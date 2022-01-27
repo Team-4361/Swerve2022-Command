@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.I2C.Port;
+
 public class Constants {
     public static final int XY_STICK_ID = 0;
     public static final int Z_STICK_ID = 1;
@@ -30,6 +32,17 @@ public class Constants {
     public static final int FL_DIO_ENCODER_PORT = 0;
     public static final int BR_DIO_ENCODER_PORT = 3;
     public static final int BL_DIO_ENCODER_PORT = 2;
+
+
+    // Intake Subsystem
+    public static final int INTAKE_PORT = 0;
+    public static final int ACCEPTOR_PORT = 0;
+    public static final Port COLOR_SENSOR_PORT = Port.kOnboard;
+    public static final int PHOTOELECTRIC_DIO = 0;
+
+    // -1.0 to 1.0 (full speed)
+    public static final double INTAKE_MOTOR_SPEED = 1.0;
+    public static final double ACCEPTOR_MOTOR_SPEED = 1.0;
 
     private Constants() {
 

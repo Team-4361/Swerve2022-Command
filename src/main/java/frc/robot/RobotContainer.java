@@ -10,8 +10,11 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArcadeCommand;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+
+import static frc.robot.Constants.*;
 
 public class RobotContainer {
 
@@ -21,10 +24,10 @@ public class RobotContainer {
           new XboxController(Constants.CONTROLLER_ID);
   private boolean leftHandedMode = false;
   
+  
   // The robot's subsystems and commands are defined here...
   private final SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem();
-
-
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(INTAKE_PORT, ACCEPTOR_PORT, PHOTOELECTRIC_DIO, COLOR_SENSOR_PORT);
 
   private final ArcadeCommand arcadeCommand = new ArcadeCommand(swerveDriveSubsystem, () -> {
     return ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -40,7 +43,9 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+
+  }
 
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
