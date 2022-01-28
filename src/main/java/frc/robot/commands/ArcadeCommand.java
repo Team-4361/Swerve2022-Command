@@ -13,6 +13,7 @@ public class ArcadeCommand extends CommandBase {
   
   private final SwerveDriveSubsystem swerveDriveSubsystem;
   private Supplier<ChassisSpeeds> chassisSpeedsFunction;
+	private Supplier<Boolean> isLeftHanded;
 
   public ArcadeCommand(SwerveDriveSubsystem swerveDriveSubsystem, Supplier<ChassisSpeeds> chassisSpeedsFunction) {
     this.swerveDriveSubsystem = swerveDriveSubsystem;
