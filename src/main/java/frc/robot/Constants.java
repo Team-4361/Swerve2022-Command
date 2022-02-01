@@ -39,6 +39,7 @@ public class Constants {
     public static final int ACCEPTOR_PORT = 0;
     public static final Port COLOR_SENSOR_PORT = Port.kOnboard;
     public static final int PHOTOELECTRIC_DIO = 0;
+    public static final int PHOTOELECTRIC_DIO_2 = 0;
 
     // -1.0 to 1.0 (full speed)
     public static final double INTAKE_MOTOR_SPEED = 1.0;

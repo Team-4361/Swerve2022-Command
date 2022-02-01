@@ -2,14 +2,18 @@ package frc.robot.subsystems;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 
+import java.util.ArrayList;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.StorageSubsystem.StorageListener;
+
+import static frc.robot.subsystems.StorageSubsystem.AcceptColor;
 
 public class StorageSubsystem
  extends SubsystemBase {
@@ -17,17 +21,25 @@ public class StorageSubsystem
     private CANSparkMax loaderMotor, acceptorMotor;
     private DigitalInput photoElectricSensorOne, photoElectricSensorTwo;
     private ColorSensorV3 colorSensor;
+	private AcceptColor acceptColor;
 
-    public enum AcceptColor {
-        RED, BLUE
-    }
+	public final static double RED_THRESHOLD = 0.35, 
+					            BLUE_THRESHOLD = 0.35,
+								PROXIMITY_THRESHOLD = 2000;
 
-    public StorageSubsystem(int loaderMotorPort, int acceptorPort, int photoElectricPortOne, int photoElectricPortTwo, Port colorSensorPort) {
-        this.loaderMotor = new CANSparkMax(laoderMotorPort, kBrushless);
+	protected static ArrayList<StorageTask> storageTasks = new ArrayList<>();
+	protected static ArrayList<StorageListener> storageListeners;
+
+    public static enum AcceptColor { RED, BLUE }
+	public static enum Task { ACCEPT, DENY }
+
+    public StorageSubsystem(int loaderMotorPort, int acceptorPort, int photoElectricPortOne, int photoElectricPortTwo, Port colorSensorPort, AcceptColor color) {
+        this.loaderMotor = new CANSparkMax(loaderMotorPort, kBrushless);
         this.acceptorMotor = new CANSparkMax(acceptorPort, kBrushless);
         this.colorSensor = new ColorSensorV3(colorSensorPort);
         this.photoElectricSensorOne = new DigitalInput(photoElectricPortOne);
-				this.photoElectricSensorTwo = new DigitalInput(photoElectricPortTwo);
+		this.photoElectricSensorTwo = new DigitalInput(photoElectricPortTwo);
+		this.acceptColor = color;
     }
 
     /** @return Color Value  */
@@ -38,26 +50,24 @@ public class StorageSubsystem
 
     /** @return Acceptor Motor Instance */
     public CANSparkMax getAcceptorMotor() { return this.acceptorMotor; }
-    
+ 
     /** @return Color Sensor Instance */
     public ColorSensorV3 getColorSensor() { return this.colorSensor; }
 
-		private ArrayList<StorageTask> storageTasks = new ArrayList<>();
-
     //Sense the ball, get its color then decide to bring it into the first or second position
-		@Override
+	@Override
   	public void periodic() {
-    	if(photoElectricSensorOne.get()){
-					StorageTask currentStorageTask = new StorageTask(colorSensor, colorSensor);
-					storageTasks.add(currentStorageTask);
-			}
+    	if (photoElectricSensorOne.get()) {
+			StorageTask currentStorageTask = new StorageTask(colorSensor, acceptColor);
+			storageTasks.add(currentStorageTask);
+		}
 
-			if(!photoElectricSensorTwo.get() && storageTasks.size() > 0){
-				if(storageTasks.get(0).isColorFound()){
-					
-				}
+		if (!photoElectricSensorTwo.get() && storageTasks.size() > 0) {
+			if (storageTasks.get(0).isColorFound()) {
+				StorageTask currentStorageTask = new StorageTask(colorSensor, acceptColor);
+				storageTasks.add(currentStorageTask);
 			}
-
+		}
   	}
 
     /** 
@@ -73,6 +83,11 @@ public class StorageSubsystem
         this.loaderMotor.set(speed);
         return this;
     }
+
+	public StorageSubsystem addListener(StorageListener listener) {
+		storageListeners.add(listener);
+		return this;
+	}
 
     /** 
      * Stops the Intake Motor
@@ -117,84 +132,91 @@ public class StorageSubsystem
 		public boolean getPhotoElectricTwo() {
         return this.photoElectricSensorTwo.get();
     }
+
+	public interface StorageListener {
+		void colorFound(Task requiredTask);
+		void colorTimeoutError();
+	}
 }
 
 
 class StorageTask{
 
 	private boolean colorFound = false;
-
 	private boolean taskFaulty = false;
-
 	private ColorSensorV3 colorSensor;
-
-	private long taskCreatedTime;
-
-	private StorageSubsystem.AcceptColor;
-
-	private Task acceptOrDeny =  null;
-	
+	private Color colorValue;
+	private long taskCreatedTime, elapsedTime;
+	private StorageSubsystem.AcceptColor targetBallColor;
+	private StorageSubsystem.Task acceptOrDeny =  null;
 	private Thread findColorThread;
 
+	private Runnable findColor = () -> {
+		taskCreatedTime = System.currentTimeMillis();
+
+		while (true) {
+			elapsedTime = System.currentTimeMillis() - taskCreatedTime;
+			colorValue = colorSensor.getColor();
+			
+			switch (targetBallColor) {
+				case BLUE: {
+					if (colorSensor.getProximity() > StorageSubsystem.PROXIMITY_THRESHOLD) {
+						if (colorValue.blue > StorageSubsystem.BLUE_THRESHOLD) {
+							acceptOrDeny = StorageSubsystem.Task.ACCEPT;
+							break;
+						}
+						if (colorValue.red > StorageSubsystem.RED_THRESHOLD) {
+							acceptOrDeny = StorageSubsystem.Task.DENY;
+							break;
+						}
+					}
+				}
+				case RED: {
+					if (colorSensor.getProximity() > StorageSubsystem.PROXIMITY_THRESHOLD) {
+						if (colorValue.blue > StorageSubsystem.BLUE_THRESHOLD) {
+							acceptOrDeny = StorageSubsystem.Task.DENY;
+							break;
+						}
+						if (colorValue.red > StorageSubsystem.RED_THRESHOLD) {
+							acceptOrDeny = StorageSubsystem.Task.ACCEPT;
+							break;
+						}
+					}
+				}
+			}
+
+			if (acceptOrDeny != null) {
+				// The value from the Color Sensor has been determined, call the Listener accordingly.
+				StorageSubsystem.storageListeners.forEach(li -> li.colorFound(acceptOrDeny));
+
+				// Remove the Thread from the ArrayList to prevent possible issues.
+				StorageSubsystem.storageTasks.remove(this);
+				findColorThread.interrupt();
+			}
+
+			if (elapsedTime > 1000) {
+				// The task has timed out, call the Timeout Error Listener.
+				taskFaulty = true;
+				StorageSubsystem.storageListeners.forEach(StorageListener::colorTimeoutError);
+				
+				// Remove the Thread from the ArrayList to prevent possible issues.
+				StorageSubsystem.storageTasks.remove(this);
+				findColorThread.interrupt();
+			}
+		}
+	};
 
 	public StorageTask(ColorSensorV3 colorSensor, StorageSubsystem.AcceptColor targetBallColor){
 		this.colorSensor = colorSensor;
 		this.taskCreatedTime = System.currentTimeMillis();
 		this.targetBallColor = targetBallColor;
-		this.findColorthread = new Thread(findColor);
+		this.findColorThread = new Thread(findColor);
 
 		this.findColorThread.start();
 
 	}
 
-	private Runnable findColor = () -> {
-		private long elaspsedTime; System.currentTimeMillis() - taskCreatedTime;
-
-		while(!colorFound){
-			if(targetBallColor == StorageSubsystem.AcceptColor.BLUE){
-				if(colorSensor.getColor().blue > 0.35 && colorSensor.getProximity() > 2000) { 
-					acceptOrDeny = Task.ACCEPT;
-					colorFound = true;
-				}
-				else if(colorSensor.getColor().red > 0.35 && colorSensor.getProximity() > 2000) {
-					acceptOrDeny = Task.DENY
-					colorFound = true;
-				}
-			} 
-			else {
-					if(targetBallColor == StorageSubsystem.AcceptColor.BLUE){
-						if(colorSensor.getColor().red > 0.35 && colorSensor.getProximity() > 2000) { 
-						acceptOrDeny = Task.ACCEPT;
-						colorFound = true;
-					} else if(colorSensor.getColor().blue > 0.35 && colorSensor.getProximity() > 2000) {
-							acceptOrDeny = Task.DENY;
-							colorFound = true;
-					}
-				}
-			}
-
-			if(elapsedTime > 1000){
-				taskFaulty = true;
-				findColorThread.stop();
-			}
-		}
-	}
-
-
-	public enum Task {
-      ACCEPT, DENY
-  }
-
-	public boolean isColorFound(){
-		return colorFound;
-	}
-
-	public boolean isTaskFaulty(){
-		return taskFaulty;
-	}
-
-	public Task getTask(){
-		return acceptOrDeny;
-	}
-
+	public boolean isColorFound(){ return colorFound; }
+	public boolean isTaskFaulty(){ return taskFaulty; }
+	public StorageSubsystem.Task getTask(){ return acceptOrDeny; }
 }

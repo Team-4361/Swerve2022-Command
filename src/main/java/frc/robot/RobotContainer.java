@@ -4,17 +4,21 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.ACCEPTOR_PORT;
+import static frc.robot.Constants.COLOR_SENSOR_PORT;
+import static frc.robot.Constants.INTAKE_PORT;
+import static frc.robot.Constants.PHOTOELECTRIC_DIO;
+import static frc.robot.Constants.PHOTOELECTRIC_DIO_2;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.ArcadeCommand;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.SwerveDriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-
-import static frc.robot.Constants.*;
+import frc.robot.commands.ArcadeCommand;
+import frc.robot.subsystems.StorageSubsystem;
+import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.StorageSubsystem.AcceptColor;
 
 public class RobotContainer {
 
@@ -27,7 +31,14 @@ public class RobotContainer {
   
   // The robot's subsystems and commands are defined here...
   private final SwerveDriveSubsystem swerveDriveSubsystem = new SwerveDriveSubsystem();
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(INTAKE_PORT, ACCEPTOR_PORT, PHOTOELECTRIC_DIO, COLOR_SENSOR_PORT);
+  private final StorageSubsystem intakeSubsystem = new StorageSubsystem(
+    INTAKE_PORT, 
+    ACCEPTOR_PORT, 
+    PHOTOELECTRIC_DIO, 
+    PHOTOELECTRIC_DIO_2, 
+    COLOR_SENSOR_PORT,
+    AcceptColor.BLUE
+  );
 
   private final ArcadeCommand arcadeCommand = new ArcadeCommand(swerveDriveSubsystem, () -> {
     return ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -44,7 +55,7 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-
+    // TODO: Add button bindings
   }
 
   public Command getAutonomousCommand() {
