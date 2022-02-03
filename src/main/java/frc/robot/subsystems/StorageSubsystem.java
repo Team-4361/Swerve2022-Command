@@ -18,19 +18,19 @@ import static frc.robot.subsystems.StorageSubsystem.AcceptColor;
 public class StorageSubsystem
  extends SubsystemBase {
 
-    private CANSparkMax loaderMotor, acceptorMotor;
-    private DigitalInput photoElectricSensorOne, photoElectricSensorTwo;
-    private ColorSensorV3 colorSensor;
+  private CANSparkMax loaderMotor, acceptorMotor;
+  private DigitalInput photoElectricSensorOne, photoElectricSensorTwo;
+  private ColorSensorV3 colorSensor;
 	private AcceptColor acceptColor;
 
 	public final static double RED_THRESHOLD = 0.35, 
-					            BLUE_THRESHOLD = 0.35,
-								PROXIMITY_THRESHOLD = 2000;
+					            			 BLUE_THRESHOLD = 0.35,
+														 PROXIMITY_THRESHOLD = 2000;
 
 	protected static ArrayList<StorageTask> storageTasks = new ArrayList<>();
 	protected static ArrayList<StorageListener> storageListeners;
 
-    public static enum AcceptColor { RED, BLUE }
+  public static enum AcceptColor { RED, BLUE }
 	public static enum Task { ACCEPT, DENY }
 
     public StorageSubsystem(int loaderMotorPort, int acceptorPort, int photoElectricPortOne, int photoElectricPortTwo, Port colorSensorPort, AcceptColor color) {
@@ -38,8 +38,8 @@ public class StorageSubsystem
         this.acceptorMotor = new CANSparkMax(acceptorPort, kBrushless);
         this.colorSensor = new ColorSensorV3(colorSensorPort);
         this.photoElectricSensorOne = new DigitalInput(photoElectricPortOne);
-		this.photoElectricSensorTwo = new DigitalInput(photoElectricPortTwo);
-		this.acceptColor = color;
+				this.photoElectricSensorTwo = new DigitalInput(photoElectricPortTwo);
+				this.acceptColor = color;
     }
 
     /** @return Color Value  */
@@ -58,16 +58,16 @@ public class StorageSubsystem
 	@Override
   	public void periodic() {
     	if (photoElectricSensorOne.get()) {
-			StorageTask currentStorageTask = new StorageTask(colorSensor, acceptColor);
-			storageTasks.add(currentStorageTask);
-		}
-
-		if (!photoElectricSensorTwo.get() && storageTasks.size() > 0) {
-			if (storageTasks.get(0).isColorFound()) {
 				StorageTask currentStorageTask = new StorageTask(colorSensor, acceptColor);
 				storageTasks.add(currentStorageTask);
 			}
-		}
+
+			if (!photoElectricSensorTwo.get() && storageTasks.size() > 0) {
+				if (storageTasks.get(0).isColorFound()) {
+					StorageTask currentStorageTask = new StorageTask(colorSensor, acceptColor);
+					storageTasks.add(currentStorageTask);
+				}
+			}
   	}
 
     /** 

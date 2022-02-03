@@ -7,7 +7,6 @@ import org.photonvision.PhotonUtils;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-//Needs PhotonLib
 
 public class ShooterVisionCamera {
 
@@ -84,7 +83,7 @@ public class ShooterVisionCamera {
         return target.getYaw();
     }
 
-    public double getPitch(){
+    public double getPitch(PhotonTrackedTarget target){
         return target.getPitch()
     }
 
@@ -99,6 +98,7 @@ public class ShooterVisionCamera {
 
         goalInfo.put("Distance", getDistanceToTarget(trackedTarget));
         goalInfo.put("Yaw", getYaw(trackedTarget));
+				goalInfo.put("Pitch", getPitch(trackedTarget));
 
         return goalInfo;
     }

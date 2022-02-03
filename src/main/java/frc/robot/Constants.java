@@ -48,6 +48,14 @@ public class Constants {
     public static final double INTAKE_MOTOR_SPEED = 1.0;
     public static final double ACCEPTOR_MOTOR_SPEED = 1.0;
 
+		//PhotonVision Constansts
+		public static final String NETWORK_TABLE_HOSTNAME = "";
+		public static final String CAMERA_NAME = "";
+		
+		public static final double CAMERA_HEIGHT = 0.0;
+		public static final double CAMERA_PITCH = 0.0;
+		
+
     private Constants() {
 
     }

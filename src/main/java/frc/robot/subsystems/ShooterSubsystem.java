@@ -16,6 +16,7 @@ public class ShooterSubsystem extends SubsystemBase {
   
   private CANSparkMax shooterMotor = new CANSparkMax(SHOOTER_PORT, kBrushless);
   private RelativeEncoder shooterEncoder = shooterMotor.getEncoder();
+	private PIDController shooterController = new PIDController(1, 1, 0);
 
     
 
@@ -44,8 +45,6 @@ public class ShooterSubsystem extends SubsystemBase {
         return false;
       }
       else{
-        shooterMotor.set(0);
-
         return true;
       }
   }
