@@ -84,6 +84,10 @@ public class ShooterVisionCamera {
         return target.getYaw();
     }
 
+    public double getPitch(){
+        return target.getPitch()
+    }
+
     /*
      Returns a hashmap of the required info needed to locate a ball and
       move toward it
