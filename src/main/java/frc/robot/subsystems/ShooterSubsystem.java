@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -17,9 +18,11 @@ public class ShooterSubsystem extends SubsystemBase {
   
   private CANSparkMax shooterMotor = new CANSparkMax(SHOOTER_PORT, kBrushless);
   private RelativeEncoder shooterEncoder = shooterMotor.getEncoder();
-	private PIDController shooterController = new PIDController(1, 1, 0);
+	private PIDController shooterController = new PIDController(0, 1, 0);
 
+  public ShooterSubsystem(){
     
+  }
 
   @Override
   public void periodic() {
@@ -36,13 +39,17 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setShooterWheelVelocity(double speed){
-    double power = shooterController.calculate(getVelocity(), speed);
+    double power = MathUtil.clamp(shooterController.calculate(getVelocity(), speed), -1.0, 1.0);
 
     shooterMotor.set(power);
   }
 
   public boolean isDesiredSpeed(double speed){
     return (shooterEncoder.getVelocity() > speed) ? true : false;
+  }
+
+  public void resetPID(){
+    shooterController.reset();
   }
 
 }

@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.swerve.SwerveChassis;
 
 public class SwerveDriveSubsystem extends SubsystemBase {
   
@@ -27,6 +28,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     
   }
 
+
+
   public HashMap<String, SwerveModuleState> getSwerveModuleStates(){
     return swerveChassis.getSwerveModuleStates();
   }
@@ -37,5 +40,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
   public Rotation2d getGyro(){
     return gyro.getRotation2d();
+  }
+
+  public void resetGyro(){
+    gyro.reset();
   }
 }

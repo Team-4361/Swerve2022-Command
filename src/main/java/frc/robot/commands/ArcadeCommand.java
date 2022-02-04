@@ -6,19 +6,21 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 
 public class ArcadeCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   
-  private final SwerveDriveSubsystem swerveDriveSubsystem;
   private Supplier<ChassisSpeeds> chassisSpeedsFunction;
-	private Supplier<Boolean> isLeftHanded;
 
-  public ArcadeCommand(SwerveDriveSubsystem swerveDriveSubsystem, Supplier<ChassisSpeeds> chassisSpeedsFunction) {
-    this.swerveDriveSubsystem = swerveDriveSubsystem;
+  public ArcadeCommand(Supplier<ChassisSpeeds> chassisSpeedsFunction) {
+
     this.chassisSpeedsFunction = chassisSpeedsFunction;
-    addRequirements(swerveDriveSubsystem);
+    Robot.swerveDrive.resetGyro();
+
+    addRequirements(Robot.swerveDrive);
   }
 
   // Called when the command is initially scheduled.
@@ -30,13 +32,13 @@ public class ArcadeCommand extends CommandBase {
   public void execute() {
     ChassisSpeeds speeds = chassisSpeedsFunction.get();
 
-    swerveDriveSubsystem.drive(speeds);
+    Robot.swerveDrive.drive(speeds);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    swerveDriveSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(0)));
+    Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Robot.swerveDrive.getGyro()));
   }
 
   // Returns true when the command should end.

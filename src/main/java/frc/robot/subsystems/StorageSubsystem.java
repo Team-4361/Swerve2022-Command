@@ -15,17 +15,23 @@ import frc.robot.subsystems.StorageSubsystem.StorageListener;
 
 import static frc.robot.subsystems.StorageSubsystem.AcceptColor;
 
+import static frc.robot.Constants.ACCEPTOR_PORT;
+import static frc.robot.Constants.COLOR_SENSOR_PORT;
+import static frc.robot.Constants.INTAKE_PORT;
+import static frc.robot.Constants.PHOTOELECTRIC_DIO;
+import static frc.robot.Constants.PHOTOELECTRIC_DIO_2;
+
 public class StorageSubsystem
  extends SubsystemBase {
 
-  private CANSparkMax loaderMotor, acceptorMotor;
+  private CANSparkMax indexerMotor, acceptorMotor;
   private DigitalInput photoElectricSensorOne, photoElectricSensorTwo;
   private ColorSensorV3 colorSensor;
-	private AcceptColor acceptColor;
+private AcceptColor acceptColor;
 
-	public final static double RED_THRESHOLD = 0.35, 
-					            			 BLUE_THRESHOLD = 0.35,
-														 PROXIMITY_THRESHOLD = 2000;
+public final static double RED_THRESHOLD = 0.35, 
+					       BLUE_THRESHOLD = 0.35,
+						   PROXIMITY_THRESHOLD = 2000;
 
 	protected static ArrayList<StorageTask> storageTasks = new ArrayList<>();
 	protected static ArrayList<StorageListener> storageListeners;
@@ -33,20 +39,20 @@ public class StorageSubsystem
   public static enum AcceptColor { RED, BLUE }
 	public static enum Task { ACCEPT, DENY }
 
-    public StorageSubsystem(int loaderMotorPort, int acceptorPort, int photoElectricPortOne, int photoElectricPortTwo, Port colorSensorPort, AcceptColor color) {
-        this.loaderMotor = new CANSparkMax(loaderMotorPort, kBrushless);
-        this.acceptorMotor = new CANSparkMax(acceptorPort, kBrushless);
-        this.colorSensor = new ColorSensorV3(colorSensorPort);
-        this.photoElectricSensorOne = new DigitalInput(photoElectricPortOne);
-				this.photoElectricSensorTwo = new DigitalInput(photoElectricPortTwo);
-				this.acceptColor = color;
+    public StorageSubsystem(AcceptColor color) {
+        this.indexerMotor = new CANSparkMax(INTAKE_PORT, kBrushless);
+        this.acceptorMotor = new CANSparkMax(ACCEPTOR_PORT, kBrushless);
+        this.colorSensor = new ColorSensorV3(COLOR_SENSOR_PORT);
+        this.photoElectricSensorOne = new DigitalInput(PHOTOELECTRIC_DIO);
+		this.photoElectricSensorTwo = new DigitalInput(PHOTOELECTRIC_DIO_2);
+		this.acceptColor = color;
     }
 
     /** @return Color Value  */
     public Color getColorValue() { return colorSensor.getColor(); }
 
     /** @return Intake Motor Instance */
-    public CANSparkMax getLoaderMotor() { return this.loaderMotor; }
+    public CANSparkMax getindexerMotor() { return this.indexerMotor; }
 
     /** @return Acceptor Motor Instance */
     public CANSparkMax getAcceptorMotor() { return this.acceptorMotor; }
@@ -80,7 +86,7 @@ public class StorageSubsystem
      */
     public StorageSubsystem
 		 startIntakeMotor(double speed) {
-        this.loaderMotor.set(speed);
+        this.indexerMotor.set(speed);
         return this;
     }
 
@@ -95,9 +101,13 @@ public class StorageSubsystem
 
      */
     public StorageSubsystem stopIntakeMotor() {
-        this.loaderMotor.set(0);
+        this.indexerMotor.set(0);
         return this;
     }
+
+	public void setAcceptColor(AcceptColor color){
+		this.acceptColor = color;
+	}
 
     
     /**
