@@ -10,6 +10,10 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ShootCommand extends CommandBase {
     
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+
+    // public ShooterSubsystem(){
+    //     shooterSubsystem
+    // }
   
     @Override
     public void initialize() {
@@ -19,7 +23,9 @@ public class ShootCommand extends CommandBase {
     
     @Override
     public void execute() {
-       shooterSubsystem.setShooterMotor(0.9);
+        while(shooterSubsystem.isDesiredSpeed(10)){
+            shooterSubsystem.setShooterWheelVelocity(10);
+        }
     }
 
     @Override

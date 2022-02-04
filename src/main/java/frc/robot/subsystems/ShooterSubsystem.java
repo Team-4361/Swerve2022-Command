@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
@@ -30,23 +31,18 @@ public class ShooterSubsystem extends SubsystemBase {
       return shooterEncoder.getVelocity();
   }
 
-  public boolean isDesiredSpeed(double speed){
-      return (shooterEncoder.getVelocity() > speed) ? true : false;
-  }
-
   public void setShooterMotor(double val){
     shooterMotor.set(val);
   }
 
-  public boolean getToDesiredSpeed(double speed){
-      if(!isDesiredSpeed(speed)){
-        shooterMotor.set(0.8);
+  public void setShooterWheelVelocity(double speed){
+    double power = shooterController.calculate(getVelocity(), speed);
 
-        return false;
-      }
-      else{
-        return true;
-      }
+    shooterMotor.set(power);
+  }
+
+  public boolean isDesiredSpeed(double speed){
+    return (shooterEncoder.getVelocity() > speed) ? true : false;
   }
 
 }

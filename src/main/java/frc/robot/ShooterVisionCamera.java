@@ -1,7 +1,9 @@
+package frc.robot;
+
 import java.util.HashMap;
 
 import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonTrackedTarget;
+import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.PhotonUtils;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -69,11 +71,6 @@ public class ShooterVisionCamera {
         return PhotonUtils.calculateDistanceToTargetMeters(cameraHeight, BALLHEIGHT, Math.toRadians(cameraPitch), Math.toRadians(target.getPitch()));
     }
 
-    public Boolean hasTargets()
-    {
-        return photonCamera.hasTargets();
-    }
-
     // Returns the yaw--rotation around the vertical axis--in degrees
     // 0 Yaw means the target is exactly in the middle of the screen
     // Negative yaw means the target is somewhere on the left of the screen
@@ -84,7 +81,7 @@ public class ShooterVisionCamera {
     }
 
     public double getPitch(PhotonTrackedTarget target){
-        return target.getPitch()
+        return target.getPitch();
     }
 
     /*
@@ -98,7 +95,7 @@ public class ShooterVisionCamera {
 
         goalInfo.put("Distance", getDistanceToTarget(trackedTarget));
         goalInfo.put("Yaw", getYaw(trackedTarget));
-				goalInfo.put("Pitch", getPitch(trackedTarget));
+		goalInfo.put("Pitch", getPitch(trackedTarget));
 
         return goalInfo;
     }
