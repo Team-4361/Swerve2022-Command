@@ -40,7 +40,7 @@ public class RobotContainer {
         -adjustJoystickValues(xyStick.getX(), Constants.DEADZONE),
         adjustJoystickValues(xyStick.getY(), Constants.DEADZONE),
         adjustJoystickValues(zStick.getTwist(), Constants.DEADZONE),
-        Rotation2d.fromDegrees(0)
+        Robot.swerveDrive.getGyro()
       );
     }));
     configureButtonBindings();
