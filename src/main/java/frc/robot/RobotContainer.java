@@ -5,6 +5,7 @@
 package frc.robot;
 
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -31,23 +32,23 @@ public class RobotContainer {
 
   private final JoystickButton xyBTNFIVE = new JoystickButton(xyStick, 5);
 
-  private final ArcadeCommand arcadeCommand = new ArcadeCommand(() -> {
-    return ChassisSpeeds.fromFieldRelativeSpeeds(
-      -adjustJoystickValues(xyStick.getX(), Constants.DEADZONE),
-      adjustJoystickValues(xyStick.getY(), Constants.DEADZONE),
-      adjustJoystickValues(zStick.getTwist(), Constants.DEADZONE),
-      Robot.swerveDrive.getGyro()
-    );
-  });
 
   public RobotContainer() {
-    Robot.swerveDrive.setDefaultCommand(arcadeCommand);
+    
+    Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() -> {
+      return ChassisSpeeds.fromFieldRelativeSpeeds(
+        -adjustJoystickValues(xyStick.getX(), Constants.DEADZONE),
+        adjustJoystickValues(xyStick.getY(), Constants.DEADZONE),
+        adjustJoystickValues(zStick.getTwist(), Constants.DEADZONE),
+        Rotation2d.fromDegrees(0)
+      );
+    }));
     configureButtonBindings();
   }
 
   private void configureButtonBindings() {
     // TODO: Add button bindings
-    xBTN.debounce(0.2).whenActive(new CenterShooterToHubCommand());
+    //xBTN.debounce(0.2).whenActive(new CenterShooterToHubCommand());
     xyBTNFIVE.whenActive(new ChangeHandMode());
   }
 

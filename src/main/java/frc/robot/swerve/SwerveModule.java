@@ -51,7 +51,7 @@ public class SwerveModule {
                         int digitalEncoderPort,
                         double offset) {
         driveMotor = new CANSparkMax(driveMotorId, MOTOR_TYPE);
-        driveEncoder = driveMotor.getAlternateEncoder(COUNTS_PER_REV);
+        driveEncoder = driveMotor.getEncoder();
 
         turnMotor = new CANSparkMax(turnMotorId, MOTOR_TYPE);
 

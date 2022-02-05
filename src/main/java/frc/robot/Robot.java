@@ -39,13 +39,18 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
-
+  
     swerveDrive = new SwerveDriveSubsystem();
-    shooter = new ShooterSubsystem();
-    storage = new StorageSubsystem(INIT_TARGET_COLOR);
 
-    camera = new ShooterVisionCamera(NETWORK_TABLE_HOSTNAME, CAMERA_NAME, CAMERA_HEIGHT, CAMERA_PITCH);
+    swerveDrive.resetGyro();
+
+    //shooter = new ShooterSubsystem();
+    //storage = new StorageSubsystem(INIT_TARGET_COLOR);
+
+    //camera = new ShooterVisionCamera(NETWORK_TABLE_HOSTNAME, CAMERA_NAME, CAMERA_HEIGHT, CAMERA_PITCH);
+
+    //Should be the last thing in this function
+    m_robotContainer = new RobotContainer();
   }
 
  
