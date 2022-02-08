@@ -4,21 +4,22 @@ package frc.robot.swerve;
 import java.util.HashMap;
 import java.util.Map;
 
+import static frc.robot.Constants.*;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.Constants;
 
 public class SwerveChassis {
     private static final Translation2d SWERVE_FR_POSITION =
-            new Translation2d(Constants.SWERVE_CHASSIS_SIDE_LENGTH/2, Constants.SWERVE_CHASSIS_SIDE_LENGTH/2);
+            new Translation2d(Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2, Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2);
     private static final Translation2d SWERVE_FL_POSITION =
-            new Translation2d(-Constants.SWERVE_CHASSIS_SIDE_LENGTH/2, Constants.SWERVE_CHASSIS_SIDE_LENGTH/2);
+            new Translation2d(-Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2, Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2);
     private static final Translation2d SWERVE_BR_POSITION =
-            new Translation2d(Constants.SWERVE_CHASSIS_SIDE_LENGTH/2, -Constants.SWERVE_CHASSIS_SIDE_LENGTH/2);
+            new Translation2d(Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2, -Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2);
     private static final Translation2d SWERVE_BL_POSITION =
-            new Translation2d(-Constants.SWERVE_CHASSIS_SIDE_LENGTH/2, -Constants.SWERVE_CHASSIS_SIDE_LENGTH/2);
+            new Translation2d(-Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2, -Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2);
     private static final SwerveDriveKinematics SWERVE_KINEMATICS =
             new SwerveDriveKinematics(
                     SWERVE_FR_POSITION,
@@ -41,10 +42,10 @@ public class SwerveChassis {
 
     public SwerveChassis() {
         this(
-                new SwerveModule(Constants.FR_DRIVE_ID, Constants.FR_TURN_ID, Constants.FR_DIO_ENCODER_PORT, Constants.FR_OFFSET),
-                new SwerveModule(Constants.FL_DRIVE_ID, Constants.FL_TURN_ID, Constants.FL_DIO_ENCODER_PORT, Constants.FL_OFFSET),
-                new SwerveModule(Constants.BR_DRIVE_ID, Constants.BR_TURN_ID, Constants.BR_DIO_ENCODER_PORT, Constants.BR_OFFSET),
-                new SwerveModule(Constants.BL_DRIVE_ID, Constants.BL_TURN_ID, Constants.BL_DIO_ENCODER_PORT, Constants.BL_OFFSET)
+                new SwerveModule(Chassis.FR_DRIVE_ID, Chassis.FR_TURN_ID, Chassis.FR_DIO_ENCODER_PORT, Chassis.FR_OFFSET),
+                new SwerveModule(Chassis.FL_DRIVE_ID, Chassis.FL_TURN_ID, Chassis.FL_DIO_ENCODER_PORT, Chassis.FL_OFFSET),
+                new SwerveModule(Chassis.BR_DRIVE_ID, Chassis.BR_TURN_ID, Chassis.BR_DIO_ENCODER_PORT, Chassis.BR_OFFSET),
+                new SwerveModule(Chassis.BL_DRIVE_ID, Chassis.BL_TURN_ID, Chassis.BL_DIO_ENCODER_PORT, Chassis.BL_OFFSET)
         );
     }
 

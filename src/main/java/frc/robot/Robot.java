@@ -12,10 +12,10 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 
-import static frc.robot.Constants.CAMERA_NAME;
-import static frc.robot.Constants.CAMERA_HEIGHT;
-import static frc.robot.Constants.CAMERA_PITCH;
-import static frc.robot.Constants.NETWORK_TABLE_HOSTNAME;
+import static frc.robot.Constants.Camera.CAMERA_NAME;
+import static frc.robot.Constants.Camera.CAMERA_HEIGHT;
+import static frc.robot.Constants.Camera.CAMERA_PITCH;
+import static frc.robot.Constants.Camera.NETWORK_TABLE_HOSTNAME;
 
 
 public class Robot extends TimedRobot {

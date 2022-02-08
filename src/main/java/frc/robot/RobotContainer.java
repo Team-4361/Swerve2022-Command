@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
+import static frc.robot.Constants.*;
+
 import frc.robot.commands.ArcadeCommand;
 import frc.robot.commands.RevAutoShootCommand;
 import frc.robot.commands.CenterShooterToHubCommand;
@@ -21,35 +23,32 @@ import frc.robot.commands.RevShooterCommand;
 
 public class RobotContainer {
 
-  private final Joystick xyStick = new Joystick(Constants.XY_STICK_ID);
-  private final Joystick zStick = new Joystick(Constants.Z_STICK_ID);
-  private final XboxController controller =
-          new XboxController(Constants.CONTROLLER_ID);
+  private final Joystick xyStick = new Joystick(Control.XY_STICK_ID);
+  private final Joystick zStick = new Joystick(Control.Z_STICK_ID);
+  private final XboxController controller = new XboxController(Control.CONTROLLER_ID);
 
   //Xbox Extracted Controller Buttons
-  private final JoystickButton xBTN = new JoystickButton(controller, 3);
-
-
-  private final JoystickButton xyBTNFIVE = new JoystickButton(xyStick, 5);
+  private final JoystickButton xButton = new JoystickButton(controller, 3);
+  private final JoystickButton xyButtonFive = new JoystickButton(xyStick, 5);
 
 
   public RobotContainer() {
-    
     Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() -> {
       return ChassisSpeeds.fromFieldRelativeSpeeds(
-        -adjustJoystickValues(xyStick.getX(), Constants.DEADZONE),
-        adjustJoystickValues(xyStick.getY(), Constants.DEADZONE),
-        adjustJoystickValues(zStick.getTwist(), Constants.DEADZONE),
+        -adjustJoystickValues(xyStick.getX(), Chassis.DEADZONE),
+        adjustJoystickValues(xyStick.getY(), Chassis.DEADZONE),
+        adjustJoystickValues(zStick.getTwist(), Chassis.DEADZONE),
         Robot.swerveDrive.getGyro()
       );
     }));
+
     configureButtonBindings();
   }
 
   private void configureButtonBindings() {
     // TODO: Add button bindings
-    //xBTN.debounce(0.2).whenActive(new CenterShooterToHubCommand());
-    xyBTNFIVE.whenActive(new ChangeHandMode());
+    //xButton.debounce(0.2).whenActive(new CenterShooterToHubCommand());
+    xyButtonFive.whenActive(new ChangeHandMode());
   }
 
   public Command getAutonomousCommand() {
