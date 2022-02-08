@@ -28,19 +28,20 @@ public class Camera {
       Our cameraName is RoxCam2021-4361
       NetworkTable server is turned off
     */
-    public Camera(String networkTableHostName, String cameraName, double mCameraHeight, double mCameraPitch)
+    /**
+     * 
+     * @param cameraName    name of the camera in photon vision
+     * @param mCameraHeight camera height in meters
+     * @param mCameraPitch camera pitch in radians
+     */
+    public Camera(String cameraName, double mCameraHeight, double mCameraPitch)
     {
         cameraHeight = mCameraHeight;
 
         //camera pitch in radians
         cameraPitch = mCameraPitch;
 
-        // inst = NetworkTableInstance.getDefault();
-
-        // inst.startClient(networkTableHostName);
-        // rootTable = inst.getTable("/photonvision/"+cameraName);
-
-        photonCamera = new PhotonCamera(cameraName/*rootTable*/);
+        photonCamera = new PhotonCamera(cameraName);
 
         photonCamera.setPipelineIndex(0);
 
@@ -66,21 +67,22 @@ public class Camera {
     }
 
     //Gets the distance to the best target
-    public double getDistanceToTarget(PhotonTrackedTarget target)
+    private double getDistanceToTarget(PhotonTrackedTarget target)
     {
         return PhotonUtils.calculateDistanceToTargetMeters(cameraHeight, BALLHEIGHT, Math.toRadians(cameraPitch), Math.toRadians(target.getPitch()));
     }
 
+    
     // Returns the yaw--rotation around the vertical axis--in degrees
     // 0 Yaw means the target is exactly in the middle of the screen
     // Negative yaw means the target is somewhere on the left of the screen
     // Positive yaw means the target is somewhere on the right of the screen
-    public double getYaw(PhotonTrackedTarget target)
+    private double getYaw(PhotonTrackedTarget target)
     {
         return target.getYaw();
     }
 
-    public double getPitch(PhotonTrackedTarget target){
+    private double getPitch(PhotonTrackedTarget target){
         return target.getPitch();
     }
 
@@ -88,6 +90,11 @@ public class Camera {
      Returns a hashmap of the required info needed to locate a ball and
       move toward it
     */
+    /**
+     * 
+     * @return returns a Hashmap containing the distance, yaw, and pitch of the best target
+     * Distance, Yaw, Pitch are they key for this information
+     */
     public HashMap<String, Double> getTargetGoal()
     {
         HashMap<String, Double> goalInfo = new HashMap<String, Double>();
