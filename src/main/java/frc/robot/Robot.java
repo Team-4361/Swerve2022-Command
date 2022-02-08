@@ -47,7 +47,7 @@ public class Robot extends TimedRobot {
     //shooter = new ShooterSubsystem();
     //storage = new StorageSubsystem(INIT_TARGET_COLOR);
 
-    //camera = new ShooterVisionCamera(NETWORK_TABLE_HOSTNAME, CAMERA_NAME, CAMERA_HEIGHT, CAMERA_PITCH);
+    //camera = new ShooterVisionCamera(CAMERA_NAME, CAMERA_HEIGHT, CAMERA_PITCH);
 
     //Should be the last thing in this function
     m_robotContainer = new RobotContainer();

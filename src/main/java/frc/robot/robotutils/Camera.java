@@ -14,14 +14,11 @@ public class Camera {
 
     PhotonCamera photonCamera;
 
-    NetworkTableInstance inst;
-    NetworkTable rootTable;
-
     double cameraHeight;
     double cameraPitch;
 
-    //Height in meters of the yellow ball from Infinite Recharge
-    final double BALLHEIGHT = 0.1778;
+    //Height in meters of the target
+    final double TARGET_HEIGHT = 0.1778;
 
     /*
       Our networktablename is photonvision
@@ -60,7 +57,9 @@ public class Camera {
         photonCamera.takeOutputSnapshot();
     }
 
-    //Get the best target
+    /**
+     * @return returns the best target
+     */
     public PhotonTrackedTarget getBestTarget()
     {
         return photonCamera.getLatestResult().getBestTarget();
@@ -69,7 +68,7 @@ public class Camera {
     //Gets the distance to the best target
     private double getDistanceToTarget(PhotonTrackedTarget target)
     {
-        return PhotonUtils.calculateDistanceToTargetMeters(cameraHeight, BALLHEIGHT, Math.toRadians(cameraPitch), Math.toRadians(target.getPitch()));
+        return PhotonUtils.calculateDistanceToTargetMeters(cameraHeight, TARGET_HEIGHT, Math.toRadians(cameraPitch), Math.toRadians(target.getPitch()));
     }
 
     
@@ -86,10 +85,6 @@ public class Camera {
         return target.getPitch();
     }
 
-    /*
-     Returns a hashmap of the required info needed to locate a ball and
-      move toward it
-    */
     /**
      * 
      * @return returns a Hashmap containing the distance, yaw, and pitch of the best target
