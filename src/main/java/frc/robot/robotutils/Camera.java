@@ -10,7 +10,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 
-public class ShooterVisionCamera {
+public class Camera {
 
     PhotonCamera photonCamera;
 
@@ -28,7 +28,7 @@ public class ShooterVisionCamera {
       Our cameraName is RoxCam2021-4361
       NetworkTable server is turned off
     */
-    public ShooterVisionCamera(String networkTableHostName, String cameraName, double mCameraHeight, double mCameraPitch)
+    public Camera(String networkTableHostName, String cameraName, double mCameraHeight, double mCameraPitch)
     {
         cameraHeight = mCameraHeight;
 

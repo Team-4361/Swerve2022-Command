@@ -7,7 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.robotutils.ShooterVisionCamera;
+import frc.robot.robotutils.Camera;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
   public static StorageSubsystem storage;
   public static ShooterSubsystem shooter;
 
-  public static ShooterVisionCamera camera;
+  public static Camera camera;
 
   public static boolean leftHandedMode = false;
 
