@@ -52,6 +52,14 @@ public class Constants {
         // The shooter motor in the Shooter device, runs at Full Speed and shoots the ball.
         public static final int SHOOTER_MOTOR_PORT = 8;
 
+        // Left Intake Extend Motor Port
+        public static final int L_INTAKE_MOTOR_PORT = 9; // TODO: change
+
+        // Right Intake Extend Motor Port
+        public static final int R_INTAKE_MOTOR_PORT = 10; // TODO: change
+
+        public static final int EXTEND_MOTOR_POSITION = 0;
+
         ////////////////////////////////////////////////////////////////////////////////////////
             
         // Used to detect the presence of a ball inside the front of the device, mainly used for 2nd entering ball.
@@ -79,6 +87,7 @@ public class Constants {
         public static final double CAMERA_PITCH = 0.0;
     }
     
+    // These values are designed to be changed based on the Motor 
     public static class MotorValue {
         public static final double SHOOT_SPEED = 1.0;
         public static final double ACCEPT_SPEED = 0.3;
@@ -91,9 +100,15 @@ public class Constants {
         // Stall RPM, stops the motor when the RPM drops below + current above limit.
         public final static double STALL_RPM = 2000;
 
+        // Target RPM for the Shooter Motor to activate loading
+        public final static double SHOOTER_TARGET_RPM = 4800;
+
         // TODO: May need to be changed later.
         public final static boolean ACCEPTOR_FLIPPED = true;
         public final static boolean STORAGE_FLIPPED = false;
         public final static boolean SHOOTER_FLIPPED = false;
+
+        // Used for stall protection, disable if any issues occur from it.
+        public final static boolean CURRENT_MEASURING = true;
     }
 }

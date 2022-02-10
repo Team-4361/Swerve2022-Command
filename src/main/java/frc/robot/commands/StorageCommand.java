@@ -4,9 +4,9 @@ package frc.robot.commands;
 import java.util.concurrent.TimeUnit;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.MotorValue;
+import frc.robot.robotutils.MotorUtil;
 import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.subsystems.StorageSubsystem.AcceptColor;
 import frc.robot.subsystems.StorageSubsystem.Task;
@@ -15,33 +15,26 @@ public class StorageCommand extends CommandBase {
     
     private final StorageSubsystem storageSubsystem;
 
-    private boolean proximityValue;
-    private AcceptColor acceptColor = StorageSubsystem.AcceptColor.BLUE;
     private String currentState = "Idle";
-    private Color color;
 
-    public StorageCommand(StorageSubsystem subsystem, StorageSubsystem.AcceptColor acceptColor) {
+    public StorageCommand(StorageSubsystem subsystem) {
         this.storageSubsystem = subsystem;
-        this.acceptColor = acceptColor;
 
         addRequirements(storageSubsystem);
     }
 
     /**
-     * Changes the Accept Color to Red or Blue
-     * @param color Color
+     * Changes the Accept Color from the Command itself, this should have originally
+     * already been set in the Subsystem.
+     * 
+     * @param color Red or Blue
+     * @return StorageCommand
      */
-    public void setAcceptColor(AcceptColor color) {
-        this.acceptColor = color;
+    public StorageCommand setAcceptColor(AcceptColor color) {
+        storageSubsystem.setAcceptColor(color);
+        return this;
     }
 
-    private double getMotorValue(double speed, boolean flipped) {
-        if (flipped) {
-            return -speed;
-        } else {
-            return speed;
-        }
-    }
 
     @Override
     public void initialize() {
@@ -58,26 +51,24 @@ public class StorageCommand extends CommandBase {
                                 case 0: {
                                     // There are zero balls loaded, run both motors until the back
                                     // sensor is tripped.
-                                    storageSubsystem.setAcceptorMotor(getMotorValue(MotorValue.ACCEPT_SPEED, MotorValue.ACCEPTOR_FLIPPED));
-                                    storageSubsystem.setStorageMotor(getMotorValue(MotorValue.SLOW_ACCEPT_SPEED, MotorValue.STORAGE_FLIPPED));
+                                    storageSubsystem.setAcceptorMotor(MotorUtil.getMotorValue(MotorValue.ACCEPT_SPEED, MotorValue.ACCEPTOR_FLIPPED));
+                                    storageSubsystem.setStorageMotor(MotorUtil.getMotorValue(MotorValue.SLOW_ACCEPT_SPEED, MotorValue.STORAGE_FLIPPED));
 
                                     TimeUnit.MILLISECONDS.sleep(100);
 
-                                    // TODO: stall protection
-                                    while (!storageSubsystem.getStorageSensorCovered()) {
-                                        storageSubsystem.setAcceptorMotor(getMotorValue(MotorValue.ACCEPT_SPEED, MotorValue.ACCEPTOR_FLIPPED));
-                                        storageSubsystem.setStorageMotor(getMotorValue(MotorValue.SLOW_ACCEPT_SPEED, MotorValue.STORAGE_FLIPPED));
+                                    while (!storageSubsystem.getStorageSensorCovered() && StorageSubsystem.stalledMotor == null) {
+                                        storageSubsystem.setAcceptorMotor(MotorUtil.getMotorValue(MotorValue.ACCEPT_SPEED, MotorValue.ACCEPTOR_FLIPPED));
+                                        storageSubsystem.setStorageMotor(MotorUtil.getMotorValue(MotorValue.SLOW_ACCEPT_SPEED, MotorValue.STORAGE_FLIPPED));
                                     }
                                 }
                                 case 1: {
                                     // There is already a single ball loaded, run only the Acceptor
                                     // motor so the other ball is not pushed into the shooter area.
-                                    storageSubsystem.setAcceptorMotor(getMotorValue(MotorValue.ACCEPT_SPEED, MotorValue.ACCEPTOR_FLIPPED));
+                                    storageSubsystem.setAcceptorMotor(MotorUtil.getMotorValue(MotorValue.ACCEPT_SPEED, MotorValue.ACCEPTOR_FLIPPED));
                                     TimeUnit.MILLISECONDS.sleep(100);
 
-                                    // TODO: stall protection
-                                    while (!storageSubsystem.getAcceptorSensorCovered()) {
-                                        storageSubsystem.setAcceptorMotor(getMotorValue(MotorValue.ACCEPT_SPEED, MotorValue.ACCEPTOR_FLIPPED));
+                                    while (!storageSubsystem.getAcceptorSensorCovered() && StorageSubsystem.stalledMotor == null) {
+                                        storageSubsystem.setAcceptorMotor(MotorUtil.getMotorValue(MotorValue.ACCEPT_SPEED, MotorValue.ACCEPTOR_FLIPPED));
                                     }
 
                                     TimeUnit.MILLISECONDS.sleep(250);
@@ -89,7 +80,7 @@ public class StorageCommand extends CommandBase {
                         }
                         case DENY: {
                             // This ball should be denied, spin the motor in the reject direction.
-                            storageSubsystem.setAcceptorMotor(getMotorValue(-MotorValue.ACCEPT_SPEED-0.1, MotorValue.ACCEPTOR_FLIPPED));
+                            storageSubsystem.setAcceptorMotor(MotorUtil.getMotorValue(-MotorValue.ACCEPT_SPEED-0.1, MotorValue.ACCEPTOR_FLIPPED));
         
                             // Add a slight delay to the end to make sure the ball is thrown out.
                             TimeUnit.MILLISECONDS.sleep(250);
@@ -108,7 +99,6 @@ public class StorageCommand extends CommandBase {
             }
         });
     }
-
     
     @Override
     public void execute() {
@@ -118,6 +108,10 @@ public class StorageCommand extends CommandBase {
         // In the Dashboard, a Boolean block changes color based on true/false so it can
         // possibly be flashing if there is a problem that requires interaction.
         SmartDashboard.putBoolean("Storage Error", false);
+
+        // Extend the Intake part of the Storage so that it is sticking out of the robot
+        // and ready to accept or reject a ball.
+        storageSubsystem.extendIntake();
     }
 
     @Override
@@ -125,6 +119,8 @@ public class StorageCommand extends CommandBase {
         // If the command ends, possibly turn off the motor?
         storageSubsystem.setStorageMotor(0);
         storageSubsystem.setAcceptorMotor(0);
+
+        storageSubsystem.retractIntake();
     }
 
     @Override

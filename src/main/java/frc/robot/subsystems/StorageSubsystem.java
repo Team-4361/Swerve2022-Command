@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
@@ -15,19 +14,21 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeShooter;
 import frc.robot.Constants.MotorValue;
+import frc.robot.robotutils.MotorUtil;
 import frc.robot.subsystems.StorageSubsystem.StorageListener;
 
 public class StorageSubsystem extends SubsystemBase {
-	private CANSparkMax storageMotor, acceptorMotor;
-	private DigitalInput acceptorSensor, storageSensor;
-	private ColorSensorV3 colorSensor;
-	private AcceptColor acceptColor;
+	public static CANSparkMax storageMotor, acceptorMotor, 
+				        leftIntakeExtend, rightIntakeExtend;
+
+	public static DigitalInput acceptorSensor, storageSensor;
+	public static ColorSensorV3 colorSensor;
+	public static AcceptColor acceptColor;
+
+	public static final double EXTEND_MOTOR_POSITIION = 0;
 
 	// Can be from 0-2 depending on the amount of balls detected in the Storage.
 	protected static int ballsLoaded = 0;
-
-	// Change if there are any issues from the Current Measuring System.
-	private final boolean currentMeasuring = true;
 
 	protected static ArrayList<StorageTask> storageTasks = new ArrayList<>();
 	protected static ArrayList<StorageListener> storageListeners;
@@ -36,20 +37,27 @@ public class StorageSubsystem extends SubsystemBase {
 	public static enum Task { ACCEPT, DENY }
 
 	private double proximity, acceptorCurrent, storageCurrent, acceptorRPM, storageRPM;
-	private CANSparkMax stalledMotor;
-	private RelativeEncoder storageEncoder, acceptorEncoder;
+	public static CANSparkMax stalledMotor;
+	private RelativeEncoder storageEncoder, acceptorEncoder, leftIntakeEncoder, rightIntakeEncoder;
 	private Color color;
 
     public StorageSubsystem(AcceptColor color) {
-        this.acceptorMotor = new CANSparkMax(IntakeShooter.ACCEPTOR_MOTOR_PORT, kBrushless);
-        this.storageMotor = new CANSparkMax(IntakeShooter.STORAGE_MOTOR_PORT, kBrushless);
-        this.colorSensor = new ColorSensorV3(IntakeShooter.COLOR_SENSOR_PORT);
-        this.acceptorSensor = new DigitalInput(IntakeShooter.ACCEPTOR_PHOTO_ELECTRIC_PORT);
-		this.storageSensor = new DigitalInput(IntakeShooter.STORAGE_PHOTO_ELECTRIC_PORT);
-		this.acceptColor = color;
+        acceptorMotor = new CANSparkMax(IntakeShooter.ACCEPTOR_MOTOR_PORT, kBrushless);
+        storageMotor = new CANSparkMax(IntakeShooter.STORAGE_MOTOR_PORT, kBrushless);
+        colorSensor = new ColorSensorV3(IntakeShooter.COLOR_SENSOR_PORT);
+        acceptorSensor = new DigitalInput(IntakeShooter.ACCEPTOR_PHOTO_ELECTRIC_PORT);
+		storageSensor = new DigitalInput(IntakeShooter.STORAGE_PHOTO_ELECTRIC_PORT);
+		leftIntakeExtend = new CANSparkMax(IntakeShooter.L_INTAKE_MOTOR_PORT, kBrushless);
+		rightIntakeExtend = new CANSparkMax(IntakeShooter.R_INTAKE_MOTOR_PORT, kBrushless);
 
-		SmartDashboard.putBoolean("Storage: Motor Stalled", false);
-		SmartDashboard.putNumber("Storage: Stalled #ID", 0);
+		storageEncoder = storageMotor.getEncoder();
+		acceptorEncoder = acceptorMotor.getEncoder();
+		leftIntakeEncoder = leftIntakeExtend.getEncoder();
+		rightIntakeEncoder = rightIntakeExtend.getEncoder();
+
+		
+
+		acceptColor = color;
     }
 
 	private void updateSensors() {
@@ -78,69 +86,50 @@ public class StorageSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Storage: Balls Loaded", ballsLoaded);
 	}
 
+	public void extendIntake() {
+		// Run the motor until we reach the amount of rotations that are required.
+		MotorUtil.runMotor(leftIntakeExtend, MotorValue.ACCEPT_SPEED);
+		MotorUtil.runMotor(rightIntakeExtend, MotorValue.ACCEPT_SPEED);
 
-	private boolean isStalled(CANSparkMax motor) {
-		if (currentMeasuring) {
-			RelativeEncoder encoder = motor.getEncoder();
-			double velocity = encoder.getVelocity();
+		while (Math.abs(leftIntakeEncoder.getPosition()) < IntakeShooter.EXTEND_MOTOR_POSITION && 
+		       Math.abs(rightIntakeEncoder.getPosition()) < IntakeShooter.EXTEND_MOTOR_POSITION) {
 
-			if (Math.abs(velocity) < MotorValue.STALL_RPM && motor.getOutputCurrent() > MotorValue.STALL_CURRENT) {
-				// The motor has been stalled, return true.
-				stalledMotor = motor;
-
-				SmartDashboard.putBoolean("Storage: Motor Stalled", true);
-				SmartDashboard.putNumber("Storage: Stalled #ID", stalledMotor.getDeviceId());
-
-				return true;
-			} else {
-				// The motor is not currently stalled, return false.
-				return false;
-			}
-		} else {
-			// Current Measuring is disabled, always return false.
-			return false;
+			// Do nothing
 		}
+
+		MotorUtil.runMotor(leftIntakeExtend, 0);
+		MotorUtil.runMotor(rightIntakeExtend, 0);
 	}
 
-	public void runMotor(CANSparkMax motor, double speed) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					// While the motor is not stopped, continously check if the motor is
-					// being stalled by anything, and if so then stop the motor and put it
-					// in the detection.
-					motor.set(speed);
+	public void retractIntake() {
+		// Run the motor until we reach the amount of rotations that are required.
+		MotorUtil.runMotor(leftIntakeExtend, -MotorValue.ACCEPT_SPEED);
+		MotorUtil.runMotor(rightIntakeExtend, -MotorValue.ACCEPT_SPEED);
 
-					// Add a delay before checking for stall current to reduce the possibility of the
-                	// extra power and low speed of starting the motor to activate the protection.
-                	TimeUnit.MILLISECONDS.sleep(100);
-					
-					while (motor.get() != 0) {
-						if (isStalled(motor)) {
-							// The motor is stalled, turn off the motor and cancel everything.
-							motor.set(0);
-						} else {
-							motor.set(speed);
-						}
-					}
-					Thread.currentThread().interrupt();
-				} catch (InterruptedException e) {}
-			}
-		}).start();
+		while (Math.abs(leftIntakeEncoder.getPosition()) != 0 && 
+		       Math.abs(rightIntakeEncoder.getPosition()) != 0) {
+
+			// Do nothing
+		}
+
+		MotorUtil.runMotor(leftIntakeExtend, 0);
+		MotorUtil.runMotor(rightIntakeExtend, 0);
 	}
 
     /** @return Color Value  */
     public Color getColorValue() { return colorSensor.getColor(); }
 
     /** @return Storage Motor Instance */
-    public CANSparkMax getStorageMotor() { return this.storageMotor; }
+    public CANSparkMax getStorageMotor() { return storageMotor; }
 
     /** @return Acceptor Motor Instance */
-    public CANSparkMax getAcceptorMotor() { return this.acceptorMotor; }
+    public CANSparkMax getAcceptorMotor() { return acceptorMotor; }
  
     /** @return Color Sensor Instance */
-    public ColorSensorV3 getColorSensor() { return this.colorSensor; }
+    public ColorSensorV3 getColorSensor() { return colorSensor; }
+
+	/** @return Acceptor Color */
+	public AcceptColor getAcceptColor() { return acceptColor; }
 
     //Sense the ball, get its color then decide to bring it into the first or second position
 	@Override
@@ -174,17 +163,21 @@ public class StorageSubsystem extends SubsystemBase {
 	}
 
 	public StorageSubsystem setStorageMotor(double speed) {
-		runMotor(storageMotor, speed);
+		MotorUtil.runMotor(storageMotor, speed);
 		return this;
 	}
 
     public StorageSubsystem setAcceptorMotor(double speed) {
-		runMotor(acceptorMotor, speed);
+		MotorUtil.runMotor(acceptorMotor, speed);
 		return this;
 	}
 
 	public void setAcceptColor(AcceptColor color){
 		this.acceptColor = color;
+	}
+
+	public int getBallsLoaded() {
+		return ballsLoaded;
 	}
 
     /** @return If the PhotoElectricSensor has a close proximity to an object. */

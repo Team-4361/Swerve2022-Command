@@ -41,11 +41,10 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
   
     swerveDrive = new SwerveDriveSubsystem();
-
     swerveDrive.resetGyro();
 
-    //shooter = new ShooterSubsystem();
-    //storage = new StorageSubsystem(INIT_TARGET_COLOR);
+    storage = new StorageSubsystem(INIT_TARGET_COLOR);
+    shooter = new ShooterSubsystem(storage);
 
     //camera = new ShooterVisionCamera(CAMERA_NAME, CAMERA_HEIGHT, CAMERA_PITCH);
 

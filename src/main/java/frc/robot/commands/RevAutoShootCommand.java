@@ -30,7 +30,8 @@ public class RevAutoShootCommand extends CommandBase {
 
       double requiredShooterVelocity = calculateDesiredVelocity(target.get("Pitch"), target.get("Distance"), target.get("Yaw"));
 
-      Robot.shooter.setShooterWheelVelocity(requiredShooterVelocity);
+      // TODO: will not work, change
+      Robot.shooter.setShooterMotor(requiredShooterVelocity);
     }
 
     @Override
