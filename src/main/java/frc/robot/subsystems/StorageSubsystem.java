@@ -47,8 +47,8 @@ public class StorageSubsystem extends SubsystemBase {
         colorSensor = new ColorSensorV3(IntakeShooter.COLOR_SENSOR_PORT);
         acceptorSensor = new DigitalInput(IntakeShooter.ACCEPTOR_PHOTO_ELECTRIC_PORT);
 		storageSensor = new DigitalInput(IntakeShooter.STORAGE_PHOTO_ELECTRIC_PORT);
-		leftIntakeExtend = new CANSparkMax(IntakeShooter.L_INTAKE_MOTOR_PORT, kBrushless);
-		rightIntakeExtend = new CANSparkMax(IntakeShooter.R_INTAKE_MOTOR_PORT, kBrushless);
+		leftIntakeExtend = new CANSparkMax(IntakeShooter.L_INTAKE_MOTOR_ID, kBrushless);
+		rightIntakeExtend = new CANSparkMax(IntakeShooter.R_INTAKE_MOTOR_ID, kBrushless);
 
 		storageEncoder = storageMotor.getEncoder();
 		acceptorEncoder = acceptorMotor.getEncoder();
@@ -91,8 +91,8 @@ public class StorageSubsystem extends SubsystemBase {
 		MotorUtil.runMotor(leftIntakeExtend, MotorValue.ACCEPT_SPEED);
 		MotorUtil.runMotor(rightIntakeExtend, MotorValue.ACCEPT_SPEED);
 
-		while (Math.abs(leftIntakeEncoder.getPosition()) < IntakeShooter.EXTEND_MOTOR_POSITION && 
-		       Math.abs(rightIntakeEncoder.getPosition()) < IntakeShooter.EXTEND_MOTOR_POSITION) {
+		while (Math.abs(leftIntakeEncoder.getPosition()) < IntakeShooter.MAX_INTAKE_MOTOR_POSITION && 
+		       Math.abs(rightIntakeEncoder.getPosition()) < IntakeShooter.MAX_INTAKE_MOTOR_POSITION) {
 
 			// Do nothing
 		}

@@ -7,7 +7,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.IntakeShooter;
 import frc.robot.robotutils.Camera;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -26,6 +29,8 @@ public class Robot extends TimedRobot {
   public static SwerveDriveSubsystem swerveDrive;
   public static StorageSubsystem storage;
   public static ShooterSubsystem shooter;
+  public static IntakeSubsystem intake;
+  public static ClimberSubsystem climber;
 
   public static Camera camera;
 
@@ -43,8 +48,12 @@ public class Robot extends TimedRobot {
     swerveDrive = new SwerveDriveSubsystem();
     swerveDrive.resetGyro();
 
-    storage = new StorageSubsystem(INIT_TARGET_COLOR);
-    shooter = new ShooterSubsystem(storage);
+    //storage = new StorageSubsystem(INIT_TARGET_COLOR);
+    //shooter = new ShooterSubsystem(storage);
+
+    intake = new IntakeSubsystem();
+
+    //climber = new ClimberSubsystem();
 
     //camera = new ShooterVisionCamera(CAMERA_NAME, CAMERA_HEIGHT, CAMERA_PITCH);
 

@@ -6,10 +6,6 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.PhotonUtils;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-
-
 public class Camera {
 
     PhotonCamera photonCamera;
@@ -18,7 +14,7 @@ public class Camera {
     double cameraPitch;
 
     //Height in meters of the target
-    final double TARGET_HEIGHT = 0.1778;
+    final double TARGET_HEIGHT = 0.0381;
 
     /*
       Our networktablename is photonvision
@@ -68,7 +64,7 @@ public class Camera {
     //Gets the distance to the best target
     private double getDistanceToTarget(PhotonTrackedTarget target)
     {
-        return PhotonUtils.calculateDistanceToTargetMeters(cameraHeight, TARGET_HEIGHT, Math.toRadians(cameraPitch), Math.toRadians(target.getPitch()));
+        return PhotonUtils.calculateDistanceToTargetMeters(cameraHeight, TARGET_HEIGHT, cameraPitch, Math.toRadians(target.getPitch()));
     }
 
     
@@ -95,9 +91,19 @@ public class Camera {
         HashMap<String, Double> goalInfo = new HashMap<String, Double>();
         PhotonTrackedTarget trackedTarget = getBestTarget();
 
+        if(trackedTarget == null){
+            goalInfo.put("Distance", 0.0);
+            goalInfo.put("Yaw", 0.0);
+            goalInfo.put("Pitch", 0.0);
+            goalInfo.put("Status", 0.0);
+
+            return goalInfo;
+        }
+
         goalInfo.put("Distance", getDistanceToTarget(trackedTarget));
         goalInfo.put("Yaw", getYaw(trackedTarget));
 		goalInfo.put("Pitch", getPitch(trackedTarget));
+        goalInfo.put("Status", 1.0);
 
         return goalInfo;
     }

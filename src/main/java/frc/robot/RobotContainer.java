@@ -18,7 +18,13 @@ import frc.robot.commands.ArcadeCommand;
 import frc.robot.commands.RevAutoShootCommand;
 import frc.robot.commands.CenterShooterToHubCommand;
 import frc.robot.commands.ChangeHandMode;
+import frc.robot.commands.MoveClimberDown;
+import frc.robot.commands.MoveClimberUp;
+import frc.robot.commands.MoveIntakeIn;
+import frc.robot.commands.MoveIntakeOut;
 import frc.robot.commands.RevShooterCommand;
+import frc.robot.commands.RunIntakeInward;
+import frc.robot.commands.RunIntakeOutward;
 
 
 public class RobotContainer {
@@ -29,8 +35,10 @@ public class RobotContainer {
 
   //Xbox Extracted Controller Buttons
   private final JoystickButton xButton = new JoystickButton(controller, 3);
+  private final JoystickButton yButton = new JoystickButton(controller, 4);
   private final JoystickButton xyButtonFive = new JoystickButton(xyStick, 5);
-
+  private final JoystickButton aButton = new JoystickButton(controller, 1);
+  private final JoystickButton bButton = new JoystickButton(controller, 2);
 
   public RobotContainer() {
     Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() -> {
@@ -49,6 +57,11 @@ public class RobotContainer {
     // TODO: Add button bindings
     //xButton.debounce(0.2).whenActive(new CenterShooterToHubCommand());
     xyButtonFive.whenActive(new ChangeHandMode());
+    aButton.whenHeld(new MoveIntakeOut());
+    bButton.whenHeld(new MoveIntakeIn());
+
+    xButton.whenHeld(new RunIntakeOutward());
+    yButton.whenHeld(new RunIntakeInward());
   }
 
   public Command getAutonomousCommand() {

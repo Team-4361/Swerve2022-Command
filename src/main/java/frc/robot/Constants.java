@@ -42,6 +42,14 @@ public class Constants {
         public static final int BL_DIO_ENCODER_PORT = 2;
     }
 
+    public static class Climber {
+        public static final int L_CLIMBER_PORT = 0;
+        public static final int R_CLIMBER_PORT = 0;
+
+        public static final int CLIMBER_PROXIMITY_SENSOR_PORT = 0;
+
+    }
+
     public static class IntakeShooter {
         // The first motor in the Storage device, used to accept the ball after the sensor is activated.
         public static final int ACCEPTOR_MOTOR_PORT = 7;
@@ -53,12 +61,14 @@ public class Constants {
         public static final int SHOOTER_MOTOR_PORT = 8;
 
         // Left Intake Extend Motor Port
-        public static final int L_INTAKE_MOTOR_PORT = 9; // TODO: change
+        public static final int L_INTAKE_MOTOR_ID = 9; // TODO: change
 
         // Right Intake Extend Motor Port
-        public static final int R_INTAKE_MOTOR_PORT = 10; // TODO: change
+        public static final int R_INTAKE_MOTOR_ID = 11; // TODO: change
 
-        public static final int EXTEND_MOTOR_POSITION = 0;
+        public static final int MAX_INTAKE_MOTOR_POSITION = 0;
+
+        public static final int INTAKE_MOTOR_ID = 12;
 
         ////////////////////////////////////////////////////////////////////////////////////////
             
