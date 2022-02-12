@@ -3,10 +3,13 @@ package frc.robot.swerve;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
+import me.wobblyyyy.pathfinder2.wpilib.WPIAdapter;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
-public class SwerveOdometry {
+public class SwerveOdometry extends AbstractOdometry {
     private final SwerveChassis chassis;
     private final Gyro gyro;
     private final SwerveDriveOdometry odometry;
@@ -27,6 +30,8 @@ public class SwerveOdometry {
 
     public void update() {
         Rotation2d rotation = gyro.getRotation2d();
+
+        // each of these states is m per sec and omega rad per sec
         SwerveModuleState frontRightState = chassis.getFrontRight().getState();
         SwerveModuleState frontLeftState = chassis.getFrontLeft().getState();
         SwerveModuleState backRightState = chassis.getBackRight().getState();
@@ -43,5 +48,10 @@ public class SwerveOdometry {
 
     public Pose2d getPose() {
         return pose;
+    }
+
+    @Override
+    public PointXYZ getRawPosition() {
+        return WPIAdapter.pointXYZFromPose(pose);
     }
 }

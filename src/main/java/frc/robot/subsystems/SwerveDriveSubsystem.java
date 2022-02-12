@@ -4,45 +4,63 @@ import java.util.HashMap;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.swerve.SwerveChassis;
+import frc.robot.swerve.SwerveOdometry;
+import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.control.Controller;
+import me.wobblyyyy.pathfinder2.control.ProportionalController;
+import me.wobblyyyy.pathfinder2.robot.Drive;
+import me.wobblyyyy.pathfinder2.robot.Odometry;
+import me.wobblyyyy.pathfinder2.robot.Robot;
 
 public class SwerveDriveSubsystem extends SubsystemBase {
-  
-  private SwerveChassis swerveChassis;
-  public AHRS gyro;
+    private SwerveChassis swerveChassis;
+    public AHRS gyro;
+    private Controller turnController = new ProportionalController(0.01);
+    private Drive drive;
+    private Odometry odometry;
+    private Robot robot;
+    private Pathfinder pathfinder;
 
-  public SwerveDriveSubsystem() {
-    swerveChassis = new SwerveChassis();
-    gyro = new AHRS(SPI.Port.kMXP);
-    gyro.reset();
-  }
+    public SwerveDriveSubsystem() {
+        swerveChassis = new SwerveChassis();
+        gyro = new AHRS(SPI.Port.kMXP);
+        gyro.reset();
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    
-  }
+        drive = swerveChassis;
+        odometry = new SwerveOdometry(swerveChassis, gyro, new Pose2d());
+        robot = new Robot(drive, odometry);
+        pathfinder = new Pathfinder(robot, turnController);
+    }
 
+    public Pathfinder getPathfinder() {
+        return pathfinder;
+    }
 
+    @Override
+    public void periodic() {
 
-  public HashMap<String, SwerveModuleState> getSwerveModuleStates(){
-    return swerveChassis.getSwerveModuleStates();
-  }
+    }
 
-  public void drive(ChassisSpeeds speeds){
-    swerveChassis.drive(speeds);
-  }
+    public HashMap<String, SwerveModuleState> getSwerveModuleStates() {
+        return swerveChassis.getSwerveModuleStates();
+    }
 
-  public Rotation2d getGyro(){
-    return gyro.getRotation2d();
-  }
+    public void drive(ChassisSpeeds speeds) {
+        swerveChassis.drive(speeds);
+    }
 
-  public void resetGyro(){
-    gyro.reset();
-  }
+    public Rotation2d getGyro() {
+        return gyro.getRotation2d();
+    }
+
+    public void resetGyro() {
+        gyro.reset();
+    }
 }

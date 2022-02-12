@@ -1,8 +1,8 @@
 package frc.robot.swerve;
 
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import static frc.robot.Constants.*;
 
@@ -10,8 +10,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.robot.Drive;
 
-public class SwerveChassis {
+public class SwerveChassis implements Drive {
     private static final Translation2d SWERVE_FR_POSITION =
             new Translation2d(Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2, Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2);
     private static final Translation2d SWERVE_FL_POSITION =
@@ -38,7 +40,8 @@ public class SwerveChassis {
     private final SwerveModule backRight;
     private final SwerveModule backLeft;
 
-
+    private Function<Translation, Translation> modifier = (t) -> t;
+    private Translation translation;
 
     public SwerveChassis() {
         this(
@@ -108,5 +111,25 @@ public class SwerveChassis {
         backLeft.setState(backLeftState);
 
         updateDashboard();
+    }
+
+    @Override
+    public void setModifier(Function<Translation, Translation> modifier) {
+        this.modifier = modifier;
+    }
+
+    @Override
+    public Function<Translation, Translation> getModifier() {
+        return modifier;
+    }
+
+    @Override
+    public void setTranslation(Translation translation) {
+        this.translation = translation;
+    }
+
+    @Override
+    public Translation getTranslation() {
+        return translation;
     }
 }

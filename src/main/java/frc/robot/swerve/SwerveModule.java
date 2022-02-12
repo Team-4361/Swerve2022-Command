@@ -10,6 +10,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * A {@code SwerveModule} is composed of two motors and two encoders:
+ * a drive motor/encoder and a turn motor/encoder. The turn motor is
+ * responsible for controlling the direction the drive motor faces, essentially
+ * allowing the robot to move in any direction.
+ */
 public class SwerveModule {
     private static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE =
             CANSparkMaxLowLevel.MotorType.kBrushless;
@@ -62,7 +68,7 @@ public class SwerveModule {
 
 
     public double velocityMetersPerSecond() {
-        return driveEncoder.getVelocity();
+        return driveEncoder.getVelocity() / COUNTS_PER_REV;
     }
 
     public Rotation2d getTurnAngle() {
