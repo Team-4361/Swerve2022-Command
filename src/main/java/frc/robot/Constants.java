@@ -46,6 +46,9 @@ public class Constants {
         public static final int L_CLIMBER_PORT = 0;
         public static final int R_CLIMBER_PORT = 0;
 
+        public static final int B_CLIMBER_SWITCH = 0;
+        public static final int T_CLIMBER_SWITCH = 0;
+
         public static final int CLIMBER_PROXIMITY_SENSOR_PORT = 0;
 
     }
