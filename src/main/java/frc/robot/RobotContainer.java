@@ -10,21 +10,22 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import static frc.robot.Constants.*;
 
-import frc.robot.commands.ArcadeCommand;
-import frc.robot.commands.RevAutoShootCommand;
-import frc.robot.commands.CenterShooterToHubCommand;
-import frc.robot.commands.ChangeHandMode;
-import frc.robot.commands.MoveClimberDown;
-import frc.robot.commands.MoveClimberUp;
-import frc.robot.commands.MoveIntakeIn;
-import frc.robot.commands.MoveIntakeOut;
-import frc.robot.commands.RevShooterCommand;
-import frc.robot.commands.RunIntakeInward;
-import frc.robot.commands.RunIntakeOutward;
+import frc.robot.commands.intake_commands.SpinIntakeInward;
+import frc.robot.commands.intake_commands.SpinIntakeOutward;
+import frc.robot.commands.intake_commands.UserTransIntakeIn;
+import frc.robot.commands.intake_commands.UserTransIntakeOut;
+import frc.robot.commands.shooter_commands.RevAutoShootCommand;
+import frc.robot.commands.shooter_commands.RevShooterCommand;
+import frc.robot.commands.chassis_commands.ArcadeCommand;
+import frc.robot.commands.chassis_commands.CenterShooterToHubCommand;
+import frc.robot.commands.chassis_commands.ToggleLeftHandMode;
+import frc.robot.commands.climber_commands.MoveClimberDown;
+import frc.robot.commands.climber_commands.MoveClimberUp;
 
 
 public class RobotContainer {
@@ -56,12 +57,12 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // TODO: Add button bindings
     //xButton.debounce(0.2).whenActive(new CenterShooterToHubCommand());
-    xyButtonFive.whenActive(new ChangeHandMode());
-    aButton.whenHeld(new MoveIntakeOut());
-    bButton.whenHeld(new MoveIntakeIn());
+    xyButtonFive.whenActive(new ToggleLeftHandMode());
+    aButton.whenHeld(new UserTransIntakeOut());
+    bButton.whenHeld(new UserTransIntakeIn());
 
-    xButton.whenHeld(new RunIntakeOutward());
-    yButton.whenHeld(new RunIntakeInward());
+    xButton.whenHeld(new SpinIntakeOutward());
+    yButton.whenHeld(new SpinIntakeInward());
   }
 
   public Command getAutonomousCommand() {

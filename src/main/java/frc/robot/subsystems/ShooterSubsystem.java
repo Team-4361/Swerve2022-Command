@@ -9,7 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.robotutils.MotorUtil;
+import frc.robot.robot_utils.MotorUtil;
 
 
 
@@ -55,11 +55,9 @@ public class ShooterSubsystem extends SubsystemBase {
         return storageSubsystem.getStorageSensorCovered();
     }
 
-    /*
-    public void setShooterWheelVelocity(double speed){
+    public void setShooterVelocity(double speed){
         MotorUtil.runMotor(shooterMotor, MathUtil.clamp(shooterController.calculate(getVelocity(), speed), -1.0, 1.0));
     }
-    */
 
     public void runShooterTimed(double speed, int timeMs) {
         MotorUtil.runMotorTimed(shooterMotor, speed, timeMs);

@@ -1,11 +1,11 @@
-package frc.robot.commands;
+package frc.robot.commands.climber_commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.Robot;
 
-public class MoveClimberDown extends CommandBase {
+public class MoveClimberUp extends CommandBase {
     
     @Override
     public void initialize() {
@@ -15,7 +15,7 @@ public class MoveClimberDown extends CommandBase {
     
     @Override
     public void execute() {
-        Robot.climber.moveClimberDown();
+        Robot.climber.moveClimberUp();;
     }
 
     @Override

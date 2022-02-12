@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeShooter;
 import frc.robot.Constants.MotorValue;
-import frc.robot.robotutils.MotorUtil;
+import frc.robot.robot_utils.MotorUtil;
 import frc.robot.subsystems.StorageSubsystem.StorageListener;
 
 public class StorageSubsystem extends SubsystemBase {
@@ -47,13 +47,9 @@ public class StorageSubsystem extends SubsystemBase {
         colorSensor = new ColorSensorV3(IntakeShooter.COLOR_SENSOR_PORT);
         acceptorSensor = new DigitalInput(IntakeShooter.ACCEPTOR_PHOTO_ELECTRIC_PORT);
 		storageSensor = new DigitalInput(IntakeShooter.STORAGE_PHOTO_ELECTRIC_PORT);
-		leftIntakeExtend = new CANSparkMax(IntakeShooter.L_INTAKE_MOTOR_ID, kBrushless);
-		rightIntakeExtend = new CANSparkMax(IntakeShooter.R_INTAKE_MOTOR_ID, kBrushless);
 
 		storageEncoder = storageMotor.getEncoder();
 		acceptorEncoder = acceptorMotor.getEncoder();
-		leftIntakeEncoder = leftIntakeExtend.getEncoder();
-		rightIntakeEncoder = rightIntakeExtend.getEncoder();
 
 		
 
@@ -86,35 +82,6 @@ public class StorageSubsystem extends SubsystemBase {
 		SmartDashboard.putNumber("Storage: Balls Loaded", ballsLoaded);
 	}
 
-	public void extendIntake() {
-		// Run the motor until we reach the amount of rotations that are required.
-		MotorUtil.runMotor(leftIntakeExtend, MotorValue.ACCEPT_SPEED);
-		MotorUtil.runMotor(rightIntakeExtend, MotorValue.ACCEPT_SPEED);
-
-		while (Math.abs(leftIntakeEncoder.getPosition()) < IntakeShooter.MAX_INTAKE_MOTOR_POSITION && 
-		       Math.abs(rightIntakeEncoder.getPosition()) < IntakeShooter.MAX_INTAKE_MOTOR_POSITION) {
-
-			// Do nothing
-		}
-
-		MotorUtil.runMotor(leftIntakeExtend, 0);
-		MotorUtil.runMotor(rightIntakeExtend, 0);
-	}
-
-	public void retractIntake() {
-		// Run the motor until we reach the amount of rotations that are required.
-		MotorUtil.runMotor(leftIntakeExtend, -MotorValue.ACCEPT_SPEED);
-		MotorUtil.runMotor(rightIntakeExtend, -MotorValue.ACCEPT_SPEED);
-
-		while (Math.abs(leftIntakeEncoder.getPosition()) != 0 && 
-		       Math.abs(rightIntakeEncoder.getPosition()) != 0) {
-
-			// Do nothing
-		}
-
-		MotorUtil.runMotor(leftIntakeExtend, 0);
-		MotorUtil.runMotor(rightIntakeExtend, 0);
-	}
 
     /** @return Color Value  */
     public Color getColorValue() { return colorSensor.getColor(); }
