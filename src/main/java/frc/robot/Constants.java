@@ -14,11 +14,15 @@ public class Constants {
     }
 
     public static class Chassis {
-        public static final double FR_OFFSET = -5.28 - (2* Math.PI)- (Math.PI/2);
+        public static final double FR_OFFSET = -4.94 - (2* Math.PI)- (Math.PI/2);
         public static final double FL_OFFSET = -6.23 - (Math.PI/2);
-        public static final double BR_OFFSET = -1.417 - (Math.PI/2) - (2*Math.PI);
+        public static final double BR_OFFSET = -1.03 - (Math.PI/2) - (2*Math.PI);
         public static final double BL_OFFSET = -3.02  - (2*Math.PI) - (Math.PI/2);
         
+        // public static final double FR_OFFSET = 0;
+        // public static final double FL_OFFSET = 0;
+        // public static final double BR_OFFSET = 0;
+        // public static final double BL_OFFSET = 0;
 
         public static final double DEADZONE = 0.05;
         public static final int LEFT_HANDED_BUTTON = 9;
