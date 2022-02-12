@@ -8,6 +8,8 @@ import java.util.HashMap;
 
 import frc.robot.Robot;
 
+import static frc.robot.Constants.IntakeShooter.SHOOTER_WHEEL_RADIUS;
+
 public class RevAutoShootCommand extends CommandBase {
     
 
@@ -28,10 +30,12 @@ public class RevAutoShootCommand extends CommandBase {
     public void execute() {
       target = Robot.camera.getTargetGoal();
 
-      double requiredShooterVelocity = calculateDesiredVelocity(target.get("Pitch"), target.get("Distance"), target.get("Yaw"));
+      double requiredShooterVelocity =  (calculateDesiredVelocity(target.get("Pitch"), target.get("Distance"), target.get("Yaw")));
 
-      // TODO: will not work, change
-      Robot.shooter.setShooterMotor(requiredShooterVelocity);
+      //Converts from RPM to velocity
+      requiredShooterVelocity =  (SHOOTER_WHEEL_RADIUS * Math.PI *requiredShooterVelocity)/30;
+
+      new RevShooterCommand(true, requiredShooterVelocity).execute();
     }
 
     @Override

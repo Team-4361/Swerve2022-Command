@@ -55,11 +55,9 @@ public class ShooterSubsystem extends SubsystemBase {
         return storageSubsystem.getStorageSensorCovered();
     }
 
-    /*
-    public void setShooterWheelVelocity(double speed){
+    public void setShooterVelocity(double speed){
         MotorUtil.runMotor(shooterMotor, MathUtil.clamp(shooterController.calculate(getVelocity(), speed), -1.0, 1.0));
     }
-    */
 
     public void runShooterTimed(double speed, int timeMs) {
         MotorUtil.runMotorTimed(shooterMotor, speed, timeMs);

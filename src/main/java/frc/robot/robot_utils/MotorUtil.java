@@ -9,13 +9,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.MotorValue;
 
 public class MotorUtil {
+	public static CANSparkMax stalledMotor;
+
+
     /** @return Motor value, reversed if flipped is true. */
     public static double getMotorValue(double speed, boolean flipped) {
-        if (flipped) {
-            return -speed;
-        } else {
-            return speed;
-        }
+		return (flipped) ? -speed : speed;
     }
     
     public static void runMotorTimed(CANSparkMax motor, double speed, int delayTime) {
@@ -56,6 +55,7 @@ public class MotorUtil {
 				SmartDashboard.putBoolean("MotorUtil: Motor Stalled", true);
 				SmartDashboard.putNumber("MotorUtil: Stalled #ID", motor.getDeviceId());
 
+				stalledMotor = motor;
 				return true;
 			} else {
 				// The motor is not currently stalled, return false.
@@ -65,6 +65,13 @@ public class MotorUtil {
 			// Current Measuring is disabled, always return false.
 			return false;
 		}
+	}
+
+	public static CANSparkMax getStalledMotor() {
+		CANSparkMax motor = stalledMotor;
+		stalledMotor = null;
+
+		return motor;
 	}
 
 	public static void runMotor(CANSparkMax motor, double speed) {
