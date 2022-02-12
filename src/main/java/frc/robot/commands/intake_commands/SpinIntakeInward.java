@@ -1,11 +1,11 @@
-package frc.robot.commands;
+package frc.robot.commands.intake_commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.Robot;
 
-public class RunIntakeOutward extends CommandBase {
+public class SpinIntakeInward extends CommandBase {
     
     @Override
     public void initialize() {
@@ -15,7 +15,7 @@ public class RunIntakeOutward extends CommandBase {
     
     @Override
     public void execute() {
-        Robot.intake.runIntakeOut();
+        Robot.intake.moveIntakeIn();
     }
 
     @Override

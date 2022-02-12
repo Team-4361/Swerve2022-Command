@@ -9,7 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.robotutils.MotorUtil;
+import frc.robot.robot_utils.MotorUtil;
 
 
 

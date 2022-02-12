@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.MotorValue;
-import frc.robot.robotutils.MotorUtil;
+import frc.robot.robot_utils.MotorUtil;
 import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.subsystems.StorageSubsystem.AcceptColor;
 import frc.robot.subsystems.StorageSubsystem.Task;
@@ -108,10 +108,6 @@ public class StorageCommand extends CommandBase {
         // In the Dashboard, a Boolean block changes color based on true/false so it can
         // possibly be flashing if there is a problem that requires interaction.
         SmartDashboard.putBoolean("Storage Error", false);
-
-        // Extend the Intake part of the Storage so that it is sticking out of the robot
-        // and ready to accept or reject a ball.
-        storageSubsystem.extendIntake();
     }
 
     @Override
@@ -119,8 +115,6 @@ public class StorageCommand extends CommandBase {
         // If the command ends, possibly turn off the motor?
         storageSubsystem.setStorageMotor(0);
         storageSubsystem.setAcceptorMotor(0);
-
-        storageSubsystem.retractIntake();
     }
 
     @Override

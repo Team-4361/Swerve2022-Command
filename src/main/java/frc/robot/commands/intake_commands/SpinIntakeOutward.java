@@ -1,26 +1,26 @@
-package frc.robot.commands;
+package frc.robot.commands.intake_commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.Robot;
 
-public class MoveClimberUp extends CommandBase {
+public class SpinIntakeOutward extends CommandBase {
     
     @Override
     public void initialize() {
-        addRequirements(Robot.climber);
+        addRequirements(Robot.intake);
     }
 
     
     @Override
     public void execute() {
-        Robot.climber.moveClimberUp();;
+        Robot.intake.runIntakeOut();
     }
 
     @Override
     public void end(boolean interrupted) {
-        Robot.climber.stopClimber();
+        Robot.intake.stopIntake();
     }
 
     @Override

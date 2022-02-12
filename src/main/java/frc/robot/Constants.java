@@ -82,11 +82,14 @@ public class Constants {
     
         // The port to use for the Color Sensor detection.
         public static final I2C.Port COLOR_SENSOR_PORT = I2C.Port.kOnboard;
+
     
         // Adjust based on sensitivity.
         public static final double BLUE_THRESHOLD = 0.30;
         public static final double RED_THRESHOLD = 0.30;
         public static final double PROXIMITY_THRESHOLD = 120;
+
+        public static final double LENGTH_ROD_TO_ANGULAR_POS = 0;
     }
     
     //PhotonVision Constants
