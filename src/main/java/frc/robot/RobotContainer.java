@@ -19,8 +19,10 @@ import frc.robot.commands.intake_commands.SpinIntakeInward;
 import frc.robot.commands.intake_commands.SpinIntakeOutward;
 import frc.robot.commands.intake_commands.UserTransIntakeIn;
 import frc.robot.commands.intake_commands.UserTransIntakeOut;
+import frc.robot.commands.pathfinder.RectangleTestCommand;
 import frc.robot.commands.shooter_commands.RevAutoShootCommand;
 import frc.robot.commands.shooter_commands.RevShooterCommand;
+import me.wobblyyyy.pathfinder2.Pathfinder;
 import frc.robot.commands.chassis_commands.ArcadeCommand;
 import frc.robot.commands.chassis_commands.CenterShooterToHubCommand;
 import frc.robot.commands.chassis_commands.ToggleLeftHandMode;
@@ -65,9 +67,8 @@ public class RobotContainer {
     yButton.whenHeld(new SpinIntakeInward());
   }
 
-  public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return null;
+  public Command getAutonomousCommand(Pathfinder pathfinder) {
+      return new RectangleTestCommand(pathfinder);
   }
 
   //Adds a deadzone

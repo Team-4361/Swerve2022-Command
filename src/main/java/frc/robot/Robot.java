@@ -14,6 +14,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
+import me.wobblyyyy.pathfinder2.Pathfinder;
 
 import static frc.robot.Constants.Camera.CAMERA_NAME;
 import static frc.robot.Constants.Camera.CAMERA_HEIGHT;
@@ -22,89 +23,91 @@ import static frc.robot.Constants.Camera.NETWORK_TABLE_HOSTNAME;
 
 
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
+    private Command m_autonomousCommand;
 
-  private RobotContainer m_robotContainer;
+    private RobotContainer m_robotContainer;
 
-  public static SwerveDriveSubsystem swerveDrive;
-  public static StorageSubsystem storage;
-  public static ShooterSubsystem shooter;
-  public static IntakeSubsystem intake;
-  public static ClimberSubsystem climber;
+    public static SwerveDriveSubsystem swerveDrive;
+    public static Pathfinder pathfinder;
+    public static StorageSubsystem storage;
+    public static ShooterSubsystem shooter;
+    public static IntakeSubsystem intake;
+    public static ClimberSubsystem climber;
 
-  public static Camera camera;
-  public static boolean leftHandedMode = false;
+    public static Camera camera;
+    public static boolean leftHandedMode = false;
 
-  private final StorageSubsystem.AcceptColor INIT_TARGET_COLOR = StorageSubsystem.AcceptColor.BLUE;
+    private final StorageSubsystem.AcceptColor INIT_TARGET_COLOR = StorageSubsystem.AcceptColor.BLUE;
 
-  @Override
-  public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-  
-    swerveDrive = new SwerveDriveSubsystem();
-    swerveDrive.resetGyro();
+    @Override
+    public void robotInit() {
+        // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+        // autonomous chooser on the dashboard.
 
-    storage = new StorageSubsystem(INIT_TARGET_COLOR);
-    shooter = new ShooterSubsystem(storage);
+        swerveDrive = new SwerveDriveSubsystem();
+        swerveDrive.resetGyro();
+        pathfinder = swerveDrive.getPathfinder();
 
-    intake = new IntakeSubsystem();
-    climber = new ClimberSubsystem();
+        storage = new StorageSubsystem(INIT_TARGET_COLOR);
+        shooter = new ShooterSubsystem(storage);
 
-    //camera = new ShooterVisionCamera(CAMERA_NAME, CAMERA_HEIGHT, CAMERA_PITCH);
+        intake = new IntakeSubsystem();
+        climber = new ClimberSubsystem();
 
-    //Should be the last thing in this function
-    m_robotContainer = new RobotContainer();
-  }
+        //camera = new ShooterVisionCamera(CAMERA_NAME, CAMERA_HEIGHT, CAMERA_PITCH);
 
- 
-  @Override
-  public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
-  }
-  @Override
-  public void disabledInit() {}
-
-  @Override
-  public void disabledPeriodic() {}
-
-
-  @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+        //Should be the last thing in this function
+        m_robotContainer = new RobotContainer();
     }
-  }
 
-  /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {}
 
-  @Override
-  public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
+    @Override
+    public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
     }
-  }
+    @Override
+    public void disabledInit() {}
 
-  /** This function is called periodically during operator control. */
-  @Override
-  public void teleopPeriodic() {}
+    @Override
+    public void disabledPeriodic() {}
 
-  @Override
-  public void testInit() {
-    // Cancels all running commands at the start of test mode.
-    CommandScheduler.getInstance().cancelAll();
-  }
 
-  /** This function is called periodically during test mode. */
-  @Override
-  public void testPeriodic() {}
+    @Override
+    public void autonomousInit() {
+        m_autonomousCommand = m_robotContainer.getAutonomousCommand(pathfinder);
+
+        // schedule the autonomous command (example)
+        if (m_autonomousCommand != null) {
+            m_autonomousCommand.schedule();
+        }
+    }
+
+    /** This function is called periodically during autonomous. */
+    @Override
+    public void autonomousPeriodic() {}
+
+    @Override
+    public void teleopInit() {
+        // This makes sure that the autonomous stops running when
+        // teleop starts running. If you want the autonomous to
+        // continue until interrupted by another command, remove
+        // this line or comment it out.
+        if (m_autonomousCommand != null) {
+            m_autonomousCommand.cancel();
+        }
+    }
+
+    /** This function is called periodically during operator control. */
+    @Override
+    public void teleopPeriodic() {}
+
+    @Override
+    public void testInit() {
+        // Cancels all running commands at the start of test mode.
+        CommandScheduler.getInstance().cancelAll();
+    }
+
+    /** This function is called periodically during test mode. */
+    @Override
+    public void testPeriodic() {}
 }
