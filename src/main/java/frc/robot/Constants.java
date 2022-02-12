@@ -14,9 +14,9 @@ public class Constants {
     }
 
     public static class Chassis {
-        public static final double FR_OFFSET = -5.28 - (2* Math.PI)- (Math.PI/2);
+        public static final double FR_OFFSET = -4.94 - (2* Math.PI)- (Math.PI/2);
         public static final double FL_OFFSET = -6.23 - (Math.PI/2);
-        public static final double BR_OFFSET = -1.417 - (Math.PI/2) - (2*Math.PI);
+        public static final double BR_OFFSET = -1.03 - (Math.PI/2) - (2*Math.PI);
         public static final double BL_OFFSET = -3.02  - (2*Math.PI) - (Math.PI/2);
         
 
@@ -45,6 +45,9 @@ public class Constants {
     public static class Climber {
         public static final int L_CLIMBER_PORT = 0;
         public static final int R_CLIMBER_PORT = 0;
+
+        public static final int T_CLIMBER_SWITCH = 0;
+        public static final int B_CLIMBER_SWITCH = 0;
 
         public static final int CLIMBER_PROXIMITY_SENSOR_PORT = 0;
 
