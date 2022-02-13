@@ -8,10 +8,16 @@ public class Constants {
         public static final int XY_STICK_ID = 0;
         public static final int Z_STICK_ID = 1;
         public static final int CONTROLLER_ID = 2;
-
-        // Change based on operator controlling the robot.
-        public static final int CHANGE_HAND_BUTTON = 5;
     }
+
+    public static class MotorFlip {
+        // TODO: May need to be changed later.
+        public final static boolean ACCEPTOR_FLIPPED = true;
+        public final static boolean STORAGE_FLIPPED = false;
+        public final static boolean SHOOTER_FLIPPED = false;
+        public final static boolean CLIMBER_FLIPPED = false;
+    }
+
 
     public static class Chassis {
         public static final double FR_OFFSET = -5.28 - (2* Math.PI)- (Math.PI/2);
@@ -20,8 +26,7 @@ public class Constants {
         public static final double BL_OFFSET = -3.02  - (2*Math.PI) - (Math.PI/2);
         
 
-        public static final double DEADZONE = 0.05;
-        public static final int LEFT_HANDED_BUTTON = 9;
+        public static final double DEAD_ZONE = 0.05;
 
         //In meters
         public static final double SWERVE_CHASSIS_SIDE_LENGTH = 0.762;
@@ -46,12 +51,14 @@ public class Constants {
         public static final int L_CLIMBER_PORT = 0;
         public static final int R_CLIMBER_PORT = 0;
 
-        public static final int CLIMBER_PROXIMITY_SENSOR_PORT = 0;
-
+        public static final int B_CLIMBER_SWITCH = 0;
+        public static final int T_CLIMBER_SWITCH = 0;
     }
 
     public static class IntakeShooter {
-        // The first motor in the Storage device, used to accept the ball after the sensor is activated.
+        /**
+         * The first motor in the Storage device, used to accept the ball after the sensor is activated.
+         */
         public static final int ACCEPTOR_MOTOR_PORT = 7;
 
         // The second middle motor in the Storage device, used to move the ball inside.
@@ -108,6 +115,8 @@ public class Constants {
         public static final double ACCEPT_SPEED = 0.3;
         public static final double SLOW_ACCEPT_SPEED = 0.2;
 
+        public static final double CLIMBER_SPEED = 0.5;
+
         // Stall current in amps, stops the motor when the current rises above
         // the maximum value.
         public final static double STALL_CURRENT = 80;
@@ -117,11 +126,6 @@ public class Constants {
 
         // Target RPM for the Shooter Motor to activate loading
         public final static double SHOOTER_TARGET_RPM = 4800;
-
-        // TODO: May need to be changed later.
-        public final static boolean ACCEPTOR_FLIPPED = true;
-        public final static boolean STORAGE_FLIPPED = false;
-        public final static boolean SHOOTER_FLIPPED = false;
 
         // Used for stall protection, disable if any issues occur from it.
         public final static boolean CURRENT_MEASURING = true;

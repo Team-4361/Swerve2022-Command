@@ -10,33 +10,32 @@ import frc.robot.Robot;
 import java.util.HashMap;
 
 public class TestChassisCMD extends CommandBase {
-    
-    private boolean moveRight = true; 
+
+    private final boolean moveRight = true;
     private boolean moveLeft, moveFoward, moveBackward;
 
-    private PIDController chassisController;
+    private final PIDController chassisController;
 
 
-
-    public TestChassisCMD(){
+    public TestChassisCMD() {
         chassisController = new PIDController(0.1, 0, 0);
         addRequirements(Robot.swerveDrive);
     }
 
     @Override
     public void initialize() {
-        
+
     }
 
-    
+
     @Override
     public void execute() {
-    
+
     }
 
     @Override
     public void end(boolean interrupted) {
-   
+
     }
 
     @Override
@@ -44,19 +43,19 @@ public class TestChassisCMD extends CommandBase {
         return false;
     }
 
-    private void driveRight(){
+    private void driveRight() {
         Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0.8, 0, 0, Rotation2d.fromDegrees(0)));
     }
-    
-    private void driveLeft(){
+
+    private void driveLeft() {
         Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(-0.8, 0, 0, Rotation2d.fromDegrees(0)));
     }
 
-    private void driveFWD(){
+    private void driveFWD() {
         Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.8, 0, Rotation2d.fromDegrees(0)));
     }
-    
-    private void driveLBack(){
+
+    private void driveLBack() {
         Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, -0.8, 0, Rotation2d.fromDegrees(0)));
     }
 }

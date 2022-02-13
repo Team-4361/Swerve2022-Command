@@ -33,12 +33,15 @@ public class StorageSubsystem extends SubsystemBase {
 	protected static ArrayList<StorageTask> storageTasks = new ArrayList<>();
 	protected static ArrayList<StorageListener> storageListeners;
 
-  	public static enum AcceptColor { RED, BLUE }
-	public static enum Task { ACCEPT, DENY }
+  	public enum AcceptColor { RED, BLUE }
+	public enum Task { ACCEPT, DENY }
 
 	private double proximity, acceptorCurrent, storageCurrent, acceptorRPM, storageRPM;
 	public static CANSparkMax stalledMotor;
-	private RelativeEncoder storageEncoder, acceptorEncoder, leftIntakeEncoder, rightIntakeEncoder;
+	private final RelativeEncoder storageEncoder;
+	private final RelativeEncoder acceptorEncoder;
+	private RelativeEncoder leftIntakeEncoder;
+	private RelativeEncoder rightIntakeEncoder;
 	private Color color;
 
     public StorageSubsystem(AcceptColor color) {
@@ -50,8 +53,6 @@ public class StorageSubsystem extends SubsystemBase {
 
 		storageEncoder = storageMotor.getEncoder();
 		acceptorEncoder = acceptorMotor.getEncoder();
-
-		
 
 		acceptColor = color;
     }
@@ -140,7 +141,7 @@ public class StorageSubsystem extends SubsystemBase {
 	}
 
 	public void setAcceptColor(AcceptColor color){
-		this.acceptColor = color;
+		acceptColor = color;
 	}
 
 	public int getBallsLoaded() {
@@ -149,11 +150,11 @@ public class StorageSubsystem extends SubsystemBase {
 
     /** @return If the PhotoElectricSensor has a close proximity to an object. */
     public boolean getAcceptorSensorCovered() {
-		return !this.acceptorSensor.get();
+		return !acceptorSensor.get();
     }
 
 	public boolean getStorageSensorCovered() {
-        return !this.storageSensor.get();
+        return !storageSensor.get();
     }
 
 	public interface StorageListener {
@@ -165,7 +166,7 @@ public class StorageSubsystem extends SubsystemBase {
 
 class StorageTask{
 
-	private boolean colorFound = false;
+	private final boolean colorFound = false;
 	private boolean taskFaulty = false;
 	private ColorSensorV3 colorSensor;
 	private Color colorValue;
@@ -174,13 +175,13 @@ class StorageTask{
 	private StorageSubsystem.Task acceptOrDeny =  null;
 	private Thread findColorThread;
 
-	private Runnable findColor = () -> {
+	private final Runnable findColor = () -> {
 		taskCreatedTime = System.currentTimeMillis();
 
 		while (true) {
 			elapsedTime = System.currentTimeMillis() - taskCreatedTime;
 			colorValue = colorSensor.getColor();
-			
+
 			// This part is for only finding the color, ignoring the PhotoElectric sensors for now.
 			switch (targetBallColor) {
 				case BLUE: {
@@ -222,7 +223,7 @@ class StorageTask{
 				// The task has timed out, call the Timeout Error Listener.
 				taskFaulty = true;
 				StorageSubsystem.storageListeners.forEach(StorageListener::colorTimeoutError);
-				
+
 				// Remove the Thread from the ArrayList to prevent possible issues.
 				StorageSubsystem.storageTasks.remove(this);
 				findColorThread.interrupt();

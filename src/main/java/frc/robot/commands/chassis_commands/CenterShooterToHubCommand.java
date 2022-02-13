@@ -10,14 +10,14 @@ import frc.robot.Robot;
 import java.util.HashMap;
 
 public class CenterShooterToHubCommand extends CommandBase {
-    
+
     private double yawToHub = 0.0;
 
     HashMap<String, Double> target;
 
     PIDController centerShooterController;
 
-    public CenterShooterToHubCommand(){
+    public CenterShooterToHubCommand() {
         centerShooterController = new PIDController(0.1, 0, 0);
         addRequirements(Robot.swerveDrive);
     }
@@ -27,12 +27,12 @@ public class CenterShooterToHubCommand extends CommandBase {
         centerShooterController.reset();
     }
 
-    
+
     @Override
     public void execute() {
         target = Robot.camera.getTargetGoal();
         yawToHub = target.get("Yaw");
-        
+
         Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, centerShooterController.calculate(yawToHub, 0), Rotation2d.fromDegrees(0)));
     }
 
@@ -43,10 +43,10 @@ public class CenterShooterToHubCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-      if(Math.abs(yawToHub) < 0.1){
-        return true;
-      } else { 
-        return false;
-      }
+        if (Math.abs(yawToHub) < 0.1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
