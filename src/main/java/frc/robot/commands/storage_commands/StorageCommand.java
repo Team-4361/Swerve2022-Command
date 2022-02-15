@@ -33,7 +33,6 @@ public class StorageCommand extends CommandBase {
     public void initialize() {
         // The intake motor should always be running while the robot is active.
         storageSubsystem.addListener(new StorageSubsystem.StorageListener() {
-
             @Override
             public void colorFound(Task requiredTask, int ballsLoaded) {
                 try {
@@ -107,7 +106,6 @@ public class StorageCommand extends CommandBase {
     
     @Override
     public void execute() {
-        // TODO: Add general readings such as current, rpm, etc.
         SmartDashboard.putString("Storage State", currentState);
 
         // Run the motors responsible for extending the intake out of the robot, since 

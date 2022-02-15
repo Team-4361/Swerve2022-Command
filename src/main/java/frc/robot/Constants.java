@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.I2C;
+import frc.robot.robot_utils.TestUtil;
 
 public class Constants {
 
@@ -18,6 +19,11 @@ public class Constants {
         public final static boolean CLIMBER_FLIPPED = false;
     }
 
+    public static class TestValue {
+        // You can change the default Testing mode to be run here, when Driver Station
+        // is in testing mode.
+        public final static TestUtil.TestMode DEFAULT_TEST_MODE = TestUtil.TestMode.CHASSIS_DRIVE_TEST;
+    }
 
     public static class Chassis {
         public static final double FR_OFFSET = -5.28 - (2* Math.PI)- (Math.PI/2);

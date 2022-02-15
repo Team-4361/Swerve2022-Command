@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeShooter;
-import frc.robot.Constants.MotorValue;
 import frc.robot.robot_utils.MotorUtil;
 import frc.robot.subsystems.StorageSubsystem.StorageListener;
 
@@ -30,7 +29,7 @@ public class StorageSubsystem extends SubsystemBase {
 	// Can be from 0-2 depending on the amount of balls detected in the Storage.
 	protected static int ballsLoaded = 0;
 
-	protected static ArrayList<StorageTask> storageTasks = new ArrayList<>();
+	protected static StorageTask currentStorageTask;
 	protected static ArrayList<StorageListener> storageListeners;
 
   	public enum AcceptColor { RED, BLUE }
@@ -40,8 +39,6 @@ public class StorageSubsystem extends SubsystemBase {
 	public static CANSparkMax stalledMotor;
 	private final RelativeEncoder storageEncoder;
 	private final RelativeEncoder acceptorEncoder;
-	private RelativeEncoder leftIntakeEncoder;
-	private RelativeEncoder rightIntakeEncoder;
 	private Color color;
 
     public StorageSubsystem(AcceptColor color) {
@@ -120,8 +117,14 @@ public class StorageSubsystem extends SubsystemBase {
 		if (proximity > IntakeShooter.PROXIMITY_THRESHOLD) {
 			// A ball is approaching the Acceptor area of the Storage module, check if it should be
 			// accepted or denied, and send it to the Listener to be handled by the Command.
-			StorageTask storageTask = new StorageTask(colorSensor, acceptColor);
-			storageTasks.add(storageTask);
+			if (currentStorageTask != null) {
+
+				// If we use the ArrayList, then it would keep making infinite StorageTasks as long as
+				// the proximity sensor is activated. During prolonged holding of the ball, or if something
+				// gets stuck (like during Shooter Testing), this caused a Memory Error. By doing this,
+				// it makes sure that only 1 storage task can be made at a time.
+				currentStorageTask = new StorageTask(colorSensor, acceptColor);
+			}
 		}
   	}
 
@@ -166,13 +169,11 @@ public class StorageSubsystem extends SubsystemBase {
 
 class StorageTask{
 
-	private final boolean colorFound = false;
-	private boolean taskFaulty = false;
 	private ColorSensorV3 colorSensor;
 	private Color colorValue;
 	private long taskCreatedTime, elapsedTime;
 	private StorageSubsystem.AcceptColor targetBallColor;
-	private StorageSubsystem.Task acceptOrDeny =  null;
+	private StorageSubsystem.Task acceptOrDeny = null;
 	private Thread findColorThread;
 
 	private final Runnable findColor = () -> {
@@ -214,24 +215,21 @@ class StorageTask{
 				// The value from the Color Sensor has been determined, call the Listener accordingly.
 				StorageSubsystem.storageListeners.forEach(li -> li.colorFound(acceptOrDeny, StorageSubsystem.ballsLoaded));
 
-				// Remove the Thread from the ArrayList to prevent possible issues.
-				StorageSubsystem.storageTasks.remove(this);
+				// Make sure to interrupt all the Threads to prevent memory leak.
 				findColorThread.interrupt();
 			}
 
-			if (elapsedTime > 1000) {
+			if (elapsedTime > 3000) {
 				// The task has timed out, call the Timeout Error Listener.
-				taskFaulty = true;
 				StorageSubsystem.storageListeners.forEach(StorageListener::colorTimeoutError);
 
-				// Remove the Thread from the ArrayList to prevent possible issues.
-				StorageSubsystem.storageTasks.remove(this);
+				// Make sure to interrupt all the Threads to prevent memory leak.
 				findColorThread.interrupt();
 			}
 		}
 	};
 
-	public StorageTask(ColorSensorV3 colorSensor, StorageSubsystem.AcceptColor targetBallColor){
+	public StorageTask(ColorSensorV3 colorSensor, StorageSubsystem.AcceptColor targetBallColor) {
 		this.colorSensor = colorSensor;
 		this.taskCreatedTime = System.currentTimeMillis();
 		this.targetBallColor = targetBallColor;
@@ -240,7 +238,5 @@ class StorageTask{
 		this.findColorThread.start();
 	}
 
-	public boolean isColorFound(){ return colorFound; }
-	public boolean isTaskFaulty(){ return taskFaulty; }
-	public StorageSubsystem.Task getTask(){ return acceptOrDeny; }
+	public StorageSubsystem.Task getTask() { return acceptOrDeny; }
 }
