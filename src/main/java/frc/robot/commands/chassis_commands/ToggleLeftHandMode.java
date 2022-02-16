@@ -6,33 +6,29 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
 public class ToggleLeftHandMode extends CommandBase {
-    
+
     private boolean finished;
 
     @Override
     public void initialize() {
-       finished = false;
+        finished = false;
+        SmartDashboard.putBoolean("Robot: Left Handed", Robot.leftHandedMode);
     }
 
-    
+
     @Override
     public void execute() {
-      if(Robot.leftHandedMode == false){
-          Robot.leftHandedMode = true;
-      } else{
-        Robot.leftHandedMode = false;
-      }
-      finished = true;
+        Robot.leftHandedMode = !Robot.leftHandedMode;
+        SmartDashboard.putBoolean("Robot: Left Handed", Robot.leftHandedMode);
+        finished = true;
     }
 
     @Override
-    public void end(boolean interrupted) {
-        
-    }
+    public void end(boolean interrupted) {}
 
     @Override
     public boolean isFinished() {
-        //Will be finished when they're are no balls in the shooter
+        // Returns true when the Left Handed Mode has been changed.
         return !finished;
     }
 }

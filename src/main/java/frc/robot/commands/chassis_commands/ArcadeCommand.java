@@ -7,39 +7,39 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
 public class ArcadeCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  
-  private Supplier<ChassisSpeeds> chassisSpeedsFunction;
+    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-  public ArcadeCommand(Supplier<ChassisSpeeds> chassisSpeedsFunction) {
+    private final Supplier<ChassisSpeeds> chassisSpeedsFunction;
 
-    this.chassisSpeedsFunction = chassisSpeedsFunction;
-    Robot.swerveDrive.resetGyro();
+    public ArcadeCommand(Supplier<ChassisSpeeds> chassisSpeedsFunction) {
 
-    addRequirements(Robot.swerveDrive);
-  }
+        this.chassisSpeedsFunction = chassisSpeedsFunction;
+        Robot.swerveDrive.resetGyro();
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
+        addRequirements(Robot.swerveDrive);
+    }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    ChassisSpeeds speeds = chassisSpeedsFunction.get();
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {}
 
-    Robot.swerveDrive.drive(speeds);
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        ChassisSpeeds speeds = chassisSpeedsFunction.get();
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Robot.swerveDrive.getGyro()));
-  }
+        Robot.swerveDrive.drive(speeds);
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Robot.swerveDrive.getGyro()));
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

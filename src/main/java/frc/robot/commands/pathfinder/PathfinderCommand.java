@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.pathfinder;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDriveSubsystem;
@@ -10,8 +10,7 @@ public class PathfinderCommand extends CommandBase {
     private final Pathfinder pathfinder;
     private final Trajectory trajectory;
 
-    public PathfinderCommand(Pathfinder pathfinder,
-                             Trajectory trajectory) {
+    public PathfinderCommand(Pathfinder pathfinder, Trajectory trajectory) {
         this.pathfinder = pathfinder;
         this.trajectory = trajectory;
     }

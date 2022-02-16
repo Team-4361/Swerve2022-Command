@@ -11,70 +11,68 @@ import static frc.robot.Constants.IntakeShooter.R_INTAKE_MOTOR_ID;
 import static frc.robot.Constants.IntakeShooter.INTAKE_MOTOR_ID;
 import static frc.robot.Constants.IntakeShooter.LENGTH_ROD_TO_ANGULAR_POS;
 
+import static frc.robot.Constants.Climber.*;
+import static frc.robot.robot_utils.MotorUtil.*;
+import static frc.robot.Constants.MotorValue.*;
+import static frc.robot.Constants.MotorFlip.*;
+
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 
 public class IntakeSubsystem extends SubsystemBase {
-  
-  private CANSparkMax leftIntakeTransMTR = new CANSparkMax(L_INTAKE_MOTOR_ID, kBrushless);
-  private CANSparkMax rightIntakeTransMTR = new CANSparkMax(R_INTAKE_MOTOR_ID, kBrushless);
-  private CANSparkMax intakeMTR = new CANSparkMax(INTAKE_MOTOR_ID, kBrushless);
 
-  private RelativeEncoder leftIntakeTransEncoder;
+    private final CANSparkMax leftIntakeTransMTR = new CANSparkMax(L_INTAKE_MOTOR_ID, kBrushless);
+    private final CANSparkMax rightIntakeTransMTR = new CANSparkMax(R_INTAKE_MOTOR_ID, kBrushless);
+    private final CANSparkMax intakeMTR = new CANSparkMax(INTAKE_MOTOR_ID, kBrushless);
 
-  private PIDController intakeController = new PIDController(0.1, 0, 0);
+    private final CANSparkMax[] intakeMotors = new CANSparkMax[]{leftIntakeTransMTR, rightIntakeTransMTR};
 
-  
+    private final RelativeEncoder leftIntakeTransEncoder;
 
-  public IntakeSubsystem() {
-    leftIntakeTransEncoder = leftIntakeTransMTR.getEncoder();
-  }
+    private final PIDController intakeController = new PIDController(0.1, 0, 0);
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    
-  }
+    public IntakeSubsystem() {
+        leftIntakeTransEncoder = leftIntakeTransMTR.getEncoder();
+    }
 
-  public void extendIntake() {
-    translateIntake(intakeController.calculate(getPosition(), LENGTH_ROD_TO_ANGULAR_POS));
-	}
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
 
-	public void retractIntake() {
-    translateIntake(intakeController.calculate(getPosition(), 0));
-	}
+    public void extendIntake() {
+        translateIntake(intakeController.calculate(getPosition(), LENGTH_ROD_TO_ANGULAR_POS));
+    }
 
-  public void moveIntakeOut() {
-      leftIntakeTransMTR.set(0.5);
-      rightIntakeTransMTR.set(0.5);
-  }
+    public void retractIntake() {
+        translateIntake(intakeController.calculate(getPosition(), 0));
+    }
 
-  public void moveIntakeIn() {
-    leftIntakeTransMTR.set(-0.5);
-    rightIntakeTransMTR.set(-0.5);
-  }
+    public void moveIntakeOut() {
+        runMotors(intakeMotors, 0.5);
+    }
 
-  public void runIntakeIn(){
-    intakeMTR.set(0.5);
-  }
+    public void moveIntakeIn() {
+        runMotors(intakeMotors, -0.5);
+    }
 
-  public void runIntakeOut(){
-    intakeMTR.set(-0.5);
-  }
+    public void runIntakeIn() {
+        runMotor(intakeMTR, 0.5);
+    }
 
-  public void stopIntake(){
-    leftIntakeTransMTR.set(0);
-    rightIntakeTransMTR.set(0);
+    public void runIntakeOut() {
+        runMotor(intakeMTR, -0.5);
+    }
 
-    intakeMTR.set(0);
-  }
+    public void stopIntake() {
+        stopMotors(intakeMotors);
+        stopMotor(intakeMTR);
+    }
 
-  public void translateIntake(double value){
-    leftIntakeTransMTR.set(value);
-    rightIntakeTransMTR.set(value);
-  }
+    public void translateIntake(double value) {
+        runMotors(intakeMotors, value);
+    }
 
-  public double getPosition(){
-    return leftIntakeTransEncoder.getPosition();
-  }
-
+    public double getPosition() {
+        return leftIntakeTransEncoder.getPosition();
+    }
 }

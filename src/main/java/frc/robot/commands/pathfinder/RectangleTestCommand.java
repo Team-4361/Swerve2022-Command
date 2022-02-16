@@ -3,7 +3,6 @@ package frc.robot.commands.pathfinder;
 import java.util.ArrayList;
 import java.util.List;
 
-import frc.robot.commands.PathfinderCommand;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
