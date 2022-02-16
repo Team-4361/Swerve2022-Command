@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import static frc.robot.Constants.*;
@@ -23,6 +24,10 @@ import frc.robot.commands.shooter_commands.RevAutoShootCommand;
 import frc.robot.commands.shooter_commands.RevShooterCommand;
 import frc.robot.commands.chassis_commands.ArcadeCommand;
 import frc.robot.commands.chassis_commands.CenterShooterToHubCommand;
+import frc.robot.commands.chassis_commands.MoveBCKCMD;
+import frc.robot.commands.chassis_commands.MoveFWDCMD;
+import frc.robot.commands.chassis_commands.MoveLeftCMD;
+import frc.robot.commands.chassis_commands.MoveRightCMD;
 import frc.robot.commands.chassis_commands.ToggleLeftHandMode;
 import frc.robot.commands.climber_commands.MoveClimberDown;
 import frc.robot.commands.climber_commands.MoveClimberUp;
@@ -40,6 +45,10 @@ public class RobotContainer {
   private final JoystickButton xyButtonFive = new JoystickButton(xyStick, 5);
   private final JoystickButton aButton = new JoystickButton(controller, 1);
   private final JoystickButton bButton = new JoystickButton(controller, 2);
+  private final JoystickButton lBumper = new JoystickButton(controller, 5);
+  private final JoystickButton rBumper = new JoystickButton(controller, 6);
+
+  private final SequentialCommandGroup testSwerveDrive = new SequentialCommandGroup(new MoveRightCMD(), new MoveLeftCMD(), new MoveFWDCMD(), new MoveBCKCMD());
 
   public RobotContainer() {
     Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() -> {
@@ -63,6 +72,11 @@ public class RobotContainer {
 
     xButton.whenHeld(new SpinIntakeOutward());
     yButton.whenHeld(new SpinIntakeInward());
+
+    xButton.and(aButton).and(yButton).and(bButton).whenActive(testSwerveDrive);
+
+    lBumper.whenActive(new MoveClimberDown());
+    rBumper.whenActive(new MoveClimberUp());
   }
 
   public Command getAutonomousCommand() {

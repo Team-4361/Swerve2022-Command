@@ -110,4 +110,9 @@ public class SwerveModule {
         SmartDashboard.putNumber(turnPosition, getTurnAngle().getRadians());
         SmartDashboard.putNumber(drivePower, driveMotor.get());
     }
+    
+    //In revolutions
+    public double getDistance(){
+        return driveEncoder.getPosition();
+    }
 }

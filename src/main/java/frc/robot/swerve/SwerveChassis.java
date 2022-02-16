@@ -10,8 +10,10 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.Constants;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
+
 
 public class SwerveChassis implements Drive {
     private static final Translation2d SWERVE_FR_POSITION =
@@ -131,5 +133,9 @@ public class SwerveChassis implements Drive {
     @Override
     public Translation getTranslation() {
         return translation;
+    }
+
+    public double getDistance(){
+        return frontRight.getDistance() * 2 * Math.PI * Constants.Chassis.SWERVE_WHEEL_RADIUS;
     }
 }

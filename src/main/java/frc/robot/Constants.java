@@ -40,11 +40,13 @@ public class Constants {
         public static final int FL_DIO_ENCODER_PORT = 0;
         public static final int BR_DIO_ENCODER_PORT = 3;
         public static final int BL_DIO_ENCODER_PORT = 2;
+
+        public static final double SWERVE_WHEEL_RADIUS = 0.0508;
     }
 
     public static class Climber {
-        public static final int L_CLIMBER_PORT = 0;
-        public static final int R_CLIMBER_PORT = 0;
+        public static final int L_CLIMBER_PORT = 8;
+        public static final int R_CLIMBER_PORT = 5;
 
         public static final int T_CLIMBER_SWITCH = 0;
         public static final int B_CLIMBER_SWITCH = 0;

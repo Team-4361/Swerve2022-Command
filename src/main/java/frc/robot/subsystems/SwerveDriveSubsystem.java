@@ -63,4 +63,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public void resetGyro() {
         gyro.reset();
     }
+
+    public double getDistance(){
+        return swerveChassis.getDistance();
+    }
 }
