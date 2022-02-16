@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class MoveFWDCMD extends CommandBase {
 
 
-    private PIDController chassisController;
+    private final PIDController chassisController;
 
     private final double distanceToMove = 2.4;
     private double initDriveEncoderDist = 0;
@@ -43,7 +43,7 @@ public class MoveFWDCMD extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (getAbsDistance() > distanceToMove) ? true : false;
+        return getAbsDistance() > distanceToMove;
     }
 
     private double getAbsDistance(){

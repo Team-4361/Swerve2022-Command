@@ -27,10 +27,6 @@ public class DisableIntake extends CommandBase {
     @Override
     public boolean isFinished() {
         //Will be finished when they're are no balls in the shooter
-        if(Robot.intake.getPosition() < (0.1)){
-            return true;
-        }
-
-        return false;
+        return Robot.intake.getPosition() < (0.1);
     }
 }

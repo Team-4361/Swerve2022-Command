@@ -43,10 +43,6 @@ public class CenterShooterToHubCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (Math.abs(yawToHub) < 0.1) {
-            return true;
-        } else {
-            return false;
-        }
+        return Math.abs(yawToHub) < 0.1;
     }
 }
