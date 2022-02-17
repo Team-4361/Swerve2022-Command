@@ -62,8 +62,6 @@ public class Constants {
         public static final int T_CLIMBER_SWITCH = 0;
         public static final int B_CLIMBER_SWITCH = 0;
 
-        public static final int B_CLIMBER_SWITCH = 0;
-        public static final int T_CLIMBER_SWITCH = 0;
     }
 
     public static class IntakeShooter {
