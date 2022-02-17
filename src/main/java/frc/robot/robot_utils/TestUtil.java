@@ -5,7 +5,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.HashMap;
 
 public class TestUtil {
-    public enum TestMode { CHASSIS_DRIVE_TEST, CHASSIS_OFFSET_ADJUSTMENT }
+
+    // Add testing modes
+    public enum TestMode { 
+        CHASSIS_DRIVE_TEST, 
+        CHASSIS_OFFSET_ADJUSTMENT,
+        SHOOTER_ANGLE_TEST;
+    }
 
     private HashMap<TestMode, CommandBase> defaultCommands;
     private TestMode currentTestMode;

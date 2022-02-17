@@ -4,12 +4,17 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.TestValue.DEFAULT_TEST_MODE;
+import static frc.robot.robot_utils.TestUtil.TestMode.CHASSIS_DRIVE_TEST;
+import static frc.robot.robot_utils.TestUtil.TestMode.CHASSIS_OFFSET_ADJUSTMENT;
+import static frc.robot.robot_utils.TestUtil.TestMode.SHOOTER_ANGLE_TEST;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.IntakeShooter;
 import frc.robot.commands.test_commands.ChassisDriveTest;
 import frc.robot.commands.test_commands.ChassisOffsetTest;
+import frc.robot.commands.test_commands.ShooterAngleTest;
 import frc.robot.robot_utils.Camera;
 import frc.robot.robot_utils.TestUtil;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -17,16 +22,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
-
 import me.wobblyyyy.pathfinder2.Pathfinder;
-
-import static frc.robot.Constants.Camera.CAMERA_NAME;
-import static frc.robot.Constants.Camera.CAMERA_HEIGHT;
-import static frc.robot.Constants.Camera.CAMERA_PITCH;
-import static frc.robot.Constants.Camera.NETWORK_TABLE_HOSTNAME;
-
-import static frc.robot.robot_utils.TestUtil.TestMode.*;
-import static frc.robot.Constants.TestValue.*;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
@@ -65,6 +61,7 @@ public class Robot extends TimedRobot {
         testUtil = new TestUtil()
                 .addDefaultCommand(CHASSIS_DRIVE_TEST, new ChassisDriveTest())
                 .addDefaultCommand(CHASSIS_OFFSET_ADJUSTMENT, new ChassisOffsetTest())
+                .addDefaultCommand(SHOOTER_ANGLE_TEST, new ShooterAngleTest())
                 .setTestMode(DEFAULT_TEST_MODE);
 
         //camera = new ShooterVisionCamera(CAMERA_NAME, CAMERA_HEIGHT, CAMERA_PITCH);
