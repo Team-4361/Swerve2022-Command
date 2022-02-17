@@ -111,8 +111,14 @@ public class Constants {
     }
     
     //PhotonVision Constants
-    public static class Camera {
+    public static class ShooterCameraConsts {
         public static final String NETWORK_TABLE_HOSTNAME = "";
+        public static final String CAMERA_NAME = "";
+	    public static final double CAMERA_HEIGHT = 0.0;
+        public static final double CAMERA_PITCH = 0.0;
+    }
+
+    public static class ChassisCameraConsts {
         public static final String CAMERA_NAME = "";
 	    public static final double CAMERA_HEIGHT = 0.0;
         public static final double CAMERA_PITCH = 0.0;

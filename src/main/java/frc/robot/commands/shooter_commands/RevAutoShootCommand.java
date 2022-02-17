@@ -28,7 +28,7 @@ public class RevAutoShootCommand extends CommandBase {
 
     @Override
     public void execute() {
-        target = Robot.camera.getTargetGoal();
+        target = Robot.shooterCamera.getTargetGoal();
 
         double requiredShooterVelocity = (calculateDesiredVelocity(target.get("Pitch"), target.get("Distance"), target.get("Yaw")));
 

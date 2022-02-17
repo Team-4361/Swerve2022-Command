@@ -30,7 +30,7 @@ public class CenterShooterToHubCommand extends CommandBase {
 
     @Override
     public void execute() {
-        target = Robot.camera.getTargetGoal();
+        target = Robot.shooterCamera.getTargetGoal();
         yawToHub = target.get("Yaw");
 
         Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, centerShooterController.calculate(yawToHub, 0), Rotation2d.fromDegrees(0)));
