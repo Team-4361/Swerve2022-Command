@@ -116,12 +116,14 @@ public class Constants {
         public static final String CAMERA_NAME = "";
 	    public static final double CAMERA_HEIGHT = 0.0;
         public static final double CAMERA_PITCH = 0.0;
+        public static final double TAPE_HEIGHT = 0.0;
     }
 
     public static class ChassisCameraConsts {
         public static final String CAMERA_NAME = "";
 	    public static final double CAMERA_HEIGHT = 0.0;
         public static final double CAMERA_PITCH = 0.0;
+        public static final double BALL_HEIGHT = 0.0;
     }
     
     // These values are designed to be changed based on the Motor 

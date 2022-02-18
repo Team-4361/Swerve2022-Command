@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
                 .setTestMode(DEFAULT_TEST_MODE);
 
         shooterCamera = new ShooterCamera(ShooterCameraConsts.CAMERA_NAME, ShooterCameraConsts.CAMERA_HEIGHT, ShooterCameraConsts.CAMERA_PITCH);
-        chassisCamera = new ChassisCamera(ChassisCameraConsts.CAMERA_NAME, ChassisCameraConsts.CAMERA_HEIGHT, ChassisCameraConsts.CAMERA_PITCH);
+        chassisCamera = new ChassisCamera(ChassisCameraConsts.CAMERA_NAME, ChassisCameraConsts.CAMERA_HEIGHT, ChassisCameraConsts.CAMERA_PITCH, INIT_TARGET_COLOR);
 
         //Should be the last thing in this function
         m_robotContainer = new RobotContainer();

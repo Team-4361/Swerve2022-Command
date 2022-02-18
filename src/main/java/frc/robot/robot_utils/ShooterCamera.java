@@ -6,6 +6,8 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonTrackedTarget;
 import org.photonvision.PhotonUtils;
 
+import static frc.robot.Constants.ShooterCameraConsts.TAPE_HEIGHT;
+
 public class ShooterCamera {
 
     PhotonCamera photonCamera;
@@ -14,7 +16,7 @@ public class ShooterCamera {
     double cameraPitch;
 
     //Height in meters of the target
-    final double TARGET_HEIGHT = 0.0381;
+    final double TARGET_HEIGHT = TAPE_HEIGHT;
 
     /*
       Our networktablename is photonvision

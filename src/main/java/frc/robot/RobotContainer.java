@@ -19,6 +19,7 @@ import frc.robot.commands.intake_commands.SpinIntakeOutward;
 import frc.robot.commands.intake_commands.UserTransIntakeIn;
 import frc.robot.commands.intake_commands.UserTransIntakeOut;
 import frc.robot.commands.pathfinder.RectangleTestCommand;
+import frc.robot.commands.shooter_commands.RevAutoShootCommand;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 
 import static frc.robot.Constants.*;
@@ -75,6 +76,16 @@ public class RobotContainer {
     public Command getAutonomousCommand(Pathfinder pathfinder) {
         return new RectangleTestCommand(pathfinder);
     }
+
+    public Command getCenterShooterToHubCommand(){
+        return new CenterShooterToHubCommand();
+    }
+
+    public Command revAutoShootCommand(){
+        return new RevAutoShootCommand();
+    }
+    
+    
 
     //Adds a deadzone
     public double deadzone(double value, double deadzone) {

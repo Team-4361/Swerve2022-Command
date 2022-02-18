@@ -4,7 +4,12 @@ import java.util.HashMap;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import frc.robot.subsystems.StorageSubsystem;
+
 import org.photonvision.PhotonUtils;
+import frc.robot.subsystems.StorageSubsystem.AcceptColor;
+import static frc.robot.Constants.ChassisCameraConsts.BALL_HEIGHT;
 
 public class ChassisCamera {
 
@@ -14,7 +19,7 @@ public class ChassisCamera {
     double cameraPitch;
 
     //Height in meters of the target
-    final double TARGET_HEIGHT = 0.0381;
+    final double TARGET_HEIGHT = BALL_HEIGHT;
 
     /*
       Our networktablename is photonvision
@@ -27,7 +32,7 @@ public class ChassisCamera {
      * @param mCameraHeight camera height in meters
      * @param mCameraPitch camera pitch in radians
      */
-    public ChassisCamera(String cameraName, double mCameraHeight, double mCameraPitch)
+    public ChassisCamera(String cameraName, double mCameraHeight, double mCameraPitch, AcceptColor targetColor)
     {
         cameraHeight = mCameraHeight;
 
@@ -36,7 +41,11 @@ public class ChassisCamera {
 
         photonCamera = new PhotonCamera(cameraName);
 
-        photonCamera.setPipelineIndex(0);
+        if(targetColor == AcceptColor.BLUE){
+            photonCamera.setPipelineIndex(1);
+        } else{
+            photonCamera.setPipelineIndex(2);
+        }
 
         System.out.println("Connected");
     }
