@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.robot_utils.TestUtil;
 
+// TODO: check all values and make sure they are correct
 public class Constants {
 
     public static class Control {
@@ -17,12 +18,13 @@ public class Constants {
         public final static boolean STORAGE_FLIPPED = false;
         public final static boolean SHOOTER_FLIPPED = false;
         public final static boolean CLIMBER_FLIPPED = false;
+        public final static boolean ADJUSTOR_FLIPPED = false;
     }
 
     public static class TestValue {
         // You can change the default Testing mode to be run here, when Driver Station
         // is in testing mode.
-        public final static TestUtil.TestMode DEFAULT_TEST_MODE = TestUtil.TestMode.CHASSIS_DRIVE_TEST;
+        public final static TestUtil.TestMode DEFAULT_TEST_MODE = TestUtil.TestMode.SHOOTER_ANGLE_TEST;
     }
 
     public static class Chassis {
@@ -59,9 +61,8 @@ public class Constants {
         public static final int L_CLIMBER_PORT = 8;
         public static final int R_CLIMBER_PORT = 5;
 
-        public static final int T_CLIMBER_SWITCH = 0;
         public static final int B_CLIMBER_SWITCH = 0;
-
+        public static final int T_CLIMBER_SWITCH = 0;
     }
 
     public static class IntakeShooter {
@@ -77,10 +78,10 @@ public class Constants {
         public static final int SHOOTER_MOTOR_PORT = 8;
 
         // Left Intake Extend Motor Port
-        public static final int L_INTAKE_MOTOR_ID = 9; // TODO: change
+        public static final int L_INTAKE_MOTOR_ID = 9; 
 
         // Right Intake Extend Motor Port
-        public static final int R_INTAKE_MOTOR_ID = 11; // TODO: change
+        public static final int R_INTAKE_MOTOR_ID = 11;
 
         public static final int MAX_INTAKE_MOTOR_POSITION = 0;
 
@@ -101,6 +102,8 @@ public class Constants {
         // The port to use for the Color Sensor detection.
         public static final I2C.Port COLOR_SENSOR_PORT = I2C.Port.kOnboard;
 
+        public static final double ADJUSTOR_GEAR_RATIO = /*1:*/160;
+
     
         // Adjust based on sensitivity.
         public static final double BLUE_THRESHOLD = 0.30;
@@ -108,6 +111,9 @@ public class Constants {
         public static final double PROXIMITY_THRESHOLD = 120;
 
         public static final double LENGTH_ROD_TO_ANGULAR_POS = 0;
+
+        // Shooter Adjustment Motor
+        public static final int SHOOTER_ADJUSTMENT_PORT = 0;
     }
     
     //PhotonVision Constants
@@ -131,6 +137,8 @@ public class Constants {
         public static final double SHOOT_SPEED = 1.0;
         public static final double ACCEPT_SPEED = 0.3;
         public static final double SLOW_ACCEPT_SPEED = 0.2;
+
+        public static final double ADJUSTOR_SPEED = 0.3;
 
         public static final double CLIMBER_SPEED = 0.5;
 

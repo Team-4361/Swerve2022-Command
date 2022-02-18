@@ -12,6 +12,7 @@ import static frc.robot.Constants.*;
 public class RevShooterCommand extends CommandBase {
 
     private double shooterVelocity, shooterCurrent, autoVelocity = 0;
+    private int shootAngle = 45;
     private boolean shootingDone = false;
     private boolean multiBall = true;
 
@@ -31,6 +32,11 @@ public class RevShooterCommand extends CommandBase {
         autoVelocity = velocity;
     }
 
+    public RevShooterCommand setAngle(int angle) {
+        shootAngle = angle;
+        return this;
+    }
+
     @Override
     public void initialize() {
         SmartDashboard.putString("Shooter: Status", "Idle");
@@ -39,14 +45,16 @@ public class RevShooterCommand extends CommandBase {
     public void shoot(boolean reset) {
         SmartDashboard.putString("Shooter: Status", "Ramping up");
 
+        Robot.shooter.setAdjustAngle(shootAngle);
+
         if (autoVelocity == 0) {
             // This is running the command in the Full Power Shoot mode, non-autonomous
             Robot.shooter.setShooterMotor(MotorUtil.getMotorValue(MotorValue.SHOOT_SPEED, MotorFlip.SHOOTER_FLIPPED));
 
-            while (!Robot.shooter.isDesiredSpeed(MotorValue.SHOOTER_TARGET_RPM)) {}
+            while (!Robot.shooter.isDesiredSpeed(MotorValue.SHOOTER_TARGET_RPM) && Robot.shooter.getAdjustAngle() <= shootAngle) {}
         } else {
             Robot.shooter.setShooterVelocity(autoVelocity);
-            while (!Robot.shooter.isDesiredSpeed(autoVelocity)) {}
+            while (!Robot.shooter.isDesiredSpeed(autoVelocity) && Robot.shooter.getAdjustAngle() <= shootAngle) {}
         }
 
 
