@@ -47,6 +47,7 @@ public class RobotContainer {
     private JoystickButton[] xyStickButtons;
 
     private final SequentialCommandGroup testSwerveDrive = new SequentialCommandGroup(new MoveRightCMD(), new MoveLeftCMD(), new MoveFWDCMD(), new MoveBCKCMD());
+    private final SequentialCommandGroup AutoShoot = new SequentialCommandGroup(new CenterShooterToHubCommand(), new RevAutoShootCommand(), new ShootCMD());
 
     public RobotContainer() {
         Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() -> ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -65,12 +66,16 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         // TODO: Add button bindings
-        //xButton.debounce(0.2).whenActive(new CenterShooterToHubCommand());
-        xyButtonFive.whenActive(new ToggleLeftHandMode());
-        // aButton.whenHeld(new UserTransIntakeOut());
-        // bButton.whenHeld(new UserTransIntakeIn());
 
-        aButton.whenHeld(new SequentialCommandGroup(new CenterShooterToHubCommand(), new RevAutoShootCommand(), new ShootCMD()));
+        //Joysticks
+        xyStickButtons[12].whenPressed(new RevIncreaseShooterAngle(10));
+        xyStickButtons[13].whenPressed(new RevDecreaseShooterAngle(10));
+        xyButtonFive.whenActive(new ToggleLeftHandMode());
+        xyStickButtons[11].debounce(0.2).whenActive(new CenterShooterToHubCommand());
+
+        //Xbox Controller
+        aButton.whenHeld(AutoShoot);
+        bButton.whenHeld(new ShootCMD());
 
         xButton.whenPressed(new EnableIntake());
         xButton.whenReleased(new DisableIntake());
@@ -78,9 +83,6 @@ public class RobotContainer {
         xButton.whenHeld(new SpinIntakeInward());
 
         yButton.whenHeld(new SpinIntakeOutward());
-
-        xyStickButtons[12].whenPressed(new RevIncreaseShooterAngle(10));
-        xyStickButtons[13].whenPressed(new RevDecreaseShooterAngle(10));
 
         xButton.and(aButton).and(yButton).and(bButton).whenActive(testSwerveDrive);
 
