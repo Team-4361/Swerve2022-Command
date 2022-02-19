@@ -14,13 +14,17 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.chassis_commands.*;
 import frc.robot.commands.climber_commands.MoveClimberDown;
 import frc.robot.commands.climber_commands.MoveClimberUp;
+import frc.robot.commands.intake_commands.DisableIntake;
+import frc.robot.commands.intake_commands.EnableIntake;
 import frc.robot.commands.intake_commands.SpinIntakeInward;
 import frc.robot.commands.intake_commands.SpinIntakeOutward;
 import frc.robot.commands.intake_commands.UserTransIntakeIn;
 import frc.robot.commands.intake_commands.UserTransIntakeOut;
 import frc.robot.commands.pathfinder.RectangleTestCommand;
+import frc.robot.commands.shooter_commands.RevAutoShootCommand;
 import frc.robot.commands.shooter_commands.RevDecreaseShooterAngle;
 import frc.robot.commands.shooter_commands.RevIncreaseShooterAngle;
+import frc.robot.commands.shooter_commands.ShootCMD;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 
 import static frc.robot.Constants.*;
@@ -63,11 +67,17 @@ public class RobotContainer {
         // TODO: Add button bindings
         //xButton.debounce(0.2).whenActive(new CenterShooterToHubCommand());
         xyButtonFive.whenActive(new ToggleLeftHandMode());
-        aButton.whenHeld(new UserTransIntakeOut());
-        bButton.whenHeld(new UserTransIntakeIn());
+        // aButton.whenHeld(new UserTransIntakeOut());
+        // bButton.whenHeld(new UserTransIntakeIn());
 
-        xButton.whenHeld(new SpinIntakeOutward());
-        yButton.whenHeld(new SpinIntakeInward());
+        aButton.whenHeld(new SequentialCommandGroup(new CenterShooterToHubCommand(), new RevAutoShootCommand(), new ShootCMD()));
+
+        xButton.whenPressed(new EnableIntake());
+        xButton.whenReleased(new DisableIntake());
+
+        xButton.whenHeld(new SpinIntakeInward());
+
+        yButton.whenHeld(new SpinIntakeOutward());
 
         xyStickButtons[12].whenPressed(new RevIncreaseShooterAngle(10));
         xyStickButtons[13].whenPressed(new RevDecreaseShooterAngle(10));

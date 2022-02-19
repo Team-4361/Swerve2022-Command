@@ -16,7 +16,7 @@ public class RevAutoShootCommand extends CommandBase {
 
 
     public RevAutoShootCommand() {
-        addRequirements(Robot.shooter, Robot.storage);
+        addRequirements(Robot.shooter);
     }
 
     @Override
