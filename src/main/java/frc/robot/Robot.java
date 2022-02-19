@@ -15,7 +15,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.test_commands.ChassisDriveTest;
 import frc.robot.commands.test_commands.ChassisOffsetTest;
 import frc.robot.commands.test_commands.ShooterAngleTest;
-import frc.robot.robot_utils.Camera;
+import frc.robot.robot_utils.ChassisCamera;
+import frc.robot.robot_utils.ShooterCamera;
 import frc.robot.robot_utils.TestUtil;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -37,7 +38,8 @@ public class Robot extends TimedRobot {
     public static ClimberSubsystem climber;
     public static TestUtil testUtil;
 
-    public static Camera camera;
+    public static ShooterCamera shooterCamera;
+    public static ChassisCamera chassisCamera;
     public static boolean leftHandedMode = false;
 
     private final StorageSubsystem.AcceptColor INIT_TARGET_COLOR = StorageSubsystem.AcceptColor.BLUE;
@@ -64,7 +66,6 @@ public class Robot extends TimedRobot {
                 .addDefaultCommand(SHOOTER_ANGLE_TEST, new ShooterAngleTest())
                 .setTestMode(DEFAULT_TEST_MODE);
 
-        //camera = new ShooterVisionCamera(CAMERA_NAME, CAMERA_HEIGHT, CAMERA_PITCH);
 
         //Should be the last thing in this function
         m_robotContainer = new RobotContainer();
