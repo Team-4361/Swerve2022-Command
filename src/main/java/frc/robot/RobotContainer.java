@@ -98,6 +98,10 @@ public class RobotContainer {
     public Command getAutonomousCommand(Pathfinder pathfinder) {
         return new RectangleTestCommand(pathfinder);
     }
+    
+    public SequentialCommandGroup getAutoShoot(){
+        return new SequentialCommandGroup(new CenterShooterToHubCommand(), new RevAutoShootCommand(), new ShootCMD());
+    }
 
     //Adds a deadzone
     public double deadzone(double value, double deadzone) {
