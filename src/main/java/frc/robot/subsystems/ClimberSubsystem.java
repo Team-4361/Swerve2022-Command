@@ -4,8 +4,6 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.robot_utils.MotorUtil;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.Climber.*;
@@ -49,7 +47,9 @@ public class ClimberSubsystem extends SubsystemBase {
     public void lowerClimber() {
         runMotors(climberGroup, getMotorValue(-CLIMBER_SPEED, CLIMBER_FLIPPED));
 
-        while (!bottomProximitySwitch.get() && !isAnyStalled(climberGroup)) {}
+        while (!bottomProximitySwitch.get() && !isAnyStalled(climberGroup)) {
+            Thread.onSpinWait();
+        }
 
         stopMotors(climberGroup);
     }
@@ -57,7 +57,9 @@ public class ClimberSubsystem extends SubsystemBase {
     public void raiseClimber() {
         runMotors(climberGroup, getMotorValue(CLIMBER_SPEED, CLIMBER_FLIPPED));
 
-        while (!topProximitySwitch.get() && !isAnyStalled(climberGroup)) {}
+        while (!topProximitySwitch.get() && !isAnyStalled(climberGroup)) {
+            Thread.onSpinWait();
+        }
 
         stopMotors(climberGroup);
     }

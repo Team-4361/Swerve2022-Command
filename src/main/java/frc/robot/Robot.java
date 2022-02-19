@@ -14,9 +14,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.test_commands.ChassisDriveTest;
 import frc.robot.commands.test_commands.ChassisOffsetTest;
-import frc.robot.robot_utils.ChassisCamera;
-import frc.robot.robot_utils.ShooterCamera;
 import frc.robot.commands.test_commands.ShooterAngleTest;
+import frc.robot.robot_utils.Camera;
 import frc.robot.robot_utils.TestUtil;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -24,13 +23,6 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.subsystems.SwerveDriveSubsystem;
 import me.wobblyyyy.pathfinder2.Pathfinder;
-
-import static frc.robot.Constants.ShooterCameraConsts;
-import static frc.robot.Constants.ChassisCameraConsts;
-
-
-import static frc.robot.robot_utils.TestUtil.TestMode.*;
-import static frc.robot.Constants.TestValue.*;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
@@ -45,8 +37,7 @@ public class Robot extends TimedRobot {
     public static ClimberSubsystem climber;
     public static TestUtil testUtil;
 
-    public static ShooterCamera shooterCamera;
-    public static ChassisCamera chassisCamera;
+    public static Camera camera;
     public static boolean leftHandedMode = false;
 
     private final StorageSubsystem.AcceptColor INIT_TARGET_COLOR = StorageSubsystem.AcceptColor.BLUE;
@@ -73,8 +64,7 @@ public class Robot extends TimedRobot {
                 .addDefaultCommand(SHOOTER_ANGLE_TEST, new ShooterAngleTest())
                 .setTestMode(DEFAULT_TEST_MODE);
 
-        shooterCamera = new ShooterCamera(ShooterCameraConsts.CAMERA_NAME, ShooterCameraConsts.CAMERA_HEIGHT, ShooterCameraConsts.CAMERA_PITCH);
-        chassisCamera = new ChassisCamera(ChassisCameraConsts.CAMERA_NAME, ChassisCameraConsts.CAMERA_HEIGHT, ChassisCameraConsts.CAMERA_PITCH, INIT_TARGET_COLOR);
+        //camera = new ShooterVisionCamera(CAMERA_NAME, CAMERA_HEIGHT, CAMERA_PITCH);
 
         //Should be the last thing in this function
         m_robotContainer = new RobotContainer();

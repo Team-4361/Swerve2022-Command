@@ -11,10 +11,7 @@ import static frc.robot.Constants.IntakeShooter.R_INTAKE_MOTOR_ID;
 import static frc.robot.Constants.IntakeShooter.INTAKE_MOTOR_ID;
 import static frc.robot.Constants.IntakeShooter.LENGTH_ROD_TO_ANGULAR_POS;
 
-import static frc.robot.Constants.Climber.*;
 import static frc.robot.robot_utils.MotorUtil.*;
-import static frc.robot.Constants.MotorValue.*;
-import static frc.robot.Constants.MotorFlip.*;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 

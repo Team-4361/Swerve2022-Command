@@ -3,7 +3,6 @@ package frc.robot.commands.chassis_commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
@@ -15,7 +14,7 @@ public class CenterShooterToHubCommand extends CommandBase {
 
     HashMap<String, Double> target;
 
-    PIDController centerShooterController;
+    final PIDController centerShooterController;
 
     public CenterShooterToHubCommand() {
         centerShooterController = new PIDController(0.1, 0, 0);
@@ -30,7 +29,7 @@ public class CenterShooterToHubCommand extends CommandBase {
 
     @Override
     public void execute() {
-        target = Robot.shooterCamera.getTargetGoal();
+        target = Robot.camera.getTargetGoal();
         yawToHub = target.get("Yaw");
 
         Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, centerShooterController.calculate(yawToHub, 0), Rotation2d.fromDegrees(0)));

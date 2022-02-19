@@ -1,6 +1,5 @@
 package frc.robot.commands.shooter_commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import java.lang.Math;
@@ -28,7 +27,7 @@ public class RevAutoShootCommand extends CommandBase {
 
     @Override
     public void execute() {
-        target = Robot.shooterCamera.getTargetGoal();
+        target = Robot.camera.getTargetGoal();
 
         double requiredShooterVelocity = (calculateDesiredVelocity(target.get("Pitch"), target.get("Distance"), target.get("Yaw")));
 

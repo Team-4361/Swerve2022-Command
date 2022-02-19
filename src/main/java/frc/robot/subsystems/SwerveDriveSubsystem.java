@@ -21,7 +21,7 @@ import me.wobblyyyy.pathfinder2.robot.Robot;
 
 public class SwerveDriveSubsystem extends SubsystemBase {
     private final SwerveChassis swerveChassis;
-    public AHRS gyro;
+    public final AHRS gyro;
     private final Controller turnController = new ProportionalController(0.01);
     private final Drive drive;
     private final Odometry odometry;

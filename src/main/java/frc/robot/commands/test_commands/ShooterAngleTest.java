@@ -13,7 +13,7 @@ public class ShooterAngleTest extends CommandBase {
 
     @Override
     public void execute() {
-        // Try different angles to run the shooter at
+        // Bounce between different angles to try
         try {
             for (int angle=0; angle<=80; angle+=10) {
                 Robot.shooter.setAdjustAngle(angle);

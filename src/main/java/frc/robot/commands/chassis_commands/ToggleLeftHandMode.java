@@ -29,6 +29,6 @@ public class ToggleLeftHandMode extends CommandBase {
     @Override
     public boolean isFinished() {
         // Returns true when the Left Handed Mode has been changed.
-        return !finished;
+        return finished;
     }
 }

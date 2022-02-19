@@ -18,7 +18,9 @@ public class Constants {
         public final static boolean STORAGE_FLIPPED = false;
         public final static boolean SHOOTER_FLIPPED = false;
         public final static boolean CLIMBER_FLIPPED = false;
-        public final static boolean ADJUSTOR_FLIPPED = false;
+
+        // Can't test it right now unfortunately but my theory is that it's flipped
+        public final static boolean ADJUSTOR_FLIPPED = true;
     }
 
     public static class TestValue {
@@ -114,22 +116,16 @@ public class Constants {
 
         // Shooter Adjustment Motor
         public static final int SHOOTER_ADJUSTMENT_PORT = 0;
+
+        public static final int STORAGE_DEFAULT_TIMEOUT = 3000;
     }
     
     //PhotonVision Constants
-    public static class ShooterCameraConsts {
+    public static class Camera {
         public static final String NETWORK_TABLE_HOSTNAME = "";
         public static final String CAMERA_NAME = "";
 	    public static final double CAMERA_HEIGHT = 0.0;
         public static final double CAMERA_PITCH = 0.0;
-        public static final double TAPE_HEIGHT = 0.0;
-    }
-
-    public static class ChassisCameraConsts {
-        public static final String CAMERA_NAME = "";
-	    public static final double CAMERA_HEIGHT = 0.0;
-        public static final double CAMERA_PITCH = 0.0;
-        public static final double BALL_HEIGHT = 0.0;
     }
     
     // These values are designed to be changed based on the Motor 

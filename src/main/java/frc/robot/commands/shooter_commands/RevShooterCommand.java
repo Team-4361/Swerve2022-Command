@@ -1,10 +1,8 @@
 package frc.robot.commands.shooter_commands;
 
-import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.Constants.MotorValue;
 import frc.robot.robot_utils.MotorUtil;
 
 import static frc.robot.Constants.*;
@@ -12,8 +10,8 @@ import static frc.robot.Constants.*;
 public class RevShooterCommand extends CommandBase {
 
     private double shooterVelocity, shooterCurrent, autoVelocity = 0;
-    private int shootAngle = 45;
-    private boolean shootingDone = false;
+    private int shootAngle = -1;
+    private volatile boolean shootingDone = false;
     private boolean multiBall = true;
 
     public RevShooterCommand(boolean shootMultiple) {
@@ -32,7 +30,7 @@ public class RevShooterCommand extends CommandBase {
         autoVelocity = velocity;
     }
 
-    public RevShooterCommand setAngle(int angle) {
+    public RevShooterCommand setShootAngle(int angle) {
         shootAngle = angle;
         return this;
     }
@@ -45,18 +43,27 @@ public class RevShooterCommand extends CommandBase {
     public void shoot(boolean reset) {
         SmartDashboard.putString("Shooter: Status", "Ramping up");
 
+        if (shootAngle == -1) {
+            // No shooting angle has been set, use the currently set angle.
+            shootAngle = (int) Robot.shooter.getAdjustAngle();
+        }
+
         Robot.shooter.setAdjustAngle(shootAngle);
 
         if (autoVelocity == 0) {
             // This is running the command in the Full Power Shoot mode, non-autonomous
             Robot.shooter.setShooterMotor(MotorUtil.getMotorValue(MotorValue.SHOOT_SPEED, MotorFlip.SHOOTER_FLIPPED));
 
-            while (!Robot.shooter.isDesiredSpeed(MotorValue.SHOOTER_TARGET_RPM) && Robot.shooter.getAdjustAngle() <= shootAngle) {}
+            while (!Robot.shooter.isDesiredSpeed(MotorValue.SHOOTER_TARGET_RPM) && Robot.shooter.getAdjustAngle() <= shootAngle) {
+                Thread.onSpinWait();
+            }
         } else {
             Robot.shooter.setShooterVelocity(autoVelocity);
-            while (!Robot.shooter.isDesiredSpeed(autoVelocity) && Robot.shooter.getAdjustAngle() <= shootAngle) {}
-        }
 
+            while (!Robot.shooter.isDesiredSpeed(autoVelocity) && Robot.shooter.getAdjustAngle() <= shootAngle) {
+                Thread.onSpinWait();
+            }
+        }
 
         // Run the Storage Motor until the sensor is not detecting the ball.
         Robot.shooter.setStorageMotor(MotorUtil.getMotorValue(MotorValue.SLOW_ACCEPT_SPEED, MotorFlip.STORAGE_FLIPPED));
@@ -86,7 +93,7 @@ public class RevShooterCommand extends CommandBase {
 
         for (int i = 0; i < ballsLoaded; i++) {
             shoot(false);
-            while (!shootingDone) {}
+            while (!shootingDone) {Thread.onSpinWait();}
         }
     }
 

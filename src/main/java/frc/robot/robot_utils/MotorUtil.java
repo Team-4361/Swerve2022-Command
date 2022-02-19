@@ -5,13 +5,19 @@ import java.util.concurrent.TimeUnit;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.MotorValue;
 
+/**
+ * Basic Motor Utilities, designed for motors that have an increased risk of
+ * something going wrong or stalling, and has detection for it. This also
+ * lets you run multiple motors at a time, and have some other purposes
+ * as well.
+ */
 public class MotorUtil {
-	public static CANSparkMax stalledMotor;
 
+	/** The motor that is currently being stalled. */
+	private static CANSparkMax stalledMotor;
 
     /** @return Motor value, reversed if flipped is true. */
     public static double getMotorValue(double speed, boolean flipped) {
@@ -153,10 +159,21 @@ public class MotorUtil {
 		}
 	}
 
+	/**
+	 * Stops a specified motor, setting it to zero.
+	 *
+	 * @param motor The motor that should be stopped.
+	 */
 	public static void stopMotor(CANSparkMax motor) {
 		motor.set(0);
 	}
 
+	/**
+	 * Returns whether any of the motors specified in the group have been stalled.
+	 *
+	 * @param motors Motor Group to Check
+	 * @return If any of the motors in the group have been stalled.
+	 */
 	public static boolean isAnyStalled(CANSparkMax[] motors) {
 		for (CANSparkMax motor: motors) {
 			if (isStalled(motor)) {

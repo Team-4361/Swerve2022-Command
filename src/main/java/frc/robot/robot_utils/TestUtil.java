@@ -34,9 +34,8 @@ public class TestUtil {
         return this;
     }
 
-    public TestUtil runExecutedCommand() {
+    public void runExecutedCommand() {
         defaultCommands.get(currentTestMode).schedule();
-        return this;
     }
 
     public TestUtil setDefaultCommands(HashMap<TestMode, CommandBase> commands) {
