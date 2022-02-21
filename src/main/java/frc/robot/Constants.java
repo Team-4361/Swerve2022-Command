@@ -21,6 +21,9 @@ public class Constants {
 
         // Can't test it right now unfortunately but my theory is that it's flipped
         public final static boolean ADJUSTOR_FLIPPED = true;
+
+        public final static boolean INTAKE_FLIPPED = false;
+        public final static boolean INTAKE_EXTENDER_FLIPPED = false;
     }
 
     public static class TestValue {
@@ -118,6 +121,8 @@ public class Constants {
         public static final int SHOOTER_ADJUSTMENT_PORT = 0;
 
         public static final int STORAGE_DEFAULT_TIMEOUT = 3000;
+
+        public static final double INTAKE_EXTEND_ROTATIONS = 20;
     }
     
     //PhotonVision Constants

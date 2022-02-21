@@ -4,7 +4,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeShooter;
+import frc.robot.Constants.MotorFlip;
+import frc.robot.Constants.MotorValue;
+import frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder;
 
 import static frc.robot.Constants.IntakeShooter.L_INTAKE_MOTOR_ID;
 import static frc.robot.Constants.IntakeShooter.R_INTAKE_MOTOR_ID;
@@ -17,18 +22,32 @@ import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-    private final CANSparkMax leftIntakeTransMTR = new CANSparkMax(L_INTAKE_MOTOR_ID, kBrushless);
-    private final CANSparkMax rightIntakeTransMTR = new CANSparkMax(R_INTAKE_MOTOR_ID, kBrushless);
-    private final CANSparkMax intakeMTR = new CANSparkMax(INTAKE_MOTOR_ID, kBrushless);
+    private final CANSparkMax leftIntakeTransMTR;
+    private final CANSparkMax rightIntakeTransMTR;
+    private final CANSparkMax intakeMTR;
 
-    private final CANSparkMax[] intakeMotors = new CANSparkMax[]{leftIntakeTransMTR, rightIntakeTransMTR};
+    private final CANSparkMax[] intakeMotors;
 
-    private final RelativeEncoder leftIntakeTransEncoder;
+    private final RotationalAbsoluteEncoder leftEncoder, rightEncoder;
 
     private final PIDController intakeController = new PIDController(0.1, 0, 0);
 
     public IntakeSubsystem() {
-        leftIntakeTransEncoder = leftIntakeTransMTR.getEncoder();
+        leftIntakeTransMTR = new CANSparkMax(L_INTAKE_MOTOR_ID, kBrushless);
+        rightIntakeTransMTR = new CANSparkMax(R_INTAKE_MOTOR_ID, kBrushless);
+        intakeMTR = new CANSparkMax(INTAKE_MOTOR_ID, kBrushless);
+
+        intakeMotors = new CANSparkMax[]{leftIntakeTransMTR, rightIntakeTransMTR};
+
+        leftEncoder = new RotationalAbsoluteEncoder(leftIntakeTransMTR)
+            .setAccuracyFactor(5)
+            .setFlipped(MotorFlip.INTAKE_FLIPPED)
+            .start();
+
+        rightEncoder = new RotationalAbsoluteEncoder(rightIntakeTransMTR)
+            .setAccuracyFactor(5)
+            .setFlipped(MotorFlip.INTAKE_FLIPPED)
+            .start();
     }
 
     @Override
@@ -37,27 +56,29 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void extendIntake() {
-        translateIntake(intakeController.calculate(getPosition(), LENGTH_ROD_TO_ANGULAR_POS));
+        //translateIntake(intakeController.calculate(getPosition(), LENGTH_ROD_TO_ANGULAR_POS));
+        leftEncoder.setMotorRotations(IntakeShooter.INTAKE_EXTEND_ROTATIONS, MotorValue.ACCEPT_SPEED);
     }
 
     public void retractIntake() {
-        translateIntake(intakeController.calculate(getPosition(), 0));
+        //translateIntake(intakeController.calculate(getPosition(), LENGTH_ROD_TO_ANGULAR_POS));
+        leftEncoder.setMotorRotations(0, MotorValue.ACCEPT_SPEED);
     }
 
     public void moveIntakeOut() {
-        runMotors(intakeMotors, 0.5);
+        runMotors(intakeMotors, getMotorValue(MotorValue.ACCEPT_SPEED, MotorFlip.INTAKE_EXTENDER_FLIPPED));
     }
 
     public void moveIntakeIn() {
-        runMotors(intakeMotors, -0.5);
+        runMotors(intakeMotors, getMotorValue(-MotorValue.ACCEPT_SPEED, MotorFlip.INTAKE_EXTENDER_FLIPPED));
     }
 
     public void runIntakeIn() {
-        runMotor(intakeMTR, 0.5);
+        runMotor(intakeMTR, getMotorValue(MotorValue.ACCEPT_SPEED, MotorFlip.INTAKE_FLIPPED));
     }
 
     public void runIntakeOut() {
-        runMotor(intakeMTR, -0.5);
+        runMotor(intakeMTR, getMotorValue(-MotorValue.ACCEPT_SPEED, MotorFlip.INTAKE_FLIPPED));
     }
 
     public void stopIntake() {
@@ -66,10 +87,10 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void translateIntake(double value) {
-        runMotors(intakeMotors, value);
+        runMotors(intakeMotors, getMotorValue(value, MotorFlip.INTAKE_FLIPPED));
     }
 
     public double getPosition() {
-        return leftIntakeTransEncoder.getPosition();
+        return leftEncoder.getAbsoluteRotations();
     }
 }

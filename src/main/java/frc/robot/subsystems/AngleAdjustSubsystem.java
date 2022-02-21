@@ -35,23 +35,12 @@ public class AngleAdjustSubsystem extends SubsystemBase {
         return (MotorUtil.inTolerance(desired, getAngle(), tolerance));
     }
 
+    private double angleToRotation(double angle) {
+        return ((ADJUSTOR_GEAR_RATIO*angle)/360);
+    }
+
     public void setAngle(double angle) {
-        // If the difference between the two is very slight, don't bother
-        // doing anything.
-        if (!MotorUtil.inTolerance(angle, getAngle(), 2)) {
-            if (getAngle() > angle) {
-                MotorUtil.runMotor(adjustorMotor, -MotorUtil.getMotorValue(ADJUSTOR_SPEED, ADJUSTOR_FLIPPED));
-            } else {
-                MotorUtil.runMotor(adjustorMotor, MotorUtil.getMotorValue(ADJUSTOR_SPEED, ADJUSTOR_FLIPPED));
-            }
-
-            while (!MotorUtil.inTolerance(angle, getAngle(), 2)) {
-                // Important to prevent CPU hanging.
-                Thread.onSpinWait();
-            }
-
-            MotorUtil.stopMotor(adjustorMotor);
-        }
+        absoluteEncoder.setMotorRotations(angleToRotation(angle), ADJUSTOR_SPEED);
     }
 
     public void setRotationsFromBase(double position) {
