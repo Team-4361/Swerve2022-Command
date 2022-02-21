@@ -18,11 +18,7 @@ import frc.robot.commands.test_commands.ShooterAngleTest;
 import frc.robot.robot_utils.ChassisCamera;
 import frc.robot.robot_utils.ShooterCamera;
 import frc.robot.robot_utils.TestUtil;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.StorageSubsystem;
-import frc.robot.subsystems.SwerveDriveSubsystem;
+import frc.robot.subsystems.*;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 
 public class Robot extends TimedRobot {
@@ -36,6 +32,7 @@ public class Robot extends TimedRobot {
     public static ShooterSubsystem shooter;
     public static IntakeSubsystem intake;
     public static ClimberSubsystem climber;
+    public static AngleAdjustSubsystem adjustor;
     public static TestUtil testUtil;
 
     public static ShooterCamera shooterCamera;
@@ -58,6 +55,8 @@ public class Robot extends TimedRobot {
 
         intake = new IntakeSubsystem();
         climber = new ClimberSubsystem();
+
+        adjustor = new AngleAdjustSubsystem();
 
         // Add your test commands here
         testUtil = new TestUtil()

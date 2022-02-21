@@ -38,6 +38,6 @@ public class ShootCMD extends CommandBase {
     @Override
     public boolean isFinished() {
         //Will be finished when they are no balls in the shooter
-        return (Robot.storage.getBallsLoaded() == 0) ? true : false;
+        return Robot.storage.getBallsLoaded() == 0;
     }
 }

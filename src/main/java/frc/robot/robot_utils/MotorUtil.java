@@ -24,6 +24,11 @@ public class MotorUtil {
 		return (flipped) ? -speed : speed;
     }
 
+	/** @return If the actual value is within tolerance is the actual value */
+	public static boolean inTolerance(double expected, double actual, double tolerance) {
+		return Math.abs(expected - actual) <= tolerance;
+	}
+
 	/**
 	 * Runs a Motor at a specified speed on a timer with Stall Protection.
 	 *

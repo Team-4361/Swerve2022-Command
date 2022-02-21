@@ -18,12 +18,12 @@ public class RevShooterAngleCommand extends CommandBase {
 
     @Override
     public void execute() {
-        Robot.shooter.setAdjustAngle(runAngle);
+        Robot.adjustor.setAngle(runAngle);
     }
 
     @Override
     public boolean isFinished() {
         // ± 5 degrees tolerance, can be adjusted later.
-        return Robot.shooter.atDesiredAngle(runAngle, 5);
+        return Robot.adjustor.atDesiredAngle(runAngle, 5);
     }
 }

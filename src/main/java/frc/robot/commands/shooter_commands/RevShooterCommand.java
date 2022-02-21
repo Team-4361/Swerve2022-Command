@@ -45,22 +45,22 @@ public class RevShooterCommand extends CommandBase {
 
         if (shootAngle == -1) {
             // No shooting angle has been set, use the currently set angle.
-            shootAngle = (int) Robot.shooter.getAdjustAngle();
+            shootAngle = (int) Robot.adjustor.getAngle();
         }
 
-        Robot.shooter.setAdjustAngle(shootAngle);
+        Robot.adjustor.setAngle(shootAngle);
 
         if (autoVelocity == 0) {
             // This is running the command in the Full Power Shoot mode, non-autonomous
             Robot.shooter.setShooterMotor(MotorUtil.getMotorValue(MotorValue.SHOOT_SPEED, MotorFlip.SHOOTER_FLIPPED));
 
-            while (!Robot.shooter.isDesiredSpeed(MotorValue.SHOOTER_TARGET_RPM) && Robot.shooter.getAdjustAngle() <= shootAngle) {
+            while (!Robot.shooter.isDesiredSpeed(MotorValue.SHOOTER_TARGET_RPM) && Robot.adjustor.getAngle() <= shootAngle) {
                 Thread.onSpinWait();
             }
         } else {
             Robot.shooter.setShooterVelocity(autoVelocity);
 
-            while (!Robot.shooter.isDesiredSpeed(autoVelocity) && Robot.shooter.getAdjustAngle() <= shootAngle) {
+            while (!Robot.shooter.isDesiredSpeed(autoVelocity) && Robot.adjustor.getAngle() <= shootAngle) {
                 Thread.onSpinWait();
             }
         }

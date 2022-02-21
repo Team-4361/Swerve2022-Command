@@ -8,22 +8,22 @@ public class RevDecreaseShooterAngle extends CommandBase {
 
     /**
      * Sets the shooter to decrease angle by a certain amount using a specialized Command.
-     * @param decrease Angle in Degrees to decrease (raise down) by.
+     * @param decrease Angle in Degrees to decrease (raise up) by.
      */
     public RevDecreaseShooterAngle(double decrease) {
-        this.runAngle = Robot.shooter.getAdjustAngle() - decrease;
+        this.runAngle = Robot.adjustor.getAngle() - decrease;
 
         addRequirements(Robot.shooter);
     }
 
     @Override
     public void execute() {
-        Robot.shooter.setAdjustAngle(runAngle);
+        Robot.adjustor.setAngle(runAngle);
     }
 
     @Override
     public boolean isFinished() {
         // ± 5 degrees tolerance, can be adjusted later.
-        return Robot.shooter.atDesiredAngle(runAngle, 5);
+        return Robot.adjustor.atDesiredAngle(runAngle, 5);
     }
 }

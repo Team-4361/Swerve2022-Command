@@ -11,19 +11,19 @@ public class RevIncreaseShooterAngle extends CommandBase {
      * @param increase Angle in Degrees to increase (raise up) by.
      */
     public RevIncreaseShooterAngle(double increase) {
-        this.runAngle = Robot.shooter.getAdjustAngle() + increase;
+        this.runAngle = Robot.adjustor.getAngle() + increase;
 
         addRequirements(Robot.shooter);
     }
 
     @Override
     public void execute() {
-        Robot.shooter.setAdjustAngle(runAngle);
+        Robot.adjustor.setAngle(runAngle);
     }
 
     @Override
     public boolean isFinished() {
         // ± 5 degrees tolerance, can be adjusted later.
-        return Robot.shooter.atDesiredAngle(runAngle, 5);
+        return Robot.adjustor.atDesiredAngle(runAngle, 5);
     }
 }
