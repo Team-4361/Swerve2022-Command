@@ -14,7 +14,7 @@ public class MoveClimberDown extends CommandBase {
     
     @Override
     public void execute() {
-        Robot.climber.moveClimberDown();
+        Robot.climber.lowerClimber();
     }
 
     @Override

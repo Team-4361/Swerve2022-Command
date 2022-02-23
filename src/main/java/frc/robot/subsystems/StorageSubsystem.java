@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
-import static frc.robot.Constants.IntakeShooter.*;
+import static frc.robot.Constants.Storage.*;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IntakeShooter;
+import frc.robot.Constants.Storage;
 import frc.robot.robot_utils.MotorUtil;
 import frc.robot.subsystems.StorageSubsystem.AcceptColor;
 import frc.robot.subsystems.StorageSubsystem.StorageListener;
@@ -50,11 +50,11 @@ public class StorageSubsystem extends SubsystemBase {
      * @param color RED or BLUE
      */
     public StorageSubsystem(AcceptColor color) {
-        acceptorMotor = new CANSparkMax(IntakeShooter.ACCEPTOR_MOTOR_PORT, kBrushless);
-        storageMotor = new CANSparkMax(IntakeShooter.STORAGE_MOTOR_PORT, kBrushless);
-        colorSensor = new ColorSensorV3(IntakeShooter.COLOR_SENSOR_PORT);
-        acceptorSensor = new DigitalInput(IntakeShooter.ACCEPTOR_PHOTO_ELECTRIC_PORT);
-        storageSensor = new DigitalInput(IntakeShooter.STORAGE_PHOTO_ELECTRIC_PORT);
+        acceptorMotor = new CANSparkMax(Storage.ACCEPTOR_MOTOR_PORT, kBrushless);
+        storageMotor = new CANSparkMax(Storage.STORAGE_MOTOR_PORT, kBrushless);
+        colorSensor = new ColorSensorV3(Storage.COLOR_SENSOR_PORT);
+        acceptorSensor = new DigitalInput(Storage.ACCEPTOR_PHOTO_ELECTRIC_PORT);
+        storageSensor = new DigitalInput(Storage.STORAGE_PHOTO_ELECTRIC_PORT);
 
         storageEncoder = storageMotor.getEncoder();
         acceptorEncoder = acceptorMotor.getEncoder();
@@ -145,7 +145,7 @@ public class StorageSubsystem extends SubsystemBase {
                 // the proximity sensor is activated. During prolonged holding of the ball, or if something
                 // gets stuck (like during Shooter Testing), this caused a Memory Error. By doing this,
                 // it makes sure that only 1 storage task can be made at a time.
-                currentStorageTask = new StorageTask(colorSensor, acceptColor, STORAGE_DEFAULT_TIMEOUT);
+                currentStorageTask = new StorageTask(colorSensor, acceptColor, STORAGE_TIMEOUT);
             }
         }
     }
@@ -218,7 +218,6 @@ class StorageTask {
     private Thread findColorThread;
     private long taskCreatedTime;
 
-    @SuppressWarnings("InfiniteLoopStatement")
     public StorageTask(ColorSensorV3 colorSensor, AcceptColor targetBallColor, long timeout) {
         this.taskCreatedTime = System.currentTimeMillis();
 
@@ -258,6 +257,7 @@ class StorageTask {
 
                     // Make sure to interrupt all the Threads to prevent memory leak.
                     findColorThread.interrupt();
+                    break;
                 }
 
                 if (elapsedTime > timeout) {
@@ -266,8 +266,10 @@ class StorageTask {
 
                     // Make sure to interrupt all the Threads to prevent memory leak.
                     findColorThread.interrupt();
+                    break;
                 }
             }
+            findColorThread.interrupt();
         };
 
         this.findColorThread = new Thread(findColor);

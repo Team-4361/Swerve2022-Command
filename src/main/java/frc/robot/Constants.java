@@ -19,7 +19,6 @@ public class Constants {
         public final static boolean SHOOTER_FLIPPED = false;
         public final static boolean CLIMBER_FLIPPED = false;
 
-        // Can't test it right now unfortunately but my theory is that it's flipped
         public final static boolean ADJUSTOR_FLIPPED = true;
 
         public final static boolean INTAKE_FLIPPED = false;
@@ -30,6 +29,10 @@ public class Constants {
         // You can change the default Testing mode to be run here, when Driver Station
         // is in testing mode.
         public final static TestUtil.TestMode DEFAULT_TEST_MODE = TestUtil.TestMode.SHOOTER_ANGLE_TEST;
+
+        // TODO: adjust enablers based on how robot is completed
+        public final static boolean DRIVE_ENABLED = false;
+        public final static boolean CAMERA_ENABLED = false;
     }
 
     public static class Chassis {
@@ -37,9 +40,8 @@ public class Constants {
         public static final double FL_OFFSET = -6.23 - (Math.PI/2);
         public static final double BR_OFFSET = -1.03 - (Math.PI/2) - (2*Math.PI);
         public static final double BL_OFFSET = -3.02  - (2*Math.PI) - (Math.PI/2);
-        
 
-        public static final double DEAD_ZONE = 0.05;
+        public static final double CONTROLLER_DEADZONE = 0.05;
 
         //In meters
         public static final double SWERVE_CHASSIS_SIDE_LENGTH = 0.762;
@@ -63,68 +65,81 @@ public class Constants {
     }
 
     public static class Climber {
-        public static final int L_CLIMBER_PORT = 8;
-        public static final int R_CLIMBER_PORT = 5;
+        public static final int L_CLIMBER_PORT = 9;
+        public static final int R_CLIMBER_PORT = 10;
 
-        public static final int B_CLIMBER_SWITCH = 0;
-        public static final int T_CLIMBER_SWITCH = 0;
+        // bottom limit switch
+        public static final int BL_LIMIT_ID = 6;
+        public static final int BR_LIMIT_ID = 7;
+
+        // TODO: change!
+        public static final int TL_LIMIT_ID = 0;
+        public static final int TR_LIMIT_ID = 8;
     }
 
-    public static class IntakeShooter {
+    public static class Intake {
+        public static final int INTAKE_SPIN_MOTOR_ID = 14;
+
+        // DIO
+        public static final int BL_LIMIT_ID = 8;
+        public static final int BR_LIMIT_ID = 9;
+
+        // TODO: change
+        public static final int FL_LIMIT_ID = 0;
+        public static final int FR_LIMIT_ID = 4;
+
+        public static final int L_INTAKE_EXTEND_ID = 12;
+        public static final int R_INTAKE_EXTEND_ID = 11;
+
+        public static final double INTAKE_EXTEND_ROTATIONS = 20;
+
+        public static final boolean LIMIT_SWITCH_ENABLED = true;
+    }
+
+    public static class ShooterAdjustor {
+        public static final double ADJUSTOR_GEAR_RATIO = /*1:*/160;
+        public static final int ADJUSTOR_MOTOR_ID = 15;
+
+        public static final boolean LIMIT_SWITCH_ENABLED = false;
+    }
+
+    public static class Shooter {
+        public static final int SHOOTER_MOTOR_ID = 17;
+        public static final int SHOOTER_WHEEL_RADIUS = 0;
+    }
+
+    public static class Storage {
         /**
          * The first motor in the Storage device, used to accept the ball after the sensor is activated.
          */
-        public static final int ACCEPTOR_MOTOR_PORT = 7;
+        public static final int ACCEPTOR_MOTOR_PORT = 13;
 
         // The second middle motor in the Storage device, used to move the ball inside.
-        public static final int STORAGE_MOTOR_PORT = 6;
-
-        // The shooter motor in the Shooter device, runs at Full Speed and shoots the ball.
-        public static final int SHOOTER_MOTOR_PORT = 8;
-
-        // Left Intake Extend Motor Port
-        public static final int L_INTAKE_MOTOR_ID = 9; 
-
-        // Right Intake Extend Motor Port
-        public static final int R_INTAKE_MOTOR_ID = 11;
-
-        public static final int MAX_INTAKE_MOTOR_POSITION = 0;
-
-        public static final int INTAKE_MOTOR_ID = 12;
-
-        public static final int SHOOTER_WHEEL_RADIUS = 0;
+        public static final int STORAGE_MOTOR_PORT = 16;
 
         ////////////////////////////////////////////////////////////////////////////////////////
             
         // Used to detect the presence of a ball inside the front of the device, mainly used for 2nd entering ball.
-        public static final int ACCEPTOR_PHOTO_ELECTRIC_PORT = 1;
+        public static final int ACCEPTOR_PHOTO_ELECTRIC_PORT = 4;
     
         // Used to detect the presence of a ball inside the middle of the device, where the first ball should go.
-        public static final int STORAGE_PHOTO_ELECTRIC_PORT = 0;
+        public static final int STORAGE_PHOTO_ELECTRIC_PORT = 5;
     
         ////////////////////////////////////////////////////////////////////////////////////////
     
         // The port to use for the Color Sensor detection.
         public static final I2C.Port COLOR_SENSOR_PORT = I2C.Port.kOnboard;
-
-        public static final double ADJUSTOR_GEAR_RATIO = /*1:*/160;
-
     
         // Adjust based on sensitivity.
         public static final double BLUE_THRESHOLD = 0.30;
         public static final double RED_THRESHOLD = 0.30;
         public static final double PROXIMITY_THRESHOLD = 120;
 
+        public static final int STORAGE_TIMEOUT = 3000;
+
         public static final double LENGTH_ROD_TO_ANGULAR_POS = 0;
-
-        // Shooter Adjustment Motor
-        public static final int SHOOTER_ADJUSTMENT_PORT = 0;
-
-        public static final int STORAGE_DEFAULT_TIMEOUT = 3000;
-
-        public static final double INTAKE_EXTEND_ROTATIONS = 20;
     }
-    
+
     //PhotonVision Constants
     public static class ShooterCameraConsts {
         public static final String CAMERA_NAME = "";
@@ -161,6 +176,6 @@ public class Constants {
         public final static double SHOOTER_TARGET_RPM = 4800;
 
         // Used for stall protection, disable if any issues occur from it.
-        public final static boolean CURRENT_MEASURING = true;
+        public final static boolean CURRENT_MEASURING = false;
     }
 }

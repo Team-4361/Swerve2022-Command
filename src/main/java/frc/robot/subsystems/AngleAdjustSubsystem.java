@@ -6,10 +6,10 @@ import frc.robot.robot_utils.MotorUtil;
 import frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
-import static frc.robot.Constants.IntakeShooter.ADJUSTOR_GEAR_RATIO;
-import static frc.robot.Constants.IntakeShooter.SHOOTER_ADJUSTMENT_PORT;
 import static frc.robot.Constants.MotorFlip.ADJUSTOR_FLIPPED;
 import static frc.robot.Constants.MotorValue.ADJUSTOR_SPEED;
+import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_GEAR_RATIO;
+import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_MOTOR_ID;
 
 public class AngleAdjustSubsystem extends SubsystemBase {
 
@@ -17,7 +17,7 @@ public class AngleAdjustSubsystem extends SubsystemBase {
     private final RotationalAbsoluteEncoder absoluteEncoder;
 
     public AngleAdjustSubsystem() {
-        adjustorMotor = new CANSparkMax(SHOOTER_ADJUSTMENT_PORT, kBrushless);
+        adjustorMotor = new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless);
         absoluteEncoder = new RotationalAbsoluteEncoder(adjustorMotor)
                 .setFlipped(ADJUSTOR_FLIPPED)
                 .start();

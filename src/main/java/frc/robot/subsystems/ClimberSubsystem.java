@@ -16,12 +16,16 @@ public class ClimberSubsystem extends SubsystemBase {
     private final CANSparkMax leftClimberMTR = new CANSparkMax(L_CLIMBER_PORT, kBrushless);
     private final CANSparkMax rightClimberMTR = new CANSparkMax(R_CLIMBER_PORT, kBrushless);
 
-    private final DigitalInput bottomProximitySwitch = new DigitalInput(B_CLIMBER_SWITCH);
-    private final DigitalInput topProximitySwitch = new DigitalInput(T_CLIMBER_SWITCH);
+    private final DigitalInput blSwitch, brSwitch, tlSwitch, trSwitch;
 
     private final CANSparkMax[] climberGroup = new CANSparkMax[]{leftClimberMTR, rightClimberMTR};
 
-    public ClimberSubsystem() {}
+    public ClimberSubsystem() {
+        blSwitch = new DigitalInput(BL_LIMIT_ID);
+        brSwitch = new DigitalInput(BR_LIMIT_ID);
+        tlSwitch = new DigitalInput(TL_LIMIT_ID);
+        trSwitch = new DigitalInput(TR_LIMIT_ID);
+    }
 
     @Override
     public void periodic() {
@@ -29,13 +33,13 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void moveClimberUp() {
-        if (!topProximitySwitch.get()) {
+        if (!tlSwitch.get() && !trSwitch.get()) {
             runMotors(climberGroup, getMotorValue(CLIMBER_SPEED, CLIMBER_FLIPPED));
         }
     }
 
     public void moveClimberDown() {
-        if (!bottomProximitySwitch.get()) {
+        if (!blSwitch.get() && !brSwitch.get()) {
             runMotors(climberGroup, getMotorValue(-CLIMBER_SPEED, CLIMBER_FLIPPED));
         }
     }
@@ -47,7 +51,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public void lowerClimber() {
         runMotors(climberGroup, getMotorValue(-CLIMBER_SPEED, CLIMBER_FLIPPED));
 
-        while (!bottomProximitySwitch.get() && !isAnyStalled(climberGroup)) {
+        while (!blSwitch.get() && !brSwitch.get()) {
             Thread.onSpinWait();
         }
 
@@ -57,7 +61,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public void raiseClimber() {
         runMotors(climberGroup, getMotorValue(CLIMBER_SPEED, CLIMBER_FLIPPED));
 
-        while (!topProximitySwitch.get() && !isAnyStalled(climberGroup)) {
+        while (!tlSwitch.get() && !trSwitch.get()) {
             Thread.onSpinWait();
         }
 

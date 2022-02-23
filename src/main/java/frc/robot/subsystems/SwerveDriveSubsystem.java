@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.swerve.SwerveChassis;
 import frc.robot.swerve.SwerveOdometry;
 import me.wobblyyyy.pathfinder2.Pathfinder;
@@ -18,6 +19,8 @@ import me.wobblyyyy.pathfinder2.control.ProportionalController;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;
+
+import static frc.robot.Constants.TestValue.DRIVE_ENABLED;
 
 public class SwerveDriveSubsystem extends SubsystemBase {
     private final SwerveChassis swerveChassis;
@@ -44,16 +47,16 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {
-
-    }
+    public void periodic() {}
 
     public HashMap<String, SwerveModuleState> getSwerveModuleStates() {
         return swerveChassis.getSwerveModuleStates();
     }
 
     public void drive(ChassisSpeeds speeds) {
-        swerveChassis.drive(speeds);
+        if (DRIVE_ENABLED) {
+            swerveChassis.drive(speeds);
+        }
     }
 
     public Rotation2d getGyro() {
@@ -61,7 +64,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     public void resetGyro() {
-        gyro.reset();
+        if (DRIVE_ENABLED) {
+            gyro.reset();
+        }
     }
 
     public double getDistance(){

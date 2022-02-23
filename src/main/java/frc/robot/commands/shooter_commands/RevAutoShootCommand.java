@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import frc.robot.Robot;
 
-import static frc.robot.Constants.IntakeShooter.SHOOTER_WHEEL_RADIUS;
+import static frc.robot.Constants.Shooter.SHOOTER_WHEEL_RADIUS;
 
 public class RevAutoShootCommand extends CommandBase {
 

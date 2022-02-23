@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import static frc.robot.Constants.*;
+import static frc.robot.Constants.TestValue.DRIVE_ENABLED;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -107,10 +108,12 @@ public class SwerveChassis implements Drive {
         SwerveModuleState backRightState = states[2];
         SwerveModuleState backLeftState = states[3];
 
-        frontRight.setState(frontRightState);
-        frontLeft.setState(frontLeftState);
-        backRight.setState(backRightState);
-        backLeft.setState(backLeftState);
+        if (DRIVE_ENABLED) {
+            frontRight.setState(frontRightState);
+            frontLeft.setState(frontLeftState);
+            backRight.setState(backRightState);
+            backLeft.setState(backLeftState);
+        }
 
         updateDashboard();
     }

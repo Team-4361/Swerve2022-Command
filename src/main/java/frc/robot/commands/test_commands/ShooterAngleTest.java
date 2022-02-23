@@ -23,7 +23,7 @@ public class ShooterAngleTest extends CommandBase {
                 Robot.adjustor.setAngle(angle);
                 TimeUnit.SECONDS.sleep(1);
             }
-        } catch (InterruptedException ex) {}
+        } catch (InterruptedException ignored) {}
     }
 
     @Override

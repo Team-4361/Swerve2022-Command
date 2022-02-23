@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.Robot;
 
-import static frc.robot.Constants.IntakeShooter.MAX_INTAKE_MOTOR_POSITION;
+import static frc.robot.Constants.Intake.INTAKE_EXTEND_ROTATIONS;
 
 public class UserTransIntakeOut extends CommandBase {
     
@@ -16,7 +16,7 @@ public class UserTransIntakeOut extends CommandBase {
     
     @Override
     public void execute() {
-        if(Robot.intake.getPosition() < MAX_INTAKE_MOTOR_POSITION) {
+        if(Robot.intake.getPosition() < INTAKE_EXTEND_ROTATIONS) {
             Robot.intake.runIntakeOut();
         }
     }

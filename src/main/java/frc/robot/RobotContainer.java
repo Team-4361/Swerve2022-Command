@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.chassis_commands.*;
@@ -18,13 +19,13 @@ import frc.robot.commands.intake_commands.DisableIntake;
 import frc.robot.commands.intake_commands.EnableIntake;
 import frc.robot.commands.intake_commands.SpinIntakeInward;
 import frc.robot.commands.intake_commands.SpinIntakeOutward;
-import frc.robot.commands.intake_commands.UserTransIntakeIn;
-import frc.robot.commands.intake_commands.UserTransIntakeOut;
 import frc.robot.commands.pathfinder.RectangleTestCommand;
 import frc.robot.commands.shooter_commands.RevAutoShootCommand;
 import frc.robot.commands.shooter_commands.RevDecreaseShooterAngle;
 import frc.robot.commands.shooter_commands.RevIncreaseShooterAngle;
+import frc.robot.commands.shooter_commands.RevShooterCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
+import frc.robot.commands.storage_commands.ProcessBallCommand;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 
 import static frc.robot.Constants.*;
@@ -48,12 +49,16 @@ public class RobotContainer {
 
     private final SequentialCommandGroup testSwerveDrive = new SequentialCommandGroup(new MoveRightCMD(), new MoveLeftCMD(), new MoveFWDCMD(), new MoveBCKCMD());
     private final SequentialCommandGroup AutoShoot = new SequentialCommandGroup(new CenterShooterToHubCommand(), new RevAutoShootCommand(), new ShootCMD());
+    private final ParallelCommandGroup storageEnableGroup = new ParallelCommandGroup()
+            .alongWith(new ProcessBallCommand())
+            .alongWith(new SpinIntakeOutward())
+            .alongWith(new EnableIntake());
 
     public RobotContainer() {
         Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() -> ChassisSpeeds.fromFieldRelativeSpeeds(
-                -deadzone(xyStick.getX(), Chassis.DEAD_ZONE),
-                deadzone(xyStick.getY(), Chassis.DEAD_ZONE),
-                deadzone(zStick.getTwist(), Chassis.DEAD_ZONE),
+                -deadzone(xyStick.getX(), Chassis.CONTROLLER_DEADZONE),
+                deadzone(xyStick.getY(), Chassis.CONTROLLER_DEADZONE),
+                deadzone(zStick.getTwist(), Chassis.CONTROLLER_DEADZONE),
                 Robot.swerveDrive.getGyro()
         )));
 
@@ -75,7 +80,7 @@ public class RobotContainer {
 
         //Xbox Controller
         aButton.whenHeld(AutoShoot);
-        bButton.whenHeld(new ShootCMD());
+        bButton.whenHeld(new RevShooterCommand(false));
 
         xButton.whenPressed(new EnableIntake());
         xButton.whenReleased(new DisableIntake());
@@ -83,6 +88,8 @@ public class RobotContainer {
         xButton.whenHeld(new SpinIntakeInward());
 
         yButton.whenHeld(new SpinIntakeOutward());
+
+        xButton.and(aButton).whenActive(storageEnableGroup);
 
         xButton.and(aButton).and(yButton).and(bButton).whenActive(testSwerveDrive);
 
@@ -100,7 +107,7 @@ public class RobotContainer {
     }
     
     public SequentialCommandGroup getAutoShoot(){
-        return new SequentialCommandGroup(new CenterShooterToHubCommand(), new RevAutoShootCommand(), new ShootCMD());
+        return new SequentialCommandGroup(new CenterShooterToHubCommand(), new RevAutoShootCommand());
     }
 
     //Adds a deadzone

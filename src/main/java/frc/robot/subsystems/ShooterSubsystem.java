@@ -1,9 +1,10 @@
 package frc.robot.subsystems;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
-import static frc.robot.Constants.IntakeShooter.*;
 import static frc.robot.Constants.MotorValue.*;
 import static frc.robot.Constants.MotorFlip.*;
+import static frc.robot.Constants.Shooter.SHOOTER_MOTOR_ID;
+import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_MOTOR_ID;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -29,8 +30,8 @@ public class ShooterSubsystem extends SubsystemBase {
         this.acceptorMotor = storageSubsystem.getAcceptorMotor();
         this.storageMotor = storageSubsystem.getStorageMotor();
 
-        this.shooterMotor = new CANSparkMax(SHOOTER_MOTOR_PORT, kBrushless);
-        this.adjustMotor = new CANSparkMax(SHOOTER_ADJUSTMENT_PORT, kBrushless);
+        this.shooterMotor = new CANSparkMax(SHOOTER_MOTOR_ID, kBrushless);
+        this.adjustMotor = new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless);
 
         this.shooterEncoder = shooterMotor.getEncoder();
         this.adjustEncoder = adjustMotor.getEncoder();

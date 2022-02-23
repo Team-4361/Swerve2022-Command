@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
+import static frc.robot.Constants.Storage.LENGTH_ROD_TO_ANGULAR_POS;
+
 public class EnableIntake extends CommandBase {
     
 
@@ -25,7 +27,7 @@ public class EnableIntake extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        //Will be finished when they're are no balls in the shooter
-        return Robot.intake.getPosition() > (Constants.IntakeShooter.LENGTH_ROD_TO_ANGULAR_POS - 0.1);
+        //Will be finished when they are no balls in the shooter
+        return Robot.intake.getPosition() > (LENGTH_ROD_TO_ANGULAR_POS - 0.1);
     }
 }

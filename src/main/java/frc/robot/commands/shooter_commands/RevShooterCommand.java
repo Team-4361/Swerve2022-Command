@@ -5,13 +5,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.robot_utils.MotorUtil;
 
+import java.util.concurrent.TimeUnit;
+
 import static frc.robot.Constants.*;
 
 public class RevShooterCommand extends CommandBase {
 
     private double shooterVelocity, shooterCurrent, autoVelocity = 0;
     private int shootAngle = -1;
-    private volatile boolean shootingDone = false;
+    private volatile boolean shootingDone = false, realDone = false;
     private boolean multiBall = true;
 
     public RevShooterCommand(boolean shootMultiple) {
@@ -41,48 +43,50 @@ public class RevShooterCommand extends CommandBase {
     }
 
     public void shoot(boolean reset) {
-        SmartDashboard.putString("Shooter: Status", "Ramping up");
+        try {
+            SmartDashboard.putString("Shooter: Status", "Ramping up");
 
-        if (shootAngle == -1) {
-            // No shooting angle has been set, use the currently set angle.
-            shootAngle = (int) Robot.adjustor.getAngle();
-        }
-
-        Robot.adjustor.setAngle(shootAngle);
-
-        if (autoVelocity == 0) {
-            // This is running the command in the Full Power Shoot mode, non-autonomous
-            Robot.shooter.setShooterMotor(MotorUtil.getMotorValue(MotorValue.SHOOT_SPEED, MotorFlip.SHOOTER_FLIPPED));
-
-            while (!Robot.shooter.isDesiredSpeed(MotorValue.SHOOTER_TARGET_RPM) && Robot.adjustor.getAngle() <= shootAngle) {
-                Thread.onSpinWait();
+            if (shootAngle > -1) {
+                // Set the shooting angle
+                Robot.adjustor.setAngle(shootAngle);
             }
-        } else {
-            Robot.shooter.setShooterVelocity(autoVelocity);
 
-            while (!Robot.shooter.isDesiredSpeed(autoVelocity) && Robot.adjustor.getAngle() <= shootAngle) {
-                Thread.onSpinWait();
+            if (autoVelocity == 0) {
+                // This is running the command in the Full Power Shoot mode, non-autonomous
+                Robot.shooter.setShooterMotor(MotorUtil.getMotorValue(MotorValue.SHOOT_SPEED, MotorFlip.SHOOTER_FLIPPED));
+
+                while (!Robot.shooter.isDesiredSpeed(MotorValue.SHOOTER_TARGET_RPM)) {
+                    Thread.onSpinWait();
+                }
+            } else {
+                Robot.shooter.setShooterVelocity(autoVelocity);
+
+                while (!Robot.shooter.isDesiredSpeed(autoVelocity)) {
+                    Thread.onSpinWait();
+                }
             }
-        }
 
-        // Run the Storage Motor until the sensor is not detecting the ball.
-        Robot.shooter.setStorageMotor(MotorUtil.getMotorValue(MotorValue.SLOW_ACCEPT_SPEED, MotorFlip.STORAGE_FLIPPED));
+            // Run the Storage Motor until the sensor is not detecting the ball.
+            Robot.shooter.setStorageMotor(MotorUtil.getMotorValue(MotorValue.SLOW_ACCEPT_SPEED, MotorFlip.STORAGE_FLIPPED));
 
-        while (Robot.shooter.storageSensorCovered()) {
-            SmartDashboard.putString("Shooter: Status", "Ball Firing");
-        }
+            while (Robot.shooter.storageSensorCovered()) {
+                SmartDashboard.putString("Shooter: Status", "Ball Firing");
+            }
 
-        Robot.shooter.setStorageMotor(0);
+            TimeUnit.MILLISECONDS.sleep(1000);
 
-        // If disabled, prevents the motor from completey spinning down, saving time from having to 
-        // spin back up after each run.
-        if (reset) {
-            Robot.shooter.setShooterMotor(0);
-        }
+            Robot.shooter.setStorageMotor(0);
 
-        SmartDashboard.putString("Shooter: Status", "Idle");
+            // If disabled, prevents the motor from completey spinning down, saving time from having to
+            // spin back up after each run.
+            if (reset) {
+                Robot.shooter.setShooterMotor(0);
+            }
 
-        shootingDone = true;
+            SmartDashboard.putString("Shooter: Status", "Idle");
+
+            shootingDone = true;
+        } catch (InterruptedException ignored) {}
     }
 
     public void shootAllBalls() {
@@ -102,9 +106,11 @@ public class RevShooterCommand extends CommandBase {
     public void execute() {
         if (multiBall) {
             shootAllBalls();
+            realDone = true;
             end(false);
         } else {
             shoot(true);
+            realDone = true;
             end(false);
         }
     }
@@ -120,6 +126,6 @@ public class RevShooterCommand extends CommandBase {
     public boolean isFinished() {
         // Should run forever, so always return false.
         //return Robot.shooter.isDesiredSpeed(10);
-        return shootingDone;
+        return realDone;
     }
 }
