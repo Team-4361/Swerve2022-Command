@@ -21,14 +21,13 @@ public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax shooterMotor, acceptorMotor, storageMotor, adjustMotor;
     private final RelativeEncoder shooterEncoder, adjustEncoder;
     private final PIDController shooterController = new PIDController(0, 1, 0);
-    private final StorageSubsystem storageSubsystem;
 
-    public ShooterSubsystem(StorageSubsystem subsystem) {
-        this.storageSubsystem = subsystem;
+    public ShooterSubsystem() {
+        
 
         // Pull the motors from the Storage Subsystem
-        this.acceptorMotor = storageSubsystem.getAcceptorMotor();
-        this.storageMotor = storageSubsystem.getStorageMotor();
+        this.acceptorMotor = Robot.storage.getAcceptorMotor();
+        this.storageMotor = Robot.storage.getStorageMotor();
 
         this.shooterMotor = new CANSparkMax(SHOOTER_MOTOR_ID, kBrushless);
         this.adjustMotor = new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless);
@@ -41,10 +40,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public double getVelocity() { return shooterEncoder.getVelocity(); }
     public void setShooterMotor(double val) { MotorUtil.runMotor(shooterMotor, val); }
-    public int getBallsLoaded() { return storageSubsystem.getBallsLoaded(); }
+    public int getBallsLoaded() { return Robot.storage.getBallsLoaded(); }
     public void setStorageMotor(double val) { MotorUtil.runMotor(storageMotor, val); }
-    public boolean acceptorSensorCovered() { return storageSubsystem.getAcceptorSensorCovered(); }
-    public boolean storageSensorCovered() { return storageSubsystem.getStorageSensorCovered(); }
+    public boolean acceptorSensorCovered() { return Robot.storage.getAcceptorSensorCovered(); }
+    public boolean storageSensorCovered() { return Robot.storage.getStorageSensorCovered(); }
 
     public void setShooterVelocity(double speed) {
         MotorUtil.runMotor(shooterMotor, MathUtil.clamp(shooterController.calculate(getVelocity(), speed), -1.0, 1.0));

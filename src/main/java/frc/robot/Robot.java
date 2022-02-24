@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
         pathfinder = swerveDrive.getPathfinder();
 
         storage = new StorageSubsystem(INIT_TARGET_COLOR);
-        shooter = new ShooterSubsystem(storage);
+        shooter = new ShooterSubsystem();
 
         intake = new IntakeSubsystem();
         climber = new ClimberSubsystem();

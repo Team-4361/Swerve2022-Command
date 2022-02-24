@@ -72,8 +72,8 @@ public class Constants {
         public static final int BL_LIMIT_ID = 6;
         public static final int BR_LIMIT_ID = 7;
 
-        public static final int TL_LIMIT_ID = 9;
-        public static final int TR_LIMIT_ID = 8;
+        public static final int TL_LIMIT_ID = 23;
+        public static final int TR_LIMIT_ID = 22;
     }
 
     public static class Intake {
@@ -84,8 +84,8 @@ public class Constants {
         public static final int BR_LIMIT_ID = 9;
 
         // TODO: change
-        public static final int FL_LIMIT_ID = 5;
-        public static final int FR_LIMIT_ID = 8;
+        public static final int FL_LIMIT_ID = 19;
+        public static final int FR_LIMIT_ID = 18;
 
         public static final int L_INTAKE_EXTEND_ID = 12;
         public static final int R_INTAKE_EXTEND_ID = 11;
