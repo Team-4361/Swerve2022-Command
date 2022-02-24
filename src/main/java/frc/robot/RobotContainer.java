@@ -45,7 +45,7 @@ public class RobotContainer {
     private final JoystickButton lBumper = new JoystickButton(controller, 5);
     private final JoystickButton rBumper = new JoystickButton(controller, 6);
 
-    private JoystickButton[] xyStickButtons;
+    private JoystickButton[] xyStickButtons = new JoystickButton[16];
 
     private final SequentialCommandGroup testSwerveDrive = new SequentialCommandGroup(new MoveRightCMD(), new MoveLeftCMD(), new MoveFWDCMD(), new MoveBCKCMD());
     private final SequentialCommandGroup AutoShoot = new SequentialCommandGroup(new CenterShooterToHubCommand(), new RevAutoShootCommand(), new ShootCMD());
@@ -62,7 +62,7 @@ public class RobotContainer {
                 Robot.swerveDrive.getGyro()
         )));
 
-        for (int i=0; i<=16; i++) {
+        for (int i = 0; i < 16; i++) {
             xyStickButtons[i] = new JoystickButton(xyStick, i);
         }
 

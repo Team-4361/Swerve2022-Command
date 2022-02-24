@@ -15,9 +15,9 @@ public class AngleAdjustSubsystem extends SubsystemBase {
 
     private final RotationalAbsoluteEncoder absoluteEncoder;
 
-    public AngleAdjustSubsystem() {
+    public AngleAdjustSubsystem(CANSparkMax adjustor) {
         
-        absoluteEncoder = new RotationalAbsoluteEncoder(new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless))
+        absoluteEncoder = new RotationalAbsoluteEncoder(adjustor)
                 .setFlipped(ADJUSTOR_FLIPPED)
                 .start();
     }

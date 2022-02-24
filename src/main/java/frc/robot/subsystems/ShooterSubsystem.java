@@ -57,4 +57,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public boolean isDesiredSpeed(double speed) { return shooterEncoder.getVelocity() > speed; }
 
     public void resetPID() { shooterController.reset(); }
+
+    public CANSparkMax getAdjustor() {
+        return adjustMotor;
+    }
 }
