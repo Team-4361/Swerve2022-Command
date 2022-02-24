@@ -13,8 +13,8 @@ import static frc.robot.Constants.MotorFlip.*;
 
 public class ClimberSubsystem extends SubsystemBase {
 
-    private final CANSparkMax leftClimberMTR = new CANSparkMax(L_CLIMBER_PORT, kBrushless);
-    private final CANSparkMax rightClimberMTR = new CANSparkMax(R_CLIMBER_PORT, kBrushless);
+    private final CANSparkMax leftClimberMTR = new CANSparkMax(L_CLIMBER_ID, kBrushless);
+    private final CANSparkMax rightClimberMTR = new CANSparkMax(R_CLIMBER_ID, kBrushless);
 
     private final DigitalInput blSwitch, brSwitch, tlSwitch, trSwitch;
 

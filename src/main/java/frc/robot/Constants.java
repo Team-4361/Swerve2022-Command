@@ -56,24 +56,23 @@ public class Constants {
         public static final int BR_TURN_ID = 7;
         public static final int BL_TURN_ID = 5;
 
-        public static final int FR_DIO_ENCODER_PORT = 1;
+        public static final int FR_DIO_ENCODER_PORT = 3;
         public static final int FL_DIO_ENCODER_PORT = 0;
-        public static final int BR_DIO_ENCODER_PORT = 3;
-        public static final int BL_DIO_ENCODER_PORT = 2;
+        public static final int BR_DIO_ENCODER_PORT = 2;
+        public static final int BL_DIO_ENCODER_PORT = 1;
 
         public static final double SWERVE_WHEEL_RADIUS = 0.0508;
     }
 
     public static class Climber {
-        public static final int L_CLIMBER_PORT = 9;
-        public static final int R_CLIMBER_PORT = 10;
+        public static final int L_CLIMBER_ID = 9;
+        public static final int R_CLIMBER_ID = 10;
 
         // bottom limit switch
         public static final int BL_LIMIT_ID = 6;
         public static final int BR_LIMIT_ID = 7;
 
-        // TODO: change!
-        public static final int TL_LIMIT_ID = 0;
+        public static final int TL_LIMIT_ID = 9;
         public static final int TR_LIMIT_ID = 8;
     }
 
@@ -85,8 +84,8 @@ public class Constants {
         public static final int BR_LIMIT_ID = 9;
 
         // TODO: change
-        public static final int FL_LIMIT_ID = 0;
-        public static final int FR_LIMIT_ID = 4;
+        public static final int FL_LIMIT_ID = 5;
+        public static final int FR_LIMIT_ID = 8;
 
         public static final int L_INTAKE_EXTEND_ID = 12;
         public static final int R_INTAKE_EXTEND_ID = 11;
@@ -105,7 +104,7 @@ public class Constants {
 
     public static class Shooter {
         public static final int SHOOTER_MOTOR_ID = 17;
-        public static final int SHOOTER_WHEEL_RADIUS = 0;
+        public static final double SHOOTER_WHEEL_RADIUS = 0.076;
     }
 
     public static class Storage {
