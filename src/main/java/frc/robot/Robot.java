@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
         intake = new IntakeSubsystem();
         climber = new ClimberSubsystem();
 
-        adjustor = new AngleAdjustSubsystem(shooter.getAdjustor());
+        adjustor = new AngleAdjustSubsystem();
 
         // Add your test commands here
         testUtil = new TestUtil()

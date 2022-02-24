@@ -18,8 +18,8 @@ import frc.robot.robot_utils.MotorUtil;
 
 
 public class ShooterSubsystem extends SubsystemBase {
-    private final CANSparkMax shooterMotor, acceptorMotor, storageMotor, adjustMotor;
-    private final RelativeEncoder shooterEncoder, adjustEncoder;
+    private final CANSparkMax shooterMotor, acceptorMotor, storageMotor;
+    private final RelativeEncoder shooterEncoder;
     private final PIDController shooterController = new PIDController(0, 1, 0);
 
     public ShooterSubsystem() {
@@ -30,10 +30,8 @@ public class ShooterSubsystem extends SubsystemBase {
         this.storageMotor = Robot.storage.getStorageMotor();
 
         this.shooterMotor = new CANSparkMax(SHOOTER_MOTOR_ID, kBrushless);
-        this.adjustMotor = new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless);
 
         this.shooterEncoder = shooterMotor.getEncoder();
-        this.adjustEncoder = adjustMotor.getEncoder();
     }
 
     @Override public void periodic() {}
@@ -57,8 +55,4 @@ public class ShooterSubsystem extends SubsystemBase {
     public boolean isDesiredSpeed(double speed) { return shooterEncoder.getVelocity() > speed; }
 
     public void resetPID() { shooterController.reset(); }
-
-    public CANSparkMax getAdjustor() {
-        return adjustMotor;
-    }
 }
