@@ -63,7 +63,6 @@ public class Robot extends TimedRobot {
                 .addDefaultCommand(SHOOTER_ANGLE_TEST, new ShooterAngleTest())
                 .setTestMode(DEFAULT_TEST_MODE);
 
-
         //Should be the last thing in this function
         m_robotContainer = new RobotContainer();
     }

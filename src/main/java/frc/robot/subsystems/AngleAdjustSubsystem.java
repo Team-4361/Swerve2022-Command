@@ -14,12 +14,12 @@ import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_MOTOR_ID;
 public class AngleAdjustSubsystem extends SubsystemBase {
 
     private final RotationalAbsoluteEncoder absoluteEncoder;
-    private final CANSparkMax adjustorMTR;
+    private final CANSparkMax adjustMotor;
 
     public AngleAdjustSubsystem() {
-        adjustorMTR = new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless);
+        adjustMotor = new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless);
 
-        absoluteEncoder = new RotationalAbsoluteEncoder(adjustorMTR)
+        absoluteEncoder = new RotationalAbsoluteEncoder(adjustMotor)
                 .setFlipped(ADJUSTOR_FLIPPED)
                 .start();
     }
@@ -46,5 +46,9 @@ public class AngleAdjustSubsystem extends SubsystemBase {
 
     public void setRotationsFromBase(double position) {
         setAngle(rotationToAngle(position));
+    }
+
+    public CANSparkMax getAdjustorMotor() {
+        return adjustMotor;
     }
 }

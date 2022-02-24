@@ -106,13 +106,11 @@ public class RevShooterCommand extends CommandBase {
     public void execute() {
         if (multiBall) {
             shootAllBalls();
-            realDone = true;
-            end(false);
         } else {
             shoot(true);
-            realDone = true;
-            end(false);
         }
+        realDone = true;
+        end(false);
     }
 
     @Override

@@ -16,13 +16,13 @@ public class Constants {
         // TODO: May need to be changed later.
         public final static boolean ACCEPTOR_FLIPPED = true;
         public final static boolean STORAGE_FLIPPED = false;
-        public final static boolean SHOOTER_FLIPPED = false;
+        public final static boolean SHOOTER_FLIPPED = true;
         public final static boolean CLIMBER_FLIPPED = false;
 
         public final static boolean ADJUSTOR_FLIPPED = true;
 
-        public final static boolean INTAKE_FLIPPED = false;
-        public final static boolean INTAKE_EXTENDER_FLIPPED = false;
+        public final static boolean INTAKE_FLIPPED = true;
+        public final static boolean INTAKE_EXTENDER_FLIPPED = true;
     }
 
     public static class TestValue {
@@ -31,17 +31,22 @@ public class Constants {
         public final static TestUtil.TestMode DEFAULT_TEST_MODE = TestUtil.TestMode.SHOOTER_ANGLE_TEST;
 
         // TODO: adjust enablers based on how robot is completed
-        public final static boolean DRIVE_ENABLED = false;
+        public final static boolean DRIVE_ENABLED = true;
         public final static boolean CAMERA_ENABLED = false;
     }
 
     public static class Chassis {
-        public static final double FR_OFFSET = -4.94 - (2* Math.PI)- (Math.PI/2);
-        public static final double FL_OFFSET = -6.23 - (Math.PI/2);
-        public static final double BR_OFFSET = -1.03 - (Math.PI/2) - (2*Math.PI);
-        public static final double BL_OFFSET = -3.02  - (2*Math.PI) - (Math.PI/2);
+        public static final double FR_OFFSET = -2.38 - (2* Math.PI) + (Math.PI);
+        public static final double FL_OFFSET = -9.401 - (Math.PI/2);
+        public static final double BR_OFFSET = -3.345 - (Math.PI/2) - (2*Math.PI);
+        public static final double BL_OFFSET = -6.12  - (2*Math.PI) - (Math.PI/2);
 
-        public static final double CONTROLLER_DEADZONE = 0.05;
+        // public static final double FR_OFFSET = 0;
+        // public static final double FL_OFFSET = 0;
+        // public static final double BR_OFFSET = 0;
+        // public static final double BL_OFFSET = 0;
+
+        public static final double CONTROLLER_DEADZONE = 0.1;
 
         //In meters
         public static final double SWERVE_CHASSIS_SIDE_LENGTH = 0.762;

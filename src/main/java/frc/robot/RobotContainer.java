@@ -5,6 +5,7 @@
 package frc.robot;
 
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -56,9 +57,9 @@ public class RobotContainer {
 
     public RobotContainer() {
         Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() -> ChassisSpeeds.fromFieldRelativeSpeeds(
-                -deadzone(xyStick.getX(), Chassis.CONTROLLER_DEADZONE),
-                deadzone(xyStick.getY(), Chassis.CONTROLLER_DEADZONE),
-                deadzone(zStick.getTwist(), Chassis.CONTROLLER_DEADZONE),
+                deadzone(xyStick.getX(), Chassis.CONTROLLER_DEADZONE),
+                -deadzone(xyStick.getY(), Chassis.CONTROLLER_DEADZONE),
+                -deadzone(zStick.getTwist(), Chassis.CONTROLLER_DEADZONE),
                 Robot.swerveDrive.getGyro()
         )));
 
