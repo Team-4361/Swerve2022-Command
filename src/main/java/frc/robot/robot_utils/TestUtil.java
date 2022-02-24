@@ -13,7 +13,7 @@ public class TestUtil {
         SHOOTER_ANGLE_TEST;
     }
 
-    private HashMap<TestMode, CommandBase> defaultCommands;
+    private HashMap<TestMode, CommandBase> defaultCommands = new HashMap<>();
     private TestMode currentTestMode;
 
     public TestUtil setTestMode(TestMode mode) {

@@ -9,15 +9,15 @@ import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.MotorFlip.ADJUSTOR_FLIPPED;
 import static frc.robot.Constants.MotorValue.ADJUSTOR_SPEED;
 import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_GEAR_RATIO;
-import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_MOTOR_ID;
 
 public class AngleAdjustSubsystem extends SubsystemBase {
 
     private final RotationalAbsoluteEncoder absoluteEncoder;
-    private final CANSparkMax adjustorMTR = new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless); 
+    private final CANSparkMax adjustorMTR;
 
     public AngleAdjustSubsystem(CANSparkMax adjustor) {
-        
+        adjustorMTR = adjustor;
+
         absoluteEncoder = new RotationalAbsoluteEncoder(adjustor)
                 .setFlipped(ADJUSTOR_FLIPPED)
                 .start();

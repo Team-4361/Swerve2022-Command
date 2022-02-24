@@ -57,11 +57,11 @@ public class Robot extends TimedRobot {
         adjustor = new AngleAdjustSubsystem(shooter.getAdjustor());
 
         // Add your test commands here
-        // testUtil = new TestUtil()
-                // .addDefaultCommand(CHASSIS_DRIVE_TEST, new ChassisDriveTest())
-                // .addDefaultCommand(CHASSIS_OFFSET_ADJUSTMENT, new ChassisOffsetTest())
-                // .addDefaultCommand(SHOOTER_ANGLE_TEST, new ShooterAngleTest())
-                // .setTestMode(DEFAULT_TEST_MODE);
+        testUtil = new TestUtil()
+                .addDefaultCommand(CHASSIS_DRIVE_TEST, new ChassisDriveTest())
+                .addDefaultCommand(CHASSIS_OFFSET_ADJUSTMENT, new ChassisOffsetTest())
+                .addDefaultCommand(SHOOTER_ANGLE_TEST, new ShooterAngleTest())
+                .setTestMode(DEFAULT_TEST_MODE);
 
 
         //Should be the last thing in this function
