@@ -14,6 +14,7 @@ import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_MOTOR_ID;
 public class AngleAdjustSubsystem extends SubsystemBase {
 
     private final RotationalAbsoluteEncoder absoluteEncoder;
+    private final CANSparkMax adjustorMTR = new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless); 
 
     public AngleAdjustSubsystem(CANSparkMax adjustor) {
         
