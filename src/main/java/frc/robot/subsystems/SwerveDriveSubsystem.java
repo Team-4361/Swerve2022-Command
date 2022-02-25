@@ -10,7 +10,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.swerve.SwerveChassis;
 import frc.robot.swerve.SwerveOdometry;
 import me.wobblyyyy.pathfinder2.Pathfinder;
@@ -57,6 +56,26 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         if (DRIVE_ENABLED) {
             swerveChassis.drive(speeds);
         }
+    }
+
+    public void driveRight() {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(0.8, 0, 0, Rotation2d.fromDegrees(0)));
+    }
+
+    public void driveLeft() {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(-0.8, 0, 0, Rotation2d.fromDegrees(0)));
+    }
+
+    public void driveForward() {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.8, 0, Rotation2d.fromDegrees(0)));
+    }
+
+    public void driveBack() {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, -0.8, 0, Rotation2d.fromDegrees(0)));
+    }
+    
+    public void stop() {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(0,0,0, Rotation2d.fromDegrees(0)));
     }
 
     public Rotation2d getGyro() {

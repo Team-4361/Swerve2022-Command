@@ -11,6 +11,7 @@ import static frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder.velocity;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class RotationalAbsoluteEncoder {
 
     protected static CANSparkMax canMotor;

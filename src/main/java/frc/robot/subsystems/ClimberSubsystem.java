@@ -27,52 +27,31 @@ public class ClimberSubsystem extends SubsystemBase {
         trSwitch = new DigitalInput(TR_LIMIT_ID);
     }
 
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-    }
-
-    public void moveClimberUp() {
-        if (!tlSwitch.get() && !trSwitch.get()) {
-            runMotors(climberGroup, getMotorValue(CLIMBER_SPEED, CLIMBER_FLIPPED));
-        }
-    }
-
-    public void moveClimberDown() {
-        if (!blSwitch.get() && !brSwitch.get()) {
-            runMotors(climberGroup, getMotorValue(-CLIMBER_SPEED, CLIMBER_FLIPPED));
-        }
-    }
+    @Override public void periodic() {}
 
     public void stopClimber() {
         stopMotors(climberGroup);
     }
 
-    // public void lowerClimber() {
-    //     runMotors(climberGroup, getMotorValue(-CLIMBER_SPEED, CLIMBER_FLIPPED));
-
-    //     while (!blSwitch.get() && !brSwitch.get()) {
-    //         Thread.onSpinWait();
-    //     }
-
-    //     stopMotors(climberGroup);
-    // }
-
-    // public void raiseClimber() {
-    //     runMotors(climberGroup, getMotorValue(CLIMBER_SPEED, CLIMBER_FLIPPED));
-
-    //     while (!tlSwitch.get() && !trSwitch.get()) {
-    //         Thread.onSpinWait();
-    //     }
-
-    //     stopMotors(climberGroup);
-    // }
-
-    public boolean isTransTopClear(){
-        return !tlSwitch.get() || !trSwitch.get();
+    public void lowerClimber() {
+        translateClimber(-CLIMBER_SPEED);
     }
 
-    public boolean isTranBtmClear(){
-        return !blSwitch.get() || !brSwitch.get();
+    public void raiseClimber() {
+        translateClimber(CLIMBER_SPEED);
+    }
+
+    public void translateClimber(double value) {
+        runMotors(climberGroup, getMotorValue(value, CLIMBER_FLIPPED));
+    }
+
+    /** @return If the top switch is pressed */
+    public boolean isTopSwitchPressed() {
+        return tlSwitch.get() && trSwitch.get();
+    }
+
+    /** @return If the bottom switch is pressed */
+    public boolean isBottomSwitchPressed() {
+        return blSwitch.get() && brSwitch.get();
     }
 }

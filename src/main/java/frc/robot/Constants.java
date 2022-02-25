@@ -10,6 +10,29 @@ public class Constants {
         public static final int XY_STICK_ID = 0;
         public static final int Z_STICK_ID = 1;
         public static final int CONTROLLER_ID = 2;
+
+        public static final int /* Xbox Controller Map */
+                // BUTTONS
+                XBOX_X = 3,
+                        XBOX_Y = 4,
+                        XBOX_B = 2,
+                        XBOX_A = 1,
+                        XBOX_START = 9,
+                        XBOX_END = 10,
+
+                // DPAD
+                XBOX_DPAD_LEFT = 14,
+                        XBOX_DPAD_RIGHT = 15,
+                        XBOX_DPAD_UP = 12,
+                        XBOX_DPAD_DOWN = 13,
+
+                // CONTROLLER
+                XBOX_LEFT_STICK = 7,
+                        XBOX_RIGHT_STICK = 8,
+
+                // TOP BUTTONS
+                XBOX_RIGHT_TRIGGER = 6,
+                        XBOX_LEFT_TRIGGER = 5;
     }
 
     public static class MotorFlip {
@@ -36,15 +59,10 @@ public class Constants {
     }
 
     public static class Chassis {
-        public static final double FR_OFFSET = -2.38 - (2* Math.PI) + (Math.PI);
-        public static final double FL_OFFSET = -9.401 - (Math.PI/2);
-        public static final double BR_OFFSET = -3.345 - (Math.PI/2) - (2*Math.PI);
-        public static final double BL_OFFSET = -6.12  - (2*Math.PI) - (Math.PI/2);
-
-        // public static final double FR_OFFSET = 0;
-        // public static final double FL_OFFSET = 0;
-        // public static final double BR_OFFSET = 0;
-        // public static final double BL_OFFSET = 0;
+        public static final double FR_OFFSET = -2.38 - (2 * Math.PI) + (Math.PI);
+        public static final double FL_OFFSET = -9.401 - (Math.PI / 2);
+        public static final double BR_OFFSET = -3.345 - (Math.PI / 2) - (2 * Math.PI);
+        public static final double BL_OFFSET = -6.12 - (2 * Math.PI) - (Math.PI / 2);
 
         public static final double CONTROLLER_DEADZONE = 0.1;
 
@@ -113,27 +131,21 @@ public class Constants {
     }
 
     public static class Storage {
-        /**         
-         * The first motor in the Storage device, used to accept the ball after the sensor is activated.
-         */
+        /** The first motor in the Storage device, used to accept the ball after the sensor is activated. */
         public static final int ACCEPTOR_MOTOR_PORT = 13;
 
-        // The second middle motor in the Storage device, used to move the ball inside.
+        /** The second middle motor in the Storage device, used to move the ball inside. */
         public static final int STORAGE_MOTOR_PORT = 16;
 
-        ////////////////////////////////////////////////////////////////////////////////////////
-            
-        // Used to detect the presence of a ball inside the front of the device, mainly used for 2nd entering ball.
+        /** Used to detect the presence of a ball inside the front of the device, mainly used for 2nd entering ball. */
         public static final int ACCEPTOR_PHOTO_ELECTRIC_PORT = 4;
-    
-        // Used to detect the presence of a ball inside the middle of the device, where the first ball should go.
+
+        /** Used to detect the presence of a ball inside the middle of the device, where the first ball should go. */
         public static final int STORAGE_PHOTO_ELECTRIC_PORT = 5;
-    
-        ////////////////////////////////////////////////////////////////////////////////////////
-    
-        // The port to use for the Color Sensor detection.
+
+        /** The port to use for the Color Sensor detection. */
         public static final I2C.Port COLOR_SENSOR_PORT = I2C.Port.kOnboard;
-    
+
         // Adjust based on sensitivity.
         public static final double BLUE_THRESHOLD = 0.30;
         public static final double RED_THRESHOLD = 0.30;
@@ -147,18 +159,18 @@ public class Constants {
     //PhotonVision Constants
     public static class ShooterCameraConsts {
         public static final String CAMERA_NAME = "";
-	    public static final double CAMERA_HEIGHT = 0.0;
+        public static final double CAMERA_HEIGHT = 0.0;
         public static final double CAMERA_PITCH = 0.0;
         public static final double TAPE_HEIGHT = 0.0;
     }
 
     public static class ChassisCameraConsts {
         public static final String CAMERA_NAME = "";
-	    public static final double CAMERA_HEIGHT = 0.0;
+        public static final double CAMERA_HEIGHT = 0.0;
         public static final double CAMERA_PITCH = 0.0;
         public static final double BALL_HEIGHT = 0.0;
     }
-    
+
     // These values are designed to be changed based on the Motor 
     public static class MotorValue {
         public static final double SHOOT_SPEED = 1.0;
@@ -171,13 +183,13 @@ public class Constants {
 
         // Stall current in amps, stops the motor when the current rises above
         // the maximum value.
-        public final static double STALL_CURRENT = 80;
-        
+        public final static double STALL_CURRENT = 80; /* AMPS */
+
         // Stall RPM, stops the motor when the RPM drops below + current above limit.
-        public final static double STALL_RPM = 2000;
+        public final static double STALL_RPM = 2000; /* RPM */
 
         // Target RPM for the Shooter Motor to activate loading
-        public final static double SHOOTER_TARGET_RPM = 4800;
+        public final static double SHOOTER_TARGET_RPM = 4800; /* RPM */
 
         // Used for stall protection, disable if any issues occur from it.
         public final static boolean CURRENT_MEASURING = false;

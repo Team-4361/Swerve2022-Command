@@ -6,15 +6,12 @@ import java.util.HashMap;
 
 public class TestUtil {
 
-    // Add testing modes
-    public enum TestMode { 
-        CHASSIS_DRIVE_TEST, 
-        CHASSIS_OFFSET_ADJUSTMENT,
-        SHOOTER_ANGLE_TEST;
-    }
-
-    private HashMap<TestMode, CommandBase> defaultCommands = new HashMap<>();
+    private HashMap<TestMode, CommandBase> defaultCommands;
     private TestMode currentTestMode;
+
+    public enum TestMode {
+        CHASSIS_DRIVE_TEST, CHASSIS_OFFSET_ADJUSTMENT, SHOOTER_ANGLE_TEST
+    }
 
     public TestUtil setTestMode(TestMode mode) {
         currentTestMode = mode;
@@ -47,5 +44,7 @@ public class TestUtil {
         defaultCommands = commands;
     }
 
-    public TestUtil() {}
+    public TestUtil() {
+        defaultCommands = new HashMap<>();
+    }
 }

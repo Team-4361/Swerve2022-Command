@@ -1,17 +1,13 @@
 package frc.robot.subsystems;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
-import static frc.robot.Constants.MotorValue.*;
-import static frc.robot.Constants.MotorFlip.*;
 import static frc.robot.Constants.Shooter.SHOOTER_MOTOR_ID;
-import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_MOTOR_ID;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.robot_utils.MotorUtil;

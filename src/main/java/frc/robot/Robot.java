@@ -43,7 +43,6 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
-
         swerveDrive = new SwerveDriveSubsystem();
         swerveDrive.resetGyro();
         pathfinder = swerveDrive.getPathfinder();
@@ -58,7 +57,7 @@ public class Robot extends TimedRobot {
 
         // Add your test commands here
         testUtil = new TestUtil()
-                .addDefaultCommand(CHASSIS_DRIVE_TEST, new ChassisDriveTest())
+                .addDefaultCommand(CHASSIS_DRIVE_TEST, new ChassisForwardOffsetTest())
                 .addDefaultCommand(CHASSIS_OFFSET_ADJUSTMENT, new ChassisOffsetTest())
                 .addDefaultCommand(SHOOTER_ANGLE_TEST, new ShooterAngleTest())
                 .setTestMode(DEFAULT_TEST_MODE);
@@ -95,13 +94,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        // This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.cancel();
-        }
+        // Ensure that any commands that are waiting to be run are completely
+        // cancelled before the robot enables to prevent problems.
+        CommandScheduler.getInstance().cancelAll();
     }
 
     /** This function is called periodically during operator control. */

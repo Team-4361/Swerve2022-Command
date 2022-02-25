@@ -14,7 +14,15 @@ public class MoveClimberDown extends CommandBase {
     
     @Override
     public void execute() {
-        Robot.climber.moveClimberDown();
+        // This runs repeatedly until the command is ended.
+        if (!Robot.climber.isBottomSwitchPressed()) {
+            // While the front switch is not pressed, keep running the climber Extender Motor out.
+            Robot.climber.lowerClimber();
+        } else {
+            // The limit switch is pressed, stop the climber and end the command.
+            Robot.climber.stopClimber();
+            end(false);
+        }
     }
 
     @Override
@@ -24,6 +32,6 @@ public class MoveClimberDown extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return !Robot.climber.isTranBtmClear();
+        return Robot.climber.isBottomSwitchPressed();
     }
 }

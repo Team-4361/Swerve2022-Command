@@ -11,10 +11,10 @@ import static frc.robot.Constants.ChassisCameraConsts.BALL_HEIGHT;
 
 public class ChassisCamera {
 
-    PhotonCamera photonCamera;
+    final PhotonCamera photonCamera;
 
-    double cameraHeight;
-    double cameraPitch;
+    final double cameraHeight;
+    final double cameraPitch;
 
     //Height in meters of the target
     final double TARGET_HEIGHT = BALL_HEIGHT;

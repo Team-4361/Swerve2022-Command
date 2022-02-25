@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Robot;
-import frc.robot.commands.intake_commands.DisableIntake;
-import frc.robot.commands.intake_commands.SpinIntakeInward;
+import frc.robot.commands.intake_commands.RetractIntake;
+import frc.robot.commands.intake_commands.SpinIntakeAccept;
 import frc.robot.robot_utils.MotorUtil;
 import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.subsystems.StorageSubsystem.Task;
@@ -25,10 +25,9 @@ public class ProcessBallCommand extends CommandBase {
     private final CANSparkMax[] processMotorGroup;
 
     public ProcessBallCommand() {
-
         disableGroup = new ParallelCommandGroup()
-                .alongWith(new SpinIntakeInward())
-                .alongWith(new DisableIntake());
+                .alongWith(new SpinIntakeAccept())
+                .alongWith(new RetractIntake());
 
         processMotorGroup = new CANSparkMax[]{Robot.storage.getStorageMotor(), Robot.storage.getAcceptorMotor()};
 
@@ -90,12 +89,14 @@ public class ProcessBallCommand extends CommandBase {
                 MotorUtil.stopMotors(processMotorGroup);
 
                 finished = true;
+                end(false);
             }
 
             @Override
             public void colorTimeoutError() {
                 MotorUtil.stopMotors(processMotorGroup);
                 finished = true;
+                end(false);
             }
         });
 

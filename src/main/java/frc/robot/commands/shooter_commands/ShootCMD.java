@@ -2,7 +2,6 @@ package frc.robot.commands.shooter_commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import java.lang.Math;
 import java.util.HashMap;
 
 import frc.robot.Robot;
