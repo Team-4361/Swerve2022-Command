@@ -1,26 +1,40 @@
 package frc.robot.commands.climber_commands;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
+import frc.robot.subsystems.ClimberSubsystem;
 
 public abstract class AbstractClimberCommand extends CommandBase {
+    private final ClimberSubsystem climber;
+    private final Supplier<Boolean> isSwitchPressed;
+    private final Runnable translate;
+
+    public AbstractClimberCommand(ClimberSubsystem climber,
+                                  Supplier<Boolean> isSwitchPressed,
+                                  Runnable translate) {
+        this.climber = climber;
+        this.isSwitchPressed = isSwitchPressed;
+        this.translate = translate;
+    }
+
     @Override
     public void initialize() {
-        addRequirements(Robot.climber);
+        addRequirements(climber);
     }
     
     @Override
     public void execute() {
-        Robot.climber.raiseClimber();
+        translate.run();
     }
 
     @Override
     public void end(boolean interrupted) {
-        Robot.climber.stopClimber();
+        climber.stopClimber();
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return !isSwitchPressed.get();
     }
 }
