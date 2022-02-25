@@ -1,0 +1,26 @@
+package frc.robot.commands.climber_commands;
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
+
+public abstract class AbstractClimberCommand extends CommandBase {
+    @Override
+    public void initialize() {
+        addRequirements(Robot.climber);
+    }
+    
+    @Override
+    public void execute() {
+        Robot.climber.raiseClimber();
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        Robot.climber.stopClimber();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
+}

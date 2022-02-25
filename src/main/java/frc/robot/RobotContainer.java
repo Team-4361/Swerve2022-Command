@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.autonomous_commands.TestAutonomous;
 import frc.robot.commands.chassis_commands.*;
 import frc.robot.commands.climber_commands.MoveClimberDown;
 import frc.robot.commands.climber_commands.MoveClimberUp;
@@ -19,7 +20,6 @@ import frc.robot.commands.intake_commands.DisableIntake;
 import frc.robot.commands.intake_commands.EnableIntake;
 import frc.robot.commands.intake_commands.SpinIntakeInward;
 import frc.robot.commands.intake_commands.SpinIntakeOutward;
-import frc.robot.commands.pathfinder.RectangleTestCommand;
 import frc.robot.commands.shooter_commands.RevAutoShootCommand;
 import frc.robot.commands.shooter_commands.RevDecreaseShooterAngle;
 import frc.robot.commands.shooter_commands.RevIncreaseShooterAngle;
@@ -27,6 +27,8 @@ import frc.robot.commands.shooter_commands.RevShooterCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.storage_commands.ProcessBallCommand;
 import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
+import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 
 import static frc.robot.Constants.*;
 
@@ -70,15 +72,11 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        // TODO: Add button bindings
-
-        //Joysticks
         xyStickButtons[12].whenPressed(new RevIncreaseShooterAngle(10));
         xyStickButtons[13].whenPressed(new RevDecreaseShooterAngle(10));
         xyButtonFive.whenActive(new ToggleLeftHandMode());
         xyStickButtons[11].debounce(0.2).whenActive(new CenterShooterToHubCommand());
 
-        //Xbox Controller
         aButton.whenHeld(AutoShoot);
         bButton.whenHeld(new RevShooterCommand(false));
 
@@ -102,15 +100,14 @@ public class RobotContainer {
         return null;
     }
 
-    public Command getAutonomousCommand(Pathfinder pathfinder) {
-        return new RectangleTestCommand(pathfinder);
+    public Command getAutonomousCommand(PathfinderSubsystem pathfinderSubsystem) {
+        return new TestAutonomous(pathfinderSubsystem);
     }
     
     public SequentialCommandGroup getAutoShoot(){
         return new SequentialCommandGroup(new CenterShooterToHubCommand(), new RevAutoShootCommand());
     }
 
-    //Adds a deadzone
     public double deadzone(double value, double deadzone) {
         return Math.abs(value) > deadzone ? value : 0;
     }

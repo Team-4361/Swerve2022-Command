@@ -62,6 +62,7 @@ public class Constants {
         public static final int BL_DIO_ENCODER_PORT = 2;
 
         public static final double SWERVE_WHEEL_RADIUS = 0.0508;
+        public static final double ODOMETRY_MS_INTERVAL = 5;
     }
 
     public static class Climber {

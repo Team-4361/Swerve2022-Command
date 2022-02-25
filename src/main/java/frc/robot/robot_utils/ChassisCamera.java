@@ -7,6 +7,9 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import org.photonvision.PhotonUtils;
 import frc.robot.subsystems.StorageSubsystem.AcceptColor;
+import me.wobblyyyy.pathfinder2.geometry.Angle;
+import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+
 import static frc.robot.Constants.ChassisCameraConsts.BALL_HEIGHT;
 
 public class ChassisCamera {
@@ -16,7 +19,7 @@ public class ChassisCamera {
     double cameraHeight;
     double cameraPitch;
 
-    //Height in meters of the target
+    // Height in meters of the target
     final double TARGET_HEIGHT = BALL_HEIGHT;
 
     /*
@@ -25,7 +28,7 @@ public class ChassisCamera {
       NetworkTable server is turned off
     */
     /**
-     * 
+     *
      * @param cameraName    name of the camera in photon vision
      * @param mCameraHeight camera height in meters
      * @param mCameraPitch camera pitch in radians
@@ -74,7 +77,7 @@ public class ChassisCamera {
         return PhotonUtils.calculateDistanceToTargetMeters(cameraHeight, TARGET_HEIGHT, cameraPitch, Math.toRadians(target.getPitch()));
     }
 
-    
+
     // Returns the yaw--rotation around the vertical axis--in degrees
     // 0 Yaw means the target is exactly in the middle of the screen
     // Negative yaw means the target is somewhere on the left of the screen
@@ -89,7 +92,41 @@ public class ChassisCamera {
     }
 
     /**
-     * 
+     * calculate the position of the target based on the robot's current
+     * position and information about the current positional error.
+     *
+     * @param robotPosition the robot's current position.
+     * @param yaw           the target's rotational offset from the
+     *                      center of the robot.
+     * @param distance      the robot's distance from the target.
+     * @return the position of the target.
+     */
+    private static PointXYZ calculateTargetPosition(PointXYZ robotPosition,
+                                                    Angle yaw,
+                                                    double distance) {
+        return robotPosition.inDirection(
+                distance,
+                robotPosition.z().add(yaw)
+        );
+    }
+
+    /**
+     * get the target's current position.
+     *
+     * @param robotPosition the robot's current position.
+     * @return the target's current position.
+     */
+    public PointXYZ getTargetPosition(PointXYZ robotPosition) {
+        PhotonTrackedTarget target = getBestTarget();
+
+        Angle yaw = Angle.fromDeg(getYaw(target));
+        double distance = getDistanceToTarget(target);
+
+        return calculateTargetPosition(robotPosition, yaw, distance);
+    }
+
+    /**
+     *
      * @return returns a Hashmap containing the distance, yaw, and pitch of the best target
      * Distance, Yaw, Pitch are they key for this information
      */
@@ -109,7 +146,7 @@ public class ChassisCamera {
 
         goalInfo.put("Distance", getDistanceToTarget(trackedTarget));
         goalInfo.put("Yaw", getYaw(trackedTarget));
-		goalInfo.put("Pitch", getPitch(trackedTarget));
+        goalInfo.put("Pitch", getPitch(trackedTarget));
         goalInfo.put("Status", 1.0);
 
         return goalInfo;

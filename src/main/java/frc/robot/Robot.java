@@ -18,14 +18,16 @@ import frc.robot.robot_utils.ShooterCamera;
 import frc.robot.robot_utils.TestUtil;
 import frc.robot.subsystems.*;
 import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 
 public class Robot extends TimedRobot {
-    private Command m_autonomousCommand;
+    private Command autonomous;
 
     private RobotContainer m_robotContainer;
 
     public static SwerveDriveSubsystem swerveDrive;
     public static Pathfinder pathfinder;
+    public static PathfinderSubsystem pathfinderSubsystem;
     public static StorageSubsystem storage;
     public static ShooterSubsystem shooter;
     public static IntakeSubsystem intake;
@@ -47,6 +49,7 @@ public class Robot extends TimedRobot {
         swerveDrive = new SwerveDriveSubsystem();
         swerveDrive.resetGyro();
         pathfinder = swerveDrive.getPathfinder();
+        pathfinderSubsystem = new PathfinderSubsystem(pathfinder);
 
         storage = new StorageSubsystem(INIT_TARGET_COLOR);
         shooter = new ShooterSubsystem(storage);
@@ -64,7 +67,7 @@ public class Robot extends TimedRobot {
                 .setTestMode(DEFAULT_TEST_MODE);
 
 
-        //Should be the last thing in this function
+        // Should be the last thing in this function
         m_robotContainer = new RobotContainer();
     }
 
@@ -73,6 +76,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
     }
+
     @Override
     public void disabledInit() {}
 
@@ -82,27 +86,20 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand(pathfinder);
+        autonomous = m_robotContainer
+            .getAutonomousCommand(pathfinderSubsystem);
 
-        // schedule the autonomous command (example)
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.schedule();
-        }
+        if (autonomous != null)
+            autonomous.schedule();
     }
 
-    /** This function is called periodically during autonomous. */
     @Override
     public void autonomousPeriodic() {}
 
     @Override
     public void teleopInit() {
-        // This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.cancel();
-        }
+        if (autonomous != null && !autonomous.isFinished())
+            autonomous.cancel();
     }
 
     /** This function is called periodically during operator control. */

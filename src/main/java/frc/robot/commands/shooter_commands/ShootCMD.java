@@ -2,18 +2,12 @@ package frc.robot.commands.shooter_commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import java.lang.Math;
 import java.util.HashMap;
 
 import frc.robot.Robot;
 
 
 public class ShootCMD extends CommandBase {
-
-
-    HashMap<String, Double> target;
-
-
     public ShootCMD() {
         addRequirements(Robot.shooter, Robot.storage);
     }
@@ -37,7 +31,6 @@ public class ShootCMD extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        //Will be finished when they are no balls in the shooter
         return Robot.storage.getBallsLoaded() == 0;
     }
 }
