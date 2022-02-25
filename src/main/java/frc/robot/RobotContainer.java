@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.autonomous_commands.TestAutonomous;
 import frc.robot.commands.chassis_commands.*;
-import frc.robot.commands.climber_commands.MoveClimberDown;
-import frc.robot.commands.climber_commands.MoveClimberUp;
+import frc.robot.commands.climber_commands.ClimberCommandDown;
+import frc.robot.commands.climber_commands.ClimberCommandUp;
 import frc.robot.commands.shooter_commands.RevAutoShootCommand;
 import frc.robot.commands.shooter_commands.RevShooterCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
@@ -84,10 +84,10 @@ public class RobotContainer {
 
         xButton.and(aButton).whenActive(storageEnableGroup);
 
-        //xButton.and(aButton).and(yButton).and(bButton).whenActive(testSwerveDrive);
+        // xButton.and(aButton).and(yButton).and(bButton).whenActive(testSwerveDrive);
 
-        lBumper.whenActive(new MoveClimberDown());
-        rBumper.whenActive(new MoveClimberUp());
+        lBumper.whenActive(new ClimberCommandDown());
+        rBumper.whenActive(new ClimberCommandUp());
     }
 
     public Command getAutonomousCommand() {
