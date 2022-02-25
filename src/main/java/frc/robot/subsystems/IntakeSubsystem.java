@@ -2,45 +2,69 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorFlip;
 import frc.robot.Constants.MotorValue;
 import frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder;
+import me.wobblyyyy.pathfinder2.math.Average;
+import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
+import me.wobblyyyy.pathfinder2.robot.components.Motor;
+import me.wobblyyyy.pathfinder2.robot.components.MultiMotor;
 
 import static frc.robot.Constants.Intake.*;
-import static frc.robot.robot_utils.MotorUtil.*;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 
-public class IntakeSubsystem extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
+    private final CANSparkMax[] sparks;
 
-    private final CANSparkMax leftIntakeTransMTR;
-    private final CANSparkMax rightIntakeTransMTR;
-    private final CANSparkMax intakeMTR;
+    private final Motor extender;
+    private final Motor intakeMotor;
 
-    private final CANSparkMax[] intakeMotors;
+    private final RotationalAbsoluteEncoder leftEncoder;
+    private final RotationalAbsoluteEncoder rightEncoder;
 
-    private final RotationalAbsoluteEncoder leftEncoder, rightEncoder;
-    private final DigitalInput flLimit, frLimit, blLimit, brLimit;
-
-    private final PIDController intakeController = new PIDController(0.1, 0, 0);
+    private final DigitalInput flLimit;
+    private final DigitalInput frLimit;
+    private final DigitalInput blLimit;
+    private final DigitalInput brLimit;
 
     public IntakeSubsystem() {
-        leftIntakeTransMTR = new CANSparkMax(L_INTAKE_EXTEND_ID, kBrushless);
-        rightIntakeTransMTR = new CANSparkMax(R_INTAKE_EXTEND_ID, kBrushless);
-        intakeMTR = new CANSparkMax(INTAKE_SPIN_MOTOR_ID, kBrushless);
+        CANSparkMax leftSpark =
+            new CANSparkMax(L_INTAKE_EXTEND_ID, kBrushless);
+        CANSparkMax rightSpark =
+            new CANSparkMax(R_INTAKE_EXTEND_ID, kBrushless);
+        CANSparkMax intakeSpark =
+            new CANSparkMax(INTAKE_SPIN_MOTOR_ID, kBrushless);
 
-        intakeMotors = new CANSparkMax[]{leftIntakeTransMTR, rightIntakeTransMTR};
+        sparks = new CANSparkMax[]{ leftSpark, rightSpark, intakeSpark };
 
-        leftEncoder = new RotationalAbsoluteEncoder(leftIntakeTransMTR)
+        extender = new MultiMotor(
+            new AbstractMotor(
+                    leftSpark::set,
+                    leftSpark::get,
+                    MotorFlip.INTAKE_EXTENDER_FLIPPED
+            ),
+            new AbstractMotor(
+                    rightSpark::set,
+                    rightSpark::get,
+                    MotorFlip.INTAKE_EXTENDER_FLIPPED
+            )
+        );
+        intakeMotor = new AbstractMotor(
+                intakeSpark::set,
+                intakeSpark::get,
+                MotorFlip.INTAKE_FLIPPED
+        );
+
+        leftEncoder = new RotationalAbsoluteEncoder(leftSpark)
                 .setAccuracyFactor(5)
                 .setFlipped(MotorFlip.INTAKE_FLIPPED)
                 .start();
 
-        rightEncoder = new RotationalAbsoluteEncoder(rightIntakeTransMTR)
+        rightEncoder = new RotationalAbsoluteEncoder(rightSpark)
                 .setAccuracyFactor(5)
                 .setFlipped(MotorFlip.INTAKE_FLIPPED)
                 .start();
@@ -50,21 +74,24 @@ public class IntakeSubsystem extends SubsystemBase {
         // TODO: is inside the robot.
         flLimit = new DigitalInput(FL_LIMIT_ID);
         frLimit = new DigitalInput(FR_LIMIT_ID);
-
         blLimit = new DigitalInput(BL_LIMIT_ID);
         brLimit = new DigitalInput(BR_LIMIT_ID);
     }
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
-        SmartDashboard.putBoolean("Back Switch Pressed:", isRearSwitchPressed());
-        SmartDashboard.putBoolean("Front Switch Pressed:", isFrontSwitchPressed());
+        SmartDashboard.putBoolean("Back Switch Pressed:",
+                isRearSwitchPressed());
+        SmartDashboard.putBoolean("Front Switch Pressed:",
+                isFrontSwitchPressed());
 
-        SmartDashboard.putNumber("Left Intake Position", getLeftPosition());
-        SmartDashboard.putNumber("Right Intake Position", getRightPosition());
+        SmartDashboard.putNumber("Left Intake Position",
+                getLeftPosition());
+        SmartDashboard.putNumber("Right Intake Position",
+                getRightPosition());
 
-        SmartDashboard.putNumber("Intake Position Average", getAveragePosition());
+        SmartDashboard.putNumber("Intake Position Average",
+                getAveragePosition());
     }
 
     public void extendIntake() {
@@ -86,20 +113,20 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void spinIntakeAccept() {
-        runMotor(intakeMTR, getMotorValue(MotorValue.ACCEPT_SPEED, MotorFlip.INTAKE_FLIPPED));
+        intakeMotor.setPower(MotorValue.ACCEPT_SPEED);
     }
 
     public void spinIntakeReject() {
-        runMotor(intakeMTR, getMotorValue(-MotorValue.ACCEPT_SPEED, MotorFlip.INTAKE_FLIPPED));
+        intakeMotor.setPower(-MotorValue.ACCEPT_SPEED);
     }
 
     public void stopIntakeGroup() {
-        stopMotors(intakeMotors);
-        stopMotor(intakeMTR);
+        extender.setPower(0);
+        intakeMotor.setPower(0);
     }
 
     private void translateExtender(double value) {
-        runMotors(intakeMotors, getMotorValue(value, MotorFlip.INTAKE_EXTENDER_FLIPPED));
+        extender.setPower(value);
     }
 
     public double getLeftPosition() {
@@ -111,6 +138,12 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public double getAveragePosition() {
-        return (getLeftPosition()+getRightPosition())/2;
+        return Average.of(getLeftPosition(), getRightPosition());
+    }
+
+    @Override
+    public void close() {
+        for (CANSparkMax spark : sparks)
+            spark.close();
     }
 }
