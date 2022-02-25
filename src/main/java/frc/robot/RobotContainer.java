@@ -76,23 +76,18 @@ public class RobotContainer {
         //Joysticks
         xyStickButtons[12].whenPressed(new RevIncreaseShooterAngle(10));
         xyStickButtons[13].whenPressed(new RevDecreaseShooterAngle(10));
-        xyButtonFive.whenActive(new ToggleLeftHandMode());
+
         xyStickButtons[11].debounce(0.2).whenActive(new CenterShooterToHubCommand());
 
         //Xbox Controller
         aButton.whenHeld(AutoShoot);
         bButton.whenHeld(new RevShooterCommand(false));
 
-        xButton.whenPressed(new EnableIntake());
-        xButton.whenReleased(new DisableIntake());
-
-        xButton.whenHeld(new SpinIntakeInward());
-
-        yButton.whenHeld(new SpinIntakeOutward());
+        yButton.whenActive(new ProcessBallCommand());
 
         xButton.and(aButton).whenActive(storageEnableGroup);
 
-        xButton.and(aButton).and(yButton).and(bButton).whenActive(testSwerveDrive);
+        //xButton.and(aButton).and(yButton).and(bButton).whenActive(testSwerveDrive);
 
         lBumper.whenActive(new MoveClimberDown());
         rBumper.whenActive(new MoveClimberUp());
