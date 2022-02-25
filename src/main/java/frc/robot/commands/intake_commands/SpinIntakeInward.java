@@ -14,7 +14,7 @@ public class SpinIntakeInward extends CommandBase {
     
     @Override
     public void execute() {
-        Robot.intake.moveIntakeIn();
+        Robot.intake.runIntakeIn();
     }
 
     @Override

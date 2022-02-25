@@ -48,23 +48,31 @@ public class ClimberSubsystem extends SubsystemBase {
         stopMotors(climberGroup);
     }
 
-    public void lowerClimber() {
-        runMotors(climberGroup, getMotorValue(-CLIMBER_SPEED, CLIMBER_FLIPPED));
+    // public void lowerClimber() {
+    //     runMotors(climberGroup, getMotorValue(-CLIMBER_SPEED, CLIMBER_FLIPPED));
 
-        while (!blSwitch.get() && !brSwitch.get()) {
-            Thread.onSpinWait();
-        }
+    //     while (!blSwitch.get() && !brSwitch.get()) {
+    //         Thread.onSpinWait();
+    //     }
 
-        stopMotors(climberGroup);
+    //     stopMotors(climberGroup);
+    // }
+
+    // public void raiseClimber() {
+    //     runMotors(climberGroup, getMotorValue(CLIMBER_SPEED, CLIMBER_FLIPPED));
+
+    //     while (!tlSwitch.get() && !trSwitch.get()) {
+    //         Thread.onSpinWait();
+    //     }
+
+    //     stopMotors(climberGroup);
+    // }
+
+    public boolean isTransTopClear(){
+        return !tlSwitch.get() || !trSwitch.get();
     }
 
-    public void raiseClimber() {
-        runMotors(climberGroup, getMotorValue(CLIMBER_SPEED, CLIMBER_FLIPPED));
-
-        while (!tlSwitch.get() && !trSwitch.get()) {
-            Thread.onSpinWait();
-        }
-
-        stopMotors(climberGroup);
+    public boolean isTranBtmClear(){
+        return !blSwitch.get() || !brSwitch.get();
     }
 }

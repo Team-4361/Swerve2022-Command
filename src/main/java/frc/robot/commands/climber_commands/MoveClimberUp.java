@@ -14,7 +14,7 @@ public class MoveClimberUp extends CommandBase {
     
     @Override
     public void execute() {
-        Robot.climber.raiseClimber();
+        Robot.climber.moveClimberUp();
     }
 
     @Override
@@ -24,6 +24,6 @@ public class MoveClimberUp extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return !Robot.climber.isTransTopClear();
     }
 }

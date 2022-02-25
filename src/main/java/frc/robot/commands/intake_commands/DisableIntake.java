@@ -2,6 +2,7 @@ package frc.robot.commands.intake_commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
+import frc.robot.Constants.MotorValue;
 
 public class DisableIntake extends CommandBase {
     
@@ -14,7 +15,7 @@ public class DisableIntake extends CommandBase {
     
     @Override
     public void execute() {
-      Robot.intake.retractIntake();
+      Robot.intake.translateIntake(-MotorValue.ACCEPT_SPEED);
     }
 
     @Override
@@ -25,6 +26,6 @@ public class DisableIntake extends CommandBase {
     @Override
     public boolean isFinished() {
         //Will be finished when they're are no balls in the shooter
-        return Robot.intake.getPosition() < (0.1);
+        return !Robot.intake.isTranBckClear();
     }
 }

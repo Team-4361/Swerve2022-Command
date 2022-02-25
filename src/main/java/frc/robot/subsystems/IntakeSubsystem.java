@@ -66,38 +66,46 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     /** extends the intake automatically */
-    public void extendIntake() {
-        if (LIMIT_SWITCH_ENABLED) {
-            translateIntake(MotorValue.ACCEPT_SPEED);
+    // public void extendIntake() {
+    //     if (LIMIT_SWITCH_ENABLED) {
+    //         translateIntake(MotorValue.ACCEPT_SPEED);
 
-            while (!flLimit.get() && !frLimit.get()) {
-                // Wait for either one of the robot's intake switches to be detected.
-                Thread.onSpinWait();
-            }
-        } else {
-            // Good backup solution
-            leftEncoder.setMotorRotations(INTAKE_EXTEND_ROTATIONS, MotorValue.ACCEPT_SPEED);
-            rightEncoder.setMotorRotations(INTAKE_EXTEND_ROTATIONS, MotorValue.ACCEPT_SPEED);
-        }
+    //         while (!flLimit.get() && !frLimit.get()) {
+    //             // Wait for either one of the robot's intake switches to be detected.
+    //             Thread.onSpinWait();
+    //         }
+    //     } else {
+    //         // Good backup solution
+    //         leftEncoder.setMotorRotations(INTAKE_EXTEND_ROTATIONS, MotorValue.ACCEPT_SPEED);
+    //         rightEncoder.setMotorRotations(INTAKE_EXTEND_ROTATIONS, MotorValue.ACCEPT_SPEED);
+    //     }
 
-        stopIntake();
+    //     stopIntake();
+    // }
+
+    // public void retractIntake() {
+    //     if (LIMIT_SWITCH_ENABLED) {
+    //         translateIntake(-MotorValue.ACCEPT_SPEED);
+
+    //         while (!blLimit.get() && !brLimit.get()) {
+    //             // Wait for either one of the robot's intake switches to be detected.
+    //             Thread.onSpinWait();
+    //         }
+    //     } else {
+    //         // Good backup solution
+    //         leftEncoder.setMotorRotations(INTAKE_EXTEND_ROTATIONS, -MotorValue.ACCEPT_SPEED);
+    //         rightEncoder.setMotorRotations(INTAKE_EXTEND_ROTATIONS, -MotorValue.ACCEPT_SPEED);
+    //     }
+
+    //     stopIntake();
+    // }
+
+    public boolean isTransFwdClear(){
+        return !flLimit.get() || !frLimit.get();
     }
 
-    public void retractIntake() {
-        if (LIMIT_SWITCH_ENABLED) {
-            translateIntake(-MotorValue.ACCEPT_SPEED);
-
-            while (!blLimit.get() && !brLimit.get()) {
-                // Wait for either one of the robot's intake switches to be detected.
-                Thread.onSpinWait();
-            }
-        } else {
-            // Good backup solution
-            leftEncoder.setMotorRotations(INTAKE_EXTEND_ROTATIONS, -MotorValue.ACCEPT_SPEED);
-            rightEncoder.setMotorRotations(INTAKE_EXTEND_ROTATIONS, -MotorValue.ACCEPT_SPEED);
-        }
-
-        stopIntake();
+    public boolean isTranBckClear(){
+        return !blLimit.get() || !brLimit.get();
     }
 
     public void moveIntakeOut() {
