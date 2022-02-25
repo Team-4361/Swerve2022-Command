@@ -179,6 +179,7 @@ public class MotorUtil {
 	 * @param motors Motor Group to Check
 	 * @return If any of the motors in the group have been stalled.
 	 */
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public static boolean isAnyStalled(CANSparkMax[] motors) {
 		for (CANSparkMax motor: motors) {
 			if (isStalled(motor)) {

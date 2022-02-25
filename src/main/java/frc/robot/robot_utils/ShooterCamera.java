@@ -10,10 +10,10 @@ import static frc.robot.Constants.ShooterCameraConsts.TAPE_HEIGHT;
 
 public class ShooterCamera {
 
-    PhotonCamera photonCamera;
+    final PhotonCamera photonCamera;
 
-    double cameraHeight;
-    double cameraPitch;
+    final double cameraHeight;
+    final double cameraPitch;
 
     //Height in meters of the target
     final double TARGET_HEIGHT = TAPE_HEIGHT;

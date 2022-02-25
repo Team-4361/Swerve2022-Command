@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.Robot;
 
-public class SpinIntakeInward extends CommandBase {
+public class SpinIntakeAccept extends CommandBase {
     
     @Override
     public void initialize() {
@@ -14,12 +14,12 @@ public class SpinIntakeInward extends CommandBase {
     
     @Override
     public void execute() {
-        Robot.intake.runIntakeIn();
+        Robot.intake.spinIntakeAccept();
     }
 
     @Override
     public void end(boolean interrupted) {
-        Robot.intake.stopIntake();
+        Robot.intake.stopIntakeGroup();
     }
 
     @Override

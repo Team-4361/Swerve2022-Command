@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.Storage.*;
+import static frc.robot.subsystems.StorageSubsystem.currentStorageTask;
 
 import java.util.ArrayList;
 
@@ -15,9 +16,8 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Storage;
 import frc.robot.robot_utils.MotorUtil;
-import frc.robot.subsystems.StorageSubsystem.AcceptColor;
-import frc.robot.subsystems.StorageSubsystem.StorageListener;
-import frc.robot.subsystems.StorageSubsystem.Task;
+
+import frc.robot.subsystems.StorageSubsystem.*;
 
 public class StorageSubsystem extends SubsystemBase {
     public static CANSparkMax storageMotor, acceptorMotor;
@@ -38,9 +38,8 @@ public class StorageSubsystem extends SubsystemBase {
 
     public enum Task {ACCEPT, DENY}
 
-    private double proximity, acceptorCurrent, storageCurrent, acceptorRPM, storageRPM;
+    private double proximity;
 
-    public static CANSparkMax stalledMotor;
     private final RelativeEncoder storageEncoder;
     private final RelativeEncoder acceptorEncoder;
 
@@ -68,10 +67,10 @@ public class StorageSubsystem extends SubsystemBase {
     private void updateSensors() {
         Color color = colorSensor.getColor();
         this.proximity = colorSensor.getProximity();
-        this.acceptorCurrent = acceptorMotor.getOutputCurrent();
-        this.storageCurrent = storageMotor.getOutputCurrent();
-        this.acceptorRPM = acceptorEncoder.getVelocity();
-        this.storageCurrent = storageEncoder.getVelocity();
+        double acceptorCurrent = acceptorMotor.getOutputCurrent();
+        double storageCurrent = storageMotor.getOutputCurrent();
+        double acceptorRPM = acceptorEncoder.getVelocity();
+        storageCurrent = storageEncoder.getVelocity();
 
         SmartDashboard.putNumber("Storage: Red", color.red);
         SmartDashboard.putNumber("Storage: Green", color.green);
@@ -86,7 +85,6 @@ public class StorageSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Storage: Storage Amps", storageCurrent);
 
         SmartDashboard.putNumber("Storage: Acceptor RPM", acceptorRPM);
-        SmartDashboard.putNumber("Storage: Storage RPM", storageRPM);
 
         SmartDashboard.putNumber("Storage: Balls Loaded", ballsLoaded);
     }
@@ -139,7 +137,7 @@ public class StorageSubsystem extends SubsystemBase {
         if (proximity > PROXIMITY_THRESHOLD) {
             // A ball is approaching the Acceptor area of the Storage module, check if it should be
             // accepted or denied, and send it to the Listener to be handled by the Command.
-            if (currentStorageTask != null) {
+            if (currentStorageTask == null) {
 
                 // If we use the ArrayList, then it would keep making infinite StorageTasks as long as
                 // the proximity sensor is activated. During prolonged holding of the ball, or if something
@@ -256,6 +254,7 @@ class StorageTask {
                     StorageSubsystem.storageListeners.forEach(li -> li.colorFound(acceptOrDeny, StorageSubsystem.ballsLoaded));
 
                     // Make sure to interrupt all the Threads to prevent memory leak.
+                    currentStorageTask = null;
                     findColorThread.interrupt();
                     break;
                 }
@@ -265,10 +264,12 @@ class StorageTask {
                     StorageSubsystem.storageListeners.forEach(StorageListener::colorTimeoutError);
 
                     // Make sure to interrupt all the Threads to prevent memory leak.
+                    currentStorageTask = null;
                     findColorThread.interrupt();
                     break;
                 }
             }
+            currentStorageTask = null;
             findColorThread.interrupt();
         };
 

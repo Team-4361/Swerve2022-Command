@@ -5,16 +5,24 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
 public class MoveClimberUp extends CommandBase {
-    
+
     @Override
     public void initialize() {
         addRequirements(Robot.climber);
     }
 
-    
+
     @Override
     public void execute() {
-        Robot.climber.raiseClimber();
+        // This runs repeatedly until the command is ended.
+        if (!Robot.climber.isTopSwitchPressed()) {
+            // While the front switch is not pressed, keep running the climber Extender Motor out.
+            Robot.climber.raiseClimber();
+        } else {
+            // The limit switch is pressed, stop the climber and end the command.
+            Robot.climber.stopClimber();
+            end(false);
+        }
     }
 
     @Override
@@ -24,6 +32,6 @@ public class MoveClimberUp extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return Robot.climber.isTopSwitchPressed();
     }
 }

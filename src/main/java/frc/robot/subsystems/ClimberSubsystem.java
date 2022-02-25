@@ -13,8 +13,8 @@ import static frc.robot.Constants.MotorFlip.*;
 
 public class ClimberSubsystem extends SubsystemBase {
 
-    private final CANSparkMax leftClimberMTR = new CANSparkMax(L_CLIMBER_PORT, kBrushless);
-    private final CANSparkMax rightClimberMTR = new CANSparkMax(R_CLIMBER_PORT, kBrushless);
+    private final CANSparkMax leftClimberMTR = new CANSparkMax(L_CLIMBER_ID, kBrushless);
+    private final CANSparkMax rightClimberMTR = new CANSparkMax(R_CLIMBER_ID, kBrushless);
 
     private final DigitalInput blSwitch, brSwitch, tlSwitch, trSwitch;
 
@@ -27,44 +27,31 @@ public class ClimberSubsystem extends SubsystemBase {
         trSwitch = new DigitalInput(TR_LIMIT_ID);
     }
 
-    @Override
-    public void periodic() {
-        // This method will be called once per scheduler run
-    }
-
-    public void moveClimberUp() {
-        if (!tlSwitch.get() && !trSwitch.get()) {
-            runMotors(climberGroup, getMotorValue(CLIMBER_SPEED, CLIMBER_FLIPPED));
-        }
-    }
-
-    public void moveClimberDown() {
-        if (!blSwitch.get() && !brSwitch.get()) {
-            runMotors(climberGroup, getMotorValue(-CLIMBER_SPEED, CLIMBER_FLIPPED));
-        }
-    }
+    @Override public void periodic() {}
 
     public void stopClimber() {
         stopMotors(climberGroup);
     }
 
     public void lowerClimber() {
-        runMotors(climberGroup, getMotorValue(-CLIMBER_SPEED, CLIMBER_FLIPPED));
-
-        while (!blSwitch.get() && !brSwitch.get()) {
-            Thread.onSpinWait();
-        }
-
-        stopMotors(climberGroup);
+        translateClimber(-CLIMBER_SPEED);
     }
 
     public void raiseClimber() {
-        runMotors(climberGroup, getMotorValue(CLIMBER_SPEED, CLIMBER_FLIPPED));
+        translateClimber(CLIMBER_SPEED);
+    }
 
-        while (!tlSwitch.get() && !trSwitch.get()) {
-            Thread.onSpinWait();
-        }
+    public void translateClimber(double value) {
+        runMotors(climberGroup, getMotorValue(value, CLIMBER_FLIPPED));
+    }
 
-        stopMotors(climberGroup);
+    /** @return If the top switch is pressed */
+    public boolean isTopSwitchPressed() {
+        return tlSwitch.get() && trSwitch.get();
+    }
+
+    /** @return If the bottom switch is pressed */
+    public boolean isBottomSwitchPressed() {
+        return blSwitch.get() && brSwitch.get();
     }
 }

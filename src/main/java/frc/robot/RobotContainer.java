@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -16,80 +15,76 @@ import frc.robot.commands.autonomous_commands.TestAutonomous;
 import frc.robot.commands.chassis_commands.*;
 import frc.robot.commands.climber_commands.MoveClimberDown;
 import frc.robot.commands.climber_commands.MoveClimberUp;
-import frc.robot.commands.intake_commands.DisableIntake;
-import frc.robot.commands.intake_commands.EnableIntake;
-import frc.robot.commands.intake_commands.SpinIntakeInward;
-import frc.robot.commands.intake_commands.SpinIntakeOutward;
 import frc.robot.commands.shooter_commands.RevAutoShootCommand;
-import frc.robot.commands.shooter_commands.RevDecreaseShooterAngle;
-import frc.robot.commands.shooter_commands.RevIncreaseShooterAngle;
 import frc.robot.commands.shooter_commands.RevShooterCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
+import frc.robot.commands.intake_commands.ExtendIntake;
+import frc.robot.commands.intake_commands.SpinIntakeReject;
 import frc.robot.commands.storage_commands.ProcessBallCommand;
-import me.wobblyyyy.pathfinder2.Pathfinder;
-import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 
-import static frc.robot.Constants.*;
+import static frc.robot.Constants.Chassis;
+import static frc.robot.Constants.Control.*;
 
 public class RobotContainer {
 
-    private final Joystick xyStick = new Joystick(Control.XY_STICK_ID);
-    private final Joystick zStick = new Joystick(Control.Z_STICK_ID);
-    private final XboxController controller = new XboxController(Control.CONTROLLER_ID);
+    private final Joystick xyStick = new Joystick(XY_STICK_ID);
+    private final Joystick zStick = new Joystick(Z_STICK_ID);
+    private final XboxController controller = new XboxController(CONTROLLER_ID);
 
-    //Xbox Extracted Controller Buttons
-    private final JoystickButton xButton = new JoystickButton(controller, 3);
-    private final JoystickButton yButton = new JoystickButton(controller, 4);
+    // Xbox Extracted Controller Buttons
+    private final JoystickButton xButton = new JoystickButton(controller, XBOX_X);
+    private final JoystickButton yButton = new JoystickButton(controller, XBOX_Y);
+    private final JoystickButton aButton = new JoystickButton(controller, XBOX_A);
+    private final JoystickButton bButton = new JoystickButton(controller, XBOX_B);
+    private final JoystickButton lBumper = new JoystickButton(controller, XBOX_LEFT_TRIGGER);
+    private final JoystickButton rBumper = new JoystickButton(controller, XBOX_RIGHT_TRIGGER);
+
     private final JoystickButton xyButtonFive = new JoystickButton(xyStick, 5);
-    private final JoystickButton aButton = new JoystickButton(controller, 1);
-    private final JoystickButton bButton = new JoystickButton(controller, 2);
-    private final JoystickButton lBumper = new JoystickButton(controller, 5);
-    private final JoystickButton rBumper = new JoystickButton(controller, 6);
 
-    private JoystickButton[] xyStickButtons;
+    private final SequentialCommandGroup testSwerveDrive = new SequentialCommandGroup(
+            new MoveRightCMD(),
+            new MoveLeftCMD(),
+            new MoveFWDCMD(),
+            new MoveBCKCMD()
+    );
 
-    private final SequentialCommandGroup testSwerveDrive = new SequentialCommandGroup(new MoveRightCMD(), new MoveLeftCMD(), new MoveFWDCMD(), new MoveBCKCMD());
-    private final SequentialCommandGroup AutoShoot = new SequentialCommandGroup(new CenterShooterToHubCommand(), new RevAutoShootCommand(), new ShootCMD());
+    private final SequentialCommandGroup AutoShoot = new SequentialCommandGroup(
+            new CenterShooterToHubCommand(),
+            new RevAutoShootCommand(),
+            new ShootCMD()
+    );
+
     private final ParallelCommandGroup storageEnableGroup = new ParallelCommandGroup()
             .alongWith(new ProcessBallCommand())
-            .alongWith(new SpinIntakeOutward())
-            .alongWith(new EnableIntake());
+            .alongWith(new SpinIntakeReject())
+            .alongWith(new ExtendIntake());
 
     public RobotContainer() {
-        Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() -> ChassisSpeeds.fromFieldRelativeSpeeds(
-                -deadzone(xyStick.getX(), Chassis.CONTROLLER_DEADZONE),
-                deadzone(xyStick.getY(), Chassis.CONTROLLER_DEADZONE),
-                deadzone(zStick.getTwist(), Chassis.CONTROLLER_DEADZONE),
-                Robot.swerveDrive.getGyro()
-        )));
-
-        for (int i=0; i<=16; i++) {
-            xyStickButtons[i] = new JoystickButton(xyStick, i);
-        }
+        Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() ->
+                ChassisSpeeds.fromFieldRelativeSpeeds(
+                    deadzone(xyStick.getX(), Chassis.CONTROLLER_DEADZONE),
+                    -deadzone(xyStick.getY(), Chassis.CONTROLLER_DEADZONE),
+                    -deadzone(zStick.getTwist(), Chassis.CONTROLLER_DEADZONE),
+                    Robot.swerveDrive.getGyro()
+                )
+        ));
 
         configureButtonBindings();
     }
 
     private void configureButtonBindings() {
-        xyStickButtons[12].whenPressed(new RevIncreaseShooterAngle(10));
-        xyStickButtons[13].whenPressed(new RevDecreaseShooterAngle(10));
         xyButtonFive.whenActive(new ToggleLeftHandMode());
-        xyStickButtons[11].debounce(0.2).whenActive(new CenterShooterToHubCommand());
+        xyButtonFive.debounce(0.2).whenActive(new CenterShooterToHubCommand());
 
         aButton.whenHeld(AutoShoot);
         bButton.whenHeld(new RevShooterCommand(false));
 
-        xButton.whenPressed(new EnableIntake());
-        xButton.whenReleased(new DisableIntake());
-
-        xButton.whenHeld(new SpinIntakeInward());
-
-        yButton.whenHeld(new SpinIntakeOutward());
+        yButton.whenActive(new ProcessBallCommand());
 
         xButton.and(aButton).whenActive(storageEnableGroup);
 
-        xButton.and(aButton).and(yButton).and(bButton).whenActive(testSwerveDrive);
+        //xButton.and(aButton).and(yButton).and(bButton).whenActive(testSwerveDrive);
 
         lBumper.whenActive(new MoveClimberDown());
         rBumper.whenActive(new MoveClimberUp());

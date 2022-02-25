@@ -10,19 +10,42 @@ public class Constants {
         public static final int XY_STICK_ID = 0;
         public static final int Z_STICK_ID = 1;
         public static final int CONTROLLER_ID = 2;
+
+        public static final int /* Xbox Controller Map */
+                // BUTTONS
+                XBOX_X = 3,
+                        XBOX_Y = 4,
+                        XBOX_B = 2,
+                        XBOX_A = 1,
+                        XBOX_START = 9,
+                        XBOX_END = 10,
+
+                // DPAD
+                XBOX_DPAD_LEFT = 14,
+                        XBOX_DPAD_RIGHT = 15,
+                        XBOX_DPAD_UP = 12,
+                        XBOX_DPAD_DOWN = 13,
+
+                // CONTROLLER
+                XBOX_LEFT_STICK = 7,
+                        XBOX_RIGHT_STICK = 8,
+
+                // TOP BUTTONS
+                XBOX_RIGHT_TRIGGER = 6,
+                        XBOX_LEFT_TRIGGER = 5;
     }
 
     public static class MotorFlip {
         // TODO: May need to be changed later.
         public final static boolean ACCEPTOR_FLIPPED = true;
         public final static boolean STORAGE_FLIPPED = false;
-        public final static boolean SHOOTER_FLIPPED = false;
+        public final static boolean SHOOTER_FLIPPED = true;
         public final static boolean CLIMBER_FLIPPED = false;
 
         public final static boolean ADJUSTOR_FLIPPED = true;
 
-        public final static boolean INTAKE_FLIPPED = false;
-        public final static boolean INTAKE_EXTENDER_FLIPPED = false;
+        public final static boolean INTAKE_FLIPPED = true;
+        public final static boolean INTAKE_EXTENDER_FLIPPED = true;
     }
 
     public static class TestValue {
@@ -31,17 +54,17 @@ public class Constants {
         public final static TestUtil.TestMode DEFAULT_TEST_MODE = TestUtil.TestMode.SHOOTER_ANGLE_TEST;
 
         // TODO: adjust enablers based on how robot is completed
-        public final static boolean DRIVE_ENABLED = false;
+        public final static boolean DRIVE_ENABLED = true;
         public final static boolean CAMERA_ENABLED = false;
     }
 
     public static class Chassis {
-        public static final double FR_OFFSET = -4.94 - (2* Math.PI)- (Math.PI/2);
-        public static final double FL_OFFSET = -6.23 - (Math.PI/2);
-        public static final double BR_OFFSET = -1.03 - (Math.PI/2) - (2*Math.PI);
-        public static final double BL_OFFSET = -3.02  - (2*Math.PI) - (Math.PI/2);
+        public static final double FR_OFFSET = -2.38 - (2 * Math.PI) + (Math.PI);
+        public static final double FL_OFFSET = -9.401 - (Math.PI / 2);
+        public static final double BR_OFFSET = -3.345 - (Math.PI / 2) - (2 * Math.PI);
+        public static final double BL_OFFSET = -6.12 - (2 * Math.PI) - (Math.PI / 2);
 
-        public static final double CONTROLLER_DEADZONE = 0.05;
+        public static final double CONTROLLER_DEADZONE = 0.1;
 
         //In meters
         public static final double SWERVE_CHASSIS_SIDE_LENGTH = 0.762;
@@ -56,26 +79,25 @@ public class Constants {
         public static final int BR_TURN_ID = 7;
         public static final int BL_TURN_ID = 5;
 
-        public static final int FR_DIO_ENCODER_PORT = 1;
+        public static final int FR_DIO_ENCODER_PORT = 3;
         public static final int FL_DIO_ENCODER_PORT = 0;
-        public static final int BR_DIO_ENCODER_PORT = 3;
-        public static final int BL_DIO_ENCODER_PORT = 2;
+        public static final int BR_DIO_ENCODER_PORT = 2;
+        public static final int BL_DIO_ENCODER_PORT = 1;
 
         public static final double SWERVE_WHEEL_RADIUS = 0.0508;
         public static final double ODOMETRY_MS_INTERVAL = 5;
     }
 
     public static class Climber {
-        public static final int L_CLIMBER_PORT = 9;
-        public static final int R_CLIMBER_PORT = 10;
+        public static final int L_CLIMBER_ID = 9;
+        public static final int R_CLIMBER_ID = 10;
 
         // bottom limit switch
         public static final int BL_LIMIT_ID = 6;
         public static final int BR_LIMIT_ID = 7;
 
-        // TODO: change!
-        public static final int TL_LIMIT_ID = 0;
-        public static final int TR_LIMIT_ID = 8;
+        public static final int TL_LIMIT_ID = 23;
+        public static final int TR_LIMIT_ID = 22;
     }
 
     public static class Intake {
@@ -86,8 +108,8 @@ public class Constants {
         public static final int BR_LIMIT_ID = 9;
 
         // TODO: change
-        public static final int FL_LIMIT_ID = 0;
-        public static final int FR_LIMIT_ID = 4;
+        public static final int FL_LIMIT_ID = 19;
+        public static final int FR_LIMIT_ID = 18;
 
         public static final int L_INTAKE_EXTEND_ID = 12;
         public static final int R_INTAKE_EXTEND_ID = 11;
@@ -106,31 +128,25 @@ public class Constants {
 
     public static class Shooter {
         public static final int SHOOTER_MOTOR_ID = 17;
-        public static final int SHOOTER_WHEEL_RADIUS = 0;
+        public static final double SHOOTER_WHEEL_RADIUS = 0.076;
     }
 
     public static class Storage {
-        /**
-         * The first motor in the Storage device, used to accept the ball after the sensor is activated.
-         */
+        /** The first motor in the Storage device, used to accept the ball after the sensor is activated. */
         public static final int ACCEPTOR_MOTOR_PORT = 13;
 
-        // The second middle motor in the Storage device, used to move the ball inside.
+        /** The second middle motor in the Storage device, used to move the ball inside. */
         public static final int STORAGE_MOTOR_PORT = 16;
 
-        ////////////////////////////////////////////////////////////////////////////////////////
-            
-        // Used to detect the presence of a ball inside the front of the device, mainly used for 2nd entering ball.
+        /** Used to detect the presence of a ball inside the front of the device, mainly used for 2nd entering ball. */
         public static final int ACCEPTOR_PHOTO_ELECTRIC_PORT = 4;
-    
-        // Used to detect the presence of a ball inside the middle of the device, where the first ball should go.
+
+        /** Used to detect the presence of a ball inside the middle of the device, where the first ball should go. */
         public static final int STORAGE_PHOTO_ELECTRIC_PORT = 5;
-    
-        ////////////////////////////////////////////////////////////////////////////////////////
-    
-        // The port to use for the Color Sensor detection.
+
+        /** The port to use for the Color Sensor detection. */
         public static final I2C.Port COLOR_SENSOR_PORT = I2C.Port.kOnboard;
-    
+
         // Adjust based on sensitivity.
         public static final double BLUE_THRESHOLD = 0.30;
         public static final double RED_THRESHOLD = 0.30;
@@ -144,18 +160,18 @@ public class Constants {
     //PhotonVision Constants
     public static class ShooterCameraConsts {
         public static final String CAMERA_NAME = "";
-	    public static final double CAMERA_HEIGHT = 0.0;
+        public static final double CAMERA_HEIGHT = 0.0;
         public static final double CAMERA_PITCH = 0.0;
         public static final double TAPE_HEIGHT = 0.0;
     }
 
     public static class ChassisCameraConsts {
         public static final String CAMERA_NAME = "";
-	    public static final double CAMERA_HEIGHT = 0.0;
+        public static final double CAMERA_HEIGHT = 0.0;
         public static final double CAMERA_PITCH = 0.0;
         public static final double BALL_HEIGHT = 0.0;
     }
-    
+
     // These values are designed to be changed based on the Motor 
     public static class MotorValue {
         public static final double SHOOT_SPEED = 1.0;
@@ -168,13 +184,13 @@ public class Constants {
 
         // Stall current in amps, stops the motor when the current rises above
         // the maximum value.
-        public final static double STALL_CURRENT = 80;
-        
+        public final static double STALL_CURRENT = 80; /* AMPS */
+
         // Stall RPM, stops the motor when the RPM drops below + current above limit.
-        public final static double STALL_RPM = 2000;
+        public final static double STALL_RPM = 2000; /* RPM */
 
         // Target RPM for the Shooter Motor to activate loading
-        public final static double SHOOTER_TARGET_RPM = 4800;
+        public final static double SHOOTER_TARGET_RPM = 4800; /* RPM */
 
         // Used for stall protection, disable if any issues occur from it.
         public final static boolean CURRENT_MEASURING = false;

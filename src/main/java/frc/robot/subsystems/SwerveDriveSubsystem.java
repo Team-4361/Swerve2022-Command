@@ -58,6 +58,26 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         }
     }
 
+    public void driveRight() {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(0.8, 0, 0, Rotation2d.fromDegrees(0)));
+    }
+
+    public void driveLeft() {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(-0.8, 0, 0, Rotation2d.fromDegrees(0)));
+    }
+
+    public void driveForward() {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.8, 0, Rotation2d.fromDegrees(0)));
+    }
+
+    public void driveBack() {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, -0.8, 0, Rotation2d.fromDegrees(0)));
+    }
+    
+    public void stop() {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(0,0,0, Rotation2d.fromDegrees(0)));
+    }
+
     public Rotation2d getGyro() {
         return gyro.getRotation2d();
     }
