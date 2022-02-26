@@ -188,6 +188,8 @@ public class Constants {
         public static final double ACCEPT_SPEED = 0.3;
         public static final double SLOW_ACCEPT_SPEED = 0.2;
 
+        public static final double EXTERNAL_ACCEPT_SPEED = 0.8;
+
         public static final double ADJUSTOR_SPEED = 0.3;
 
         public static final double CLIMBER_SPEED = 0.5;

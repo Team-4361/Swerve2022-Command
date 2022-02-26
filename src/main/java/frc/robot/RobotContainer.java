@@ -18,7 +18,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Chassis;
@@ -35,7 +34,6 @@ import frc.robot.commands.climber_commands.MoveClimberUp;
 //import frc.robot.commands.climber_commands.ClimberCommandDown;
 //import frc.robot.commands.climber_commands.ClimberCommandUp;
 import frc.robot.commands.intake_commands.ExtendIntake;
-import frc.robot.commands.intake_commands.SpinIntakeReject;
 import frc.robot.commands.shooter_commands.RevAutoShootCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.storage_commands.ProcessBallCommand;
@@ -70,10 +68,10 @@ public class RobotContainer {
             new ShootCMD()
     );
 
-    private final ParallelCommandGroup storageEnableGroup = new ParallelCommandGroup()
-            .alongWith(new ProcessBallCommand())
-            .alongWith(new SpinIntakeReject())
-            .alongWith(new ExtendIntake());
+    private final SequentialCommandGroup storageGroup = new SequentialCommandGroup(
+            new ExtendIntake(),
+            new ProcessBallCommand()
+    );
 
     public RobotContainer() {
         Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() ->
@@ -97,9 +95,7 @@ public class RobotContainer {
 
         //yButton.whenActive(new ProcessBallCommand());
 
-        yButton.whenActive(new ExtendIntake());
-
-        xButton.and(aButton).whenActive(storageEnableGroup);
+        yButton.whenActive(storageGroup);
 
         // xButton.and(aButton).and(yButton).and(bButton).whenActive(testSwerveDrive);
 

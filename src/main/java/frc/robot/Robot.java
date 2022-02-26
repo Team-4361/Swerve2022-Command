@@ -13,7 +13,13 @@ import frc.robot.commands.test_commands.ShooterAngleTest;
 import frc.robot.robot_utils.ChassisCamera;
 import frc.robot.robot_utils.ShooterCamera;
 import frc.robot.robot_utils.TestUtil;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.shooter.AngleAdjustSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.storage.AcceptColor;
+import frc.robot.subsystems.storage.StorageSubsystem;
+import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 
@@ -39,7 +45,7 @@ public class Robot extends TimedRobot {
     public static ChassisCamera chassisCamera;
     public static boolean leftHandedMode = false;
 
-    private final StorageSubsystem.AcceptColor INIT_TARGET_COLOR = StorageSubsystem.AcceptColor.BLUE;
+    private final AcceptColor INIT_TARGET_COLOR = AcceptColor.BLUE;
 
     @Override
     public void robotInit() {
