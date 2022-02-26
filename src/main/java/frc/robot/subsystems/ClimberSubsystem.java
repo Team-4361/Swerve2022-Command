@@ -13,12 +13,13 @@ import frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder;
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.Climber.*;
 import static frc.robot.Constants.MotorValue.CLIMBER_SPEED;
-import static frc.robot.robot_utils.MotorUtil.*;
 
-public class ClimberSubsystem extends SubsystemBase {
-    private final CANSparkMax leftClimberMTR = new CANSparkMax(L_CLIMBER_ID, kBrushless);
-    private final CANSparkMax rightClimberMTR = new CANSparkMax(R_CLIMBER_ID, kBrushless);
+public class ClimberSubsystem extends SubsystemBase implements AutoCloseable {
+    private final CANSparkMax leftSpark;
+    private final CANSparkMax rightSpark;
 
+    private final Motor leftMotor;
+    private final Motor rightMotor;
     private final Motor climber;
 
     private final DigitalInput blSwitch;
@@ -26,19 +27,17 @@ public class ClimberSubsystem extends SubsystemBase {
     private final DigitalInput tlSwitch;
     private final DigitalInput trSwitch;
 
-    private final CANSparkMax[] climberGroup = new CANSparkMax[]{leftClimberMTR, rightClimberMTR};
-
-    private final RotationalAbsoluteEncoder leftEncoder = new RotationalAbsoluteEncoder(leftClimberMTR)
-        .setFlipped(MotorFlip.CLIMBER_LEFT_FLIPPED)
-        .start();
-
-    public final RotationalAbsoluteEncoder rightEncoder = new RotationalAbsoluteEncoder(rightClimberMTR)
-        .setFlipped(MotorFlip.CLIMBER_RIGHT_FLIPPED)
-        .start();
+    private final RotationalAbsoluteEncoder leftEncoder;
+    private final RotationalAbsoluteEncoder rightEncoder;
 
     public ClimberSubsystem() {
-        Motor leftMotor = new SparkMaxMotor(L_CLIMBER_ID, kBrushless);
-        Motor rightMotor = new SparkMaxMotor(R_CLIMBER_ID, kBrushless);
+        leftSpark = new CANSparkMax(L_CLIMBER_ID, kBrushless);
+        rightSpark = new CANSparkMax(L_CLIMBER_ID, kBrushless);
+
+        leftMotor = new SparkMaxMotor(leftSpark)
+                .setIsInverted(MotorFlip.CLIMBER_LEFT_FLIPPED);
+        rightMotor = new SparkMaxMotor(rightSpark)
+                .setIsInverted(MotorFlip.CLIMBER_RIGHT_FLIPPED);
 
         if (MotorFlip.CLIMBER_LEFT_FLIPPED)
             leftMotor = leftMotor.invert();
@@ -51,12 +50,19 @@ public class ClimberSubsystem extends SubsystemBase {
         brSwitch = new DigitalInput(BR_LIMIT_ID);
         tlSwitch = new DigitalInput(TL_LIMIT_ID);
         trSwitch = new DigitalInput(TR_LIMIT_ID);
+
+        leftEncoder = new RotationalAbsoluteEncoder(leftSpark)
+                .setFlipped(MotorFlip.CLIMBER_LEFT_FLIPPED).start();
+        rightEncoder = new RotationalAbsoluteEncoder(rightSpark)
+                .setFlipped(MotorFlip.CLIMBER_LEFT_FLIPPED).start();
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("left climber encoder:", leftEncoder.getAbsoluteRotations());
-        SmartDashboard.putNumber("right climber encoder:", rightEncoder.getAbsoluteRotations());
+        SmartDashboard.putNumber("left climber encoder:",
+                leftEncoder.getAbsoluteRotations());
+        SmartDashboard.putNumber("right climber encoder:",
+                rightEncoder.getAbsoluteRotations());
 
         SmartDashboard.putBoolean("bl switch:", blSwitch.get());
         SmartDashboard.putBoolean("br switch:", brSwitch.get());
@@ -70,7 +76,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void stopClimber() {
-        stopMotors(climberGroup);
+        climber.setPower(0);
     }
 
 
@@ -111,13 +117,11 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void translateLeftClimber(double value) {
-        runMotor(leftClimberMTR,
-                getMotorValue(value, MotorFlip.CLIMBER_LEFT_FLIPPED));
+        leftMotor.setPower(value);
     }
 
     public void translateRightClimber(double value) {
-        runMotor(rightClimberMTR,
-                getMotorValue(value, MotorFlip.CLIMBER_RIGHT_FLIPPED));
+        rightMotor.setPower(value);
     }
 
     /**
@@ -162,5 +166,11 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public boolean isBottomRightSwitchPressed() {
         return brSwitch.get();
+    }
+
+    @Override
+    public void close() {
+        leftSpark.close();
+        rightSpark.close();
     }
 }
