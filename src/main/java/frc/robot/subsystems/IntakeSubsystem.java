@@ -8,7 +8,7 @@ import frc.robot.Constants.MotorFlip;
 import frc.robot.Constants.MotorValue;
 import frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder;
 import me.wobblyyyy.pathfinder2.math.Average;
-import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
+import me.wobblyyyy.pathfinder2.revrobotics.SparkMaxMotor;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
 import me.wobblyyyy.pathfinder2.robot.components.MultiMotor;
 
@@ -40,22 +40,13 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         sparks = new CANSparkMax[]{leftSpark, rightSpark, intakeSpark};
 
         extender = new MultiMotor(
-                new AbstractMotor(
-                        leftSpark::set,
-                        leftSpark::get,
-                        MotorFlip.INTAKE_EXTENDER_FLIPPED
-                ),
-                new AbstractMotor(
-                        rightSpark::set,
-                        rightSpark::get,
-                        MotorFlip.INTAKE_EXTENDER_FLIPPED
-                )
+                new SparkMaxMotor(leftSpark).setIsInverted(
+                    MotorFlip.INTAKE_EXTENDER_LEFT_FLIPPED),
+                new SparkMaxMotor(rightSpark).setIsInverted(
+                    MotorFlip.INTAKE_EXTENDER_RIGHT_FLIPPED)
         );
-        intakeMotor = new AbstractMotor(
-                intakeSpark::set,
-                intakeSpark::get,
-                MotorFlip.INTAKE_FLIPPED
-        );
+        intakeMotor = new SparkMaxMotor(INTAKE_SPIN_MOTOR_ID, kBrushless)
+                .setIsInverted(MotorFlip.INTAKE_FLIPPED);
 
         leftEncoder = new RotationalAbsoluteEncoder(leftSpark)
                 .setAccuracyFactor(5)

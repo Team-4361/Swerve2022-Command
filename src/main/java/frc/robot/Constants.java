@@ -46,7 +46,8 @@ public class Constants {
         public final static boolean ADJUSTOR_FLIPPED = true;
 
         public final static boolean INTAKE_FLIPPED = true;
-        public final static boolean INTAKE_EXTENDER_FLIPPED = true;
+        public final static boolean INTAKE_EXTENDER_LEFT_FLIPPED = true;
+        public final static boolean INTAKE_EXTENDER_RIGHT_FLIPPED = true;
     }
 
     public static class TestValue {
