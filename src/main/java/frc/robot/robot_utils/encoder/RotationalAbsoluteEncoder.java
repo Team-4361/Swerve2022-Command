@@ -129,8 +129,21 @@ public class RotationalAbsoluteEncoder {
         canMotor.set(0);
     }
 
+    public void nonBlockingSetMotorRotations(double degrees,
+                                             double speed) {
+        if (getAbsoluteRotations() < degrees)
+            canMotor.set(getMotorValue(speed, rpmFlipped));
+        else
+            canMotor.set(getMotorValue(-speed, rpmFlipped));
+    }
+
     public void setMotorAngle(double angle, double speed) {
         setMotorRotations(angle / 360, speed);
+    }
+
+    public void nonBlockingSetMotorAngle(double angleInRotations,
+                                         double speed) {
+        nonBlockingSetMotorRotations(angleInRotations / 360, speed);
     }
 
     public void increaseRotations(double increase, double speed) {

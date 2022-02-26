@@ -44,6 +44,9 @@ public class RevShooterCommand extends CommandBase {
     }
 
     public void shoot(boolean reset) {
+        Robot.pathfinder.onTick((pf) -> {
+
+        });
         try {
             SmartDashboard.putString("Shooter: Status", "Ramping up");
 
