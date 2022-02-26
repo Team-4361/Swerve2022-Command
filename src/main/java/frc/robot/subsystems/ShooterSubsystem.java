@@ -31,6 +31,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+
     }
 
     public double getVelocity() {

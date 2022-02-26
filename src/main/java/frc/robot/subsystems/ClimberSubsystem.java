@@ -23,12 +23,10 @@ public class ClimberSubsystem extends SubsystemBase {
     private final CANSparkMax[] climberGroup = new CANSparkMax[]{leftClimberMTR, rightClimberMTR};
 
     private final RotationalAbsoluteEncoder leftEncoder = new RotationalAbsoluteEncoder(leftClimberMTR)
-        .setFlipped(MotorFlip.CLIMBER_FLIPPED)
-        .start();
+            .setFlipped(MotorFlip.CLIMBER_FLIPPED);
 
     public final RotationalAbsoluteEncoder rightEncoder = new RotationalAbsoluteEncoder(rightClimberMTR)
-        .setFlipped(MotorFlip.CLIMBER_FLIPPED)
-        .start();
+            .setFlipped(MotorFlip.CLIMBER_FLIPPED);
 
     public ClimberSubsystem() {
         blSwitch = new DigitalInput(BL_LIMIT_ID);
@@ -46,6 +44,9 @@ public class ClimberSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("br switch:", brSwitch.get());
         SmartDashboard.putBoolean("tl switch:", tlSwitch.get());
         SmartDashboard.putBoolean("tr switch:", trSwitch.get());
+
+        leftEncoder.update();
+        rightEncoder.update();
     }
 
     public void zero() {
@@ -53,9 +54,7 @@ public class ClimberSubsystem extends SubsystemBase {
         rightEncoder.resetZero();
     }
 
-    public void stopClimber() {
-        stopMotors(climberGroup);
-    }
+    public void stopClimber() {stopMotors(climberGroup);}
 
 
     public void raiseLeftClimber() {
@@ -89,11 +88,11 @@ public class ClimberSubsystem extends SubsystemBase {
         return tlSwitch.get();
     }
 
-    public void stopLeftClimber(){
+    public void stopLeftClimber() {
         translateLeftClimber(0);
     }
 
-    public void stopRightClimber(){
+    public void stopRightClimber() {
         translateRightClimber(0);
     }
 

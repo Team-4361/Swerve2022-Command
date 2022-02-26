@@ -18,10 +18,13 @@ public class AngleAdjustSubsystem extends SubsystemBase {
 
     public AngleAdjustSubsystem() {
         adjustMotor = new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless);
+        absoluteEncoder = new RotationalAbsoluteEncoder(adjustMotor).setFlipped(ADJUSTOR_FLIPPED);
+    }
 
-        absoluteEncoder = new RotationalAbsoluteEncoder(adjustMotor)
-                .setFlipped(ADJUSTOR_FLIPPED)
-                .start();
+    @Override
+    public void periodic() {
+        // Update the encoder so it keeps working
+        absoluteEncoder.update();
     }
 
     public double rotationToAngle(double rotation) {

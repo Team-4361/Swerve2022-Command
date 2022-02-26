@@ -59,13 +59,11 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
 
         leftEncoder = new RotationalAbsoluteEncoder(leftSpark)
                 .setAccuracyFactor(5)
-                .setFlipped(MotorFlip.INTAKE_FLIPPED)
-                .start();
+                .setFlipped(MotorFlip.INTAKE_FLIPPED);
 
         rightEncoder = new RotationalAbsoluteEncoder(rightSpark)
                 .setAccuracyFactor(5)
-                .setFlipped(MotorFlip.INTAKE_FLIPPED)
-                .start();
+                .setFlipped(MotorFlip.INTAKE_FLIPPED);
 
         // TODO: Not sure if these are reversed or not, needs testing, assuming
         // TODO: front is towards the robot's front, extended from chassis, and back
@@ -78,18 +76,17 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Back Switch Pressed:",
-                isRearSwitchPressed());
-        SmartDashboard.putBoolean("Front Switch Pressed:",
-                isFrontSwitchPressed());
+        SmartDashboard.putBoolean("Back Switch Pressed:", isRearSwitchPressed());
+        SmartDashboard.putBoolean("Front Switch Pressed:", isFrontSwitchPressed());
 
-        SmartDashboard.putNumber("Left Intake Position",
-                getLeftPosition());
-        SmartDashboard.putNumber("Right Intake Position",
-                getRightPosition());
+        SmartDashboard.putNumber("Left Intake Position", getLeftPosition());
+        SmartDashboard.putNumber("Right Intake Position", getRightPosition());
 
-        SmartDashboard.putNumber("Intake Position Average",
-                getAveragePosition());
+        SmartDashboard.putNumber("Intake Position Average", getAveragePosition());
+
+        // Update the encoders
+        leftEncoder.update();
+        rightEncoder.update();
     }
 
     public void extendIntake() {
