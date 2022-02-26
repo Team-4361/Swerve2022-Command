@@ -11,21 +11,15 @@ import frc.robot.robot_utils.MotorUtil;
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.Shooter.SHOOTER_MOTOR_ID;
 
-
 public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax shooterMotor, acceptorMotor, storageMotor;
     private final RelativeEncoder shooterEncoder;
     private final PIDController shooterController = new PIDController(0, 1, 0);
 
     public ShooterSubsystem() {
-
-
-        // Pull the motors from the Storage Subsystem
-        this.acceptorMotor = Robot.storage.getAcceptorMotor();
         this.storageMotor = Robot.storage.getStorageMotor();
-
+        this.acceptorMotor = Robot.storage.getAcceptorMotor();
         this.shooterMotor = new CANSparkMax(SHOOTER_MOTOR_ID, kBrushless);
-
         this.shooterEncoder = shooterMotor.getEncoder();
     }
 
@@ -58,11 +52,10 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setShooterVelocity(double speed) {
-        MotorUtil.runMotor(shooterMotor, MathUtil.clamp(shooterController.calculate(getVelocity(), speed), -1.0, 1.0));
-    }
+        double power = MathUtil.clamp(shooterController
+                .calculate(getVelocity(), speed), -1, 1);
 
-    public void runShooterTimed(double speed, int timeMs) {
-        MotorUtil.runMotorTimed(shooterMotor, speed, timeMs);
+        shooterMotor.set(power);
     }
 
     public void stopShooter() {
@@ -73,7 +66,6 @@ public class ShooterSubsystem extends SubsystemBase {
         return shooterMotor.getOutputCurrent();
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isDesiredSpeed(double speed) {
         return shooterEncoder.getVelocity() > speed;
     }

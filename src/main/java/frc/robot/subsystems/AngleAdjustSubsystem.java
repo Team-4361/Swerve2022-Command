@@ -37,7 +37,8 @@ public class AngleAdjustSubsystem extends SubsystemBase {
                     absoluteEncoder.getAbsoluteRotations()));
     }
 
-    public boolean atDesiredAngle(double desired, int tolerance) {
+    public boolean atDesiredAngle(double desired,
+                                  double tolerance) {
         return (MotorUtil.inTolerance(desired, getAngle(), tolerance));
     }
 
