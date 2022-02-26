@@ -2,11 +2,13 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorFlip;
 import me.wobblyyyy.pathfinder2.revrobotics.SparkMaxMotor;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
 import me.wobblyyyy.pathfinder2.robot.components.MultiMotor;
+import frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.Climber.*;
@@ -25,6 +27,14 @@ public class ClimberSubsystem extends SubsystemBase {
     private final DigitalInput trSwitch;
 
     private final CANSparkMax[] climberGroup = new CANSparkMax[]{leftClimberMTR, rightClimberMTR};
+
+    private final RotationalAbsoluteEncoder leftEncoder = new RotationalAbsoluteEncoder(leftClimberMTR)
+        .setFlipped(MotorFlip.CLIMBER_LEFT_FLIPPED)
+        .start();
+
+    public final RotationalAbsoluteEncoder rightEncoder = new RotationalAbsoluteEncoder(rightClimberMTR)
+        .setFlipped(MotorFlip.CLIMBER_RIGHT_FLIPPED)
+        .start();
 
     public ClimberSubsystem() {
         Motor leftMotor = new SparkMaxMotor(L_CLIMBER_ID, kBrushless);
@@ -45,18 +55,39 @@ public class ClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("left climber encoder:", leftEncoder.getAbsoluteRotations());
+        SmartDashboard.putNumber("right climber encoder:", rightEncoder.getAbsoluteRotations());
+
+        SmartDashboard.putBoolean("bl switch:", blSwitch.get());
+        SmartDashboard.putBoolean("br switch:", brSwitch.get());
+        SmartDashboard.putBoolean("tl switch:", tlSwitch.get());
+        SmartDashboard.putBoolean("tr switch:", trSwitch.get());
+    }
+
+    public void zero() {
+        leftEncoder.resetZero();
+        rightEncoder.resetZero();
     }
 
     public void stopClimber() {
         stopMotors(climberGroup);
     }
 
-    public void lowerClimber() {
-        translateClimber(-CLIMBER_SPEED);
+
+    public void raiseLeftClimber() {
+        translateLeftClimber(-CLIMBER_SPEED);
     }
 
-    public void raiseClimber() {
-        translateClimber(CLIMBER_SPEED);
+    public void raiseRightClimber() {
+        translateRightClimber(-CLIMBER_SPEED);
+    }
+
+    public void lowerLeftClimber() {
+        translateLeftClimber(CLIMBER_SPEED);
+    }
+
+    public void lowerRightClimber() {
+        translateRightClimber(CLIMBER_SPEED);
     }
 
     public void translateClimber(double value) {
@@ -79,6 +110,16 @@ public class ClimberSubsystem extends SubsystemBase {
         }
     }
 
+    public void translateLeftClimber(double value) {
+        runMotor(leftClimberMTR,
+                getMotorValue(value, MotorFlip.CLIMBER_LEFT_FLIPPED));
+    }
+
+    public void translateRightClimber(double value) {
+        runMotor(rightClimberMTR,
+                getMotorValue(value, MotorFlip.CLIMBER_RIGHT_FLIPPED));
+    }
+
     /**
      * @return If the top switch is pressed
      */
@@ -86,10 +127,40 @@ public class ClimberSubsystem extends SubsystemBase {
         return tlSwitch.get() || trSwitch.get();
     }
 
+    public boolean isTopLeftSwitchPressed() {
+        return tlSwitch.get();
+    }
+
+    public void stopLeftClimber(){
+        translateLeftClimber(0);
+    }
+
+    public void stopRightClimber(){
+        translateRightClimber(0);
+    }
+
     /**
-     * @return If the bottom switch is pressed
+     * @return If the top switch is pressed
+     */
+    public boolean isTopRightSwitchPressed() {
+        return trSwitch.get();
+    }
+
+    /**
+     * @return If the top switch is pressed
+     */
+    public boolean isBottomLeftSwitchPressed() {
+        return blSwitch.get();
+    }
+
+    /**
+     * @return If the top switch is pressed
      */
     public boolean isBottomSwitchPressed() {
         return blSwitch.get() || brSwitch.get();
+    }
+
+    public boolean isBottomRightSwitchPressed() {
+        return brSwitch.get();
     }
 }

@@ -4,6 +4,16 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.Control.CONTROLLER_ID;
+import static frc.robot.Constants.Control.XBOX_A;
+import static frc.robot.Constants.Control.XBOX_B;
+import static frc.robot.Constants.Control.XBOX_LEFT_TRIGGER;
+import static frc.robot.Constants.Control.XBOX_RIGHT_TRIGGER;
+import static frc.robot.Constants.Control.XBOX_X;
+import static frc.robot.Constants.Control.XBOX_Y;
+import static frc.robot.Constants.Control.XY_STICK_ID;
+import static frc.robot.Constants.Control.Z_STICK_ID;
+
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -11,20 +21,25 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.Chassis;
 import frc.robot.commands.autonomous_commands.TestAutonomous;
-import frc.robot.commands.chassis_commands.*;
-import frc.robot.commands.climber_commands.ClimberCommandDown;
-import frc.robot.commands.climber_commands.ClimberCommandUp;
+import frc.robot.commands.chassis_commands.ArcadeCommand;
+import frc.robot.commands.chassis_commands.CenterShooterToHubCommand;
+import frc.robot.commands.chassis_commands.MoveBCKCMD;
+import frc.robot.commands.chassis_commands.MoveFWDCMD;
+import frc.robot.commands.chassis_commands.MoveLeftCMD;
+import frc.robot.commands.chassis_commands.MoveRightCMD;
+import frc.robot.commands.chassis_commands.ToggleLeftHandMode;
+import frc.robot.commands.climber_commands.MoveClimberDown;
+import frc.robot.commands.climber_commands.MoveClimberUp;
+//import frc.robot.commands.climber_commands.ClimberCommandDown;
+//import frc.robot.commands.climber_commands.ClimberCommandUp;
 import frc.robot.commands.intake_commands.ExtendIntake;
 import frc.robot.commands.intake_commands.SpinIntakeReject;
 import frc.robot.commands.shooter_commands.RevAutoShootCommand;
-import frc.robot.commands.shooter_commands.RevShooterCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.storage_commands.ProcessBallCommand;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
-
-import static frc.robot.Constants.Chassis;
-import static frc.robot.Constants.Control.*;
 
 public class RobotContainer {
 
@@ -78,16 +93,18 @@ public class RobotContainer {
         xyButtonFive.debounce(0.2).whenActive(new CenterShooterToHubCommand());
 
         aButton.whenHeld(AutoShoot);
-        bButton.whenHeld(new RevShooterCommand(false));
+        //bButton.whenHeld(new RevShooterCommand(false));
 
-        yButton.whenActive(new ProcessBallCommand());
+        //yButton.whenActive(new ProcessBallCommand());
+
+        yButton.whenActive(new ExtendIntake());
 
         xButton.and(aButton).whenActive(storageEnableGroup);
 
         // xButton.and(aButton).and(yButton).and(bButton).whenActive(testSwerveDrive);
 
-        lBumper.whenActive(new ClimberCommandDown());
-        rBumper.whenActive(new ClimberCommandUp());
+        lBumper.whenActive(new MoveClimberUp());
+        rBumper.whenActive(new MoveClimberDown());
     }
 
     public Command getAutonomousCommand() {

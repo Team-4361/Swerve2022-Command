@@ -129,7 +129,7 @@ public class Constants {
 
     public static class Shooter {
         public static final int SHOOTER_MOTOR_ID = 17;
-        public static final double SHOOTER_WHEEL_RADIUS = 0.076;
+        public static final double SHOOTER_WHEEL_RADIUS = 0.00619125;
     }
 
     public static class Storage {
