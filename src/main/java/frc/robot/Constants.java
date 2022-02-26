@@ -40,7 +40,8 @@ public class Constants {
         public final static boolean ACCEPTOR_FLIPPED = true;
         public final static boolean STORAGE_FLIPPED = false;
         public final static boolean SHOOTER_FLIPPED = true;
-        public final static boolean CLIMBER_FLIPPED = false;
+        public static final boolean CLIMBER_RIGHT_FLIPPED = false;
+        public static final boolean CLIMBER_LEFT_FLIPPED = false;
 
         public final static boolean ADJUSTOR_FLIPPED = true;
 
