@@ -5,6 +5,8 @@ import frc.robot.Robot;
 
 public class MoveClimberUp extends CommandBase {
 
+    private boolean leftDone = false, rightDone = false;
+
     @Override
     public void initialize() {
         addRequirements(Robot.climber);
@@ -14,12 +16,25 @@ public class MoveClimberUp extends CommandBase {
     @Override
     public void execute() {
         // This runs repeatedly until the command is ended.
-        if (!Robot.climber.isTopSwitchPressed()) {
+        if (!Robot.climber.isTopLeftSwitchPressed()) {
             // While the front switch is not pressed, keep running the climber Extender Motor out.
-            Robot.climber.raiseClimber();
+            Robot.climber.raiseLeftClimber();
         } else {
-            // The limit switch is pressed, stop the climber and end the command.
-            Robot.climber.stopClimber();
+            Robot.climber.stopLeftClimber();
+            leftDone = true;
+        }
+
+        // This runs repeatedly until the command is ended.
+        if (!Robot.climber.isTopRightSwitchPressed()) {
+            // While the front switch is not pressed, keep running the climber Extender Motor out.
+            Robot.climber.raiseRightClimber();
+        } else {
+            Robot.climber.stopRightClimber();
+            rightDone = true;
+        }
+        
+
+        if (leftDone && rightDone) {
             end(false);
         }
     }
@@ -31,6 +46,6 @@ public class MoveClimberUp extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Robot.climber.isTopSwitchPressed();
+        return leftDone && rightDone;
     }
 }
