@@ -170,16 +170,16 @@ public class Constants {
     //PhotonVision Constants
     public static class ShooterCameraConsts {
         public static final String CAMERA_NAME = "";
-        public static final double CAMERA_HEIGHT = 0.0;
-        public static final double CAMERA_PITCH = 0.0;
-        public static final double TAPE_HEIGHT = 0.0;
+        public static final double CAMERA_HEIGHT = 0.8001;
+        public static final double CAMERA_PITCH = Math.PI/4;
+        public static final double TAPE_HEIGHT = 2.54;
     }
 
     public static class ChassisCameraConsts {
         public static final String CAMERA_NAME = "";
-        public static final double CAMERA_HEIGHT = 0.0;
+        public static final double CAMERA_HEIGHT = 0.5715;
         public static final double CAMERA_PITCH = 0.0;
-        public static final double BALL_HEIGHT = 0.0;
+        public static final double BALL_HEIGHT = 0.2413;
     }
 
     // These values are designed to be changed based on the Motor 
@@ -190,7 +190,7 @@ public class Constants {
 
         public static final double ADJUSTOR_SPEED = 0.3;
 
-        public static final double CLIMBER_SPEED = 0.5;
+        public static final double CLIMBER_SPEED = 0.2;
 
         // Stall current in amps, stops the motor when the current rises above
         // the maximum value.

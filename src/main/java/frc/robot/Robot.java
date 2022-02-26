@@ -7,6 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.ChassisCameraConsts;
+import frc.robot.Constants.Shooter;
+import frc.robot.Constants.ShooterCameraConsts;
 import frc.robot.commands.test_commands.ChassisForwardOffsetTest;
 import frc.robot.commands.test_commands.ChassisOffsetTest;
 import frc.robot.commands.test_commands.ShooterAngleTest;
@@ -19,6 +22,8 @@ import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 
 import static frc.robot.Constants.TestValue.DEFAULT_TEST_MODE;
 import static frc.robot.robot_utils.TestUtil.TestMode.*;
+
+import javax.naming.InitialContext;
 
 public class Robot extends TimedRobot {
     private Command autonomous;
@@ -66,6 +71,10 @@ public class Robot extends TimedRobot {
                 .setTestMode(DEFAULT_TEST_MODE);
 
         robotContainer = new RobotContainer();
+
+        //Cameras
+        chassisCamera = new ChassisCamera("RoxBallCam", ChassisCameraConsts.CAMERA_HEIGHT, ChassisCameraConsts.CAMERA_PITCH, INIT_TARGET_COLOR);
+        shooterCamera = new ShooterCamera("RoxShooterCam", ShooterCameraConsts.CAMERA_HEIGHT, ShooterCameraConsts.CAMERA_PITCH);
     }
 
 

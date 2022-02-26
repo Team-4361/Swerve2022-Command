@@ -14,6 +14,7 @@ import static frc.robot.Constants.Control.XBOX_Y;
 import static frc.robot.Constants.Control.XY_STICK_ID;
 import static frc.robot.Constants.Control.Z_STICK_ID;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -35,8 +36,10 @@ import frc.robot.commands.climber_commands.MoveClimberUp;
 //import frc.robot.commands.climber_commands.ClimberCommandDown;
 //import frc.robot.commands.climber_commands.ClimberCommandUp;
 import frc.robot.commands.intake_commands.ExtendIntake;
+import frc.robot.commands.intake_commands.RetractIntake;
 import frc.robot.commands.intake_commands.SpinIntakeReject;
 import frc.robot.commands.shooter_commands.RevAutoShootCommand;
+import frc.robot.commands.shooter_commands.RevShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.storage_commands.ProcessBallCommand;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
@@ -78,10 +81,10 @@ public class RobotContainer {
     public RobotContainer() {
         Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() ->
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                        deadzone(xyStick.getX(), Chassis.CONTROLLER_DEADZONE),
+                        0.2/*deadzone(xyStick.getX(), Chassis.CONTROLLER_DEADZONE)*/,
                         -deadzone(xyStick.getY(), Chassis.CONTROLLER_DEADZONE),
                         -deadzone(zStick.getTwist(), Chassis.CONTROLLER_DEADZONE),
-                        Robot.swerveDrive.getGyro()
+                        Rotation2d.fromDegrees(0)
                 )
         ));
 
@@ -98,6 +101,7 @@ public class RobotContainer {
         //yButton.whenActive(new ProcessBallCommand());
 
         yButton.whenActive(new ExtendIntake());
+        bButton.whenActive(new RevShooterAngleCommand(20));
 
         xButton.and(aButton).whenActive(storageEnableGroup);
 
