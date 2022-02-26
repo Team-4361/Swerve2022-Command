@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.commands.storage_commands.ProcessBallCommand;
 import frc.robot.robot_utils.MotorUtil;
 
 import java.util.ArrayList;
@@ -56,44 +57,26 @@ public class StorageSubsystem extends SubsystemBase {
         this.storageAdjustorMotor = new CANSparkMax(STORAGE_MOTOR_PORT, kBrushless);
     }
 
-    public void acceptTask() {
-        listeners.forEach(TaskListener::onAcceptTask);
-
-        // Prevent a feedback loop by stopping the system from running again.
-        running = false;
-    }
-
-    public void rejectTask() {
-        listeners.forEach(TaskListener::onRejectTask);
-
-        // Prevent a feedback loop from stopping the system from running.
-        running = false;
-    }
-
-    public void addListener(TaskListener listener) {
-        listeners.add(listener);
-    }
-
     private void checkBall() {
         // Check if the proximity is greater than the specified threshold.
         if (colorProximity > PROXIMITY_THRESHOLD) {
             switch (acceptColor) {
                 case BLUE: {
                     if (color.blue > BLUE_THRESHOLD) {
-                        acceptTask();
+                        ProcessBallCommand.defaultListener.onAcceptTask();
                         running = false;
                     } else if (color.red > RED_THRESHOLD) {
-                        rejectTask();
+                        ProcessBallCommand.defaultListener.onRejectTask();
                         running = false;
                     }
                     break;
                 }
                 case RED: {
                     if (color.red > RED_THRESHOLD) {
-                        acceptTask();
+                        ProcessBallCommand.defaultListener.onAcceptTask();
                         running = false;
                     } else if (color.blue > BLUE_THRESHOLD) {
-                        rejectTask();
+                        ProcessBallCommand.defaultListener.onRejectTask();
                         running = false;
                     }
                     break;

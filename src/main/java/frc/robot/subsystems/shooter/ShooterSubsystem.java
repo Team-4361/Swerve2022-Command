@@ -42,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setStorageMotor(double val) {
-        Robot.storage.translateIndexMotor(val);
+        Robot.storage.translateAdjustorMotor(val);
     }
 
     public boolean acceptorSensorCovered() {

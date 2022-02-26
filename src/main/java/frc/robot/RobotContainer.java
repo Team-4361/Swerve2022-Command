@@ -13,7 +13,12 @@ import static frc.robot.Constants.Control.XBOX_X;
 import static frc.robot.Constants.Control.XBOX_Y;
 import static frc.robot.Constants.Control.XY_STICK_ID;
 import static frc.robot.Constants.Control.Z_STICK_ID;
+import static frc.robot.Constants.MotorFlip.SHOOTER_FLIPPED;
+import static frc.robot.Constants.MotorValue.SHOOT_SPEED;
+import static frc.robot.robot_utils.MotorUtil.getMotorValue;
 
+import frc.robot.commands.climber_commands.MoveClimberDown;
+import frc.robot.commands.climber_commands.MoveClimberUp;
 import frc.robot.commands.intake_commands.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
@@ -35,6 +40,7 @@ import frc.robot.commands.chassis_commands.ToggleLeftHandMode;
 import frc.robot.commands.intake_commands.ExtendIntake;
 import frc.robot.commands.shooter_commands.RevAutoShootCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
+import frc.robot.commands.shooter_commands.TimedShooterCommand;
 import frc.robot.commands.storage_commands.ProcessBallCommand;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 
@@ -89,17 +95,17 @@ public class RobotContainer {
         xyButtonFive.whenActive(new ToggleLeftHandMode());
         xyButtonFive.debounce(0.2).whenActive(new CenterShooterToHubCommand());
 
-        aButton.whenHeld(AutoShoot);
-        //bButton.whenHeld(new RevShooterCommand(false));
-
-        //yButton.whenActive(new ProcessBallCommand());
+        aButton.whenActive(new TimedShooterCommand());
 
         yButton.whenActive(storageGroup);
 
-        // xButton.and(aButton).and(yButton).and(bButton).whenActive(testSwerveDrive);
+        xButton.whenActive(new MoveClimberDown());
+        bButton.whenActive(new MoveClimberUp());
 
         lBumper.whenActive(new RetractIntake());
         rBumper.whenActive(new ExtendIntake());
+
+
     }
 
     public Command getAutonomousCommand() {

@@ -6,125 +6,117 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.commands.intake_commands.RetractIntake;
 import frc.robot.subsystems.storage.TaskListener;
+import me.wobblyyyy.pathfinder2.scheduler.Task;
 
 import java.util.concurrent.TimeUnit;
 
 public class ProcessBallCommand extends CommandBase {
-    private boolean finished = false, accepting = false, rejecting = false;
+    private static int ballsLoaded = 0;
+    private enum State { ACCEPTING, DENYING, NEUTRAL }
 
-    private int ballsLoaded = 0;
+    protected static State currentState = State.NEUTRAL;
+    protected static int oldBalls;
 
-    private void stop() {
-        Robot.storage.setRunningState(false);
-        Robot.storage.translateAdjustorMotor(0);
-        Robot.storage.stopIntakeMotor();
-        Robot.storage.stopIndexMotor();
+    public static TaskListener defaultListener = new TaskListener() {
+        @Override
+        public void onAcceptTask() {
+            oldBalls = Robot.storage.getBallsLoaded();
+            currentState = State.ACCEPTING;
+            SmartDashboard.putString("Storage Status", "Accepting");
+        }
 
-        end(false);
-    }
+        @Override
+        public void onRejectTask() {
+            oldBalls = Robot.storage.getBallsLoaded();
+            currentState = State.DENYING;
+            SmartDashboard.putString("Storage Status", "Rejecting");
+        }
+
+        @Override public void onTimeout() {}
+    };
 
     private void reject() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Robot.storage.spinStorageReject();
-                    Robot.storage.spinIndexReject(true);
+        new Thread(() -> {
+            try {
+                Robot.storage.spinStorageReject();
+                Robot.storage.spinIndexReject(true);
 
-                    TimeUnit.SECONDS.sleep(2);
+                TimeUnit.SECONDS.sleep(2);
 
-                    rejecting = false;
-                    stop();
-                } catch (InterruptedException e) {}
-            }
+                end(false);
+            } catch (InterruptedException ignored) {}
         }).start();
     }
 
     private void accept() {
-        switch (ballsLoaded) {
+        int currentBallsLoaded = Robot.storage.getBallsLoaded();
+
+        switch (oldBalls) {
             case 0: {
-                if (!Robot.storage.rearProximityCovered()) {
+                if (currentBallsLoaded <= oldBalls) {
                     // keep running the motors until the rear proximity is covered
                     Robot.storage.spinStorageAccept();
                     Robot.storage.spinIndexAccept(true);
                 } else {
-                    accepting = false;
-                    stop();
+                    end(false);
                 }
                 break;
             }
 
             case 1: {
-                if (!Robot.storage.frontProximityCovered()) {
+                if (currentBallsLoaded <= oldBalls) {
                     // keep running the index motor until front proximity is covered
                     Robot.storage.spinStorageAccept();
                 } else {
-                    accepting = false;
-                    stop();
+                    end(false);
                 }
                 break;
             }
 
             default: {
-                accepting = false;
-                stop();
-                break;
+                end(false);
             }
         }
     }
 
     public ProcessBallCommand() {
         addRequirements(Robot.storage, Robot.intake);
-
-        finished = false;
-        accepting = false;
-        rejecting = false;
-
-        
+        currentState = State.NEUTRAL;
     }
 
     @Override
     public void initialize() {
         // The intake motor should always be running while the robot is active.
-        Robot.storage.addListener(new TaskListener() {
-            @Override
-            public void onAcceptTask() {
-                ballsLoaded = Robot.storage.getBallsLoaded();
-                SmartDashboard.putString("Storage Status", "Accepting");
-                accepting = true;
-            }
-
-            @Override
-            public void onRejectTask() {
-                ballsLoaded = Robot.storage.getBallsLoaded();
-                SmartDashboard.putString("Storage Status", "Rejecting");
-                rejecting = true;
-            }
-
-            @Override
-            public void onTimeout() {
-                stop();
-            }
-        });
-
-        Robot.storage.setRunningState(true);
         Robot.intake.spinIntakeAccept();
+        Robot.storage.setRunningState(true);
     }
 
     @Override
     public void execute() {
-        if (accepting) {
-            accept();
-        } else if (rejecting) {
-            reject();
+        // This is run in a constant loop, and it will run these checking
+        // methods when waiting for a ball response.
+        switch (currentState) {
+            case ACCEPTING:
+                accept();
+                break;
+
+            case DENYING:
+                reject();
+                break;
+
+            case NEUTRAL:
+                break;
         }
     }
 
     @Override
     public void end(boolean interrupted) {
+        Robot.storage.setRunningState(false);
+        Robot.storage.translateAdjustorMotor(0);
+        Robot.storage.stopIntakeMotor();
+        Robot.storage.stopIndexMotor();
 
-        // TODO: we may not want to immediately retract everything when command is done.
-        //new RetractIntake().execute();
+        currentState = State.NEUTRAL;
     }
 
     @Override
@@ -132,6 +124,6 @@ public class ProcessBallCommand extends CommandBase {
         // We should return true when the ball has been successfully processed,
         // or has been timed out. Otherwise, the command is still running and
         // return false.
-        return finished;
+        return !Robot.storage.getRunningState();
     }
 }
