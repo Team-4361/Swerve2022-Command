@@ -1,13 +1,13 @@
 package frc.robot.swerve;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import me.wobblyyyy.pathfinder2.revrobotics.SparkMaxMotor;
+import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
 /**
  * A {@code SwerveModule} is composed of two motors and two encoders:
@@ -16,53 +16,32 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * allowing the robot to move in any direction.
  */
 public class SwerveModule {
-    private static final CANSparkMaxLowLevel.MotorType MOTOR_TYPE =
-            CANSparkMaxLowLevel.MotorType.kBrushless;
-
     private static final int COUNTS_PER_REV = 4_096;
 
-    private static final double DRIVE_PID_PROPORTIONAL = 1.0;
-    private static final double DRIVE_PID_INTEGRAL = 0;
-    private static final double DRIVE_PID_DERIVATIVE = 0;
-    private static final double DRIVE_PID_PERIOD = 0.02;
-
-    private static final double TURN_PID_PROPORTIONAL = 0.5;
-    private static final double TURN_PID_INTEGRAL = 0.00;
-    private static final double TURN_PID_DERIVATIVE = 0;
-    private static final double TURN_PID_PERIOD = 0.02;
-
-    private final CANSparkMax driveMotor;
+    private final SparkMaxMotor driveMotor;
+    private final SparkMaxMotor turnMotor;
     private final RelativeEncoder driveEncoder;
     private final DutyCycleEncoder rotationPWMEncoder;
     private final double offset;
 
-    private final PIDController driveController = new PIDController(
-            DRIVE_PID_PROPORTIONAL,
-            DRIVE_PID_INTEGRAL,
-            DRIVE_PID_DERIVATIVE,
-            DRIVE_PID_PERIOD
-    );
-
-    private final CANSparkMax turnMotor;
     private final PIDController turnController = new PIDController(
-            TURN_PID_PROPORTIONAL,
-            TURN_PID_INTEGRAL,
-            TURN_PID_DERIVATIVE,
-            TURN_PID_PERIOD
+            0.5,
+            0.00,
+            0,
+            0.02
     );
 
     public SwerveModule(int driveMotorId,
                         int turnMotorId,
                         int digitalEncoderPort,
                         double offset) {
-        driveMotor = new CANSparkMax(driveMotorId, MOTOR_TYPE);
-        driveEncoder = driveMotor.getEncoder();
+        driveMotor = SparkMaxMotor.brushless(driveMotorId);
+        turnMotor = SparkMaxMotor.brushless(turnMotorId);
 
-        turnMotor = new CANSparkMax(turnMotorId, MOTOR_TYPE);
+        driveEncoder = driveMotor.getSpark().getEncoder();
+        rotationPWMEncoder = new DutyCycleEncoder(digitalEncoderPort);
 
         this.offset = offset;
-
-        rotationPWMEncoder = new DutyCycleEncoder(digitalEncoderPort);
     }
 
 
@@ -86,11 +65,18 @@ public class SwerveModule {
                 state.angle.getRadians()
         );
 
-        turnMotor.set(turnPower);
-
-        driveMotor.set(state.speedMetersPerSecond);
+        driveMotor.setPower(state.speedMetersPerSecond);
+        turnMotor.setPower(turnPower);
     }
 
+    /**
+     * get the swerve module's state based on the drive motor's velocity
+     * (meters/sec) and the turn encoder's angle.
+     *
+     * @return a new {@code SwerveModuleState}, representing the module's
+     * current state, based on the module's drive motor velocity (m/s)
+     * and the turn encoder's angle.
+     */
     public SwerveModuleState getState() {
         return new SwerveModuleState(
                 velocityMetersPerSecond(),
@@ -99,18 +85,22 @@ public class SwerveModule {
     }
 
     public void updateDashboard(String prefix) {
-        String driveVelocity = String.format("%s: vel", prefix);
-        String drivePower = String.format("%s: pow", prefix);
-        String turnPower = String.format("%s: turn pow", prefix);
-        String turnPosition = String.format("%s: turn pos", prefix);
+        String driveVelocity = StringUtils.format("%s: vel", prefix);
+        String drivePower = StringUtils.format("%s: pow", prefix);
+        String turnPower = StringUtils.format("%s: turn pow", prefix);
+        String turnPosition = StringUtils.format("%s: turn pos", prefix);
 
         SmartDashboard.putNumber(driveVelocity, velocityMetersPerSecond());
-        SmartDashboard.putNumber(turnPower, turnMotor.get());
+        SmartDashboard.putNumber(turnPower, turnMotor.getPower());
         SmartDashboard.putNumber(turnPosition, getTurnAngle().getRadians());
-        SmartDashboard.putNumber(drivePower, driveMotor.get());
+        SmartDashboard.putNumber(drivePower, driveMotor.getPower());
     }
 
-    //In revolutions
+    /**
+     * get the elapsed distance, in rotations.
+     *
+     * @return the elapsed distance, in rotations
+     */
     public double getDistance() {
         return driveEncoder.getPosition();
     }

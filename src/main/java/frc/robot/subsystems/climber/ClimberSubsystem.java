@@ -7,7 +7,8 @@ import static frc.robot.Constants.Climber.L_CLIMBER_ID;
 import static frc.robot.Constants.Climber.R_CLIMBER_ID;
 import static frc.robot.Constants.Climber.TL_LIMIT_ID;
 import static frc.robot.Constants.Climber.TR_LIMIT_ID;
-import static frc.robot.Constants.MotorFlip.CLIMBER_FLIPPED;
+import static frc.robot.Constants.MotorFlip.CLIMBER_LEFT_FLIPPED;
+import static frc.robot.Constants.MotorFlip.CLIMBER_RIGHT_FLIPPED;
 import static frc.robot.Constants.MotorValue.CLIMBER_SPEED;
 import static frc.robot.robot_utils.MotorUtil.getMotorValue;
 import static frc.robot.robot_utils.MotorUtil.runMotor;
@@ -32,10 +33,10 @@ public class ClimberSubsystem extends SubsystemBase {
     private final CANSparkMax[] climberGroup = new CANSparkMax[]{leftClimberMTR, rightClimberMTR};
 
     private final RotationalAbsoluteEncoder leftEncoder = new RotationalAbsoluteEncoder(leftClimberMTR)
-            .setFlipped(MotorFlip.CLIMBER_FLIPPED);
+            .setFlipped(MotorFlip.CLIMBER_LEFT_FLIPPED);
 
     public final RotationalAbsoluteEncoder rightEncoder = new RotationalAbsoluteEncoder(rightClimberMTR)
-            .setFlipped(MotorFlip.CLIMBER_FLIPPED);
+            .setFlipped(MotorFlip.CLIMBER_RIGHT_FLIPPED);
 
     public ClimberSubsystem() {
         blSwitch = new DigitalInput(BL_LIMIT_ID);
@@ -83,11 +84,11 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void translateLeftClimber(double value) {
-        runMotor(leftClimberMTR, getMotorValue(value, CLIMBER_FLIPPED));
+        runMotor(leftClimberMTR, getMotorValue(value, CLIMBER_LEFT_FLIPPED));
     }
 
     public void translateRightClimber(double value) {
-        runMotor(rightClimberMTR, getMotorValue(value, CLIMBER_FLIPPED));
+        runMotor(rightClimberMTR, getMotorValue(value, CLIMBER_RIGHT_FLIPPED));
     }
 
     /**

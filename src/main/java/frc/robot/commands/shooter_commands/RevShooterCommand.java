@@ -11,7 +11,6 @@ import static frc.robot.Constants.MotorFlip;
 import static frc.robot.Constants.MotorValue;
 
 public class RevShooterCommand extends CommandBase {
-
     private double shooterVelocity, shooterCurrent, autoVelocity = 0;
     private int shootAngle = -1;
     private volatile boolean shootingDone = false, realDone = false;
@@ -126,8 +125,6 @@ public class RevShooterCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        // Should run forever, so always return false.
-        //return Robot.shooter.isDesiredSpeed(10);
         return realDone;
     }
 }

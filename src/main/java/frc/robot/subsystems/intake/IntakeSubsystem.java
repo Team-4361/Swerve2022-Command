@@ -43,12 +43,12 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
                 new AbstractMotor(
                         leftSpark::set,
                         leftSpark::get,
-                        MotorFlip.INTAKE_EXTENDER_FLIPPED
+                        MotorFlip.INTAKE_EXTENDER_LEFT_FLIPPED
                 ),
                 new AbstractMotor(
                         rightSpark::set,
                         rightSpark::get,
-                        MotorFlip.INTAKE_EXTENDER_FLIPPED
+                        MotorFlip.INTAKE_EXTENDER_RIGHT_FLIPPED
                 )
         );
         intakeMotor = new AbstractMotor(

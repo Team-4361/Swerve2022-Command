@@ -40,12 +40,14 @@ public class Constants {
         public final static boolean ACCEPTOR_FLIPPED = false;
         public final static boolean STORAGE_FLIPPED = false;
         public final static boolean SHOOTER_FLIPPED = true;
-        public final static boolean CLIMBER_FLIPPED = false;
+        public static final boolean CLIMBER_RIGHT_FLIPPED = false;
+        public static final boolean CLIMBER_LEFT_FLIPPED = false;
 
         public final static boolean ADJUSTOR_FLIPPED = true;
 
         public final static boolean INTAKE_FLIPPED = true;
-        public final static boolean INTAKE_EXTENDER_FLIPPED = true;
+        public final static boolean INTAKE_EXTENDER_LEFT_FLIPPED = true;
+        public final static boolean INTAKE_EXTENDER_RIGHT_FLIPPED = true;
     }
 
     public static class TestValue {
