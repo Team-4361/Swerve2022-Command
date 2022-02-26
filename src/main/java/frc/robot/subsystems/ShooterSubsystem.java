@@ -53,7 +53,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void setShooterVelocity(double speed) {
         double power = MathUtil.clamp(shooterController
-                .calculate(getVelocity(), speed), -1, 1);
+                .calculate(getVelocity(), speed), 0, 1);
 
         shooterMotor.set(power);
     }
