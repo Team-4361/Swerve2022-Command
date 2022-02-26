@@ -23,7 +23,7 @@ import static frc.robot.robot_utils.TestUtil.TestMode.*;
 public class Robot extends TimedRobot {
     private Command autonomous;
 
-    private RobotContainer m_robotContainer;
+    private RobotContainer robotContainer;
 
     public static SwerveDriveSubsystem swerveDrive;
     public static Pathfinder pathfinder;
@@ -65,7 +65,7 @@ public class Robot extends TimedRobot {
                 .addDefaultCommand(SHOOTER_ANGLE_TEST, new ShooterAngleTest())
                 .setTestMode(DEFAULT_TEST_MODE);
 
-        m_robotContainer = new RobotContainer();
+        robotContainer = new RobotContainer();
     }
 
 
@@ -85,7 +85,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        autonomous = m_robotContainer
+        autonomous = robotContainer
                 .getAutonomousCommand(pathfinderSubsystem);
 
         if (autonomous != null)
