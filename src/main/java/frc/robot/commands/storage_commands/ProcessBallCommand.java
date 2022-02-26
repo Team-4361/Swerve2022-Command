@@ -1,10 +1,7 @@
 package frc.robot.commands.storage_commands;
 
 
-import java.util.concurrent.TimeUnit;
-
 import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -15,10 +12,13 @@ import frc.robot.robot_utils.MotorUtil;
 import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.subsystems.StorageSubsystem.Task;
 
-import static frc.robot.Constants.*;
+import java.util.concurrent.TimeUnit;
+
+import static frc.robot.Constants.MotorFlip;
+import static frc.robot.Constants.MotorValue;
 
 public class ProcessBallCommand extends CommandBase {
-    
+
     private final ParallelCommandGroup disableGroup;
 
     private boolean finished = false;
@@ -71,20 +71,22 @@ public class ProcessBallCommand extends CommandBase {
 
                                     TimeUnit.MILLISECONDS.sleep(250);
                                 }
-                            
+
                                 // If there is more than one, do nothing because more cannot be accepted.
-                                default: {}
+                                default: {
+                                }
                             }
                         }
                         case DENY: {
                             // This ball should be denied, spin the motor in the reject direction.
                             Robot.storage.setAcceptorMotor(MotorUtil.getMotorValue(-MotorValue.ACCEPT_SPEED, MotorFlip.ACCEPTOR_FLIPPED));
-        
+
                             // Add a slight delay to the end to make sure the ball is thrown out.
                             TimeUnit.MILLISECONDS.sleep(250);
                         }
                     }
-                } catch (InterruptedException ignored) {}
+                } catch (InterruptedException ignored) {
+                }
 
                 MotorUtil.stopMotors(processMotorGroup);
 
@@ -104,9 +106,10 @@ public class ProcessBallCommand extends CommandBase {
         // possibly be flashing if there is a problem that requires interaction.
         SmartDashboard.putBoolean("Storage Error", false);
     }
-    
+
     @Override
-    public void execute() {}
+    public void execute() {
+    }
 
     @Override
     public void end(boolean interrupted) {

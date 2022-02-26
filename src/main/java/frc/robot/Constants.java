@@ -14,25 +14,25 @@ public class Constants {
         public static final int /* Xbox Controller Map */
                 // BUTTONS
                 XBOX_X = 3,
-                        XBOX_Y = 4,
-                        XBOX_B = 2,
-                        XBOX_A = 1,
-                        XBOX_START = 9,
-                        XBOX_END = 10,
+                XBOX_Y = 4,
+                XBOX_B = 2,
+                XBOX_A = 1,
+                XBOX_START = 9,
+                XBOX_END = 10,
 
-                // DPAD
-                XBOX_DPAD_LEFT = 14,
-                        XBOX_DPAD_RIGHT = 15,
-                        XBOX_DPAD_UP = 12,
-                        XBOX_DPAD_DOWN = 13,
+        // DPAD
+        XBOX_DPAD_LEFT = 14,
+                XBOX_DPAD_RIGHT = 15,
+                XBOX_DPAD_UP = 12,
+                XBOX_DPAD_DOWN = 13,
 
-                // CONTROLLER
-                XBOX_LEFT_STICK = 7,
-                        XBOX_RIGHT_STICK = 8,
+        // CONTROLLER
+        XBOX_LEFT_STICK = 7,
+                XBOX_RIGHT_STICK = 8,
 
-                // TOP BUTTONS
-                XBOX_RIGHT_TRIGGER = 6,
-                        XBOX_LEFT_TRIGGER = 5;
+        // TOP BUTTONS
+        XBOX_RIGHT_TRIGGER = 6,
+                XBOX_LEFT_TRIGGER = 5;
     }
 
     public static class MotorFlip {
@@ -132,19 +132,29 @@ public class Constants {
     }
 
     public static class Storage {
-        /** The first motor in the Storage device, used to accept the ball after the sensor is activated. */
+        /**
+         * The first motor in the Storage device, used to accept the ball after the sensor is activated.
+         */
         public static final int ACCEPTOR_MOTOR_PORT = 13;
 
-        /** The second middle motor in the Storage device, used to move the ball inside. */
+        /**
+         * The second middle motor in the Storage device, used to move the ball inside.
+         */
         public static final int STORAGE_MOTOR_PORT = 16;
 
-        /** Used to detect the presence of a ball inside the front of the device, mainly used for 2nd entering ball. */
+        /**
+         * Used to detect the presence of a ball inside the front of the device, mainly used for 2nd entering ball.
+         */
         public static final int ACCEPTOR_PHOTO_ELECTRIC_PORT = 4;
 
-        /** Used to detect the presence of a ball inside the middle of the device, where the first ball should go. */
+        /**
+         * Used to detect the presence of a ball inside the middle of the device, where the first ball should go.
+         */
         public static final int STORAGE_PHOTO_ELECTRIC_PORT = 5;
 
-        /** The port to use for the Color Sensor detection. */
+        /**
+         * The port to use for the Color Sensor detection.
+         */
         public static final I2C.Port COLOR_SENSOR_PORT = I2C.Port.kOnboard;
 
         // Adjust based on sensitivity.

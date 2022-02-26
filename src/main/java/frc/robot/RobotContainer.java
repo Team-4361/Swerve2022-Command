@@ -15,11 +15,11 @@ import frc.robot.commands.autonomous_commands.TestAutonomous;
 import frc.robot.commands.chassis_commands.*;
 import frc.robot.commands.climber_commands.ClimberCommandDown;
 import frc.robot.commands.climber_commands.ClimberCommandUp;
+import frc.robot.commands.intake_commands.ExtendIntake;
+import frc.robot.commands.intake_commands.SpinIntakeReject;
 import frc.robot.commands.shooter_commands.RevAutoShootCommand;
 import frc.robot.commands.shooter_commands.RevShooterCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
-import frc.robot.commands.intake_commands.ExtendIntake;
-import frc.robot.commands.intake_commands.SpinIntakeReject;
 import frc.robot.commands.storage_commands.ProcessBallCommand;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 
@@ -63,10 +63,10 @@ public class RobotContainer {
     public RobotContainer() {
         Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() ->
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                    deadzone(xyStick.getX(), Chassis.CONTROLLER_DEADZONE),
-                    -deadzone(xyStick.getY(), Chassis.CONTROLLER_DEADZONE),
-                    -deadzone(zStick.getTwist(), Chassis.CONTROLLER_DEADZONE),
-                    Robot.swerveDrive.getGyro()
+                        deadzone(xyStick.getX(), Chassis.CONTROLLER_DEADZONE),
+                        -deadzone(xyStick.getY(), Chassis.CONTROLLER_DEADZONE),
+                        -deadzone(zStick.getTwist(), Chassis.CONTROLLER_DEADZONE),
+                        Robot.swerveDrive.getGyro()
                 )
         ));
 
@@ -98,8 +98,8 @@ public class RobotContainer {
     public Command getAutonomousCommand(PathfinderSubsystem pathfinderSubsystem) {
         return new TestAutonomous(pathfinderSubsystem);
     }
-    
-    public SequentialCommandGroup getAutoShoot(){
+
+    public SequentialCommandGroup getAutoShoot() {
         return new SequentialCommandGroup(new CenterShooterToHubCommand(), new RevAutoShootCommand());
     }
 

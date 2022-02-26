@@ -1,9 +1,9 @@
 package frc.robot.commands.climber_commands;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ClimberSubsystem;
+
+import java.util.function.Supplier;
 
 public abstract class AbstractClimberCommand extends CommandBase {
     private final ClimberSubsystem climber;
@@ -22,7 +22,7 @@ public abstract class AbstractClimberCommand extends CommandBase {
     public void initialize() {
         addRequirements(climber);
     }
-    
+
     @Override
     public void execute() {
         translate.run();

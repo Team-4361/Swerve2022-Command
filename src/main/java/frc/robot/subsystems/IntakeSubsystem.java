@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,9 +12,8 @@ import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
 import me.wobblyyyy.pathfinder2.robot.components.MultiMotor;
 
-import static frc.robot.Constants.Intake.*;
-
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
+import static frc.robot.Constants.Intake.*;
 
 public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     private final CANSparkMax[] sparks;
@@ -33,25 +31,25 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
 
     public IntakeSubsystem() {
         CANSparkMax leftSpark =
-            new CANSparkMax(L_INTAKE_EXTEND_ID, kBrushless);
+                new CANSparkMax(L_INTAKE_EXTEND_ID, kBrushless);
         CANSparkMax rightSpark =
-            new CANSparkMax(R_INTAKE_EXTEND_ID, kBrushless);
+                new CANSparkMax(R_INTAKE_EXTEND_ID, kBrushless);
         CANSparkMax intakeSpark =
-            new CANSparkMax(INTAKE_SPIN_MOTOR_ID, kBrushless);
+                new CANSparkMax(INTAKE_SPIN_MOTOR_ID, kBrushless);
 
-        sparks = new CANSparkMax[]{ leftSpark, rightSpark, intakeSpark };
+        sparks = new CANSparkMax[]{leftSpark, rightSpark, intakeSpark};
 
         extender = new MultiMotor(
-            new AbstractMotor(
-                    leftSpark::set,
-                    leftSpark::get,
-                    MotorFlip.INTAKE_EXTENDER_FLIPPED
-            ),
-            new AbstractMotor(
-                    rightSpark::set,
-                    rightSpark::get,
-                    MotorFlip.INTAKE_EXTENDER_FLIPPED
-            )
+                new AbstractMotor(
+                        leftSpark::set,
+                        leftSpark::get,
+                        MotorFlip.INTAKE_EXTENDER_FLIPPED
+                ),
+                new AbstractMotor(
+                        rightSpark::set,
+                        rightSpark::get,
+                        MotorFlip.INTAKE_EXTENDER_FLIPPED
+                )
         );
         intakeMotor = new AbstractMotor(
                 intakeSpark::set,
@@ -102,12 +100,16 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         translateExtender(-MotorValue.ACCEPT_SPEED);
     }
 
-    /** @return If both front switches are being pressed in */
+    /**
+     * @return If both front switches are being pressed in
+     */
     public boolean isFrontSwitchPressed() {
         return flLimit.get() && frLimit.get();
     }
 
-    /** @return If both rear switches are being pressed in */
+    /**
+     * @return If both rear switches are being pressed in
+     */
     public boolean isRearSwitchPressed() {
         return blLimit.get() && brLimit.get();
     }

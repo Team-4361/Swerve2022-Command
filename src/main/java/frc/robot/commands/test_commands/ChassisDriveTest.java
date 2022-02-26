@@ -34,7 +34,9 @@ public class ChassisDriveTest extends CommandBase {
         Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, -0.8, 0, Rotation2d.fromDegrees(0)));
     }
 
-    @Override public void initialize() {}
+    @Override
+    public void initialize() {
+    }
 
     @Override
     public void execute() {
@@ -42,7 +44,9 @@ public class ChassisDriveTest extends CommandBase {
         driveFWD();
     }
 
-    @Override public void end(boolean interrupted) {}
+    @Override
+    public void end(boolean interrupted) {
+    }
 
     @Override
     public boolean isFinished() {

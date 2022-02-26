@@ -1,14 +1,13 @@
 package frc.robot.robot_utils;
 
-import java.util.HashMap;
-
-import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
-import org.photonvision.PhotonUtils;
 import frc.robot.subsystems.StorageSubsystem.AcceptColor;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
+import java.util.HashMap;
 
 import static frc.robot.Constants.ChassisCameraConsts.BALL_HEIGHT;
 
@@ -27,14 +26,13 @@ public class ChassisCamera {
       Our cameraName is RoxCam2021-4361
       NetworkTable server is turned off
     */
+
     /**
-     *
      * @param cameraName    name of the camera in photon vision
      * @param mCameraHeight camera height in meters
-     * @param mCameraPitch camera pitch in radians
+     * @param mCameraPitch  camera pitch in radians
      */
-    public ChassisCamera(String cameraName, double mCameraHeight, double mCameraPitch, AcceptColor targetColor)
-    {
+    public ChassisCamera(String cameraName, double mCameraHeight, double mCameraPitch, AcceptColor targetColor) {
         cameraHeight = mCameraHeight;
 
         //camera pitch in radians
@@ -42,9 +40,9 @@ public class ChassisCamera {
 
         photonCamera = new PhotonCamera(cameraName);
 
-        if(targetColor == AcceptColor.BLUE){
+        if (targetColor == AcceptColor.BLUE) {
             photonCamera.setPipelineIndex(1);
-        } else{
+        } else {
             photonCamera.setPipelineIndex(2);
         }
 
@@ -52,28 +50,24 @@ public class ChassisCamera {
     }
 
     //Creates an image of the input video of the pipeline
-    public void takeInputPicture()
-    {
+    public void takeInputPicture() {
         photonCamera.takeInputSnapshot();
     }
 
     //Creates an image of the output video of the pipeline
-    public void takeOutputSnapshot()
-    {
+    public void takeOutputSnapshot() {
         photonCamera.takeOutputSnapshot();
     }
 
     /**
      * @return returns the best target
      */
-    public PhotonTrackedTarget getBestTarget()
-    {
+    public PhotonTrackedTarget getBestTarget() {
         return photonCamera.getLatestResult().getBestTarget();
     }
 
     //Gets the distance to the best target
-    private double getDistanceToTarget(PhotonTrackedTarget target)
-    {
+    private double getDistanceToTarget(PhotonTrackedTarget target) {
         return PhotonUtils.calculateDistanceToTargetMeters(cameraHeight, TARGET_HEIGHT, cameraPitch, Math.toRadians(target.getPitch()));
     }
 
@@ -82,12 +76,11 @@ public class ChassisCamera {
     // 0 Yaw means the target is exactly in the middle of the screen
     // Negative yaw means the target is somewhere on the left of the screen
     // Positive yaw means the target is somewhere on the right of the screen
-    private double getYaw(PhotonTrackedTarget target)
-    {
+    private double getYaw(PhotonTrackedTarget target) {
         return target.getYaw();
     }
 
-    private double getPitch(PhotonTrackedTarget target){
+    private double getPitch(PhotonTrackedTarget target) {
         return target.getPitch();
     }
 
@@ -126,16 +119,14 @@ public class ChassisCamera {
     }
 
     /**
-     *
      * @return returns a Hashmap containing the distance, yaw, and pitch of the best target
      * Distance, Yaw, Pitch are they key for this information
      */
-    public HashMap<String, Double> getTargetGoal()
-    {
+    public HashMap<String, Double> getTargetGoal() {
         HashMap<String, Double> goalInfo = new HashMap<String, Double>();
         PhotonTrackedTarget trackedTarget = getBestTarget();
 
-        if(trackedTarget == null){
+        if (trackedTarget == null) {
             goalInfo.put("Distance", 0.0);
             goalInfo.put("Yaw", 0.0);
             goalInfo.put("Pitch", 0.0);

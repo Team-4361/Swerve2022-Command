@@ -37,7 +37,7 @@ public class AngleAdjustSubsystem extends SubsystemBase {
     }
 
     private double angleToRotation(double angle) {
-        return ((ADJUSTOR_GEAR_RATIO*angle)/360);
+        return ((ADJUSTOR_GEAR_RATIO * angle) / 360);
     }
 
     public void setAngle(double angle) {

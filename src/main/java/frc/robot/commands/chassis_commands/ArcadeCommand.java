@@ -1,10 +1,10 @@
 package frc.robot.commands.chassis_commands;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
+
+import java.util.function.Supplier;
 
 public class ArcadeCommand extends CommandBase {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
@@ -21,7 +21,8 @@ public class ArcadeCommand extends CommandBase {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {}
+    public void initialize() {
+    }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override

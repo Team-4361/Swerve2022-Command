@@ -1,7 +1,6 @@
 package frc.robot.commands.climber_commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
 import frc.robot.Robot;
 
 public class MoveClimberUp extends CommandBase {

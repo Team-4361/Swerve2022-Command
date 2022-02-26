@@ -3,11 +3,10 @@ package frc.robot.swerve;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
-
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -53,7 +52,7 @@ public class SwerveModule {
     );
 
     public SwerveModule(int driveMotorId,
-                        int turnMotorId, 
+                        int turnMotorId,
                         int digitalEncoderPort,
                         double offset) {
         driveMotor = new CANSparkMax(driveMotorId, MOTOR_TYPE);
@@ -86,7 +85,7 @@ public class SwerveModule {
                 turnAngleRadians(),
                 state.angle.getRadians()
         );
-        
+
         turnMotor.set(turnPower);
 
         driveMotor.set(state.speedMetersPerSecond);
@@ -110,9 +109,9 @@ public class SwerveModule {
         SmartDashboard.putNumber(turnPosition, getTurnAngle().getRadians());
         SmartDashboard.putNumber(drivePower, driveMotor.get());
     }
-    
+
     //In revolutions
-    public double getDistance(){
+    public double getDistance() {
         return driveEncoder.getPosition();
     }
 }

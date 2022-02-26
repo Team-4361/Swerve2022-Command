@@ -1,11 +1,9 @@
 package frc.robot.commands.shooter_commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
-import java.lang.Math;
-import java.util.HashMap;
-
 import frc.robot.Robot;
+
+import java.util.HashMap;
 
 import static frc.robot.Constants.Shooter.SHOOTER_WHEEL_RADIUS;
 

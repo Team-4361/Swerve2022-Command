@@ -4,21 +4,21 @@
 
 package frc.robot;
 
-import static frc.robot.Constants.TestValue.DEFAULT_TEST_MODE;
-import static frc.robot.robot_utils.TestUtil.TestMode.CHASSIS_DRIVE_TEST;
-import static frc.robot.robot_utils.TestUtil.TestMode.CHASSIS_OFFSET_ADJUSTMENT;
-import static frc.robot.robot_utils.TestUtil.TestMode.SHOOTER_ANGLE_TEST;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.test_commands.*;
+import frc.robot.commands.test_commands.ChassisForwardOffsetTest;
+import frc.robot.commands.test_commands.ChassisOffsetTest;
+import frc.robot.commands.test_commands.ShooterAngleTest;
 import frc.robot.robot_utils.ChassisCamera;
 import frc.robot.robot_utils.ShooterCamera;
 import frc.robot.robot_utils.TestUtil;
 import frc.robot.subsystems.*;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
+
+import static frc.robot.Constants.TestValue.DEFAULT_TEST_MODE;
+import static frc.robot.robot_utils.TestUtil.TestMode.*;
 
 public class Robot extends TimedRobot {
     private Command autonomous;
@@ -75,23 +75,26 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+    }
 
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+    }
 
 
     @Override
     public void autonomousInit() {
         autonomous = m_robotContainer
-            .getAutonomousCommand(pathfinderSubsystem);
+                .getAutonomousCommand(pathfinderSubsystem);
 
         if (autonomous != null)
             autonomous.schedule();
     }
 
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+    }
 
     @Override
     public void teleopInit() {
@@ -101,9 +104,12 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll();
     }
 
-    /** This function is called periodically during operator control. */
+    /**
+     * This function is called periodically during operator control.
+     */
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+    }
 
     @Override
     public void testInit() {
@@ -114,7 +120,10 @@ public class Robot extends TimedRobot {
         testUtil.runExecutedCommand();
     }
 
-    /** This function is called periodically during test mode. */
+    /**
+     * This function is called periodically during test mode.
+     */
     @Override
-    public void testPeriodic() {}
+    public void testPeriodic() {
+    }
 }

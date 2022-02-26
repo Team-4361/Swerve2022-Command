@@ -2,9 +2,9 @@ package frc.robot.commands.autonomous_commands;
 
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.trajectory.Trajectory;
 import me.wobblyyyy.pathfinder2.trajectory.spline.AdvancedSplineTrajectoryBuilder;
-import me.wobblyyyy.pathfinder2.trajectory.LinearTrajectory;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 import me.wobblyyyy.pathfinder2.wpilib.TrajectoryCommand;
 

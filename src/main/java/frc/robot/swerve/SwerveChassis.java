@@ -1,12 +1,5 @@
 package frc.robot.swerve;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
-import static frc.robot.Constants.*;
-import static frc.robot.Constants.TestValue.DRIVE_ENABLED;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -15,16 +8,23 @@ import frc.robot.Constants;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+import static frc.robot.Constants.Chassis;
+import static frc.robot.Constants.TestValue.DRIVE_ENABLED;
+
 
 public class SwerveChassis implements Drive {
     private static final Translation2d SWERVE_FR_POSITION =
-            new Translation2d(Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2, Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2);
+            new Translation2d(Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2, Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2);
     private static final Translation2d SWERVE_FL_POSITION =
-            new Translation2d(-Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2, Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2);
+            new Translation2d(-Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2, Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2);
     private static final Translation2d SWERVE_BR_POSITION =
-            new Translation2d(Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2, -Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2);
+            new Translation2d(Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2, -Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2);
     private static final Translation2d SWERVE_BL_POSITION =
-            new Translation2d(-Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2, -Chassis.SWERVE_CHASSIS_SIDE_LENGTH/2);
+            new Translation2d(-Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2, -Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2);
     private static final SwerveDriveKinematics SWERVE_KINEMATICS =
             new SwerveDriveKinematics(
                     SWERVE_FR_POSITION,
@@ -92,11 +92,11 @@ public class SwerveChassis implements Drive {
         return SWERVE_KINEMATICS;
     }
 
-    public HashMap<String, SwerveModuleState> getSwerveModuleStates(){
-        return new HashMap<>(Map.of("FL", getFrontLeft().getState(), 
-                                    "BL", getBackLeft().getState(),
-                                    "FR", getFrontRight().getState(), 
-                                    "BR", getBackRight().getState()));
+    public HashMap<String, SwerveModuleState> getSwerveModuleStates() {
+        return new HashMap<>(Map.of("FL", getFrontLeft().getState(),
+                "BL", getBackLeft().getState(),
+                "FR", getFrontRight().getState(),
+                "BR", getBackRight().getState()));
     }
 
     public void drive(ChassisSpeeds speeds) {
@@ -138,7 +138,7 @@ public class SwerveChassis implements Drive {
         return translation;
     }
 
-    public double getDistance(){
+    public double getDistance() {
         return frontRight.getDistance() * 2 * Math.PI * Constants.Chassis.SWERVE_WHEEL_RADIUS;
     }
 }

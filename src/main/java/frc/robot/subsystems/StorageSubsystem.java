@@ -1,23 +1,23 @@
 package frc.robot.subsystems;
 
-import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
-import static frc.robot.Constants.Storage.*;
-import static frc.robot.subsystems.StorageSubsystem.currentStorageTask;
-
-import java.util.ArrayList;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Storage;
 import frc.robot.robot_utils.MotorUtil;
+import frc.robot.subsystems.StorageSubsystem.AcceptColor;
+import frc.robot.subsystems.StorageSubsystem.StorageListener;
+import frc.robot.subsystems.StorageSubsystem.Task;
 
-import frc.robot.subsystems.StorageSubsystem.*;
+import java.util.ArrayList;
+
+import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
+import static frc.robot.Constants.Storage.*;
+import static frc.robot.subsystems.StorageSubsystem.currentStorageTask;
 
 public class StorageSubsystem extends SubsystemBase {
     public static CANSparkMax storageMotor, acceptorMotor;
@@ -92,27 +92,37 @@ public class StorageSubsystem extends SubsystemBase {
     /**
      * @return Color Value
      */
-    public Color getColorValue() {return colorSensor.getColor();}
+    public Color getColorValue() {
+        return colorSensor.getColor();
+    }
 
     /**
      * @return Storage Motor Instance
      */
-    public CANSparkMax getStorageMotor() {return storageMotor;}
+    public CANSparkMax getStorageMotor() {
+        return storageMotor;
+    }
 
     /**
      * @return Acceptor Motor Instance
      */
-    public CANSparkMax getAcceptorMotor() {return acceptorMotor;}
+    public CANSparkMax getAcceptorMotor() {
+        return acceptorMotor;
+    }
 
     /**
      * @return Color Sensor Instance
      */
-    public ColorSensorV3 getColorSensor() {return colorSensor;}
+    public ColorSensorV3 getColorSensor() {
+        return colorSensor;
+    }
 
     /**
      * @return Acceptor Color
      */
-    public AcceptColor getAcceptColor() {return acceptColor;}
+    public AcceptColor getAcceptColor() {
+        return acceptColor;
+    }
 
     /**
      * Sense the ball, get its color then decide to bring it into the first or second position.
@@ -153,28 +163,36 @@ public class StorageSubsystem extends SubsystemBase {
      *
      * @param listener StorageListener
      */
-    public void addListener(StorageListener listener) { storageListeners.add(listener); }
+    public void addListener(StorageListener listener) {
+        storageListeners.add(listener);
+    }
 
     /**
      * Sets the Storage Motor Speed
      *
      * @param speed Speed from -1.0 to +1.0
      */
-    public void setStorageMotor(double speed) { MotorUtil.runMotor(storageMotor, speed); }
+    public void setStorageMotor(double speed) {
+        MotorUtil.runMotor(storageMotor, speed);
+    }
 
     /**
      * Sets the Acceptance Motor Speed
      *
      * @param speed Speed from -1.0 to +1.0
      */
-    public void setAcceptorMotor(double speed) { MotorUtil.runMotor(acceptorMotor, speed); }
+    public void setAcceptorMotor(double speed) {
+        MotorUtil.runMotor(acceptorMotor, speed);
+    }
 
     /**
      * Sets the Acceptance Color, RED or BLUE
      *
      * @param color Accept Color
      */
-    public void setAcceptColor(AcceptColor color) { acceptColor = color; }
+    public void setAcceptColor(AcceptColor color) {
+        acceptColor = color;
+    }
 
     /**
      * @return Balls Loaded Amount
@@ -186,12 +204,16 @@ public class StorageSubsystem extends SubsystemBase {
     /**
      * @return If the Acceptor (front) Sensor has proximity to an object.
      */
-    public boolean getAcceptorSensorCovered() {return !acceptorSensor.get();}
+    public boolean getAcceptorSensorCovered() {
+        return !acceptorSensor.get();
+    }
 
     /**
      * @return If the Storage (rear) Sensor has proximity to an object.
      */
-    public boolean getStorageSensorCovered() {return !storageSensor.get();}
+    public boolean getStorageSensorCovered() {
+        return !storageSensor.get();
+    }
 
     public interface StorageListener {
         /**
@@ -280,5 +302,7 @@ class StorageTask {
     /**
      * @return Storage Task
      */
-    public Task getTask() {return acceptOrDeny;}
+    public Task getTask() {
+        return acceptOrDeny;
+    }
 }

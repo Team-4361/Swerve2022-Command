@@ -1,15 +1,9 @@
 package frc.robot.robot_utils.encoder;
 
-import static frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder.absoluteRotations;
-import static frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder.canEncoder;
-import static frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder.getMotorValue;
-import static frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder.inTolerance;
-import static frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder.relativeRotations;
-import static frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder.rpmFlipped;
-import static frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder.velocity;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+
+import static frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder.*;
 
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class RotationalAbsoluteEncoder {
@@ -55,11 +49,11 @@ public class RotationalAbsoluteEncoder {
     }
 
     public static boolean inTolerance(double expected, double actual, double tolerance) {
-		return Math.abs(expected - actual) <= tolerance;
-	}
+        return Math.abs(expected - actual) <= tolerance;
+    }
 
     public static double getMotorValue(double speed, boolean flipped) {
-		return (flipped) ? -speed : speed;
+        return (flipped) ? -speed : speed;
     }
 
     public RotationalAbsoluteEncoder start() {
@@ -97,7 +91,7 @@ public class RotationalAbsoluteEncoder {
     }
 
     public double getAbsoluteAngle() {
-        return absoluteRotations*360;
+        return absoluteRotations * 360;
     }
 
     // Returns the rotations as a regular Relative Encoder.
@@ -136,23 +130,23 @@ public class RotationalAbsoluteEncoder {
     }
 
     public void setMotorAngle(double angle, double speed) {
-        setMotorRotations(angle/360, speed);
+        setMotorRotations(angle / 360, speed);
     }
 
     public void increaseRotations(double increase, double speed) {
-        setMotorRotations(getAbsoluteRotations()+increase, speed);
+        setMotorRotations(getAbsoluteRotations() + increase, speed);
     }
 
     public void decreaseRotations(double decrease, double speed) {
-        setMotorRotations(getAbsoluteRotations()-decrease, speed);
+        setMotorRotations(getAbsoluteRotations() - decrease, speed);
     }
 
     public void increaseMotorAngle(double increase, double speed) {
-        setMotorAngle(getAbsoluteAngle()+increase, speed);
+        setMotorAngle(getAbsoluteAngle() + increase, speed);
     }
 
     public void decreaseMotorAngle(double decrease, double speed) {
-        setMotorAngle(getAbsoluteAngle()-decrease, speed);
+        setMotorAngle(getAbsoluteAngle() - decrease, speed);
     }
 }
 
@@ -160,7 +154,7 @@ class MotorMonitor extends Thread {
     // Calculates the rotations that should be increased or decreased from the total, based on RPM
     // and time difference between the two changes.
     private double calculateRotationChange(double rpm, double diffSeconds) {
-        return rpm/(60/diffSeconds);
+        return rpm / (60 / diffSeconds);
     }
 
     @Override
@@ -170,7 +164,7 @@ class MotorMonitor extends Thread {
 
         while (!isInterrupted()) {
             // Check every 200 milliseconds to avoid bouncing and false values.
-            if (System.currentTimeMillis() > lastTime +200) {
+            if (System.currentTimeMillis() > lastTime + 200) {
                 // Get the motor RPM value based on if it's flipped or not.
                 velocity = getMotorValue(canEncoder.getVelocity(), rpmFlipped);
 

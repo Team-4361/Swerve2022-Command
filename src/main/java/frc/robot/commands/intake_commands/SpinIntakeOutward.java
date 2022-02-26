@@ -1,7 +1,6 @@
 package frc.robot.commands.intake_commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
 import frc.robot.Robot;
 
 public class SpinIntakeOutward extends CommandBase {
@@ -10,7 +9,7 @@ public class SpinIntakeOutward extends CommandBase {
         addRequirements(Robot.intake);
     }
 
-    
+
     @Override
     public void execute() {
         Robot.intake.spinIntakeReject();

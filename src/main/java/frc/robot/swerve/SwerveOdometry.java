@@ -2,14 +2,14 @@ package frc.robot.swerve;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.Constants;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
 import me.wobblyyyy.pathfinder2.time.Time;
 import me.wobblyyyy.pathfinder2.wpilib.WPIAdapter;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 /**
  * the chassis' swerve drive odometry system. this uses encoders on each
@@ -23,7 +23,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
  */
 public class SwerveOdometry extends AbstractOdometry {
     private final double updateInterval =
-        Constants.Chassis.ODOMETRY_MS_INTERVAL;
+            Constants.Chassis.ODOMETRY_MS_INTERVAL;
 
     private final SwerveChassis chassis;
     private final Gyro gyro;

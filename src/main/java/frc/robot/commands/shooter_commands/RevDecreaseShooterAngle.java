@@ -8,6 +8,7 @@ public class RevDecreaseShooterAngle extends CommandBase {
 
     /**
      * Sets the shooter to decrease angle by a certain amount using a specialized Command.
+     *
      * @param decrease Angle in Degrees to decrease (raise up) by.
      */
     public RevDecreaseShooterAngle(double decrease) {

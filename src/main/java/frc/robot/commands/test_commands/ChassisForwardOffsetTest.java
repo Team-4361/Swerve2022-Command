@@ -13,7 +13,9 @@ public class ChassisForwardOffsetTest extends CommandBase {
         addRequirements(Robot.swerveDrive);
     }
 
-    @Override public void initialize() {}
+    @Override
+    public void initialize() {
+    }
 
     @Override
     public void execute() {

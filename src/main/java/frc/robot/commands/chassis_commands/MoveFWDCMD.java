@@ -15,20 +15,20 @@ public class MoveFWDCMD extends CommandBase {
     private double initDriveEncoderDist = 0;
 
 
-    public MoveFWDCMD(){
+    public MoveFWDCMD() {
         chassisController = new PIDController(0.1, 0, 0);
         addRequirements(Robot.swerveDrive);
     }
 
     @Override
-    public void initialize() { 
+    public void initialize() {
         initDriveEncoderDist = Robot.swerveDrive.getDistance();
     }
 
-    
+
     @Override
     public void execute() {
-        double power = chassisController.calculate(getAbsDistance(), distanceToMove+0.1);
+        double power = chassisController.calculate(getAbsDistance(), distanceToMove + 0.1);
 
         Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, power, 0, Rotation2d.fromDegrees(0)));
     }
@@ -43,7 +43,7 @@ public class MoveFWDCMD extends CommandBase {
         return getAbsDistance() > distanceToMove;
     }
 
-    private double getAbsDistance(){
+    private double getAbsDistance() {
         return Robot.swerveDrive.getDistance() - initDriveEncoderDist;
     }
 }

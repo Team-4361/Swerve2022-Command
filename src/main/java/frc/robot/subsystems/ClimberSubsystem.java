@@ -1,15 +1,14 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.Climber.*;
+import static frc.robot.Constants.MotorFlip.CLIMBER_FLIPPED;
+import static frc.robot.Constants.MotorValue.CLIMBER_SPEED;
 import static frc.robot.robot_utils.MotorUtil.*;
-import static frc.robot.Constants.MotorValue.*;
-import static frc.robot.Constants.MotorFlip.*;
 
 public class ClimberSubsystem extends SubsystemBase {
 
@@ -27,7 +26,9 @@ public class ClimberSubsystem extends SubsystemBase {
         trSwitch = new DigitalInput(TR_LIMIT_ID);
     }
 
-    @Override public void periodic() {}
+    @Override
+    public void periodic() {
+    }
 
     public void stopClimber() {
         stopMotors(climberGroup);
@@ -45,12 +46,16 @@ public class ClimberSubsystem extends SubsystemBase {
         runMotors(climberGroup, getMotorValue(value, CLIMBER_FLIPPED));
     }
 
-    /** @return If the top switch is pressed */
+    /**
+     * @return If the top switch is pressed
+     */
     public boolean isTopSwitchPressed() {
         return tlSwitch.get() && trSwitch.get();
     }
 
-    /** @return If the bottom switch is pressed */
+    /**
+     * @return If the bottom switch is pressed
+     */
     public boolean isBottomSwitchPressed() {
         return blSwitch.get() && brSwitch.get();
     }

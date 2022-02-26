@@ -1,9 +1,6 @@
 package frc.robot.subsystems;
 
-import java.util.HashMap;
-
 import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -18,6 +15,8 @@ import me.wobblyyyy.pathfinder2.control.ProportionalController;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;
+
+import java.util.HashMap;
 
 import static frc.robot.Constants.TestValue.DRIVE_ENABLED;
 
@@ -46,7 +45,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {}
+    public void periodic() {
+    }
 
     public HashMap<String, SwerveModuleState> getSwerveModuleStates() {
         return swerveChassis.getSwerveModuleStates();
@@ -73,9 +73,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public void driveBack() {
         drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, -0.8, 0, Rotation2d.fromDegrees(0)));
     }
-    
+
     public void stop() {
-        drive(ChassisSpeeds.fromFieldRelativeSpeeds(0,0,0, Rotation2d.fromDegrees(0)));
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(0)));
     }
 
     public Rotation2d getGyro() {
@@ -88,7 +88,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         }
     }
 
-    public double getDistance(){
+    public double getDistance() {
         return swerveChassis.getDistance();
     }
 }

@@ -1,25 +1,24 @@
 package frc.robot.commands.storage_commands;
 
 
-import java.util.concurrent.TimeUnit;
-
 import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Robot;
 import frc.robot.Constants.MotorValue;
+import frc.robot.Robot;
 import frc.robot.commands.intake_commands.EnableIntake;
 import frc.robot.commands.intake_commands.SpinIntakeInward;
 import frc.robot.robot_utils.MotorUtil;
 import frc.robot.subsystems.StorageSubsystem;
 import frc.robot.subsystems.StorageSubsystem.Task;
 
-import static frc.robot.Constants.*;
+import java.util.concurrent.TimeUnit;
+
+import static frc.robot.Constants.MotorFlip;
 
 public class OldStorage extends CommandBase {
-    
+
     private final String currentState = "Idle";
 
     public OldStorage() {
@@ -78,19 +77,21 @@ public class OldStorage extends CommandBase {
                                 }
 
                                 // If there is more than one, do nothing because more cannot be accepted.
-                                default: {}
+                                default: {
+                                }
                             }
                         }
                         case DENY: {
                             // This ball should be denied, spin the motor in the reject direction.
-                            Robot.storage.setAcceptorMotor(MotorUtil.getMotorValue(-MotorValue.ACCEPT_SPEED-0.1, MotorFlip.ACCEPTOR_FLIPPED));
-        
+                            Robot.storage.setAcceptorMotor(MotorUtil.getMotorValue(-MotorValue.ACCEPT_SPEED - 0.1, MotorFlip.ACCEPTOR_FLIPPED));
+
                             // Add a slight delay to the end to make sure the ball is thrown out.
                             TimeUnit.MILLISECONDS.sleep(250);
                         }
-                    } 
-                } catch (InterruptedException e) {}
-                
+                    }
+                } catch (InterruptedException e) {
+                }
+
                 Robot.storage.setAcceptorMotor(0);
                 Robot.storage.setStorageMotor(0);
             }
@@ -102,7 +103,7 @@ public class OldStorage extends CommandBase {
             }
         });
     }
-    
+
     @Override
     public void execute() {
         SmartDashboard.putString("Storage State", currentState);

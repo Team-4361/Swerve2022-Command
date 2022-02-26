@@ -7,7 +7,8 @@ import frc.robot.robot_utils.MotorUtil;
 
 import java.util.concurrent.TimeUnit;
 
-import static frc.robot.Constants.*;
+import static frc.robot.Constants.MotorFlip;
+import static frc.robot.Constants.MotorValue;
 
 public class RevShooterCommand extends CommandBase {
 
@@ -86,7 +87,8 @@ public class RevShooterCommand extends CommandBase {
             SmartDashboard.putString("Shooter: Status", "Idle");
 
             shootingDone = true;
-        } catch (InterruptedException ignored) {}
+        } catch (InterruptedException ignored) {
+        }
     }
 
     public void shootAllBalls() {
@@ -97,7 +99,9 @@ public class RevShooterCommand extends CommandBase {
 
         for (int i = 0; i < ballsLoaded; i++) {
             shoot(false);
-            while (!shootingDone) {Thread.onSpinWait();}
+            while (!shootingDone) {
+                Thread.onSpinWait();
+            }
         }
     }
 

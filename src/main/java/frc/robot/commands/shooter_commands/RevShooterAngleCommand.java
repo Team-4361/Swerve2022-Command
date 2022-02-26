@@ -8,6 +8,7 @@ public class RevShooterAngleCommand extends CommandBase {
 
     /**
      * Sets the shooter to a specified angle using a specialized Command.
+     *
      * @param angle Angle in Degrees to be set to.
      */
     public RevShooterAngleCommand(double angle) {

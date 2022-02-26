@@ -7,9 +7,9 @@ public class ExtendIntake extends CommandBase {
 
     @Override
     public void initialize() {
-       addRequirements(Robot.intake);
+        addRequirements(Robot.intake);
     }
-    
+
     @Override
     public void execute() {
         // This runs repeatedly until the command is ended.

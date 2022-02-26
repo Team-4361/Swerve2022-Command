@@ -15,7 +15,7 @@ public class MoveRightCMD extends CommandBase {
     private double initDriveEncoderDist = 0;
 
 
-    public MoveRightCMD(){
+    public MoveRightCMD() {
         chassisController = new PIDController(0.1, 0, 0);
         addRequirements(Robot.swerveDrive);
     }
@@ -25,10 +25,10 @@ public class MoveRightCMD extends CommandBase {
         initDriveEncoderDist = Robot.swerveDrive.getDistance();
     }
 
-    
+
     @Override
     public void execute() {
-        double power = chassisController.calculate(getAbsDistance(), distanceToMove+0.1);
+        double power = chassisController.calculate(getAbsDistance(), distanceToMove + 0.1);
 
         Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(power, 0, 0, Rotation2d.fromDegrees(0)));
     }
@@ -43,7 +43,7 @@ public class MoveRightCMD extends CommandBase {
         return getAbsDistance() > distanceToMove;
     }
 
-    private double getAbsDistance(){
+    private double getAbsDistance() {
         return Robot.swerveDrive.getDistance() - initDriveEncoderDist;
     }
 }

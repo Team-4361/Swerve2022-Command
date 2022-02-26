@@ -8,6 +8,7 @@ public class RevIncreaseShooterAngle extends CommandBase {
 
     /**
      * Sets the shooter to increase angle by a certain amount using a specialized Command.
+     *
      * @param increase Angle in Degrees to increase (raise up) by.
      */
     public RevIncreaseShooterAngle(double increase) {
