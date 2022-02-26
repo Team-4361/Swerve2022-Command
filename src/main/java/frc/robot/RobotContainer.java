@@ -14,6 +14,7 @@ import static frc.robot.Constants.Control.XBOX_Y;
 import static frc.robot.Constants.Control.XY_STICK_ID;
 import static frc.robot.Constants.Control.Z_STICK_ID;
 
+import frc.robot.commands.intake_commands.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -29,8 +30,6 @@ import frc.robot.commands.chassis_commands.MoveFWDCMD;
 import frc.robot.commands.chassis_commands.MoveLeftCMD;
 import frc.robot.commands.chassis_commands.MoveRightCMD;
 import frc.robot.commands.chassis_commands.ToggleLeftHandMode;
-import frc.robot.commands.climber_commands.MoveClimberDown;
-import frc.robot.commands.climber_commands.MoveClimberUp;
 //import frc.robot.commands.climber_commands.ClimberCommandDown;
 //import frc.robot.commands.climber_commands.ClimberCommandUp;
 import frc.robot.commands.intake_commands.ExtendIntake;
@@ -99,8 +98,8 @@ public class RobotContainer {
 
         // xButton.and(aButton).and(yButton).and(bButton).whenActive(testSwerveDrive);
 
-        lBumper.whenActive(new MoveClimberUp());
-        rBumper.whenActive(new MoveClimberDown());
+        lBumper.whenActive(new RetractIntake());
+        rBumper.whenActive(new ExtendIntake());
     }
 
     public Command getAutonomousCommand() {

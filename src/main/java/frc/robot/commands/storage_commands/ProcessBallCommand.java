@@ -1,6 +1,7 @@
 package frc.robot.commands.storage_commands;
 
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.commands.intake_commands.RetractIntake;
@@ -32,6 +33,7 @@ public class ProcessBallCommand extends CommandBase {
 
                     TimeUnit.SECONDS.sleep(2);
 
+                    rejecting = false;
                     stop();
                 } catch (InterruptedException e) {}
             }
@@ -46,8 +48,10 @@ public class ProcessBallCommand extends CommandBase {
                     Robot.storage.spinStorageAccept();
                     Robot.storage.spinIndexAccept(true);
                 } else {
+                    accepting = false;
                     stop();
                 }
+                break;
             }
 
             case 1: {
@@ -55,18 +59,28 @@ public class ProcessBallCommand extends CommandBase {
                     // keep running the index motor until front proximity is covered
                     Robot.storage.spinStorageAccept();
                 } else {
+                    accepting = false;
                     stop();
                 }
+                break;
             }
 
             default: {
+                accepting = false;
                 stop();
+                break;
             }
         }
     }
 
     public ProcessBallCommand() {
-        addRequirements(Robot.storage);
+        addRequirements(Robot.storage, Robot.intake);
+
+        finished = false;
+        accepting = false;
+        rejecting = false;
+
+        
     }
 
     @Override
@@ -76,12 +90,14 @@ public class ProcessBallCommand extends CommandBase {
             @Override
             public void onAcceptTask() {
                 ballsLoaded = Robot.storage.getBallsLoaded();
+                SmartDashboard.putString("Storage Status", "Accepting");
                 accepting = true;
             }
 
             @Override
             public void onRejectTask() {
                 ballsLoaded = Robot.storage.getBallsLoaded();
+                SmartDashboard.putString("Storage Status", "Rejecting");
                 rejecting = true;
             }
 
@@ -92,6 +108,7 @@ public class ProcessBallCommand extends CommandBase {
         });
 
         Robot.storage.setRunningState(true);
+        Robot.intake.spinIntakeAccept();
     }
 
     @Override
@@ -105,11 +122,9 @@ public class ProcessBallCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        // If the command ends, possibly turn off the motor?
-        stop();
 
         // TODO: we may not want to immediately retract everything when command is done.
-        new RetractIntake().execute();
+        //new RetractIntake().execute();
     }
 
     @Override

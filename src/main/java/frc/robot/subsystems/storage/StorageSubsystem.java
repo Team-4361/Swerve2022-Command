@@ -81,16 +81,20 @@ public class StorageSubsystem extends SubsystemBase {
                 case BLUE: {
                     if (color.blue > BLUE_THRESHOLD) {
                         acceptTask();
+                        running = false;
                     } else if (color.red > RED_THRESHOLD) {
                         rejectTask();
+                        running = false;
                     }
                     break;
                 }
                 case RED: {
                     if (color.red > RED_THRESHOLD) {
                         acceptTask();
+                        running = false;
                     } else if (color.blue > BLUE_THRESHOLD) {
                         rejectTask();
+                        running = false;
                     }
                     break;
                 }
@@ -100,6 +104,7 @@ public class StorageSubsystem extends SubsystemBase {
 
     public void updateSensors() {
         this.color = indexColorSensor.getColor();
+        this.colorProximity = indexColorSensor.getProximity();
 
         SmartDashboard.putNumber("Storage: Red", color.red);
         SmartDashboard.putNumber("Storage: Green", color.green);
