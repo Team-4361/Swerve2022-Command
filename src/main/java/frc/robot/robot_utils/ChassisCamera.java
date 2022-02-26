@@ -1,6 +1,6 @@
 package frc.robot.robot_utils;
 
-import frc.robot.subsystems.StorageSubsystem.AcceptColor;
+import frc.robot.subsystems.storage.AcceptColor;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import org.photonvision.PhotonCamera;

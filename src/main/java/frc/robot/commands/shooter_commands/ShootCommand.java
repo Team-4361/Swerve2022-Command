@@ -5,8 +5,8 @@ import java.util.Map;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-import frc.robot.subsystems.AngleAdjustSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.shooter.AngleAdjustSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.time.ElapsedTimer;
 

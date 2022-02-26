@@ -6,7 +6,7 @@ import frc.robot.Robot;
 
 public class ShootCMD extends CommandBase {
     public ShootCMD() {
-        addRequirements(Robot.shooter, Robot.storage);
+        addRequirements(Robot.shooter);
     }
 
     @Override
@@ -17,13 +17,11 @@ public class ShootCMD extends CommandBase {
 
     @Override
     public void execute() {
-        Robot.storage.setStorageMotor(1.0);
     }
 
     @Override
     public void end(boolean interrupted) {
         Robot.shooter.setShooterMotor(0);
-        Robot.storage.setStorageMotor(0);
     }
 
     @Override

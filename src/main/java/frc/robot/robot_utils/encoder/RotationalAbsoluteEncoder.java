@@ -12,10 +12,22 @@ public class RotationalAbsoluteEncoder {
     protected static RelativeEncoder canEncoder;
     protected static double accuracyFactor = 15;
 
-    private Thread monitorThread;
+    /** absolute rotations */
+    protected static double absoluteRotations = 0;
 
-    protected static double absoluteRotations = 0, relativeRotations = 0, velocity = 0;
+    /** relative rotations */
+    protected static double relativeRotations = 0;
+
+    /** calculated rotations */
+    protected static double calculatedRotations = 0;
+
+    /** raw motor velocity */
+    protected static double velocity = 0;
+
+    /** if the RPM is flipped */
     protected static boolean rpmFlipped = false;
+
+    private long lastUpdated, timeDifference;
 
     // After doing research, experimenting, and looking at my recorded graphs, I discovered
     // that to accurately record the total absolute rotational information, we should be using
@@ -56,12 +68,6 @@ public class RotationalAbsoluteEncoder {
         return (flipped) ? -speed : speed;
     }
 
-    public RotationalAbsoluteEncoder start() {
-        monitorThread = new Thread(new MotorMonitor());
-        monitorThread.start();
-        return this;
-    }
-
     // Used when telling the motor to go to a specified position, this is the factor
     // based on the motor speed of tolerance it has.
     //
@@ -71,18 +77,10 @@ public class RotationalAbsoluteEncoder {
         return this;
     }
 
-    public void stop() {
-        monitorThread.interrupt();
-    }
-
     // If the RPM is flipped from what it should be going, enable this.
     public RotationalAbsoluteEncoder setFlipped(boolean flipped) {
         rpmFlipped = flipped;
         return this;
-    }
-
-    public boolean isRunning() {
-        return monitorThread.isAlive();
     }
 
     // Returns the rotations as emulated by an Absolute Encoder.
@@ -113,6 +111,35 @@ public class RotationalAbsoluteEncoder {
         return this;
     }
 
+
+    private double calculateRotationChange(double rpm, double diffSeconds) {
+        return rpm / (60 / diffSeconds);
+    }
+
+    /**
+     * This is expected to be automatically updated on a scheduled period of time,
+     * such as being called from the periodic/execute looped methods on a Subsystem
+     * or Command. This is fully non-blocking and doesn't rely on any additional Threads.
+     */
+    public void update() {
+        timeDifference = System.currentTimeMillis() - lastUpdated;
+
+        velocity = getMotorValue(canEncoder.getVelocity(), rpmFlipped);
+
+        if (!inTolerance(0, velocity, 1)) {
+            relativeRotations = getMotorValue(canEncoder.getPosition(), rpmFlipped);
+
+            // Change the RPM to the actual amount of rotations based on the time it been.
+            calculatedRotations = calculateRotationChange(velocity, (double) timeDifference/1000);
+
+            // Add or subtract to the total rotations based on the value being + or -
+            absoluteRotations += calculatedRotations;
+
+            lastUpdated = System.currentTimeMillis();
+        }
+
+    }
+
     public void setMotorRotations(double degrees, double speed) {
         if (getAbsoluteRotations() < degrees) {
             // rotate up
@@ -122,6 +149,7 @@ public class RotationalAbsoluteEncoder {
             canMotor.set(getMotorValue(-speed, rpmFlipped));
         }
 
+        // TODO: there is probably a better solution
         while (!inTolerance(degrees, getAbsoluteRotations(), 20)) {
             Thread.onSpinWait();
         }
@@ -160,40 +188,5 @@ public class RotationalAbsoluteEncoder {
 
     public void decreaseMotorAngle(double decrease, double speed) {
         setMotorAngle(getAbsoluteAngle() - decrease, speed);
-    }
-}
-
-class MotorMonitor extends Thread {
-    // Calculates the rotations that should be increased or decreased from the total, based on RPM
-    // and time difference between the two changes.
-    private double calculateRotationChange(double rpm, double diffSeconds) {
-        return rpm / (60 / diffSeconds);
-    }
-
-    @Override
-    public void run() {
-        long lastTime = System.currentTimeMillis();
-        double rotations;
-
-        while (!isInterrupted()) {
-            // Check every 200 milliseconds to avoid bouncing and false values.
-            if (System.currentTimeMillis() > lastTime + 200) {
-                // Get the motor RPM value based on if it's flipped or not.
-                velocity = getMotorValue(canEncoder.getVelocity(), rpmFlipped);
-
-                if (!inTolerance(0, velocity, 2)) {
-                    relativeRotations = getMotorValue(canEncoder.getPosition(), rpmFlipped);
-
-                    // Change the RPM to the actual amount of rotations based on the time it been.
-                    rotations = calculateRotationChange(velocity, 0.2);
-
-                    // Add or subtract to the total rotations based on the value being + or -
-                    absoluteRotations += rotations;
-                }
-
-                // Finally, reset the lastTime, so it constantly updates every 200ms.
-                lastTime = System.currentTimeMillis();
-            }
-        }
     }
 }

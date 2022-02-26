@@ -113,6 +113,7 @@ public class MotorUtil {
      * @param speed Speed to Run Motor
      */
     public static void runMotor(CANSparkMax motor, double speed) {
+        /*
         new Thread(() -> {
             try {
                 // While the motor is not stopped, continuously check if the motor is
@@ -136,6 +137,8 @@ public class MotorUtil {
             } catch (InterruptedException ignored) {
             }
         }).start();
+        */
+        motor.set(speed);
     }
 
     /**
