@@ -70,13 +70,13 @@ public class OldStorage extends CommandBase {
                                         break;
                                     }
 
-                                    while (!Robot.storage.getAcceptorSensorCovered() && StorageSubsystem.stalledMotor == null) {
+                                    while (!Robot.storage.getAcceptorSensorCovered()) {
                                         Robot.storage.setAcceptorMotor(MotorUtil.getMotorValue(MotorValue.ACCEPT_SPEED, MotorFlip.ACCEPTOR_FLIPPED));
                                     }
 
                                     TimeUnit.MILLISECONDS.sleep(250);
                                 }
-                            
+
                                 // If there is more than one, do nothing because more cannot be accepted.
                                 default: {}
                             }
