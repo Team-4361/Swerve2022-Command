@@ -17,13 +17,10 @@ import static frc.robot.Constants.MotorFlip.SHOOTER_FLIPPED;
 import static frc.robot.Constants.MotorValue.SHOOT_SPEED;
 import static frc.robot.robot_utils.MotorUtil.getMotorValue;
 
-<<<<<<< HEAD
-import edu.wpi.first.math.geometry.Rotation2d;
-=======
 import frc.robot.commands.climber_commands.MoveClimberDown;
 import frc.robot.commands.climber_commands.MoveClimberUp;
 import frc.robot.commands.intake_commands.*;
->>>>>>> origin/main
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -42,11 +39,6 @@ import frc.robot.commands.chassis_commands.ToggleLeftHandMode;
 //import frc.robot.commands.climber_commands.ClimberCommandDown;
 //import frc.robot.commands.climber_commands.ClimberCommandUp;
 import frc.robot.commands.intake_commands.ExtendIntake;
-<<<<<<< HEAD
-import frc.robot.commands.intake_commands.RetractIntake;
-import frc.robot.commands.intake_commands.SpinIntakeReject;
-=======
->>>>>>> origin/main
 import frc.robot.commands.shooter_commands.RevAutoShootCommand;
 import frc.robot.commands.shooter_commands.RevShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
@@ -91,7 +83,7 @@ public class RobotContainer {
     public RobotContainer() {
         Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() ->
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                        0.2/*deadzone(xyStick.getX(), Chassis.CONTROLLER_DEADZONE)*/,
+                        deadzone(xyStick.getX(), Chassis.CONTROLLER_DEADZONE),
                         -deadzone(xyStick.getY(), Chassis.CONTROLLER_DEADZONE),
                         -deadzone(zStick.getTwist(), Chassis.CONTROLLER_DEADZONE),
                         Rotation2d.fromDegrees(0)
@@ -109,13 +101,8 @@ public class RobotContainer {
 
         yButton.whenActive(storageGroup);
 
-<<<<<<< HEAD
-        yButton.whenActive(new ExtendIntake());
-        bButton.whenActive(new RevShooterAngleCommand(20));
-=======
         xButton.whenActive(new MoveClimberDown());
         bButton.whenActive(new MoveClimberUp());
->>>>>>> origin/main
 
         lBumper.whenActive(new RetractIntake());
         rBumper.whenActive(new ExtendIntake());
