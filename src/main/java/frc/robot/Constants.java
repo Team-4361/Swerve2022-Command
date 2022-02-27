@@ -37,15 +37,17 @@ public class Constants {
 
     public static class MotorFlip {
         // TODO: May need to be changed later.
-        public final static boolean ACCEPTOR_FLIPPED = true;
+        public final static boolean ACCEPTOR_FLIPPED = false;
         public final static boolean STORAGE_FLIPPED = false;
         public final static boolean SHOOTER_FLIPPED = true;
-        public final static boolean CLIMBER_FLIPPED = false;
+        public static final boolean CLIMBER_RIGHT_FLIPPED = false;
+        public static final boolean CLIMBER_LEFT_FLIPPED = false;
 
         public final static boolean ADJUSTOR_FLIPPED = true;
 
         public final static boolean INTAKE_FLIPPED = true;
-        public final static boolean INTAKE_EXTENDER_FLIPPED = true;
+        public final static boolean INTAKE_EXTENDER_LEFT_FLIPPED = true;
+        public final static boolean INTAKE_EXTENDER_RIGHT_FLIPPED = true;
     }
 
     public static class TestValue {
@@ -187,6 +189,8 @@ public class Constants {
         public static final double SHOOT_SPEED = 1.0;
         public static final double ACCEPT_SPEED = 0.3;
         public static final double SLOW_ACCEPT_SPEED = 0.2;
+
+        public static final double EXTERNAL_ACCEPT_SPEED = 1;
 
         public static final double ADJUSTOR_SPEED = 0.3;
 

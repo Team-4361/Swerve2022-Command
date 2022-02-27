@@ -1,7 +1,7 @@
 package frc.robot.commands.climber_commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.climber.ClimberSubsystem;
 
 import java.util.function.Supplier;
 

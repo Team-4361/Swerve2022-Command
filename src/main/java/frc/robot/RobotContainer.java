@@ -13,13 +13,21 @@ import static frc.robot.Constants.Control.XBOX_X;
 import static frc.robot.Constants.Control.XBOX_Y;
 import static frc.robot.Constants.Control.XY_STICK_ID;
 import static frc.robot.Constants.Control.Z_STICK_ID;
+import static frc.robot.Constants.MotorFlip.SHOOTER_FLIPPED;
+import static frc.robot.Constants.MotorValue.SHOOT_SPEED;
+import static frc.robot.robot_utils.MotorUtil.getMotorValue;
 
+<<<<<<< HEAD
 import edu.wpi.first.math.geometry.Rotation2d;
+=======
+import frc.robot.commands.climber_commands.MoveClimberDown;
+import frc.robot.commands.climber_commands.MoveClimberUp;
+import frc.robot.commands.intake_commands.*;
+>>>>>>> origin/main
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Chassis;
@@ -31,16 +39,18 @@ import frc.robot.commands.chassis_commands.MoveFWDCMD;
 import frc.robot.commands.chassis_commands.MoveLeftCMD;
 import frc.robot.commands.chassis_commands.MoveRightCMD;
 import frc.robot.commands.chassis_commands.ToggleLeftHandMode;
-import frc.robot.commands.climber_commands.MoveClimberDown;
-import frc.robot.commands.climber_commands.MoveClimberUp;
 //import frc.robot.commands.climber_commands.ClimberCommandDown;
 //import frc.robot.commands.climber_commands.ClimberCommandUp;
 import frc.robot.commands.intake_commands.ExtendIntake;
+<<<<<<< HEAD
 import frc.robot.commands.intake_commands.RetractIntake;
 import frc.robot.commands.intake_commands.SpinIntakeReject;
+=======
+>>>>>>> origin/main
 import frc.robot.commands.shooter_commands.RevAutoShootCommand;
 import frc.robot.commands.shooter_commands.RevShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
+import frc.robot.commands.shooter_commands.TimedShooterCommand;
 import frc.robot.commands.storage_commands.ProcessBallCommand;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 
@@ -73,10 +83,10 @@ public class RobotContainer {
             new ShootCMD()
     );
 
-    private final ParallelCommandGroup storageEnableGroup = new ParallelCommandGroup()
-            .alongWith(new ProcessBallCommand())
-            .alongWith(new SpinIntakeReject())
-            .alongWith(new ExtendIntake());
+    private final SequentialCommandGroup storageGroup = new SequentialCommandGroup(
+            new ExtendIntake(),
+            new ProcessBallCommand()
+    );
 
     public RobotContainer() {
         Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() ->
@@ -95,20 +105,22 @@ public class RobotContainer {
         xyButtonFive.whenActive(new ToggleLeftHandMode());
         xyButtonFive.debounce(0.2).whenActive(new CenterShooterToHubCommand());
 
-        aButton.whenHeld(AutoShoot);
-        //bButton.whenHeld(new RevShooterCommand(false));
+        aButton.whenActive(new TimedShooterCommand());
 
-        //yButton.whenActive(new ProcessBallCommand());
+        yButton.whenActive(storageGroup);
 
+<<<<<<< HEAD
         yButton.whenActive(new ExtendIntake());
         bButton.whenActive(new RevShooterAngleCommand(20));
+=======
+        xButton.whenActive(new MoveClimberDown());
+        bButton.whenActive(new MoveClimberUp());
+>>>>>>> origin/main
 
-        xButton.and(aButton).whenActive(storageEnableGroup);
+        lBumper.whenActive(new RetractIntake());
+        rBumper.whenActive(new ExtendIntake());
 
-        // xButton.and(aButton).and(yButton).and(bButton).whenActive(testSwerveDrive);
 
-        lBumper.whenActive(new MoveClimberUp());
-        rBumper.whenActive(new MoveClimberDown());
     }
 
     public Command getAutonomousCommand() {

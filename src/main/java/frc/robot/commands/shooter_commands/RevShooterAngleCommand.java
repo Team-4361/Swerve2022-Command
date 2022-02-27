@@ -6,11 +6,6 @@ import frc.robot.Robot;
 public class RevShooterAngleCommand extends CommandBase {
     private final double runAngle;
 
-    /**
-     * Sets the shooter to a specified angle using a specialized Command.
-     *
-     * @param angle Angle in Degrees to be set to.
-     */
     public RevShooterAngleCommand(double angle) {
         this.runAngle = angle;
 
@@ -24,7 +19,6 @@ public class RevShooterAngleCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        // ± 5 degrees tolerance, can be adjusted later.
         return Robot.adjustor.atDesiredAngle(runAngle, 5);
     }
 }
