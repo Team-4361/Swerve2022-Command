@@ -12,19 +12,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static frc.robot.Constants.Chassis;
+import static frc.robot.Constants.Chassis.*;
 import static frc.robot.Constants.TestValue.DRIVE_ENABLED;
 
 
 public class SwerveChassis implements Drive {
     private static final Translation2d SWERVE_FR_POSITION =
-            new Translation2d(Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2, Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2);
+            new Translation2d(SWERVE_CHASSIS_SIDE_LENGTH / 2, SWERVE_CHASSIS_SIDE_LENGTH / 2);
     private static final Translation2d SWERVE_FL_POSITION =
-            new Translation2d(-Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2, Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2);
+            new Translation2d(-SWERVE_CHASSIS_SIDE_LENGTH / 2, SWERVE_CHASSIS_SIDE_LENGTH / 2);
     private static final Translation2d SWERVE_BR_POSITION =
-            new Translation2d(Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2, -Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2);
+            new Translation2d(SWERVE_CHASSIS_SIDE_LENGTH / 2, -SWERVE_CHASSIS_SIDE_LENGTH / 2);
     private static final Translation2d SWERVE_BL_POSITION =
-            new Translation2d(-Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2, -Chassis.SWERVE_CHASSIS_SIDE_LENGTH / 2);
+            new Translation2d(-SWERVE_CHASSIS_SIDE_LENGTH / 2, -SWERVE_CHASSIS_SIDE_LENGTH / 2);
     private static final SwerveDriveKinematics SWERVE_KINEMATICS =
             new SwerveDriveKinematics(
                     SWERVE_FR_POSITION,
@@ -48,10 +48,10 @@ public class SwerveChassis implements Drive {
 
     public SwerveChassis() {
         this(
-                new SwerveModule(Chassis.FR_DRIVE_ID, Chassis.FR_TURN_ID, Chassis.FR_DIO_ENCODER_PORT, Chassis.FR_OFFSET),
-                new SwerveModule(Chassis.FL_DRIVE_ID, Chassis.FL_TURN_ID, Chassis.FL_DIO_ENCODER_PORT, Chassis.FL_OFFSET),
-                new SwerveModule(Chassis.BR_DRIVE_ID, Chassis.BR_TURN_ID, Chassis.BR_DIO_ENCODER_PORT, Chassis.BR_OFFSET),
-                new SwerveModule(Chassis.BL_DRIVE_ID, Chassis.BL_TURN_ID, Chassis.BL_DIO_ENCODER_PORT, Chassis.BL_OFFSET)
+                new SwerveModule(FR_DRIVE_ID, FR_TURN_ID, FR_DIO_ENCODER_PORT, FR_OFFSET, FR_ERROR_FACTOR),
+                new SwerveModule(FL_DRIVE_ID, FL_TURN_ID, FL_DIO_ENCODER_PORT, FL_OFFSET, FL_ERROR_FACTOR),
+                new SwerveModule(BR_DRIVE_ID, BR_TURN_ID, BR_DIO_ENCODER_PORT, BR_OFFSET, BR_ERROR_FACTOR),
+                new SwerveModule(BL_DRIVE_ID, BL_TURN_ID, BL_DIO_ENCODER_PORT, BL_OFFSET, FL_ERROR_FACTOR)
         );
     }
 

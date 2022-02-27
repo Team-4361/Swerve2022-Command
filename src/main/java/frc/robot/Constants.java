@@ -88,6 +88,11 @@ public class Constants {
 
         public static final double SWERVE_WHEEL_RADIUS = 0.0508;
         public static final double ODOMETRY_MS_INTERVAL = 5;
+
+        public static final double BL_ERROR_FACTOR = 1;
+        public static final double BR_ERROR_FACTOR = 1;
+        public static final double FR_ERROR_FACTOR = 1;
+        public static final double FL_ERROR_FACTOR = 1;
     }
 
     public static class Climber {

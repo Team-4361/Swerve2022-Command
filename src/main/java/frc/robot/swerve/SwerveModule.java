@@ -23,6 +23,8 @@ public class SwerveModule {
     private final RelativeEncoder driveEncoder;
     private final DutyCycleEncoder rotationPWMEncoder;
     private final double offset;
+    
+    private double errorFactor;
 
     private final PIDController turnController = new PIDController(
             0.5,
@@ -34,7 +36,8 @@ public class SwerveModule {
     public SwerveModule(int driveMotorId,
                         int turnMotorId,
                         int digitalEncoderPort,
-                        double offset) {
+                        double offset,
+                        double errorFactor) {
         driveMotor = SparkMaxMotor.brushless(driveMotorId);
         turnMotor = SparkMaxMotor.brushless(turnMotorId);
 
@@ -42,6 +45,7 @@ public class SwerveModule {
         rotationPWMEncoder = new DutyCycleEncoder(digitalEncoderPort);
 
         this.offset = offset;
+        this.errorFactor = errorFactor;
     }
 
 
@@ -65,7 +69,7 @@ public class SwerveModule {
                 state.angle.getRadians()
         );
 
-        driveMotor.setPower(state.speedMetersPerSecond);
+        driveMotor.setPower(state.speedMetersPerSecond* errorFactor);
         turnMotor.setPower(turnPower);
     }
 
@@ -104,4 +108,6 @@ public class SwerveModule {
     public double getDistance() {
         return driveEncoder.getPosition();
     }
+
+    
 }
