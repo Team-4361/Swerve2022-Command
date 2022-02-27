@@ -42,9 +42,6 @@ public class STRAcceptBall extends CommandBase {
                 return Robot.storage.frontProximityCovered();
             case 1:
                 return Robot.storage.rearProximityCovered();
-            case 2:
-                CommandScheduler.getInstance().schedule(new STRRejectBall());
-                return true;
         }
         return false;
     }
