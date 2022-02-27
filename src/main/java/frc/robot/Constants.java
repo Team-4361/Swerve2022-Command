@@ -187,7 +187,7 @@ public class Constants {
     // These values are designed to be changed based on the Motor 
     public static class MotorValue {
         public static final double SHOOT_SPEED = 1.0;
-        public static final double ACCEPT_SPEED = 0.3;
+        public static final double ACCEPT_SPEED = 0.6;
         public static final double SLOW_ACCEPT_SPEED = 0.2;
 
         public static final double EXTERNAL_ACCEPT_SPEED = 1;

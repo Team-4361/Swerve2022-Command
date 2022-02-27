@@ -21,7 +21,8 @@ import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.AngleAdjustSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.storage.AcceptColor;
-import frc.robot.subsystems.storage.StorageSubsystem;
+import frc.robot.subsystems.storage.NewStorageSubsystem;
+
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
@@ -39,7 +40,7 @@ public class Robot extends TimedRobot {
     public static SwerveDriveSubsystem swerveDrive;
     public static Pathfinder pathfinder;
     public static PathfinderSubsystem pathfinderSubsystem;
-    public static StorageSubsystem storage;
+    public static NewStorageSubsystem storage;
     public static ShooterSubsystem shooter;
     public static IntakeSubsystem intake;
     public static ClimberSubsystem climber;
@@ -61,7 +62,7 @@ public class Robot extends TimedRobot {
         pathfinder = swerveDrive.getPathfinder();
         pathfinderSubsystem = new PathfinderSubsystem(pathfinder);
 
-        storage = new StorageSubsystem(INIT_TARGET_COLOR);
+        storage = new NewStorageSubsystem(INIT_TARGET_COLOR);
         shooter = new ShooterSubsystem();
 
         intake = new IntakeSubsystem();

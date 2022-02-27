@@ -19,12 +19,15 @@ import static frc.robot.robot_utils.MotorUtil.getMotorValue;
 
 import frc.robot.commands.climber_commands.MoveClimberDown;
 import frc.robot.commands.climber_commands.MoveClimberUp;
+//import frc.robot.commands.climber_commands.ClimberCommandDown;
+//import frc.robot.commands.climber_commands.ClimberCommandUp;
 import frc.robot.commands.intake_commands.*;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Chassis;
@@ -36,14 +39,15 @@ import frc.robot.commands.chassis_commands.MoveFWDCMD;
 import frc.robot.commands.chassis_commands.MoveLeftCMD;
 import frc.robot.commands.chassis_commands.MoveRightCMD;
 import frc.robot.commands.chassis_commands.ToggleLeftHandMode;
-//import frc.robot.commands.climber_commands.ClimberCommandDown;
-//import frc.robot.commands.climber_commands.ClimberCommandUp;
-import frc.robot.commands.intake_commands.ExtendIntake;
 import frc.robot.commands.shooter_commands.RevAutoShootCommand;
 import frc.robot.commands.shooter_commands.RevShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.shooter_commands.TimedShooterCommand;
-import frc.robot.commands.storage_commands.ProcessBallCommand;
+import frc.robot.commands.storage_commands.SimpleProcessBallCMD;
+import frc.robot.commands.storage_commands.SequentialStorageCMDs.STRDecide;
+import frc.robot.commands.storage_commands.SequentialStorageCMDs.STRExtendIntake;
+import frc.robot.commands.storage_commands.SequentialStorageCMDs.STRSpinIntakeAccept;
+import frc.robot.commands.storage_commands.SequentialStorageCMDs.STRSpinIntakeReject;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 
 public class RobotContainer {
@@ -75,10 +79,17 @@ public class RobotContainer {
             new ShootCMD()
     );
 
-    private final SequentialCommandGroup storageGroup = new SequentialCommandGroup(
-            new ExtendIntake(),
-            new ProcessBallCommand()
-    );
+    // private final SequentialCommandGroup storageGroup = new SequentialCommandGroup(
+    //         new ExtendIntake(),
+    //         new ProcessBallCommand()
+    // );
+
+    private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(new STRExtendIntake(),
+                                                                                     new STRSpinIntakeAccept(),
+                                                                                     new STRDecide(),
+                                                                                     new RetractIntake());
+
+
 
     public RobotContainer() {
         Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() ->
@@ -99,13 +110,13 @@ public class RobotContainer {
 
         aButton.whenActive(new TimedShooterCommand());
 
-        yButton.whenActive(storageGroup);
+        yButton.whenActive(processBallCMD);
 
-        xButton.whenActive(new MoveClimberDown());
-        bButton.whenActive(new MoveClimberUp());
+        xButton.whileHeld(new SimpleProcessBallCMD());
+        
 
-        lBumper.whenActive(new RetractIntake());
-        rBumper.whenActive(new ExtendIntake());
+        lBumper.whenActive(new MoveClimberUp());
+        rBumper.whenActive(new MoveClimberDown());
 
 
     }
