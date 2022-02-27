@@ -1,8 +1,10 @@
 package frc.robot.commands.storage_commands.SequentialStorageCMDs;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Robot;
+import frc.robot.commands.intake_commands.RetractIntake;
+
 import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
 
 public class STRRejectBall extends CommandBase {
@@ -25,6 +27,8 @@ public class STRRejectBall extends CommandBase {
     public void end(boolean interrupted) {
         Robot.intake.stopIntakeGroup();
         Robot.storage.setAcceptorMotor(0);
+
+        CommandScheduler.getInstance().schedule(new RetractIntake());
     }
 
     @Override

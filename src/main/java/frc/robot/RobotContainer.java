@@ -86,8 +86,7 @@ public class RobotContainer {
 
     private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(new STRExtendIntake(),
                                                                                      new STRSpinIntakeAccept(),
-                                                                                     new STRDecide(),
-                                                                                     new RetractIntake());
+                                                                                     new STRDecide());
 
 
 
@@ -117,8 +116,6 @@ public class RobotContainer {
 
         lBumper.whenActive(new MoveClimberUp());
         rBumper.whenActive(new MoveClimberDown());
-
-
     }
 
     public Command getAutonomousCommand() {
