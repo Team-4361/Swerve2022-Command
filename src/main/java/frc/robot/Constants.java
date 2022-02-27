@@ -171,14 +171,14 @@ public class Constants {
 
     //PhotonVision Constants
     public static class ShooterCameraConsts {
-        public static final String CAMERA_NAME = "";
+        public static final String CAMERA_NAME = "RoxShooterCam";
         public static final double CAMERA_HEIGHT = 0.8001;
         public static final double CAMERA_PITCH = Math.PI/4;
         public static final double TAPE_HEIGHT = 2.54;
     }
 
     public static class ChassisCameraConsts {
-        public static final String CAMERA_NAME = "";
+        public static final String CAMERA_NAME = "RoxBallCam";
         public static final double CAMERA_HEIGHT = 0.5715;
         public static final double CAMERA_PITCH = 0.0;
         public static final double BALL_HEIGHT = 0.2413;
