@@ -11,6 +11,9 @@
 *.o
 *.obj
 
+# IDEA Folder Sometimes Causes Issues When Importing
+.idea/
+
 # Precompiled Headers
 *.gch
 *.pch
