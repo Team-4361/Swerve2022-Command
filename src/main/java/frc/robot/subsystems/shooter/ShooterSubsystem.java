@@ -15,7 +15,7 @@ import static frc.robot.Constants.Shooter.SHOOTER_MOTOR_ID;
 public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax shooterMotor;
     private final RelativeEncoder shooterEncoder;
-    private final PIDController shooterController = new PIDController(0, 1, 0);
+    private final PIDController shooterController = new PIDController(0.1, 1, 0);
 
     public ShooterSubsystem() {
 
