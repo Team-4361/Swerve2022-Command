@@ -35,7 +35,7 @@ import frc.robot.commands.chassis_commands.MoveLeftCMD;
 import frc.robot.commands.chassis_commands.MoveRightCMD;
 import frc.robot.commands.chassis_commands.ToggleLeftHandMode;
 import frc.robot.commands.shooter_commands.RevAutoShootCommand;
-import frc.robot.commands.shooter_commands.ShootCMD;
+
 import frc.robot.commands.shooter_commands.TimedShooterCommand;
 import frc.robot.commands.storage_commands.SimpleProcessBallCMD;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageDecision;
@@ -94,7 +94,7 @@ public class RobotContainer {
         xyButtonFive.whenActive(new ToggleLeftHandMode());
         xyButtonFive.debounce(0.2).whenActive(new CenterShooterToHubCommand());
 
-        aButton.whenActive(new ShootCMD());
+        aButton.whenActive(new TimedShooterCommand());
 
         yButton.whenActive(processBallCMD);
 

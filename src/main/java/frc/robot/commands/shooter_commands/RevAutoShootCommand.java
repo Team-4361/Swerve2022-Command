@@ -7,9 +7,8 @@ import java.util.HashMap;
 
 import static frc.robot.Constants.Shooter.SHOOTER_WHEEL_RADIUS;
 
+/** @deprecated Will be removed */
 public class RevAutoShootCommand extends CommandBase {
-
-
     HashMap<String, Double> target;
 
 

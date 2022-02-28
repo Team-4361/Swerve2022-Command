@@ -7,26 +7,28 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.robot_utils.MotorUtil;
+import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
+import static frc.robot.Constants.MotorFlip.SHOOTER_FLIPPED;
 import static frc.robot.Constants.Shooter.SHOOTER_MOTOR_ID;
+import static frc.robot.robot_utils.MotorUtil.getMotorValue;
 
 
 public class ShooterSubsystem extends SubsystemBase {
-    private final CANSparkMax shooterMotor;
+    private final AbstractMotor shooterMotor;
     private final RelativeEncoder shooterEncoder;
     private final PIDController shooterController = new PIDController(0.1, 1, 0);
 
     public ShooterSubsystem() {
+        CANSparkMax shooterSpark = new CANSparkMax(SHOOTER_MOTOR_ID, kBrushless);
+        this.shooterMotor = new AbstractMotor(
+                shooterSpark::set,
+                shooterSpark::get,
+                SHOOTER_FLIPPED
+        );
 
-        this.shooterMotor = new CANSparkMax(SHOOTER_MOTOR_ID, kBrushless);
-
-        this.shooterEncoder = shooterMotor.getEncoder();
-    }
-
-    @Override
-    public void periodic() {
-
+        this.shooterEncoder = shooterSpark.getEncoder();
     }
 
     public double getVelocity() {
@@ -34,7 +36,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setShooterMotor(double val) {
-        MotorUtil.runMotor(shooterMotor, val);
+        shooterMotor.setPower(val);
     }
 
     public int getBallsLoaded() {
@@ -54,19 +56,12 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setShooterVelocity(double speed) {
-        MotorUtil.runMotor(shooterMotor, MathUtil.clamp(shooterController.calculate(getVelocity(), speed), -1.0, 1.0));
-    }
-
-    public void runShooterTimed(double speed, int timeMs) {
-        MotorUtil.runMotorTimed(shooterMotor, speed, timeMs);
+        double velocity = MathUtil.clamp(shooterController.calculate(getVelocity(), speed), -1.0, 1.0);
+        shooterMotor.setPower(velocity);
     }
 
     public void stopShooter() {
-        shooterMotor.set(0);
-    }
-
-    public double getShooterCurrent() {
-        return shooterMotor.getOutputCurrent();
+        shooterMotor.setPower(0);
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
