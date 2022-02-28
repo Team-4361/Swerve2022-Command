@@ -32,7 +32,7 @@ public class RevAutoShootCommand extends CommandBase {
         //Converts from RPM to velocity
         requiredShooterVelocity = (SHOOTER_WHEEL_RADIUS * Math.PI * requiredShooterVelocity) / 30;
 
-        new RevShooterCommand(true, requiredShooterVelocity).execute();
+        //new RevShooterCommand(true, requiredShooterVelocity).execute();
     }
 
     @Override

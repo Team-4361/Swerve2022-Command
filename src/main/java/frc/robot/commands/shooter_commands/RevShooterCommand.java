@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import static frc.robot.Constants.MotorFlip;
 import static frc.robot.Constants.MotorValue;
 
+/** @deprecated Do not use */
 public class RevShooterCommand extends CommandBase {
     private double shooterVelocity, shooterCurrent, autoVelocity = 0;
     private int shootAngle = -1;
