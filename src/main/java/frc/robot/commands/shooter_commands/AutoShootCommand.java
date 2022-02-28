@@ -9,6 +9,10 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import java.util.Map;
 
 import static frc.robot.Constants.Shooter.SHOOTER_WHEEL_RADIUS;
+import static frc.robot.Constants.Shooter.SHOOTER_WHEEL_MASS;
+import static frc.robot.Constants.BALL_MASS;
+import static frc.robot.Constants.BALL_RADIUS;
+
 import static frc.robot.Robot.shooter;
 
 public class AutoShootCommand extends SequentialCommandGroup {
@@ -59,16 +63,26 @@ public class AutoShootCommand extends SequentialCommandGroup {
             end(false);
         }
         
+        
+        /**
+         * 
+         * @param pitchToTarget pitch to target in degrees
+         * @param distanceToTarget distance to target
+         * @param initialHeight initial height of ball launch
+         * @return Return required shooter wheel angular velocity in RPM
+         */
         private static double calculateVelocity(double pitchToTarget,
                                                 double distanceToTarget,
                                                 double initialHeight) {
             pitchToTarget = Math.toRadians(pitchToTarget);
 
-            return (1 / Math.cos(pitchToTarget)) * Math.sqrt((((
-                                Math.pow(distanceToTarget, 2) + 
-                                (2.44 * distanceToTarget) + 1.4884) * 9.80)) 
-                    / (2 * (2.64 - initialHeight - (Math.tan(pitchToTarget) 
-                                * (distanceToTarget + 1.22)))));
+            double requiredLinearVelocity = (1 / Math.cos(pitchToTarget)) * Math.sqrt((((
+                Math.pow(distanceToTarget, 2) + 
+                (2.44 * distanceToTarget) + 1.4884) * 9.80)) 
+                / (2 * (2.64 - initialHeight - (Math.tan(pitchToTarget) 
+                * (distanceToTarget + 1.22)))));
+        
+            return (Math.sqrt( (BALL_MASS*Math.pow(requiredLinearVelocity, 2))/((1/2)*SHOOTER_WHEEL_MASS*Math.pow(SHOOTER_WHEEL_RADIUS, 2) + (2/5)*BALL_MASS*Math.pow(BALL_RADIUS, 2))))/(2*Math.PI);
         }
 
         @Override

@@ -7,6 +7,10 @@ import frc.robot.subsystems.storage.RetractMode;
 // TODO: check all values and make sure they are correct
 public class Constants {
 
+    public static double BALL_MASS = 0;
+    public static double BALL_RADIUS = 0;
+
+
     public static class Control {
         public static final int XY_STICK_ID = 0;
         public static final int Z_STICK_ID = 1;
@@ -138,6 +142,7 @@ public class Constants {
         public static final int SHOOTER_MOTOR_ID = 17;
         public static final double SHOOTER_WHEEL_RADIUS = 0.00619125;
         public static final double DESIRED_RPM = 4800;
+        public static double SHOOTER_WHEEL_MASS = 0;
     }
 
     public static class Storage {
@@ -175,7 +180,7 @@ public class Constants {
 
         public static final double LENGTH_ROD_TO_ANGULAR_POS = 0;
 
-        public static final RetractMode RETRACT_MODE = RetractMode.RETRACT_WHEN_FULL;
+        public static final RetractMode RETRACT_MODE = RetractMode.RETRACT_ALWAYS;
     }
 
     //PhotonVision Constants

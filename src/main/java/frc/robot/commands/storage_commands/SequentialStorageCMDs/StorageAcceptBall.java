@@ -12,7 +12,6 @@ import static frc.robot.robot_utils.MotorUtil.*;
 
 public class StorageAcceptBall extends CommandBase {
     private int ballsLoaded = 0;
-    private int holdStartTime;
 
     @Override
     public void initialize() {
@@ -87,10 +86,6 @@ public class StorageAcceptBall extends CommandBase {
             default:
                 return false;
         }
-    }
-
-    private long elapsedTime(){
-        return System.currentTimeMillis() - holdStartTime;
     }
 }
 
