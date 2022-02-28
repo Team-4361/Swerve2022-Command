@@ -7,10 +7,11 @@ import frc.robot.Robot;
 import static frc.robot.Constants.MotorFlip.ACCEPTOR_FLIPPED;
 import static frc.robot.Constants.MotorFlip.SHOOTER_FLIPPED;
 import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
+import static frc.robot.Constants.MotorValue.SHOOT_SPEED;
 import static frc.robot.Constants.Shooter.DESIRED_RPM;
 import static frc.robot.robot_utils.MotorUtil.getMotorValue;
 
-public class RevSensorShootCommand extends CommandBase {
+public class SensorShootCommand extends CommandBase {
     private double desiredRPM = DESIRED_RPM;
 
     /**
@@ -18,14 +19,14 @@ public class RevSensorShootCommand extends CommandBase {
      *
      * @param desiredRPM The velocity you want to shoot at.
      */
-    public RevSensorShootCommand(double desiredRPM) {
+    public SensorShootCommand(double desiredRPM) {
         this.desiredRPM = desiredRPM;
 
         addRequirements(Robot.shooter, Robot.storage);
     }
 
     /** Initializes the Sensor Shooting Command, with a default RPM from {@link Constants} */
-    public RevSensorShootCommand() {
+    public SensorShootCommand() {
         addRequirements(Robot.shooter, Robot.storage);
     }
 
@@ -34,15 +35,21 @@ public class RevSensorShootCommand extends CommandBase {
     public void execute() {
         // While the rear sensor is still being pressed keep executing the command (there is still a ball inside)
         if (Robot.storage.rearProximityCovered()) {
-            // Constantly run the shooter, even while at the proper RPM. TODO: Add variable speed control
-            Robot.shooter.setShooterMotor(getMotorValue(1.0, SHOOTER_FLIPPED));
+            // Constantly run the shooter, even while at the proper RPM.
+
+            // If the desired RPM has been set, run the motor at the calculated velocity to make sure it
+            // reaches the required speed.
+            if (desiredRPM != DESIRED_RPM) {
+                Robot.shooter.setShooterVelocity(desiredRPM);
+            } else {
+                Robot.shooter.setShooterMotor(SHOOT_SPEED);
+            }
 
             // Only run the rear storage motor when the shooter has reached its target RPM.
             if (Robot.shooter.isDesiredSpeed(this.desiredRPM)) {
                 // Run the storage motor, due to the if statement above it will shut off when the ball leaves.
-                Robot.storage.setStorageMotor(getMotorValue(ACCEPT_SPEED, ACCEPTOR_FLIPPED));
+                Robot.storage.setStorageMotor(ACCEPT_SPEED);
             }
-
         } else {
             end(false);
         }

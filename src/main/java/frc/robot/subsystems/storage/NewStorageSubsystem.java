@@ -8,7 +8,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
 
+import static frc.robot.Constants.MotorFlip.ACCEPTOR_FLIPPED;
+import static frc.robot.Constants.MotorFlip.STORAGE_FLIPPED;
 import static frc.robot.Constants.Storage.*;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
@@ -16,8 +19,7 @@ import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 public class NewStorageSubsystem extends SubsystemBase {
     private final DigitalInput frontProximity, rearProximity;
     private final ColorSensorV3 indexColorSensor;
-    private final CANSparkMax indexerMotor;
-    private final CANSparkMax acceptorMotor;
+    private final AbstractMotor acceptorMotor, storageMotor;
 
     private final AcceptColor acceptColor;
 
@@ -27,13 +29,25 @@ public class NewStorageSubsystem extends SubsystemBase {
     public NewStorageSubsystem(AcceptColor acceptColor) {
         this.acceptColor = acceptColor;
 
-        this.indexerMotor = new CANSparkMax(ACCEPTOR_MOTOR_PORT, kBrushless);
+        CANSparkMax acceptorSpark = new CANSparkMax(ACCEPTOR_MOTOR_PORT, kBrushless);
+        CANSparkMax storageSpark = new CANSparkMax(STORAGE_MOTOR_PORT, kBrushless);
+
         this.frontProximity = new DigitalInput(ACCEPTOR_PHOTO_ELECTRIC_PORT);
         this.rearProximity = new DigitalInput(STORAGE_PHOTO_ELECTRIC_PORT);
 
         this.indexColorSensor = new ColorSensorV3(COLOR_SENSOR_PORT);
 
-        this.acceptorMotor = new CANSparkMax(ACCEPTOR_MOTOR_PORT, kBrushless);
+        this.acceptorMotor = new AbstractMotor(
+                acceptorSpark::set,
+                acceptorSpark::get,
+                ACCEPTOR_FLIPPED
+        );
+
+        this.storageMotor = new AbstractMotor(
+                storageSpark::set,
+                storageSpark::get,
+                STORAGE_FLIPPED
+        );
     }
 
     @Override
@@ -58,11 +72,11 @@ public class NewStorageSubsystem extends SubsystemBase {
     }
 
     public void setAcceptorMotor(double speed) {
-        acceptorMotor.set(speed);
+        acceptorMotor.setPower(speed);
     }
 
     public void setStorageMotor(double speed) {
-        indexerMotor.set(speed);
+        storageMotor.setPower(speed);
     }
 
     public boolean frontProximityCovered() {

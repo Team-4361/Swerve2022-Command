@@ -23,7 +23,7 @@ public class AngleAdjustSubsystem extends SubsystemBase {
         adjustor = SparkMaxMotor.brushless(ADJUSTOR_MOTOR_ID);
         absoluteEncoder = new RotationalAbsoluteEncoder(adjustor.getSpark())
                 .setFlipped(ADJUSTOR_FLIPPED);
-        controller = new PIDController(1 / 90, 0, 0);
+        controller = new PIDController((double) 1 / 90, 0, 0);
         controller.setSetpoint(0.0);
     }
 
