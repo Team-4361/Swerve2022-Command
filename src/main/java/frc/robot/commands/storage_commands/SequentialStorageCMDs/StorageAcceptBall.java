@@ -12,11 +12,13 @@ import static frc.robot.robot_utils.MotorUtil.*;
 
 public class StorageAcceptBall extends CommandBase {
     private int ballsLoaded = 0;
+    private int holdStartTime;
 
     @Override
     public void initialize() {
         addRequirements(Robot.storage);
         ballsLoaded = Robot.storage.getBallsLoaded();
+        System.out.println("Accepting Ball");
     }
 
 
@@ -30,19 +32,21 @@ public class StorageAcceptBall extends CommandBase {
                 if (Robot.storage.frontProximityCovered()) {
                     end(false);
                 }
-
+                System.out.println("Storing 1 ball");
                 // There are no balls loaded currently, it is safe to run both motors.
                 Robot.storage.setAcceptorMotor(getMotorValue(ACCEPT_SPEED, ACCEPTOR_FLIPPED));
                 Robot.storage.setStorageMotor(getMotorValue(ACCEPT_SPEED, STORAGE_FLIPPED));
 
                 break;
             case 1:
+                System.out.println("Storing 2 balls");
                 if (Robot.storage.rearProximityCovered()) {
                     end(false);
                 }
 
                 // There is already a ball loaded, we should only run the front acceptor motor.
                 Robot.storage.setAcceptorMotor(getMotorValue(ACCEPT_SPEED, ACCEPTOR_FLIPPED));
+                Robot.storage.setStorageMotor(getMotorValue(ACCEPT_SPEED, STORAGE_FLIPPED));
 
                 break;
             default:
@@ -83,6 +87,10 @@ public class StorageAcceptBall extends CommandBase {
             default:
                 return false;
         }
+    }
+
+    private long elapsedTime(){
+        return System.currentTimeMillis() - holdStartTime;
     }
 }
 

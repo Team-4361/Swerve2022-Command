@@ -27,13 +27,15 @@ public class NewStorageSubsystem extends SubsystemBase {
     public NewStorageSubsystem(AcceptColor acceptColor) {
         this.acceptColor = acceptColor;
 
-        this.indexerMotor = new CANSparkMax(ACCEPTOR_MOTOR_PORT, kBrushless);
+        this.indexerMotor = new CANSparkMax(STORAGE_MOTOR_PORT, kBrushless);
         this.frontProximity = new DigitalInput(ACCEPTOR_PHOTO_ELECTRIC_PORT);
         this.rearProximity = new DigitalInput(STORAGE_PHOTO_ELECTRIC_PORT);
 
         this.indexColorSensor = new ColorSensorV3(COLOR_SENSOR_PORT);
 
         this.acceptorMotor = new CANSparkMax(ACCEPTOR_MOTOR_PORT, kBrushless);
+
+        this.retractMode = RetractMode.RETRACT_ALWAYS;
     }
 
     @Override
@@ -74,15 +76,14 @@ public class NewStorageSubsystem extends SubsystemBase {
     }
 
     public int getBallsLoaded() {
-        if (rearProximityCovered()) {
-            if (frontProximityCovered()) {
-                return 2;
-            } else {
-                return 1;
-            }
-        } else {
+        if (rearProximityCovered() && frontProximityCovered()){
+            return 2;
+        }else if(frontProximityCovered()){
+            return 1;
+        }else {
             return 0;
         }
+           
     }
 
     public Color getColor() {

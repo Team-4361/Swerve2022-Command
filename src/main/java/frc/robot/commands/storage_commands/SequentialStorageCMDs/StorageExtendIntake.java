@@ -8,6 +8,7 @@ public class StorageExtendIntake extends CommandBase {
     @Override
     public void initialize() {
         addRequirements(Robot.intake);
+        System.out.println("Extending Intake");
     }
 
     @Override

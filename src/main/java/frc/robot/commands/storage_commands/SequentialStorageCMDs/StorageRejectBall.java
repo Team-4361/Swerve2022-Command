@@ -17,6 +17,7 @@ public class StorageRejectBall extends CommandBase {
     public void initialize() {
         timeStarted = System.currentTimeMillis();
         addRequirements(Robot.intake, Robot.storage);
+        System.out.println("Rejecting Ball");
     }
 
     @Override

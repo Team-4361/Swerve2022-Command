@@ -11,15 +11,17 @@ public class StorageDecision extends CommandBase {
      */
     @Override
     public void initialize() {
-        StorageTask selectedTask = Robot.storage.getNextTask();
+        StorageTask selectedTask = Robot.storage.getDetectedTask();
 
         // If any of these are true, the task has ended early or has been interrupted, so we should not continue.
-        assert selectedTask != null && selectedTask != StorageTask.NEUTRAL;
-
+        //assert selectedTask != null && selectedTask != StorageTask.NEUTRAL;
+        System.out.println("Making Decision");
         if (selectedTask == StorageTask.ACCEPT) {
             // The acceptance task has been selected, run the STRAcceptBall command.
+            System.out.println("Schedueling Accept");
             new StorageAcceptBall().schedule();
         } else if (selectedTask == StorageTask.REJECT) {
+            System.out.println("Schedueling Reject");
             new StorageRejectBall().schedule();
         }
 
@@ -33,6 +35,6 @@ public class StorageDecision extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Robot.storage.getNextTask() == null;
+        return true;
     }
 }

@@ -94,7 +94,7 @@ public class RobotContainer {
         xyButtonFive.whenActive(new ToggleLeftHandMode());
         xyButtonFive.debounce(0.2).whenActive(new CenterShooterToHubCommand());
 
-        aButton.whenActive(new TimedShooterCommand());
+        aButton.whenActive(new ShootCMD());
 
         yButton.whenActive(processBallCMD);
 
@@ -111,7 +111,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand(PathfinderSubsystem pathfinderSubsystem) {
-        return new TestAutonomous(pathfinderSubsystem);
+        return (Command) new TestAutonomous(pathfinderSubsystem);
     }
 
     public SequentialCommandGroup getAutoShoot() {
