@@ -34,8 +34,8 @@ import frc.robot.commands.chassis_commands.MoveFWDCMD;
 import frc.robot.commands.chassis_commands.MoveLeftCMD;
 import frc.robot.commands.chassis_commands.MoveRightCMD;
 import frc.robot.commands.chassis_commands.ToggleLeftHandMode;
-import frc.robot.commands.shooter_commands.RevAutoShootCommand;
-
+import frc.robot.commands.shooter_commands.AutoShootCommand;
+import frc.robot.commands.shooter_commands.SensorShootCommand;
 import frc.robot.commands.shooter_commands.TimedShooterCommand;
 import frc.robot.commands.storage_commands.SimpleProcessBallCMD;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageDecision;
@@ -68,8 +68,7 @@ public class RobotContainer {
 
     private final SequentialCommandGroup AutoShoot = new SequentialCommandGroup(
             new CenterShooterToHubCommand(),
-            new RevAutoShootCommand(),
-            new ShootCMD()
+            new AutoShootCommand()
     );
 
     private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(new StorageExtendIntake(),
@@ -94,7 +93,7 @@ public class RobotContainer {
         xyButtonFive.whenActive(new ToggleLeftHandMode());
         xyButtonFive.debounce(0.2).whenActive(new CenterShooterToHubCommand());
 
-        aButton.whenActive(new TimedShooterCommand());
+        aButton.whenActive(new SensorShootCommand());
 
         yButton.whenActive(processBallCMD);
 
@@ -115,7 +114,7 @@ public class RobotContainer {
     }
 
     public SequentialCommandGroup getAutoShoot() {
-        return new SequentialCommandGroup(new CenterShooterToHubCommand(), new RevAutoShootCommand());
+        return new SequentialCommandGroup(new CenterShooterToHubCommand(), new AutoShootCommand());
     }
 
     public double deadzone(double value, double deadzone) {
