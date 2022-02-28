@@ -7,20 +7,22 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 
 import static frc.robot.Constants.Storage.*;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 
-public class NewStorageSubsystem extends SubsystemBase{
+public class NewStorageSubsystem extends SubsystemBase {
     private final DigitalInput frontProximity, rearProximity;
     private final ColorSensorV3 indexColorSensor;
-    private CANSparkMax indexerMotor, acceptorMotor;
+    private final CANSparkMax indexerMotor;
+    private final CANSparkMax acceptorMotor;
 
     private final AcceptColor acceptColor;
 
-    private int ballsLoaded = 0;
-    private AcceptColor currentColor;
+    private StorageTask nextTask;
+    private RetractMode retractMode;
 
     public NewStorageSubsystem(AcceptColor acceptColor) {
         this.acceptColor = acceptColor;
@@ -31,27 +33,16 @@ public class NewStorageSubsystem extends SubsystemBase{
 
         this.indexColorSensor = new ColorSensorV3(COLOR_SENSOR_PORT);
 
-        this.indexerMotor = new CANSparkMax(STORAGE_MOTOR_PORT, kBrushless);
         this.acceptorMotor = new CANSparkMax(ACCEPTOR_MOTOR_PORT, kBrushless);
     }
 
     @Override
     public void periodic() {
         updateSensors();
-
-        if (rearProximityCovered()) {
-            if (frontProximityCovered()) {
-                ballsLoaded = 2;
-            } else {
-                ballsLoaded = 1;
-            }
-        } else {
-            ballsLoaded = 0;
-        }
     }
 
     public void updateSensors() {
-        int colorProximity  = indexColorSensor.getProximity();
+        int colorProximity = indexColorSensor.getProximity();
         Color color = indexColorSensor.getColor();
 
         SmartDashboard.putNumber("Storage: Red", color.red);
@@ -63,14 +54,14 @@ public class NewStorageSubsystem extends SubsystemBase{
         SmartDashboard.putBoolean("Storage: Acceptor Loaded", frontProximityCovered());
         SmartDashboard.putBoolean("Storage: Storage Loaded", rearProximityCovered());
 
-        SmartDashboard.putNumber("Storage: Balls Loaded", ballsLoaded);
+        SmartDashboard.putNumber("Storage: Balls Loaded", getBallsLoaded());
     }
 
-    public void setAcceptorMotor(double speed){
+    public void setAcceptorMotor(double speed) {
         acceptorMotor.set(speed);
     }
 
-    public void setStorageMotor(double speed){
+    public void setStorageMotor(double speed) {
         indexerMotor.set(speed);
     }
 
@@ -83,27 +74,100 @@ public class NewStorageSubsystem extends SubsystemBase{
     }
 
     public int getBallsLoaded() {
-        return ballsLoaded;
+        if (rearProximityCovered()) {
+            if (frontProximityCovered()) {
+                return 2;
+            } else {
+                return 1;
+            }
+        } else {
+            return 0;
+        }
     }
 
-    public Color getColor(){
+    public Color getColor() {
         return indexColorSensor.getColor();
     }
 
-    public int getProximity(){
+    public int getProximity() {
         return indexColorSensor.getProximity();
     }
 
-    public void setCurrentColor(AcceptColor color){
-        currentColor = color;
+    /**
+     * @return Based off the target color, and what is currently detected, return {@link StorageTask#ACCEPT},
+     * {@link StorageTask#REJECT}, or {@link StorageTask#NEUTRAL} if nothing should be done.
+     */
+    public StorageTask getDetectedTask() {
+        if (Robot.storage.getProximity() >= PROXIMITY_THRESHOLD) {
+            Color detectedColor = getColor();
+
+            switch (getAcceptColor()) {
+                case BLUE:
+                    if (detectedColor.blue > BLUE_THRESHOLD) {
+                        return StorageTask.ACCEPT;
+                    } else if (detectedColor.red > RED_THRESHOLD) {
+                        return StorageTask.REJECT;
+                    } else {
+                        return StorageTask.NEUTRAL;
+                    }
+
+                case RED:
+                    if (detectedColor.red > RED_THRESHOLD) {
+                        return StorageTask.ACCEPT;
+                    } else if (detectedColor.blue > BLUE_THRESHOLD) {
+                        return StorageTask.REJECT;
+                    } else {
+                        return StorageTask.NEUTRAL;
+                    }
+
+                default:
+                    return StorageTask.NEUTRAL;
+            }
+        } else {
+            return StorageTask.NEUTRAL;
+        }
     }
 
-    public AcceptColor getCurrentColor(){
-        return currentColor;
+    /**
+     * Sets the next task that should be executed, used for when the proper value is received. This is
+     * designed to be used in another CommandBase.
+     *
+     * @param task The {@link StorageTask} to be used.
+     */
+    public void setNextTask(StorageTask task) {
+        this.nextTask = task;
     }
 
-    public AcceptColor getAcceptColor(){
+    /** @return The next {@link StorageTask} that should be used, and resets the original. */
+    public StorageTask getNextTask() {
+        StorageTask taskBuffer = this.nextTask;
+        this.nextTask = null;
+
+        return taskBuffer;
+    }
+
+    /**
+     * Sets the retraction mode, used for after a Storage command cycle has ended, on the conditions
+     * the intake should be retracted.
+     *
+     * @param mode The {@link RetractMode} to use for the Intake.
+     */
+    public void setRetractMode(RetractMode mode) {
+        this.retractMode = mode;
+    }
+
+    /** @return Retract Mode */
+    public RetractMode getRetractMode() {
+        return this.retractMode;
+    }
+
+    /** @return Returns the {@link AcceptColor}. Either {@link AcceptColor#RED}, or {@link AcceptColor#BLUE} */
+    public AcceptColor getAcceptColor() {
         return this.acceptColor;
     }
 
+    /** @return If there are the maximum amount of balls stored (2) */
+    public boolean isFull() {
+        return getBallsLoaded() == 2;
+    }
 }

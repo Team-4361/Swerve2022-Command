@@ -4,6 +4,12 @@ public enum StorageTask {
     /** Accept Task */
     ACCEPT,
 
-    /** Deny Task */
-    DENY;
+    /** Reject Task */
+    REJECT,
+
+    /**
+     * Neutral Task, returned when nothing should be done.
+     * @see NewStorageSubsystem#getDetectedTask()
+     */
+    NEUTRAL
 }

@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 import static frc.robot.Constants.MotorFlip.SHOOTER_FLIPPED;
 import static frc.robot.Constants.MotorFlip.STORAGE_FLIPPED;
 import static frc.robot.Constants.MotorValue.SHOOT_SPEED;
-import static frc.robot.Constants.MotorValue.SLOW_ACCEPT_SPEED;
 import static frc.robot.robot_utils.MotorUtil.getMotorValue;
 
 public class TimedShooterCommand extends CommandBase {

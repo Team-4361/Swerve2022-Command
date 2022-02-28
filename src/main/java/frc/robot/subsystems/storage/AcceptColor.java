@@ -5,5 +5,5 @@ public enum AcceptColor {
     RED,
 
     /** Accept the BLUE Color */
-    BLUE;
+    BLUE
 }

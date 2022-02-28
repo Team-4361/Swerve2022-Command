@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.I2C;
 import frc.robot.robot_utils.TestUtil;
+import frc.robot.subsystems.storage.RetractMode;
 
 // TODO: check all values and make sure they are correct
 public class Constants {
@@ -172,6 +173,8 @@ public class Constants {
         public static final int STORAGE_TIMEOUT = 3000;
 
         public static final double LENGTH_ROD_TO_ANGULAR_POS = 0;
+
+        public static final RetractMode RETRACT_MODE = RetractMode.RETRACT_WHEN_FULL;
     }
 
     //PhotonVision Constants

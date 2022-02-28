@@ -82,7 +82,7 @@ public class ShooterCamera {
      * Distance, Yaw, Pitch are they key for this information
      */
     public HashMap<String, Double> getTargetGoal() {
-        HashMap<String, Double> goalInfo = new HashMap<String, Double>();
+        HashMap<String, Double> goalInfo = new HashMap<>();
         PhotonTrackedTarget trackedTarget = getBestTarget();
 
         if (trackedTarget == null) {

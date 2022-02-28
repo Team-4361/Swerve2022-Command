@@ -5,17 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8304b6b5-06b2-478c-b0eb-99a8454e362b" name="Changes" comment="adjust motor maybe fixed">
-      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/shooter_commands/TimedShooterCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/storage_commands/SequentialStorageCMDs/IntakeProcessAccept.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/storage_commands/SequentialStorageCMDs/StorageAcceptBall.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/storage_commands/SequentialStorageCMDs/StorageDecision.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/storage/RetractMode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/storage_commands/ProcessBallCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/storage_commands/ProcessBallCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/shooter/ShooterSubsystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/shooter/ShooterSubsystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/storage/StorageSubsystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/storage/StorageSubsystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/shooter_commands/TimedShooterCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/shooter_commands/TimedShooterCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/storage_commands/SequentialStorageCMDs/STRAcceptBall.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/storage_commands/SequentialStorageCMDs/STRDecide.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/storage_commands/SequentialStorageCMDs/STRExtendIntake.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/storage_commands/SequentialStorageCMDs/StorageExtendIntake.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/storage_commands/SequentialStorageCMDs/STRRejectBall.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/storage_commands/SequentialStorageCMDs/StorageRejectBall.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/storage_commands/SequentialStorageCMDs/STRRetractIntake.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/storage_commands/SequentialStorageCMDs/STRSpinIntakeAccept.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/storage_commands/SequentialStorageCMDs/STRSpinIntakeReject.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/robot_utils/ChassisCamera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/robot_utils/ChassisCamera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/robot_utils/ShooterCamera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/robot_utils/ShooterCamera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/robot_utils/encoder/RotationalAbsoluteEncoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/robot_utils/encoder/RotationalAbsoluteEncoder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/storage/AcceptColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/storage/AcceptColor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/storage/NewStorageSubsystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/storage/NewStorageSubsystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/storage/StorageTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/storage/StorageTask.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -50,9 +72,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="Interface" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -72,6 +94,9 @@
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
   </component>
   <component name="ProjectId" id="24hkiOwLo8shPg7GKMC3a7m1Ed9" />
   <component name="ProjectViewState">

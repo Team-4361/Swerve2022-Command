@@ -3,8 +3,6 @@ package frc.robot.robot_utils.encoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
-import static frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder.*;
-
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public class RotationalAbsoluteEncoder {
 
@@ -103,12 +101,11 @@ public class RotationalAbsoluteEncoder {
     }
 
     // Resets everything to zero for calibration.
-    public RotationalAbsoluteEncoder resetZero() {
+    public void resetZero() {
         absoluteRotations = 0;
         relativeRotations = 0;
         velocity = 0;
 
-        return this;
     }
 
 
