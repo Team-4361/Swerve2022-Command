@@ -4,20 +4,6 @@
 
 package frc.robot;
 
-import static frc.robot.Constants.Control.CONTROLLER_ID;
-import static frc.robot.Constants.Control.XBOX_A;
-import static frc.robot.Constants.Control.XBOX_B;
-import static frc.robot.Constants.Control.XBOX_LEFT_TRIGGER;
-import static frc.robot.Constants.Control.XBOX_RIGHT_TRIGGER;
-import static frc.robot.Constants.Control.XBOX_X;
-import static frc.robot.Constants.Control.XBOX_Y;
-import static frc.robot.Constants.Control.XY_STICK_ID;
-import static frc.robot.Constants.Control.Z_STICK_ID;
-
-import frc.robot.commands.climber_commands.MoveClimberDown;
-import frc.robot.commands.climber_commands.MoveClimberUp;
-//import frc.robot.commands.climber_commands.ClimberCommandDown;
-//import frc.robot.commands.climber_commands.ClimberCommandUp;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
@@ -27,21 +13,18 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Chassis;
 import frc.robot.commands.autonomous_commands.TestAutonomous;
-import frc.robot.commands.chassis_commands.ArcadeCommand;
-import frc.robot.commands.chassis_commands.CenterShooterToHubCommand;
-import frc.robot.commands.chassis_commands.MoveBCKCMD;
-import frc.robot.commands.chassis_commands.MoveFWDCMD;
-import frc.robot.commands.chassis_commands.MoveLeftCMD;
-import frc.robot.commands.chassis_commands.MoveRightCMD;
-import frc.robot.commands.chassis_commands.ToggleLeftHandMode;
-import frc.robot.commands.shooter_commands.RevAutoShootCommand;
-
+import frc.robot.commands.chassis_commands.*;
+import frc.robot.commands.climber_commands.MoveClimberDown;
+import frc.robot.commands.climber_commands.MoveClimberUp;
+import frc.robot.commands.shooter_commands.AutoShootCommand;
 import frc.robot.commands.shooter_commands.TimedShooterCommand;
-import frc.robot.commands.storage_commands.SimpleProcessBallCMD;
+import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageDecision;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageExtendIntake;
-import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
+import frc.robot.commands.storage_commands.SimpleProcessBallCMD;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
+
+import static frc.robot.Constants.Control.*;
 
 public class RobotContainer {
 
@@ -66,10 +49,10 @@ public class RobotContainer {
             new MoveBCKCMD()
     );
 
-    private final SequentialCommandGroup AutoShoot = new SequentialCommandGroup(
+    // TODO: may need to add/remove commands from this group.
+    private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
             new CenterShooterToHubCommand(),
-            new RevAutoShootCommand(),
-            new ShootCMD()
+            new AutoShootCommand()
     );
 
     private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(new StorageExtendIntake(),
@@ -114,8 +97,8 @@ public class RobotContainer {
         return (Command) new TestAutonomous(pathfinderSubsystem);
     }
 
-    public SequentialCommandGroup getAutoShoot() {
-        return new SequentialCommandGroup(new CenterShooterToHubCommand(), new RevAutoShootCommand());
+    public SequentialCommandGroup getAutoShootGroup() {
+        return autoShootGroup;
     }
 
     public double deadzone(double value, double deadzone) {
