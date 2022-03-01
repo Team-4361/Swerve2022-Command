@@ -14,7 +14,7 @@ public class StorageExtendIntake extends CommandBase {
     @Override
     public void execute() {
         // This runs repeatedly until the command is ended.
-        if (!Robot.intake.isFrontSwitchPressed()) {
+        if (!Robot.intake.isFrontSwitchPressed() && Robot.intake.getAveragePosition() < 1) {
             // While the front switch is not pressed, keep running the Intake Extender Motor out.
             Robot.intake.extendIntake();
         } else {
@@ -32,6 +32,6 @@ public class StorageExtendIntake extends CommandBase {
     @Override
     public boolean isFinished() {
         // Will be finished when the front switch is pressed, meaning all the way extended.
-        return Robot.intake.isFrontSwitchPressed();
+        return Robot.intake.isFrontSwitchPressed() && Robot.intake.getAveragePosition() > 1;
     }
 }

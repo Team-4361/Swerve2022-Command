@@ -7,8 +7,8 @@ import frc.robot.subsystems.storage.RetractMode;
 // TODO: check all values and make sure they are correct
 public class Constants {
 
-    public static double BALL_MASS = 0;
-    public static double BALL_RADIUS = 0;
+    public static double BALL_MASS = 0.2676195;
+    public static double BALL_RADIUS = 0.2413;
 
 
     public static class Control {
@@ -201,7 +201,7 @@ public class Constants {
     // These values are designed to be changed based on the Motor 
     public static class MotorValue {
         public static final double SHOOT_SPEED = 1.0;
-        public static final double ACCEPT_SPEED = 0.6;
+        public static final double ACCEPT_SPEED = 0.1;
         public static final double SLOW_ACCEPT_SPEED = 0.2;
 
         public static final double EXTERNAL_ACCEPT_SPEED = 1;
