@@ -52,11 +52,11 @@ public class RobotContainer {
             new MoveBCKCMD()
     );
 
-    // // TODO: may need to add/remove commands from this group.
-    // private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
-    //         new CenterShooterToHubCommand(),
-    //         new AutoShootCommand()
-    // );
+    // TODO: may need to add/remove commands from this group.
+    private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
+            new CenterShooterToHubCommand(),
+            new AutoShootCommand()
+    );
 
     private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(new StorageExtendIntake(),
             new IntakeProcessAccept(),
@@ -99,9 +99,9 @@ public class RobotContainer {
         return (Command) new TestAutonomous(pathfinderSubsystem);
     }
 
-    // public SequentialCommandGroup getAutoShootGroup() {
-    //     return autoShootGroup;
-    // }
+    public SequentialCommandGroup getAutoShootGroup() {
+        return autoShootGroup;
+    }
 
     public double deadzone(double value, double deadzone) {
         return Math.abs(value) > deadzone ? value : 0;

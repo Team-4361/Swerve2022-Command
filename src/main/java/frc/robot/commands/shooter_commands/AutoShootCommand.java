@@ -10,6 +10,7 @@ import java.util.Map;
 
 import static frc.robot.Constants.Shooter.SHOOTER_WHEEL_RADIUS;
 import static frc.robot.Constants.Shooter.SHOOTER_WHEEL_MASS;
+import static frc.robot.Constants.Shooter.SHOOTER_HEIGHT;
 import static frc.robot.Constants.BALL_MASS;
 import static frc.robot.Constants.BALL_RADIUS;
 
@@ -46,11 +47,11 @@ public class AutoShootCommand extends SequentialCommandGroup {
         private final double requiredVelocity;
 
         public ShootBallCommand(Map<String, Double> map) {
-            this.requiredVelocity = (calculateVelocity(
+            this.requiredVelocity = calculateVelocity(
                     map.get("Pitch"),
                     map.get("Distance"),
-                    map.get("Yaw")
-            ) * SHOOTER_WHEEL_RADIUS * Math.PI) / 30;
+                    SHOOTER_HEIGHT
+            );
 
             addRequirements(shooter);
         }

@@ -140,9 +140,11 @@ public class Constants {
 
     public static class Shooter {
         public static final int SHOOTER_MOTOR_ID = 17;
-        public static final double SHOOTER_WHEEL_RADIUS = 0.00619125;
+        public static final double SHOOTER_WHEEL_RADIUS = 0.0889;
         public static final double DESIRED_RPM = 4800;
-        public static double SHOOTER_WHEEL_MASS = 0;
+        //In KG
+        public static double SHOOTER_WHEEL_MASS = 0.603844;
+        public static double SHOOTER_HEIGHT = 0;
     }
 
     public static class Storage {
