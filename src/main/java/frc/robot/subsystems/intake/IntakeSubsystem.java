@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorFlip;
 import frc.robot.Constants.MotorValue;
-import frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder;
+import frc.robot.robot_utils.encoder.ConcurrentRotationalEncoder;
 import me.wobblyyyy.pathfinder2.math.Average;
 import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
@@ -21,8 +21,8 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     private final Motor extender;
     private final Motor intakeMotor;
 
-    private final RotationalAbsoluteEncoder leftEncoder;
-    private final RotationalAbsoluteEncoder rightEncoder;
+    private final ConcurrentRotationalEncoder leftEncoder;
+    private final ConcurrentRotationalEncoder rightEncoder;
 
     private final DigitalInput flLimit;
     private final DigitalInput frLimit;
@@ -30,13 +30,9 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     private final DigitalInput brLimit;
 
     public IntakeSubsystem() {
-        CANSparkMax leftSpark =
-                new CANSparkMax(L_INTAKE_EXTEND_ID, kBrushless);
-        CANSparkMax rightSpark =
-                new CANSparkMax(R_INTAKE_EXTEND_ID, kBrushless);
-        CANSparkMax intakeSpark =
-                new CANSparkMax(INTAKE_SPIN_MOTOR_ID, kBrushless);
-
+        CANSparkMax leftSpark = new CANSparkMax(L_INTAKE_EXTEND_ID, kBrushless);
+        CANSparkMax rightSpark = new CANSparkMax(R_INTAKE_EXTEND_ID, kBrushless);
+        CANSparkMax intakeSpark = new CANSparkMax(INTAKE_SPIN_MOTOR_ID, kBrushless);
         sparks = new CANSparkMax[]{leftSpark, rightSpark, intakeSpark};
 
         extender = new MultiMotor(
@@ -57,13 +53,8 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
                 MotorFlip.INTAKE_FLIPPED
         );
 
-        leftEncoder = new RotationalAbsoluteEncoder(leftSpark)
-                .setAccuracyFactor(5)
-                .setFlipped(MotorFlip.INTAKE_FLIPPED);
-
-        rightEncoder = new RotationalAbsoluteEncoder(rightSpark)
-                .setAccuracyFactor(5)
-                .setFlipped(MotorFlip.INTAKE_FLIPPED);
+        leftEncoder = new ConcurrentRotationalEncoder(leftSpark).setFlipped(MotorFlip.INTAKE_FLIPPED);
+        rightEncoder = new ConcurrentRotationalEncoder(rightSpark).setFlipped(MotorFlip.INTAKE_FLIPPED);
 
         // TODO: Not sure if these are reversed or not, needs testing, assuming
         // TODO: front is towards the robot's front, extended from chassis, and back
@@ -76,8 +67,8 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Back Switch Pressed:", isRearSwitchPressed());
-        SmartDashboard.putBoolean("Front Switch Pressed:", isFrontSwitchPressed());
+        SmartDashboard.putBoolean("Back Switch Pressed:", isRetracted());
+        SmartDashboard.putBoolean("Front Switch Pressed:", isExtended());
 
         SmartDashboard.putNumber("Left Intake Position", getLeftPosition());
         SmartDashboard.putNumber("Right Intake Position", getRightPosition());
@@ -85,8 +76,8 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         SmartDashboard.putNumber("Intake Position Average", getAveragePosition());
 
         // Update the encoders
-        leftEncoder.update();
-        rightEncoder.update();
+        leftEncoder.periodic();
+        rightEncoder.periodic();
     }
 
     public void extendIntake() {
@@ -97,17 +88,25 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         translateExtender(-MotorValue.ACCEPT_SPEED);
     }
 
+    public void extendIntake(double speed) {
+        translateExtender(speed);
+    }
+
+    public void retractIntake(double speed) {
+        translateExtender(-speed);
+    }
+
     /**
      * @return If both front switches are being pressed in
      */
-    public boolean isFrontSwitchPressed() {
+    public boolean isExtended() {
         return flLimit.get() && frLimit.get();
     }
 
     /**
      * @return If both rear switches are being pressed in
      */
-    public boolean isRearSwitchPressed() {
+    public boolean isRetracted() {
         return blLimit.get() && brLimit.get();
     }
 
@@ -138,6 +137,11 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
 
     public double getAveragePosition() {
         return Average.of(getLeftPosition(), getRightPosition());
+    }
+
+    public void resetEncoders() {
+        this.leftEncoder.reset();
+        this.rightEncoder.reset();
     }
 
     @Override

@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.ChassisCameraConsts;
 import frc.robot.Constants.ShooterCameraConsts;
+import frc.robot.commands.intake_commands.CalibrateIntake;
+import frc.robot.commands.intake_commands.RetractIntakeLimit;
 import frc.robot.commands.test_commands.ChassisForwardOffsetTest;
 import frc.robot.commands.test_commands.ChassisOffsetTest;
 import frc.robot.commands.test_commands.ShooterAngleTest;
@@ -82,6 +84,9 @@ public class Robot extends TimedRobot {
         //Cameras
         chassisCamera = new ChassisCamera("RoxBallCam", ChassisCameraConsts.CAMERA_HEIGHT, ChassisCameraConsts.CAMERA_PITCH, INIT_TARGET_COLOR);
         shooterCamera = new ShooterCamera("RoxShooterCam", ShooterCameraConsts.CAMERA_HEIGHT, ShooterCameraConsts.CAMERA_PITCH);
+
+        // Run retract intake command (not sure if this is how it really works)
+        new CalibrateIntake().schedule();
     }
 
 

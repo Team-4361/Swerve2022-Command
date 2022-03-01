@@ -63,8 +63,7 @@ public class AutoShootCommand extends SequentialCommandGroup {
 
             end(false);
         }
-        
-        
+
         /**
          * 
          * @param pitchToTarget pitch to target in degrees

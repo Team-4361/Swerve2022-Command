@@ -32,10 +32,10 @@ public class ClimberSubsystem extends SubsystemBase {
 
     private final CANSparkMax[] climberGroup = new CANSparkMax[]{leftClimberMTR, rightClimberMTR};
 
-    private final RotationalAbsoluteEncoder leftEncoder = new RotationalAbsoluteEncoder(leftClimberMTR)
+    private final ConcurrentRotationalEncoder leftEncoder = new ConcurrentRotationalEncoder(leftClimberMTR)
             .setFlipped(MotorFlip.CLIMBER_LEFT_FLIPPED);
 
-    public final RotationalAbsoluteEncoder rightEncoder = new RotationalAbsoluteEncoder(rightClimberMTR)
+    public final ConcurrentRotationalEncoder rightEncoder = new ConcurrentRotationalEncoder(rightClimberMTR)
             .setFlipped(MotorFlip.CLIMBER_RIGHT_FLIPPED);
 
     public ClimberSubsystem() {
@@ -55,13 +55,13 @@ public class ClimberSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("tl switch:", tlSwitch.get());
         SmartDashboard.putBoolean("tr switch:", trSwitch.get());
 
-        leftEncoder.update();
-        rightEncoder.update();
+        leftEncoder.periodic();
+        rightEncoder.periodic();
     }
 
     public void zero() {
-        leftEncoder.resetZero();
-        rightEncoder.resetZero();
+        leftEncoder.reset();
+        rightEncoder.reset();
     }
 
     public void stopClimber() {stopMotors(climberGroup);}

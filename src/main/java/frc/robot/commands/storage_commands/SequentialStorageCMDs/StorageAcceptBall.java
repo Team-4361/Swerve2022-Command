@@ -2,7 +2,7 @@ package frc.robot.commands.storage_commands.SequentialStorageCMDs;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.commands.intake_commands.RetractIntake;
+import frc.robot.commands.intake_commands.RetractIntakeLimit;
 
 import static frc.robot.Constants.MotorFlip.ACCEPTOR_FLIPPED;
 import static frc.robot.Constants.MotorFlip.STORAGE_FLIPPED;
@@ -62,12 +62,12 @@ public class StorageAcceptBall extends CommandBase {
 
         switch (Robot.storage.getRetractMode()) {
             case RETRACT_ALWAYS:
-                new RetractIntake().schedule();
+                new RetractIntakeLimit().schedule();
                 break;
 
             case RETRACT_WHEN_FULL:
                 if (Robot.storage.isFull()) {
-                    new RetractIntake().schedule();
+                    new RetractIntakeLimit().schedule();
                 }
                 break;
 

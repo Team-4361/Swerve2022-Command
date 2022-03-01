@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+@Deprecated(forRemoval = true)
 public class RotationalAbsoluteEncoder {
 
     protected static CANSparkMax canMotor;

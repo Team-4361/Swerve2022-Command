@@ -126,9 +126,19 @@ public class Constants {
         public static final int L_INTAKE_EXTEND_ID = 12;
         public static final int R_INTAKE_EXTEND_ID = 11;
 
-        public static final double INTAKE_EXTEND_ROTATIONS = 20;
+        // TODO: find correct rotations that you want, subtract from total rotations
+        public static final double INTAKE_TOTAL_EXTEND_ROTATIONS = 20;
+
+
+        // TODO: this is the amount subtracted from INTAKE_TOTAL_EXTEND_ROTATIONS and is used for
+        // TODO: the amount to use from zero when retracting
+        public static final double INTAKE_ROTATION_BUFFER = 10;
 
         public static final boolean LIMIT_SWITCH_ENABLED = true;
+
+        /** Gives you some time to react before switching modes, disable
+         * when you know it works. */
+        public static final boolean TEST_SAFETY_ENABLED = true;
     }
 
     public static class ShooterAdjustor {
