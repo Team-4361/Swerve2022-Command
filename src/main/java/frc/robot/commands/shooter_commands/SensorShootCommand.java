@@ -30,8 +30,6 @@ public class SensorShootCommand extends CommandBase {
         addRequirements(Robot.shooter, Robot.storage);
     }
 
-    
-
     /** Executes the Shooter Command */
     @Override
     public void execute() {

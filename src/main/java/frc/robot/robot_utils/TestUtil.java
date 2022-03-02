@@ -10,7 +10,7 @@ public class TestUtil {
     private TestMode currentTestMode;
 
     public enum TestMode {
-        CHASSIS_DRIVE_TEST, CHASSIS_OFFSET_ADJUSTMENT, SHOOTER_ANGLE_TEST
+        CHASSIS_DRIVE_TEST, CHASSIS_OFFSET_ADJUSTMENT, SHOOTER_ANGLE_TEST, INTAKE_ROTATION_TEST
     }
 
     public TestUtil setTestMode(TestMode mode) {

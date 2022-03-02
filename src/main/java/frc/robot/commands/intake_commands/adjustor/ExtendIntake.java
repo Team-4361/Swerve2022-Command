@@ -1,22 +1,21 @@
-package frc.robot.commands.intake_commands;
+package frc.robot.commands.intake_commands.adjustor;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.robot_utils.encoder.ConcurrentRotationalEncoder;
 
 import static frc.robot.Constants.Intake.*;
 import static frc.robot.Constants.MotorValue.ADJUSTOR_SPEED;
 
 /**
- * This is designed to be used for normal use of retracting the intake. This works by
- * retracting the intake at the specified speed inside {@link frc.robot.Constants},
+ * This is designed to be used for normal use of extending the intake. This works by
+ * extending the intake at the specified speed inside {@link frc.robot.Constants},
  * for the specified amount of rotations, until it reaches the limit. After that,
- * it will run the {@link RetractIntake} command at a low speed, to ensure it
- * reaches the limit switches, and is fully retracted without breaking anything.
+ * it will run the {@link ExtendIntake} command at a low speed, to ensure it
+ * reaches the limit switches, and is fully extended without breaking anything.
  */
-public class RetractIntake extends CommandBase {
+public class ExtendIntake extends CommandBase {
 
-    private final double totalRetractRotations;
+    private final double totalExtendRotations;
 
     /**
      * Preferably everything should have already been reset when retracted,
@@ -28,8 +27,8 @@ public class RetractIntake extends CommandBase {
         }
     }
 
-    public RetractIntake() {
-        this.totalRetractRotations = INTAKE_ROTATION_BUFFER;
+    public ExtendIntake() {
+        this.totalExtendRotations = INTAKE_TOTAL_EXTEND_ROTATIONS-INTAKE_ROTATION_BUFFER;
     }
 
     @Override
@@ -43,15 +42,15 @@ public class RetractIntake extends CommandBase {
         double avg = Robot.intake.getAveragePosition();
 
         // If we haven't reached the rotation limit yet, keep extending at full speed.
-        if (avg > this.totalRetractRotations) {
-            Robot.intake.retractIntake(ADJUSTOR_SPEED);
-        } else if (avg < this.totalRetractRotations) {
+        if (avg < this.totalExtendRotations) {
+            Robot.intake.extendIntake(ADJUSTOR_SPEED);
+        } else if (avg > this.totalExtendRotations) {
             // We have reached the maximum amount of rotations at full speed, run the
             // ExtendIntakeLimit command at a LOW speed, to prevent issues.
             if (TEST_SAFETY_ENABLED) {
                 Robot.intake.stopIntakeGroup();
             }
-            new RetractIntakeLimit(0.15).schedule();
+            new ExtendIntakeLimit(0.15).schedule();
 
             end(false);
         }
@@ -59,7 +58,6 @@ public class RetractIntake extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Robot.intake.getAveragePosition() <= this.totalRetractRotations;
+        return Robot.intake.getAveragePosition() >= this.totalExtendRotations;
     }
 }
-

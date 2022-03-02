@@ -3,8 +3,8 @@ package frc.robot.commands.storage_commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Robot;
-import frc.robot.commands.intake_commands.ExtendIntakeLimit;
-import frc.robot.commands.intake_commands.RetractIntakeLimit;
+import frc.robot.commands.intake_commands.adjustor.ExtendIntakeLimit;
+import frc.robot.commands.intake_commands.adjustor.RetractIntakeLimit;
 
 import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
 

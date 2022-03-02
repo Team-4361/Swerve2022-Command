@@ -10,9 +10,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.ChassisCameraConsts;
 import frc.robot.Constants.ShooterCameraConsts;
 import frc.robot.commands.intake_commands.CalibrateIntake;
-import frc.robot.commands.intake_commands.RetractIntakeLimit;
 import frc.robot.commands.test_commands.ChassisForwardOffsetTest;
 import frc.robot.commands.test_commands.ChassisOffsetTest;
+import frc.robot.commands.test_commands.IntakeMaxRotationTest;
 import frc.robot.commands.test_commands.ShooterAngleTest;
 import frc.robot.robot_utils.ChassisCamera;
 import frc.robot.robot_utils.ShooterCamera;
@@ -77,6 +77,7 @@ public class Robot extends TimedRobot {
                 .addDefaultCommand(CHASSIS_DRIVE_TEST, new ChassisForwardOffsetTest())
                 .addDefaultCommand(CHASSIS_OFFSET_ADJUSTMENT, new ChassisOffsetTest())
                 .addDefaultCommand(SHOOTER_ANGLE_TEST, new ShooterAngleTest())
+                .addDefaultCommand(INTAKE_ROTATION_TEST, new IntakeMaxRotationTest())
                 .setTestMode(DEFAULT_TEST_MODE);
 
         robotContainer = new RobotContainer();

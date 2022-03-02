@@ -67,7 +67,9 @@ public class ConcurrentRotationalEncoder {
 
     public double getAbsoluteAngle() {return absoluteRotations * 360;}
 
-    public double getRelativeRotations() {return relativeRotations;}
+    public double getRelativeRotations() {return relativeRotations; }
+
+    public double getCalculatedRotations() { return calculatedRotations; }
 
     public double getVelocity() {return velocity;}
 

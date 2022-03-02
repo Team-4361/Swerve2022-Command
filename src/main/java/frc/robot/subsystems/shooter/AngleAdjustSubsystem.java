@@ -6,7 +6,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.robot_utils.MotorUtil;
 import frc.robot.robot_utils.encoder.ConcurrentRotationalEncoder;
-import frc.robot.robot_utils.encoder.RotationalAbsoluteEncoder;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.revrobotics.SparkMaxMotor;
 

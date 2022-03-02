@@ -1,5 +1,7 @@
 package frc.robot.commands.intake_commands;
 
+import frc.robot.commands.intake_commands.adjustor.RetractIntakeLimit;
+
 public class CalibrateIntake extends RetractIntakeLimit {
 
     public CalibrateIntake() {
