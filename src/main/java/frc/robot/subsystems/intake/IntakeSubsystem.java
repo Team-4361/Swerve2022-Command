@@ -1,6 +1,9 @@
 package frc.robot.subsystems.intake;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,8 +24,8 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     private final Motor extender;
     private final Motor intakeMotor;
 
-    private final RotationalAbsoluteEncoder leftEncoder;
-    private final RotationalAbsoluteEncoder rightEncoder;
+    private final RelativeEncoder leftEncoder;
+    private final RelativeEncoder rightEncoder;
 
     private final DigitalInput flLimit;
     private final DigitalInput frLimit;
@@ -57,13 +60,8 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
                 MotorFlip.INTAKE_FLIPPED
         );
 
-        leftEncoder = new RotationalAbsoluteEncoder(leftSpark)
-                .setAccuracyFactor(5)
-                .setFlipped(MotorFlip.INTAKE_FLIPPED);
-
-        rightEncoder = new RotationalAbsoluteEncoder(rightSpark)
-                .setAccuracyFactor(5)
-                .setFlipped(MotorFlip.INTAKE_FLIPPED);
+        leftEncoder = sparks[0].getEncoder();
+        rightEncoder = sparks[1].getEncoder();
 
         // TODO: Not sure if these are reversed or not, needs testing, assuming
         // TODO: front is towards the robot's front, extended from chassis, and back
@@ -79,14 +77,15 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         SmartDashboard.putBoolean("Back Switch Pressed:", isRearSwitchPressed());
         SmartDashboard.putBoolean("Front Switch Pressed:", isFrontSwitchPressed());
 
-        SmartDashboard.putNumber("Left Intake Position", getLeftPosition());
-        SmartDashboard.putNumber("Right Intake Position", getRightPosition());
+        SmartDashboard.putNumber("Left Intake Position", leftEncoder.getPosition());
+        SmartDashboard.putNumber("Right Intake Position", rightEncoder.getPosition());
 
         SmartDashboard.putNumber("Intake Position Average", getAveragePosition());
 
         // Update the encoders
-        leftEncoder.update();
-        rightEncoder.update();
+        // leftEncoder.update();
+        // rightEncoder.update();
+
     }
 
     public void extendIntake() {
@@ -101,14 +100,14 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
      * @return If both front switches are being pressed in
      */
     public boolean isFrontSwitchPressed() {
-        return flLimit.get() && frLimit.get();
+        return !flLimit.get() && !frLimit.get();
     }
 
     /**
      * @return If both rear switches are being pressed in
      */
     public boolean isRearSwitchPressed() {
-        return blLimit.get() && brLimit.get();
+        return !blLimit.get() && !brLimit.get();
     }
 
     public void spinIntakeAccept() {
@@ -129,11 +128,11 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     }
 
     public double getLeftPosition() {
-        return leftEncoder.getAbsoluteRotations();
+        return leftEncoder.getPosition();
     }
 
     public double getRightPosition() {
-        return rightEncoder.getAbsoluteRotations();
+        return rightEncoder.getPosition();
     }
 
     public double getAveragePosition() {

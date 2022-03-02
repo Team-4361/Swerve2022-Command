@@ -50,7 +50,7 @@ public class SwerveModule {
 
 
     public double velocityMetersPerSecond() {
-        return driveEncoder.getVelocity() / COUNTS_PER_REV;
+        return driveEncoder.getVelocity();//  COUNTS_PER_REV;
     }
 
     public Rotation2d getTurnAngle() {

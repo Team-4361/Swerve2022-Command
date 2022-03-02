@@ -14,7 +14,7 @@ public class RetractIntake extends CommandBase {
     @Override
     public void execute() {
         // This runs repeatedly until the command is ended.
-        if (!Robot.intake.isRearSwitchPressed()) {
+        if (!Robot.intake.isRearSwitchPressed() /*&& (Robot.intake.getLeftPosition() >= 0.5 && Robot.intake.getRightPosition() >= 0.5)*/) {
             // While the rear switch is not pressed, keep running the Intake Retract Motor out.
             Robot.intake.retractIntake();
         } else {
@@ -35,6 +35,6 @@ public class RetractIntake extends CommandBase {
     @Override
     public boolean isFinished() {
         // Will be finished when the front switch is pressed, meaning all the way extended.
-        return Robot.intake.isRearSwitchPressed();
+        return Robot.intake.isRearSwitchPressed() /*|| (Robot.intake.getLeftPosition() < 0.5 && Robot.intake.getRightPosition() < 0.5)*/;
     }
 }
