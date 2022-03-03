@@ -52,16 +52,11 @@ public class MotorUtil {
                 TimeUnit.MILLISECONDS.sleep(100);
 
                 while (System.currentTimeMillis() <= stopTime) {
-                    if (!isStalled(motor)) {
-                        motor.set(speed);
-                    } else {
-                        motor.set(0);
-                        SmartDashboard.putBoolean("jammed", true);
-                    }
+                    motor.set(!isStalled(motor) ? speed : 0);
                 }
+
                 motor.set(0);
-            } catch (InterruptedException ignored) {
-            }
+            } catch (InterruptedException ignored) {}
             Thread.currentThread().interrupt();
         }).start();
     }

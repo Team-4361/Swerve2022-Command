@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import static frc.robot.Constants.MotorFlip.SHOOTER_FLIPPED;
 import static frc.robot.Constants.MotorFlip.STORAGE_FLIPPED;
+import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
 import static frc.robot.Constants.MotorValue.SHOOT_SPEED;
 import static frc.robot.robot_utils.MotorUtil.getMotorValue;
 
@@ -36,7 +37,7 @@ public class TimedShooterCommand extends CommandBase {
                     SmartDashboard.putString("Shooter: Status", "Shooting");
 
                     // Start loading the balls into the shooter's reach
-                    Robot.shooter.setStorageMotor(getMotorValue(0.4, STORAGE_FLIPPED));
+                    Robot.shooter.setStorageMotor(getMotorValue(ACCEPT_SPEED, STORAGE_FLIPPED));
 
                     // wait 5 seconds to shoot two balls
                     TimeUnit.SECONDS.sleep(5);
@@ -54,13 +55,6 @@ public class TimedShooterCommand extends CommandBase {
         }).start();
     }
 
-    @Override
-    public void execute() {
-        
-    }
-
-    @Override
-    public boolean isFinished() {
-        return finished;
-    }
+    @Override public void execute() {}
+    @Override public boolean isFinished() { return finished; }
 }

@@ -127,12 +127,12 @@ public class Constants {
         public static final int R_INTAKE_EXTEND_ID = 11;
 
         // TODO: find correct rotations that you want, subtract from total rotations
-        public static final double INTAKE_TOTAL_EXTEND_ROTATIONS = 20;
+        public static final double INTAKE_TOTAL_EXTEND_ROTATIONS = 7;
 
 
         // TODO: this is the amount subtracted from INTAKE_TOTAL_EXTEND_ROTATIONS and is used for
         // TODO: the amount to use from zero when retracting
-        public static final double INTAKE_ROTATION_BUFFER = 10;
+        public static final double INTAKE_ROTATION_BUFFER = 3;
 
         public static final boolean LIMIT_SWITCH_ENABLED = true;
 
@@ -213,7 +213,7 @@ public class Constants {
     // These values are designed to be changed based on the Motor 
     public static class MotorValue {
         public static final double SHOOT_SPEED = 1.0;
-        public static final double ACCEPT_SPEED = 0.1;
+        public static final double ACCEPT_SPEED = 0.4;
         public static final double SLOW_ACCEPT_SPEED = 0.2;
 
         public static final double EXTERNAL_ACCEPT_SPEED = 1;
