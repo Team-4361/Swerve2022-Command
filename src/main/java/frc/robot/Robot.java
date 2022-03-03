@@ -62,8 +62,8 @@ public class Robot extends TimedRobot {
         pathfinder = swerveDrive.getPathfinder();
         pathfinderSubsystem = new PathfinderSubsystem(pathfinder);
 
-        storage = new NewStorageSubsystem(INIT_TARGET_COLOR);
-        storage.setRetractMode(RETRACT_MODE);
+        storage = new NewStorageSubsystem(INIT_TARGET_COLOR)
+                .setRetractMode(RETRACT_MODE);
 
         shooter = new ShooterSubsystem();
 
@@ -96,19 +96,12 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
     }
 
-    @Override
-    public void disabledInit() {
-    }
-
-    @Override
-    public void disabledPeriodic() {
-    }
-
+    @Override public void disabledInit() {}
+    @Override public void disabledPeriodic() {}
 
     @Override
     public void autonomousInit() {
-        autonomous = robotContainer
-                .getAutonomousCommand(pathfinderSubsystem);
+        autonomous = robotContainer.getAutonomousCommand(pathfinderSubsystem);
 
         if (autonomous != null)
             autonomous.schedule();
@@ -130,8 +123,7 @@ public class Robot extends TimedRobot {
      * This function is called periodically during operator control.
      */
     @Override
-    public void teleopPeriodic() {
-    }
+    public void teleopPeriodic() {}
 
     @Override
     public void testInit() {

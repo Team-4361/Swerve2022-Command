@@ -15,7 +15,9 @@ import frc.robot.Constants.Chassis;
 import frc.robot.commands.autonomous_commands.TestAutonomous;
 import frc.robot.commands.chassis_commands.*;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntake;
+import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.intake_commands.adjustor.RetractIntake;
+import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 import frc.robot.commands.shooter_commands.AutoShootCommand;
 import frc.robot.commands.shooter_commands.SensorShootCommand;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
@@ -83,8 +85,8 @@ public class RobotContainer {
 
         xButton.whileHeld(new SimpleProcessBallCMD());
 
-        lBumper.whenActive(new RetractIntake());
-        rBumper.whenActive(new ExtendIntake());
+        lBumper.whenActive(new RetractIntakeMagnet());
+        rBumper.whenActive(new ExtendIntakeMagnet());
     }
 
     public Command getAutonomousCommand() {

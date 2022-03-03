@@ -104,7 +104,7 @@ public class Constants {
         public static final int L_CLIMBER_ID = 9;
         public static final int R_CLIMBER_ID = 10;
 
-        // bottom limit switch
+        // bottom magnet
         public static final int BL_LIMIT_ID = 6;
         public static final int BR_LIMIT_ID = 7;
 
@@ -116,12 +116,12 @@ public class Constants {
         public static final int INTAKE_SPIN_MOTOR_ID = 14;
 
         // DIO
-        public static final int BL_LIMIT_ID = 8;
-        public static final int BR_LIMIT_ID = 9;
+        public static final int BL_MAGNET_ID = 8;
+        public static final int BR_MAGNET_ID = 9;
 
         // TODO: change
-        public static final int FL_LIMIT_ID = 19;
-        public static final int FR_LIMIT_ID = 18;
+        public static final int FL_MAGNET_ID = 19;
+        public static final int FR_MAGNET_ID = 18;
 
         public static final int L_INTAKE_EXTEND_ID = 12;
         public static final int R_INTAKE_EXTEND_ID = 11;
@@ -228,9 +228,6 @@ public class Constants {
 
         // Stall RPM, stops the motor when the RPM drops below + current above limit.
         public final static double STALL_RPM = 2000; /* RPM */
-
-        // Target RPM for the Shooter Motor to activate loading
-        public final static double SHOOTER_TARGET_RPM = 4800; /* RPM */
 
         // Used for stall protection, disable if any issues occur from it.
         public final static boolean CURRENT_MEASURING = false;

@@ -11,11 +11,12 @@ import static frc.robot.Constants.MotorValue.ADJUSTOR_SPEED;
  * extending the intake at the specified speed inside {@link frc.robot.Constants},
  * for the specified amount of rotations, until it reaches the limit. After that,
  * it will run the {@link ExtendIntake} command at a low speed, to ensure it
- * reaches the limit switches, and is fully extended without breaking anything.
+ * reaches the magnets, and is fully extended without breaking anything.
  */
 public class ExtendIntake extends CommandBase {
 
     private final double totalExtendRotations;
+    private final boolean onlyRotations;
 
     /**
      * Preferably everything should have already been reset when retracted,
@@ -28,6 +29,13 @@ public class ExtendIntake extends CommandBase {
     }
 
     public ExtendIntake() {
+        this.totalExtendRotations = INTAKE_TOTAL_EXTEND_ROTATIONS-INTAKE_ROTATION_BUFFER;
+        this.onlyRotations = false;
+    }
+
+    /** Useful for extending the intake the specified amount of rotations. */
+    public ExtendIntake(boolean rotations) {
+        this.onlyRotations = rotations;
         this.totalExtendRotations = INTAKE_TOTAL_EXTEND_ROTATIONS-INTAKE_ROTATION_BUFFER;
     }
 
@@ -50,7 +58,10 @@ public class ExtendIntake extends CommandBase {
             if (TEST_SAFETY_ENABLED) {
                 Robot.intake.stopIntakeGroup();
             }
-            new ExtendIntakeLimit(0.15).schedule();
+
+            if (!onlyRotations) {
+                new ExtendIntakeMagnet(0.15).schedule();
+            }
 
             end(false);
         }

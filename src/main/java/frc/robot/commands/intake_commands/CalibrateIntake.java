@@ -1,8 +1,8 @@
 package frc.robot.commands.intake_commands;
 
-import frc.robot.commands.intake_commands.adjustor.RetractIntakeLimit;
+import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 
-public class CalibrateIntake extends RetractIntakeLimit {
+public class CalibrateIntake extends RetractIntakeMagnet {
 
     public CalibrateIntake() {
         super(0.15);

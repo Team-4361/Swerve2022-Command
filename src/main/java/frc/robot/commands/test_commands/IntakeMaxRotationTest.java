@@ -1,13 +1,11 @@
 package frc.robot.commands.test_commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.commands.intake_commands.adjustor.ExtendIntakeLimit;
-import frc.robot.commands.intake_commands.adjustor.RetractIntakeLimit;
+import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
+import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 
 import static frc.robot.Constants.Intake.INTAKE_ROTATION_BUFFER;
 
@@ -50,9 +48,9 @@ public class IntakeMaxRotationTest extends SequentialCommandGroup {
 
     public IntakeMaxRotationTest() {
         super(
-                new ExtendIntakeLimit(0.15),
+                new ExtendIntakeMagnet(0.15),
                 new RecordInformation(),
-                new RetractIntakeLimit(0.15)
+                new RetractIntakeMagnet(0.15)
         );
     }
 }

@@ -11,11 +11,12 @@ import static frc.robot.Constants.MotorValue.ADJUSTOR_SPEED;
  * retracting the intake at the specified speed inside {@link frc.robot.Constants},
  * for the specified amount of rotations, until it reaches the limit. After that,
  * it will run the {@link RetractIntake} command at a low speed, to ensure it
- * reaches the limit switches, and is fully retracted without breaking anything.
+ * reaches the magnets, and is fully retracted without breaking anything.
  */
 public class RetractIntake extends CommandBase {
 
     private final double totalRetractRotations;
+    private final boolean onlyRotations;
 
     /**
      * Preferably everything should have already been reset when retracted,
@@ -29,6 +30,12 @@ public class RetractIntake extends CommandBase {
 
     public RetractIntake() {
         this.totalRetractRotations = INTAKE_ROTATION_BUFFER;
+        this.onlyRotations = false;
+    }
+
+    public RetractIntake(boolean rotations) {
+        this.totalRetractRotations = INTAKE_ROTATION_BUFFER;
+        this.onlyRotations = rotations;
     }
 
     @Override
@@ -50,7 +57,10 @@ public class RetractIntake extends CommandBase {
             if (TEST_SAFETY_ENABLED) {
                 Robot.intake.stopIntakeGroup();
             }
-            new RetractIntakeLimit(0.15).schedule();
+
+            if (!onlyRotations) {
+                new RetractIntakeMagnet(0.15).schedule();
+            }
 
             end(false);
         }

@@ -24,10 +24,10 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     private final ConcurrentRotationalEncoder leftEncoder;
     private final ConcurrentRotationalEncoder rightEncoder;
 
-    private final DigitalInput flLimit;
-    private final DigitalInput frLimit;
-    private final DigitalInput blLimit;
-    private final DigitalInput brLimit;
+    private final DigitalInput flMagnet;
+    private final DigitalInput frMagnet;
+    private final DigitalInput blMagnet;
+    private final DigitalInput brMagnet;
 
     public IntakeSubsystem() {
         CANSparkMax leftSpark = new CANSparkMax(L_INTAKE_EXTEND_ID, kBrushless);
@@ -59,10 +59,10 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         // TODO: Not sure if these are reversed or not, needs testing, assuming
         // TODO: front is towards the robot's front, extended from chassis, and back
         // TODO: is inside the robot.
-        flLimit = new DigitalInput(FL_LIMIT_ID);
-        frLimit = new DigitalInput(FR_LIMIT_ID);
-        blLimit = new DigitalInput(BL_LIMIT_ID);
-        brLimit = new DigitalInput(BR_LIMIT_ID);
+        flMagnet = new DigitalInput(FL_MAGNET_ID);
+        frMagnet = new DigitalInput(FR_MAGNET_ID);
+        blMagnet = new DigitalInput(BL_MAGNET_ID);
+        brMagnet = new DigitalInput(BR_MAGNET_ID);
     }
 
     @Override
@@ -100,14 +100,14 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
      * @return If both front switches are being pressed in
      */
     public boolean isExtended() {
-        return flLimit.get() && frLimit.get();
+        return flMagnet.get() && frMagnet.get();
     }
 
     /**
      * @return If both rear switches are being pressed in
      */
     public boolean isRetracted() {
-        return blLimit.get() && brLimit.get();
+        return blMagnet.get() && brMagnet.get();
     }
 
     public void spinIntakeAccept() {

@@ -34,7 +34,6 @@ public class NewStorageSubsystem extends SubsystemBase {
 
         this.frontProximity = new DigitalInput(ACCEPTOR_PHOTO_ELECTRIC_PORT);
         this.rearProximity = new DigitalInput(STORAGE_PHOTO_ELECTRIC_PORT);
-
         this.indexColorSensor = new ColorSensorV3(COLOR_SENSOR_PORT);
 
         this.acceptorMotor = new AbstractMotor(
@@ -165,8 +164,9 @@ public class NewStorageSubsystem extends SubsystemBase {
      *
      * @param mode The {@link RetractMode} to use for the Intake.
      */
-    public void setRetractMode(RetractMode mode) {
+    public NewStorageSubsystem setRetractMode(RetractMode mode) {
         this.retractMode = mode;
+        return this;
     }
 
     /** @return Retract Mode */

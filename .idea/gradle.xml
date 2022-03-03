@@ -6,8 +6,7 @@
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="$PROJECT_DIR$/../../../littl/Downloads/gradle-6.7.1-bin/gradle-6.7.1" />
-        <option name="gradleJvm" value="#JAVA_HOME" />
+        <option name="gradleHome" value="$USER_HOME$/littl/Downloads/gradle-6.7.1-bin/gradle-6.7.1" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />

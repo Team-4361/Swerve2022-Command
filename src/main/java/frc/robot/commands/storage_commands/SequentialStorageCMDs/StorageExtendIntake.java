@@ -18,7 +18,7 @@ public class StorageExtendIntake extends CommandBase {
             // While the front switch is not pressed, keep running the Intake Extender Motor out.
             Robot.intake.extendIntake();
         } else {
-            // The limit switch is pressed, stop the intake and end the command.
+            // The magnet is pressed, stop the intake and end the command.
             Robot.intake.stopIntakeGroup();
             end(false);
         }
