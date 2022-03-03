@@ -33,9 +33,9 @@ public class RetractIntake extends CommandBase {
         this.onlyRotations = false;
     }
 
-    public RetractIntake(boolean rotations) {
+    public RetractIntake(boolean usingRotationOnly) {
         this.totalRetractRotations = INTAKE_ROTATION_BUFFER;
-        this.onlyRotations = rotations;
+        this.onlyRotations = usingRotationOnly;
     }
 
     @Override

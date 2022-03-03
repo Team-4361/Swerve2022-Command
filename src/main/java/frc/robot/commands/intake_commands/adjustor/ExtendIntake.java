@@ -34,8 +34,8 @@ public class ExtendIntake extends CommandBase {
     }
 
     /** Useful for extending the intake the specified amount of rotations. */
-    public ExtendIntake(boolean rotations) {
-        this.onlyRotations = rotations;
+    public ExtendIntake(boolean usingRotationOnly) {
+        this.onlyRotations = usingRotationOnly;
         this.totalExtendRotations = INTAKE_TOTAL_EXTEND_ROTATIONS-INTAKE_ROTATION_BUFFER;
     }
 
