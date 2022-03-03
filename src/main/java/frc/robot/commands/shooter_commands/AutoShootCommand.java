@@ -86,7 +86,7 @@ public class AutoShootCommand extends SequentialCommandGroup {
             
             double requiredWhlAngVel = (Math.sqrt( (BALL_MASS*Math.pow(requiredLinExtVelocity, 2))/((1/2)*SHOOTER_WHEEL_MASS*Math.pow(SHOOTER_WHEEL_RADIUS, 2) + (2/5)*BALL_MASS*Math.pow(BALL_RADIUS, 2))))/(2*Math.PI);
         
-            return requiredWhlAngVel;
+            return requiredWhlAngVel*60;
         }
 
         @Override

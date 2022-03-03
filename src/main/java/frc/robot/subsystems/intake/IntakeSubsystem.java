@@ -63,6 +63,9 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         leftEncoder = sparks[0].getEncoder();
         rightEncoder = sparks[1].getEncoder();
 
+        leftEncoder.setPosition(0);
+        rightEncoder.setPosition(0);
+
         // TODO: Not sure if these are reversed or not, needs testing, assuming
         // TODO: front is towards the robot's front, extended from chassis, and back
         // TODO: is inside the robot.
@@ -70,6 +73,8 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         frLimit = new DigitalInput(FR_LIMIT_ID);
         blLimit = new DigitalInput(BL_LIMIT_ID);
         brLimit = new DigitalInput(BR_LIMIT_ID);
+        
+
     }
 
     @Override
@@ -100,14 +105,14 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
      * @return If both front switches are being pressed in
      */
     public boolean isFrontSwitchPressed() {
-        return !flLimit.get() && !frLimit.get();
+        return flLimit.get() && frLimit.get();
     }
 
     /**
      * @return If both rear switches are being pressed in
      */
     public boolean isRearSwitchPressed() {
-        return !blLimit.get() && !brLimit.get();
+        return blLimit.get() && brLimit.get();
     }
 
     public void spinIntakeAccept() {
