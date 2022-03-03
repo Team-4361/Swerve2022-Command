@@ -1,7 +1,6 @@
 package frc.robot.commands.storage_commands.SequentialStorageCMDs;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Robot;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 import frc.robot.subsystems.storage.StorageTask;
@@ -11,11 +10,6 @@ public class StorageDecision extends CommandBase {
      * Checks the Task that was determined in {@link IntakeProcessAccept}, and based on the value, schedules either the
      * acceptance command, or reject command. If there are 2 balls loaded in the Storage, then ignore.
      */
-
-    ParallelCommandGroup acceptGroup = new ParallelCommandGroup(
-            new RetractIntakeMagnet(),
-            new StorageAcceptBall()
-    );
 
     @Override
     public void initialize() {
@@ -28,7 +22,8 @@ public class StorageDecision extends CommandBase {
         switch (selectedTask) {
             case ACCEPT:
                 System.out.println("Storage: Scheduling Accept...");
-                acceptGroup.schedule();
+                new StorageAcceptBall().schedule();
+                new RetractIntakeMagnet().schedule();
                 break;
             case REJECT:
                 System.out.println("Storage: Scheduling Reject...");

@@ -34,7 +34,8 @@ public class RetractIntakeMagnet extends CommandBase {
         // This runs repeatedly until the command is ended.
         if (!Robot.intake.isRetracted()) {
             // While the rear switch is not pressed, keep running the Intake Retract Motor out.
-            Robot.intake.retractIntake(retractSpeed);
+            //Robot.intake.retractIntake(retractSpeed);
+            Robot.intake.retractIntakePID();
         } else {
             // The magnet is pressed, stop the intake and end the command.
             Robot.intake.stopIntakeGroup();
@@ -57,6 +58,6 @@ public class RetractIntakeMagnet extends CommandBase {
     @Override
     public boolean isFinished() {
         // Will be finished when the front switch is pressed, meaning all the way extended.
-        return Robot.intake.isRetracted();
+        return Robot.intake.isRetracted() ||  (Robot.intake.getLeftPosition() >= -0.5 && Robot.intake.getRightPosition() >= -0.5);
     }
 }

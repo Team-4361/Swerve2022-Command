@@ -57,7 +57,6 @@ public class StorageAcceptBall extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        Robot.storage.setAcceptorMotor(0);
         Robot.storage.setStorageMotor(0);
 
         switch (Robot.storage.getRetractMode()) {
@@ -74,6 +73,8 @@ public class StorageAcceptBall extends CommandBase {
             default:
                 break;
         }
+
+        new StorageRunAcceptor().schedule();
     }
 
     @Override

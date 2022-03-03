@@ -1,12 +1,18 @@
 package frc.robot.subsystems.intake;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorFlip;
 import frc.robot.Constants.MotorValue;
+import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 import frc.robot.robot_utils.encoder.ConcurrentRotationalEncoder;
+import me.wobblyyyy.pathfinder2.control.ProportionalController;
 import me.wobblyyyy.pathfinder2.math.Average;
 import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
@@ -21,13 +27,15 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     private final Motor extender;
     private final Motor intakeMotor;
 
-    private final ConcurrentRotationalEncoder leftEncoder;
-    private final ConcurrentRotationalEncoder rightEncoder;
+    private final RelativeEncoder leftEncoder;
+    private final RelativeEncoder rightEncoder;
 
     private final DigitalInput flMagnet;
     private final DigitalInput frMagnet;
     private final DigitalInput blMagnet;
     private final DigitalInput brMagnet;
+
+    private final ProportionalController intakeController = new ProportionalController(0.09);
 
     public IntakeSubsystem() {
         CANSparkMax leftSpark = new CANSparkMax(L_INTAKE_EXTEND_ID, kBrushless);
@@ -53,8 +61,14 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
                 MotorFlip.INTAKE_FLIPPED
         );
 
-        leftEncoder = new ConcurrentRotationalEncoder(leftSpark).setFlipped(MotorFlip.INTAKE_FLIPPED);
-        rightEncoder = new ConcurrentRotationalEncoder(rightSpark).setFlipped(MotorFlip.INTAKE_FLIPPED);
+
+        leftEncoder = sparks[0].getEncoder();
+        rightEncoder = sparks[1].getEncoder();
+
+        new RetractIntakeMagnet().schedule();
+
+        leftEncoder.setPosition(0);
+        rightEncoder.setPosition(0);
 
         // TODO: Not sure if these are reversed or not, needs testing, assuming
         // TODO: front is towards the robot's front, extended from chassis, and back
@@ -63,6 +77,9 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         frMagnet = new DigitalInput(FR_MAGNET_ID);
         blMagnet = new DigitalInput(BL_MAGNET_ID);
         brMagnet = new DigitalInput(BR_MAGNET_ID);
+        
+
+
     }
 
     @Override
@@ -70,14 +87,15 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         SmartDashboard.putBoolean("Back Switch Pressed:", isRetracted());
         SmartDashboard.putBoolean("Front Switch Pressed:", isExtended());
 
-        SmartDashboard.putNumber("Left Intake Position", getLeftPosition());
-        SmartDashboard.putNumber("Right Intake Position", getRightPosition());
+        SmartDashboard.putNumber("Left Intake Position", leftEncoder.getPosition());
+        SmartDashboard.putNumber("Right Intake Position", rightEncoder.getPosition());
 
         SmartDashboard.putNumber("Intake Position Average", getAveragePosition());
 
         // Update the encoders
-        leftEncoder.periodic();
-        rightEncoder.periodic();
+        // leftEncoder.update();
+        // rightEncoder.update();
+
     }
 
     public void extendIntake() {
@@ -94,6 +112,14 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
 
     public void retractIntake(double speed) {
         translateExtender(-speed);
+    }
+
+    public void retractIntakePID(){
+        translateExtender(intakeController.calculate(getAveragePosition(), -0.5));
+    }
+
+    public void extendIntakePID(){
+        translateExtender(intakeController.calculate(getAveragePosition(), -7));
     }
 
     /**
@@ -128,11 +154,11 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     }
 
     public double getLeftPosition() {
-        return leftEncoder.getAbsoluteRotations();
+        return leftEncoder.getPosition();
     }
 
     public double getRightPosition() {
-        return rightEncoder.getAbsoluteRotations();
+        return rightEncoder.getPosition();
     }
 
     public double getAveragePosition() {
@@ -140,8 +166,8 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     }
 
     public void resetEncoders() {
-        this.leftEncoder.reset();
-        this.rightEncoder.reset();
+        this.leftEncoder.setPosition(0);
+        this.rightEncoder.setPosition(0);
     }
 
     @Override

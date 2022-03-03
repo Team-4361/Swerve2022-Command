@@ -16,7 +16,8 @@ public class StorageExtendIntake extends CommandBase {
         // This runs repeatedly until the command is ended.
         if (!Robot.intake.isExtended()) {
             // While the front switch is not pressed, keep running the Intake Extender Motor out.
-            Robot.intake.extendIntake();
+            //Robot.intake.extendIntake();
+            Robot.intake.extendIntakePID();
         } else {
             // The magnet is pressed, stop the intake and end the command.
             Robot.intake.stopIntakeGroup();
@@ -32,6 +33,6 @@ public class StorageExtendIntake extends CommandBase {
     @Override
     public boolean isFinished() {
         // Will be finished when the front switch is pressed, meaning all the way extended.
-        return Robot.intake.isExtended();
+        return Robot.intake.isExtended() || (Robot.intake.getLeftPosition() <= -7 && Robot.intake.getRightPosition() <= -7);
     }
 }
