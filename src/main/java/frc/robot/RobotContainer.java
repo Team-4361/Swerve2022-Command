@@ -86,7 +86,7 @@ public class RobotContainer {
 
         xButton.whileHeld(new SimpleProcessBallCMD());
 
-        lBumper.whenActive(new RetractIntake());
+        lBumper.whenActive(new RetractIntakeMagnet());
         rBumper.whenActive(new StorageExtendIntake());
     }
 
