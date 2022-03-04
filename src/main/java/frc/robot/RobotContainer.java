@@ -9,23 +9,16 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Chassis;
-import frc.robot.commands.autonomous_commands.TestAutonomous;
 import frc.robot.commands.chassis_commands.*;
-import frc.robot.commands.intake_commands.adjustor.ExtendIntake;
-import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
-import frc.robot.commands.intake_commands.adjustor.RetractIntake;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
-import frc.robot.commands.shooter_commands.AutoShootCommand;
 import frc.robot.commands.shooter_commands.SensorShootCommand;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageDecision;
-import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageExtendIntake;
+import frc.robot.commands.storage_commands.SequentialStorageCMDs.ExtendIntakePID;
 import frc.robot.commands.storage_commands.SimpleProcessBallCMD;
-import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 
 import static frc.robot.Constants.Control.*;
 
@@ -58,7 +51,7 @@ public class RobotContainer {
     //         new AutoShootCommand()
     // );
 
-    private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(new StorageExtendIntake(),
+    private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(new ExtendIntakePID(),
             new IntakeProcessAccept(),
             new StorageDecision());
 
@@ -87,7 +80,7 @@ public class RobotContainer {
         xButton.whileHeld(new SimpleProcessBallCMD());
 
         lBumper.whenActive(new RetractIntakeMagnet());
-        rBumper.whenActive(new StorageExtendIntake());
+        rBumper.whenActive(new ExtendIntakePID());
     }
 
     public Command getAutonomousCommand() {

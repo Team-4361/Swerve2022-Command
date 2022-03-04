@@ -16,6 +16,7 @@ import static frc.robot.robot_utils.MotorUtil.stopMotors;
 
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,6 +28,9 @@ public class ClimberSubsystem extends SubsystemBase {
 
     private final CANSparkMax leftClimberMTR = new CANSparkMax(L_CLIMBER_ID, kBrushless);
     private final CANSparkMax rightClimberMTR = new CANSparkMax(R_CLIMBER_ID, kBrushless);
+
+    /** could possibly eliminate bouncing issues */
+    private final Debouncer debouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
 
     private final DigitalInput blSwitch, brSwitch, tlSwitch, trSwitch;
 
@@ -92,10 +96,10 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     /**
-     * @return If the top switch is pressed
+     * @return If the top left switch is pressed
      */
     public boolean isTopLeftSwitchPressed() {
-        return tlSwitch.get();
+        return debouncer.calculate(tlSwitch.get());
     }
 
     public void stopLeftClimber() {
@@ -107,23 +111,23 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     /**
-     * @return If the top switch is pressed
+     * @return If the top right switch is pressed
      */
     public boolean isTopRightSwitchPressed() {
-        return trSwitch.get();
+        return debouncer.calculate(trSwitch.get());
     }
 
     /**
-     * @return If the top switch is pressed
+     * @return If the bottom left switch is pressed
      */
     public boolean isBottomLeftSwitchPressed() {
-        return blSwitch.get();
+        return debouncer.calculate(blSwitch.get());
     }
 
     /**
-     * @return If the top switch is pressed
+     * @return If the bottom right is pressed
      */
     public boolean isBottomRightSwitchPressed() {
-        return brSwitch.get();
+        return debouncer.calculate(brSwitch.get());
     }
 }

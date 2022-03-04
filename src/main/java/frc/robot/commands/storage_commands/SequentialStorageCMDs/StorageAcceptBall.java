@@ -7,11 +7,14 @@ import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 import static frc.robot.Constants.MotorFlip.ACCEPTOR_FLIPPED;
 import static frc.robot.Constants.MotorFlip.STORAGE_FLIPPED;
 import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
+import static frc.robot.Constants.Storage.STORAGE_EXTRA_TIME_MS;
 import static frc.robot.robot_utils.MotorUtil.*;
 
 
 public class StorageAcceptBall extends CommandBase {
     private int ballsLoaded = 0;
+    private long startTimeMillis = -1;
+    private long endTimeMillis = -1;
 
     @Override
     public void initialize() {
@@ -20,6 +23,16 @@ public class StorageAcceptBall extends CommandBase {
         System.out.println("Accepting Ball");
     }
 
+    private void timeEnd() {
+        if (startTimeMillis == -1) {
+            this.startTimeMillis = System.currentTimeMillis();
+            this.endTimeMillis = startTimeMillis + STORAGE_EXTRA_TIME_MS;
+        } else {
+            if (System.currentTimeMillis() > endTimeMillis) {
+                end(false);
+            }
+        }
+    }
 
     @Override
     public void execute() {
@@ -29,7 +42,7 @@ public class StorageAcceptBall extends CommandBase {
         switch (ballsLoaded) {
             case 0:
                 if (Robot.storage.frontProximityCovered()) {
-                    end(false);
+                    timeEnd();
                 }
                 System.out.println("Storing 1 ball");
                 // There are no balls loaded currently, it is safe to run both motors.
@@ -40,7 +53,7 @@ public class StorageAcceptBall extends CommandBase {
             case 1:
                 System.out.println("Storing 2 balls");
                 if (Robot.storage.rearProximityCovered()) {
-                    end(false);
+                    timeEnd();
                 }
 
                 // There is already a ball loaded, we should only run the front acceptor motor.

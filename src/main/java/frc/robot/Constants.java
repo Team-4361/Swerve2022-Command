@@ -188,7 +188,7 @@ public class Constants {
         public static final double RED_THRESHOLD = 0.30;
         public static final double PROXIMITY_THRESHOLD = 120;
 
-        public static final int STORAGE_TIMEOUT = 3000;
+        public static final int STORAGE_EXTRA_TIME_MS = 500;
 
         public static final double LENGTH_ROD_TO_ANGULAR_POS = 0;
 
@@ -220,7 +220,7 @@ public class Constants {
 
         public static final double ADJUSTOR_SPEED = 0.3;
 
-        public static final double CLIMBER_SPEED = 0.2;
+        public static final double CLIMBER_SPEED = 0.35;
 
         // Stall current in amps, stops the motor when the current rises above
         // the maximum value.

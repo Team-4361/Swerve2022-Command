@@ -1,10 +1,10 @@
 package frc.robot.subsystems.intake;
 
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,6 +30,12 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     private final RelativeEncoder leftEncoder;
     private final RelativeEncoder rightEncoder;
 
+    // For testing the values that it would have been under absolute
+    private final ConcurrentRotationalEncoder leftRotationalEncoder;
+    private final ConcurrentRotationalEncoder rightRotationalEncoder;
+
+    private final Debouncer debouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+
     private final DigitalInput flMagnet;
     private final DigitalInput frMagnet;
     private final DigitalInput blMagnet;
@@ -42,6 +48,12 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         CANSparkMax rightSpark = new CANSparkMax(R_INTAKE_EXTEND_ID, kBrushless);
         CANSparkMax intakeSpark = new CANSparkMax(INTAKE_SPIN_MOTOR_ID, kBrushless);
         sparks = new CANSparkMax[]{leftSpark, rightSpark, intakeSpark};
+
+        leftRotationalEncoder = new ConcurrentRotationalEncoder(leftSpark)
+                .setFlipped(MotorFlip.INTAKE_EXTENDER_LEFT_FLIPPED);
+
+        rightRotationalEncoder = new ConcurrentRotationalEncoder(rightSpark)
+                .setFlipped(MotorFlip.INTAKE_EXTENDER_RIGHT_FLIPPED);
 
         extender = new MultiMotor(
                 new AbstractMotor(
@@ -77,9 +89,6 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         frMagnet = new DigitalInput(FR_MAGNET_ID);
         blMagnet = new DigitalInput(BL_MAGNET_ID);
         brMagnet = new DigitalInput(BR_MAGNET_ID);
-        
-
-
     }
 
     @Override
@@ -91,6 +100,11 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         SmartDashboard.putNumber("Right Intake Position", rightEncoder.getPosition());
 
         SmartDashboard.putNumber("Intake Position Average", getAveragePosition());
+
+        SmartDashboard.putNumber("Left Absolute Intake", leftRotationalEncoder.getAbsoluteRotations());
+        SmartDashboard.putNumber("Right Absolute Intake", rightRotationalEncoder.getAbsoluteRotations());
+
+        SmartDashboard.putNumber("Intake Absolute Position Avg", getAverageAbsolutePosition());
 
         // Update the encoders
         // leftEncoder.update();
@@ -126,14 +140,14 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
      * @return If both front switches are being pressed in
      */
     public boolean isExtended() {
-        return flMagnet.get() && frMagnet.get();
+        return debouncer.calculate(flMagnet.get()) && debouncer.calculate(frMagnet.get());
     }
 
     /**
      * @return If both rear switches are being pressed in
      */
     public boolean isRetracted() {
-        return blMagnet.get() && brMagnet.get();
+        return debouncer.calculate(blMagnet.get()) && debouncer.calculate(brMagnet.get());
     }
 
     public void spinIntakeAccept() {
@@ -163,6 +177,10 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
 
     public double getAveragePosition() {
         return Average.of(getLeftPosition(), getRightPosition());
+    }
+
+    public double getAverageAbsolutePosition() {
+        return Average.of(leftRotationalEncoder.getAbsoluteRotations(), rightRotationalEncoder.getAbsoluteRotations());
     }
 
     public void resetEncoders() {
