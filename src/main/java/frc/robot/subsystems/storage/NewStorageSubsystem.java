@@ -89,7 +89,7 @@ public class NewStorageSubsystem extends SubsystemBase {
     public int getBallsLoaded() {
         if (rearProximityCovered() && frontProximityCovered()){
             return 2;
-        }else if(frontProximityCovered()){
+        }else if(rearProximityCovered()){
             return 1;
         }else {
             return 0;
