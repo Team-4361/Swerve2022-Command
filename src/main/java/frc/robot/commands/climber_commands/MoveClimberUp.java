@@ -1,6 +1,5 @@
 package frc.robot.commands.climber_commands;
 
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 

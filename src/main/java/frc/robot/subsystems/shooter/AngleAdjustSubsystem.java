@@ -25,6 +25,8 @@ public class AngleAdjustSubsystem extends SubsystemBase {
                 .setFlipped(ADJUSTOR_FLIPPED);
         controller = new PIDController((double) 1 / 90, 0, 0);
         controller.setSetpoint(0.0);
+        
+        targetAngle = new Angle();
     }
 
     public double rotationToAngle(double rotation) {
@@ -55,10 +57,10 @@ public class AngleAdjustSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // absoluteEncoder.periodic();
-        // Angle currentAngle = Angle.fixedDeg(getAngle());
-        // double delta = Angle.minimumDelta(currentAngle, targetAngle);
-        // double adjustorMotorPower = controller.calculate(delta);
-        // adjustor.setPower(adjustorMotorPower);
+        absoluteEncoder.periodic();
+        Angle currentAngle = Angle.fixedDeg(getAngle());
+        double delta = Angle.minimumDelta(currentAngle, targetAngle);
+        double adjustorMotorPower = controller.calculate(delta);
+        adjustor.setPower(adjustorMotorPower);
     }
 }
