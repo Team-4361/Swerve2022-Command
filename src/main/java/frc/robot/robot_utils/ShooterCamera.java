@@ -96,7 +96,7 @@ public class ShooterCamera {
 
         goalInfo.put("Distance", getDistanceToTarget(trackedTarget));
         goalInfo.put("Yaw", getYaw(trackedTarget));
-        goalInfo.put("Pitch", getPitch(trackedTarget));
+        goalInfo.put("Pitch", 45 + getPitch(trackedTarget));
         goalInfo.put("Status", 1.0);
 
         return goalInfo;
