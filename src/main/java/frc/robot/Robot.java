@@ -79,7 +79,6 @@ public class Robot extends TimedRobot {
                 .addDefaultCommand(CHASSIS_DRIVE_TEST, new ChassisForwardOffsetTest())
                 .addDefaultCommand(CHASSIS_OFFSET_ADJUSTMENT, new ChassisOffsetTest())
                 .addDefaultCommand(SHOOTER_ANGLE_TEST, new ShooterAngleTest())
-                .addDefaultCommand(INTAKE_ROTATION_TEST, new IntakeMaxRotationTest())
                 .setTestMode(DEFAULT_TEST_MODE);
 
         robotContainer = new RobotContainer();
