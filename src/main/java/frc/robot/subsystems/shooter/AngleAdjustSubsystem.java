@@ -55,10 +55,10 @@ public class AngleAdjustSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        absoluteEncoder.periodic();
-        Angle currentAngle = Angle.fixedDeg(getAngle());
-        double delta = Angle.minimumDelta(currentAngle, targetAngle);
-        double adjustorMotorPower = controller.calculate(delta);
-        adjustor.setPower(adjustorMotorPower);
+        // absoluteEncoder.periodic();
+        // Angle currentAngle = Angle.fixedDeg(getAngle());
+        // double delta = Angle.minimumDelta(currentAngle, targetAngle);
+        // double adjustorMotorPower = controller.calculate(delta);
+        // adjustor.setPower(adjustorMotorPower);
     }
 }

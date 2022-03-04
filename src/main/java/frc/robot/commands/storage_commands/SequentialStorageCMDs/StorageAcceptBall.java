@@ -20,6 +20,7 @@ public class StorageAcceptBall extends CommandBase {
     public void initialize() {
         addRequirements(Robot.storage);
         ballsLoaded = Robot.storage.getBallsLoaded();
+        startTimeMillis = -1;
         System.out.println("Accepting Ball");
     }
 
@@ -41,9 +42,9 @@ public class StorageAcceptBall extends CommandBase {
         // the top.
         switch (ballsLoaded) {
             case 0:
-                if (Robot.storage.frontProximityCovered()) {
-                    timeEnd();
-                }
+                // if (Robot.storage.frontProximityCovered()) {
+                //     timeEnd();
+                // }
                 System.out.println("Storing 1 ball");
                 // There are no balls loaded currently, it is safe to run both motors.
                 Robot.storage.setAcceptorMotor(getMotorValue(ACCEPT_SPEED, ACCEPTOR_FLIPPED));
@@ -52,9 +53,9 @@ public class StorageAcceptBall extends CommandBase {
                 break;
             case 1:
                 System.out.println("Storing 2 balls");
-                if (Robot.storage.rearProximityCovered()) {
-                    timeEnd();
-                }
+                // if (Robot.storage.rearProximityCovered()) {
+                //     timeEnd();
+                // }
 
                 // There is already a ball loaded, we should only run the front acceptor motor.
                 Robot.storage.setAcceptorMotor(getMotorValue(ACCEPT_SPEED, ACCEPTOR_FLIPPED));
@@ -87,16 +88,18 @@ public class StorageAcceptBall extends CommandBase {
                 break;
         }
 
-        new StorageRunAcceptor().schedule();
+        new StorageRunAcceptor(ACCEPT_SPEED, 0.3).schedule();
     }
 
     @Override
     public boolean isFinished() {
+        
+            
         switch (ballsLoaded) {
             case 0:
-                return Robot.storage.frontProximityCovered();
+                return Robot.storage.frontProximityCovered(); //&& System.currentTimeMillis() > endTimeMillis;
             case 1:
-                return Robot.storage.rearProximityCovered();
+                return Robot.storage.rearProximityCovered();// && System.currentTimeMillis() > endTimeMillis;
             default:
                 return false;
         }

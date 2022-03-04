@@ -89,7 +89,7 @@ public class Robot extends TimedRobot {
         shooterCamera = new ShooterCamera("RoxShooterCam", ShooterCameraConsts.CAMERA_HEIGHT, ShooterCameraConsts.CAMERA_PITCH);
 
         // Run retract intake command (not sure if this is how it really works)
-        new CalibrateIntake().schedule();
+        //new CalibrateIntake().schedule();
     }
 
 
@@ -98,7 +98,10 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
     }
 
-    @Override public void disabledInit() {}
+    @Override public void disabledInit() {
+        CommandScheduler.getInstance().cancelAll();
+    }
+    
     @Override public void disabledPeriodic() {}
 
     @Override

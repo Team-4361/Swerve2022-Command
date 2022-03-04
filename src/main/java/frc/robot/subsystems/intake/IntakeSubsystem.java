@@ -77,7 +77,7 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         leftEncoder = sparks[0].getEncoder();
         rightEncoder = sparks[1].getEncoder();
 
-        new RetractIntakeMagnet().schedule();
+        //new RetractIntakeMagnet().schedule();
 
         leftEncoder.setPosition(0);
         rightEncoder.setPosition(0);

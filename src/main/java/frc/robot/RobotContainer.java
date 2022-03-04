@@ -51,7 +51,7 @@ public class RobotContainer {
     //         new AutoShootCommand()
     // );
 
-    private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(new ExtendIntakePID(),
+    private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(
             new IntakeProcessAccept(),
             new StorageDecision());
 
