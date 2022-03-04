@@ -39,7 +39,6 @@ public class StorageAcceptBall extends CommandBase {
 
                 // There is already a ball loaded, we should only run the front acceptor motor.
                 Robot.storage.setAcceptorMotor(getMotorValue(ACCEPT_SPEED, ACCEPTOR_FLIPPED));
-                Robot.storage.setStorageMotor(getMotorValue(ACCEPT_SPEED, STORAGE_FLIPPED));
 
                 break;
             default:

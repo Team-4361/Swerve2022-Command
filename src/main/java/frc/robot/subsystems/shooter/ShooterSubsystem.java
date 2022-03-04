@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.robot_utils.MotorUtil;
@@ -18,7 +19,12 @@ import static frc.robot.robot_utils.MotorUtil.getMotorValue;
 public class ShooterSubsystem extends SubsystemBase {
     private final AbstractMotor shooterMotor;
     private final RelativeEncoder shooterEncoder;
-    private final PIDController shooterController = new PIDController(0.1, 1, 0);
+    private final PIDController shooterController = new PIDController(0 ,2e-4, 0);
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Shooter Velocity", getVelocity());
+    }
 
     public ShooterSubsystem() {
         CANSparkMax shooterSpark = new CANSparkMax(SHOOTER_MOTOR_ID, kBrushless);
@@ -34,7 +40,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public double getVelocity() {
-        return shooterEncoder.getVelocity();
+        return -shooterEncoder.getVelocity();
     }
 
     public void setShooterMotor(double val) {
@@ -69,7 +75,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isDesiredSpeed(double speed) {
-        return (shooterEncoder.getVelocity() - 0.05) >= speed;
+        return (getVelocity() - 0.05) >= speed;
     }
 
     public void resetPID() {

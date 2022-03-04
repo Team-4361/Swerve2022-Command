@@ -26,7 +26,7 @@ public class RetractIntakeMagnet extends CommandBase {
         if (!Robot.intake.isRetracted()) {
             // While the rear switch is not pressed, keep running the Intake Retract Motor out.
             //Robot.intake.retractIntake(retractSpeed);
-            Robot.intake.retractIntakePID();
+            Robot.intake.retractIntake();
         } else {
             // The magnet is pressed, stop the intake and end the command.
             Robot.intake.stopIntakeGroup();

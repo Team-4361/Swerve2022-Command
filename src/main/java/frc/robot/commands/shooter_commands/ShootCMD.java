@@ -44,8 +44,9 @@ public class ShootCMD extends CommandBase{
     public void end(boolean interrupted) {
         // TODO Auto-generated method stub
         Robot.storage.setAcceptorMotor(0);
-        Robot.storage.setAcceptorMotor(0);
+        Robot.storage.setStorageMotor(0);
         Robot.shooter.setShooterMotor(0);
+        Robot.shooter.resetPID();
     }
 
     @Override

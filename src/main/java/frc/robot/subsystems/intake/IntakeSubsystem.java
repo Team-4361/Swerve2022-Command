@@ -34,7 +34,7 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     private final DigitalInput blMagnet;
     private final DigitalInput brMagnet;
 
-    private final ProportionalController intakeController = new ProportionalController(0.09);
+    private final ProportionalController intakeController = new ProportionalController(/*0.09*/ 0.01);
 
     public IntakeSubsystem() {
         CANSparkMax leftSpark = new CANSparkMax(L_INTAKE_EXTEND_ID, kBrushless);
@@ -127,7 +127,7 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     }
 
     public void spinIntakeAccept() {
-        intakeMotor.setPower(MotorValue.ACCEPT_SPEED);
+        intakeMotor.setPower(MotorValue.SPIN_INTAKE_ACCEPT);
     }
 
     public void spinIntakeReject() {
@@ -162,10 +162,6 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     public void resetEncoders() {
         this.leftEncoder.setPosition(0);
         this.rightEncoder.setPosition(0);
-    }
-
-    public void calibrate(){
-        new CalibrateRetractIntake().schedule();
     }
 
     @Override

@@ -13,8 +13,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Chassis;
 import frc.robot.commands.chassis_commands.*;
+import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
+import frc.robot.commands.intake_commands.adjustor.RunAcceptor;
 import frc.robot.commands.shooter_commands.SensorShootCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
@@ -74,17 +76,18 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        xyButtonFive.whenActive(new ToggleLeftHandMode());
-        xyButtonFive.debounce(0.2).whenActive(new CenterShooterToHubCommand());
+        xyButtonFive.whenActive(new CalibrateRetractIntake());
+        //xyButtonFive.debounce(0.2).whenActive(new CenterShooterToHubCommand());
 
-        aButton.whenActive(new SensorShootCommand());
+        aButton.whenHeld(new ShootCMD(processBallCMD, 2000));
 
-        yButton.debounce(0.2).whenActive(processBallCMD);
+        yButton.whenActive(processBallCMD);
 
-        xButton.whileHeld(new SimpleProcessBallCMD());
+        xButton.whenActive(new CalibrateRetractIntake());
 
-        bButton.whileHeld(new ShootCMD(processBallCMD, ACCEPT_SPEED));
-
+        //bButton.whileHeld(new ShootCMD(processBallCMD, ACCEPT_SPEED));
+        
+        bButton.whenHeld(new RunAcceptor());
         lBumper.whenActive(new RetractIntakeMagnet());
         rBumper.whenActive(new ExtendIntakeMagnet());
     }
