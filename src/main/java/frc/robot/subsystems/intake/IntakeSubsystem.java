@@ -126,11 +126,11 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     }
 
     public void retractIntakePID(){
-        translateExtender(intakeController.calculate(getAveragePosition(), -0.5));
+        translateExtender(intakeController.calculate(getAveragePosition(), INTAKE_RETRACT_SETPOINT));
     }
 
     public void extendIntakePID(){
-        translateExtender(intakeController.calculate(getAveragePosition(), -7));
+        translateExtender(intakeController.calculate(getAveragePosition(), INTAKE_EXTEND_SETPOINT));
     }
 
     /**

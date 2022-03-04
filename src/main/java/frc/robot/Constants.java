@@ -127,7 +127,9 @@ public class Constants {
         public static final int R_INTAKE_EXTEND_ID = 11;
 
         // TODO: find correct rotations that you want, subtract from total rotations
-        public static final double INTAKE_TOTAL_EXTEND_ROTATIONS = 7;
+        public static final double INTAKE_EXTEND_SETPOINT = -7;
+        public static final double INTAKE_RETRACT_SETPOINT = -0.5;
+
 
 
         // TODO: this is the amount subtracted from INTAKE_TOTAL_EXTEND_ROTATIONS and is used for
