@@ -70,6 +70,9 @@ public class Robot extends TimedRobot {
         shooter = new ShooterSubsystem();
 
         intake = new IntakeSubsystem();
+
+        intake.calibrate();
+
         climber = new ClimberSubsystem();
 
         adjustor = new AngleAdjustSubsystem();
@@ -87,9 +90,6 @@ public class Robot extends TimedRobot {
         //Cameras
         chassisCamera = new ChassisCamera("RoxBallCam", ChassisCameraConsts.CAMERA_HEIGHT, ChassisCameraConsts.CAMERA_PITCH, INIT_TARGET_COLOR);
         shooterCamera = new ShooterCamera("RoxShooterCam", ShooterCameraConsts.CAMERA_HEIGHT, ShooterCameraConsts.CAMERA_PITCH);
-
-        // Run retract intake command (not sure if this is how it really works)
-        //new CalibrateIntake().schedule();
     }
 
 

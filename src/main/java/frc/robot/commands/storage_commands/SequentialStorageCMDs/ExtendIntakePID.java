@@ -16,7 +16,6 @@ public class ExtendIntakePID extends CommandBase {
         // This runs repeatedly until the command is ended.
         if (!Robot.intake.isExtended()) {
             // While the front switch is not pressed, keep running the Intake Extender Motor out.
-            //Robot.intake.extendIntake();
             Robot.intake.extendIntakePID();
         } else {
             // The magnet is pressed, stop the intake and end the command.

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorFlip;
 import frc.robot.Constants.MotorValue;
+import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 import frc.robot.robot_utils.encoder.ConcurrentRotationalEncoder;
 import me.wobblyyyy.pathfinder2.control.ProportionalController;
@@ -73,14 +74,12 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
                 MotorFlip.INTAKE_FLIPPED
         );
 
-
         leftEncoder = sparks[0].getEncoder();
         rightEncoder = sparks[1].getEncoder();
 
-        //new RetractIntakeMagnet().schedule();
-
         leftEncoder.setPosition(0);
         rightEncoder.setPosition(0);
+
 
         // TODO: Not sure if these are reversed or not, needs testing, assuming
         // TODO: front is towards the robot's front, extended from chassis, and back
@@ -90,6 +89,8 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         blMagnet = new DigitalInput(BL_MAGNET_ID);
         brMagnet = new DigitalInput(BR_MAGNET_ID);
     }
+
+    
 
     @Override
     public void periodic() {
@@ -105,10 +106,6 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         SmartDashboard.putNumber("Right Absolute Intake", rightRotationalEncoder.getAbsoluteRotations());
 
         SmartDashboard.putNumber("Intake Absolute Position Avg", getAverageAbsolutePosition());
-
-        // Update the encoders
-        // leftEncoder.update();
-        // rightEncoder.update();
 
     }
 
@@ -186,6 +183,10 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     public void resetEncoders() {
         this.leftEncoder.setPosition(0);
         this.rightEncoder.setPosition(0);
+    }
+
+    public void calibrate(){
+        new CalibrateRetractIntake().schedule();
     }
 
     @Override
