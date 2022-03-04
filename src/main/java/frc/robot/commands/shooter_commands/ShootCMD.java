@@ -36,7 +36,7 @@ public class ShootCMD extends CommandBase{
             // Run the storage motor, due to the if statement above it will shut off when the ball leaves.
             Robot.storage.setStorageMotor(ACCEPT_SPEED);
         } else{
-            Robot.shooter.setShooterVelocity(shootSpeed);
+            Robot.shooter.setShooterVelocity(this.shootSpeed);
         }
     }
 
