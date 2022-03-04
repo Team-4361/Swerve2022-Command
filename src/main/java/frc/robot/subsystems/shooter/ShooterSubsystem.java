@@ -69,7 +69,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isDesiredSpeed(double speed) {
-        return shooterEncoder.getVelocity() > speed;
+        return (shooterEncoder.getVelocity() - 0.05) >= speed;
     }
 
     public void resetPID() {

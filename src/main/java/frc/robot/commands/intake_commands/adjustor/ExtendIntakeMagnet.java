@@ -4,8 +4,9 @@ package frc.robot.commands.intake_commands.adjustor;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
-public class ExtendIntakeMagnet extends CommandBase {
+import static frc.robot.Constants.Intake.INTAKE_EXTEND_SETPOINT;
 
+public class ExtendIntakeMagnet extends CommandBase {
     @Override
     public void initialize() {
         addRequirements(Robot.intake);
@@ -33,6 +34,6 @@ public class ExtendIntakeMagnet extends CommandBase {
     @Override
     public boolean isFinished() {
         // Will be finished when the front switch is pressed, meaning all the way extended.
-        return Robot.intake.isExtended() || (Robot.intake.getLeftPosition() <= -7 && Robot.intake.getRightPosition() <= -7);
+        return Robot.intake.isExtended() || (Robot.intake.getLeftPosition() <= INTAKE_EXTEND_SETPOINT && Robot.intake.getRightPosition() <= INTAKE_EXTEND_SETPOINT);
     }
 }

@@ -14,6 +14,7 @@ public class CalibrateRetractIntake extends CommandBase{
     @Override
     public void end(boolean interrupted) {
         Robot.intake.stopIntakeGroup();
+        Robot.intake.resetEncoders();
     }
 
     @Override
@@ -24,9 +25,6 @@ public class CalibrateRetractIntake extends CommandBase{
         } else {
             // The magnet is pressed, stop the intake and end the command.
             Robot.intake.stopIntakeGroup();
-
-            // Reset the encoders since we know we're at the end.
-            Robot.intake.resetEncoders();
 
             end(false);
         }

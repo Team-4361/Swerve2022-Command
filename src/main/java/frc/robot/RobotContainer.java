@@ -13,12 +13,15 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Chassis;
 import frc.robot.commands.chassis_commands.*;
+import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 import frc.robot.commands.shooter_commands.SensorShootCommand;
+import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageDecision;
-import frc.robot.commands.storage_commands.SequentialStorageCMDs.ExtendIntakePID;
 import frc.robot.commands.storage_commands.SimpleProcessBallCMD;
+
+import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
 
 import static frc.robot.Constants.Control.*;
 
@@ -52,9 +55,9 @@ public class RobotContainer {
     // );
 
     private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(
+            new ExtendIntakeMagnet(),
             new IntakeProcessAccept(),
-            new StorageDecision(),
-            new RetractIntakeMagnet());
+            new StorageDecision());
 
 
     public RobotContainer() {
@@ -80,8 +83,10 @@ public class RobotContainer {
 
         xButton.whileHeld(new SimpleProcessBallCMD());
 
+        bButton.whileHeld(new ShootCMD(processBallCMD, ACCEPT_SPEED));
+
         lBumper.whenActive(new RetractIntakeMagnet());
-        rBumper.whenActive(new ExtendIntakePID());
+        rBumper.whenActive(new ExtendIntakeMagnet());
     }
 
     public Command getAutonomousCommand() {

@@ -4,6 +4,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.MotorValue;
 import frc.robot.Robot;
 
+import static frc.robot.Constants.Intake.INTAKE_RETRACT_SETPOINT;
+
 /**
  * This is only designed to be used at slow speeds, as it completely ignores
  * all encoder values, such as for calibration purposes. Otherwise, it will
@@ -47,6 +49,6 @@ public class RetractIntakeMagnet extends CommandBase {
     @Override
     public boolean isFinished() {
         // Will be finished when the front switch is pressed, meaning all the way extended.
-        return Robot.intake.isRetracted() ||  (Robot.intake.getLeftPosition() >= -0.5 && Robot.intake.getRightPosition() >= -0.5);
+        return Robot.intake.isRetracted() ||  (Robot.intake.getLeftPosition() >= INTAKE_RETRACT_SETPOINT && Robot.intake.getRightPosition() >= INTAKE_RETRACT_SETPOINT);
     }
 }
