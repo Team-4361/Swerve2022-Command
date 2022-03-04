@@ -12,7 +12,6 @@ import frc.robot.Constants.ShooterCameraConsts;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.test_commands.ChassisForwardOffsetTest;
 import frc.robot.commands.test_commands.ChassisOffsetTest;
-import frc.robot.commands.test_commands.IntakeMaxRotationTest;
 import frc.robot.commands.test_commands.ShooterAngleTest;
 import frc.robot.robot_utils.ChassisCamera;
 import frc.robot.robot_utils.ShooterCamera;
