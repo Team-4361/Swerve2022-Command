@@ -29,6 +29,8 @@ public class ShooterSubsystem extends SubsystemBase {
         );
 
         this.shooterEncoder = shooterSpark.getEncoder();
+
+        shooterController.setIntegratorRange(-1, 1);
     }
 
     public double getVelocity() {
@@ -62,6 +64,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void stopShooter() {
         shooterMotor.setPower(0);
+        shooterController.reset();
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")

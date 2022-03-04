@@ -53,7 +53,8 @@ public class RobotContainer {
 
     private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(
             new IntakeProcessAccept(),
-            new StorageDecision());
+            new StorageDecision(),
+            new RetractIntakeMagnet());
 
 
     public RobotContainer() {
@@ -75,7 +76,7 @@ public class RobotContainer {
 
         aButton.whenActive(new SensorShootCommand());
 
-        yButton.whenActive(processBallCMD);
+        yButton.debounce(0.2).whenActive(processBallCMD);
 
         xButton.whileHeld(new SimpleProcessBallCMD());
 
