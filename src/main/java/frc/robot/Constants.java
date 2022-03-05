@@ -48,7 +48,7 @@ public class Constants {
         public static final boolean CLIMBER_RIGHT_FLIPPED = false;
         public static final boolean CLIMBER_LEFT_FLIPPED = false;
 
-        public final static boolean ADJUSTOR_FLIPPED = true;
+        public final static boolean ADJUSTOR_FLIPPED = false;
 
         public final static boolean INTAKE_FLIPPED = true;
         public final static boolean INTAKE_EXTENDER_LEFT_FLIPPED = true;
@@ -217,7 +217,7 @@ public class Constants {
         public static final double SHOOT_SPEED = 1.0;
         public static final double ACCEPT_SPEED = 0.4;
         public static final double SPIN_INTAKE_ACCEPT = 0.6;
-        public static final double SLOW_ACCEPT_SPEED = 0.2;
+        public static final double SLOW_ACCEPT_SPEED = 0.25;
 
         public static final double EXTERNAL_ACCEPT_SPEED = 1;
 

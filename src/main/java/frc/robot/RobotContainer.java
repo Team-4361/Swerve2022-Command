@@ -87,7 +87,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        lStick.whenActive(new CenterShooterToHubCommand());
+        lStick.whenHeld(new CenterShooterToHubCommand());
         rStick.whenHeld(new RunStorageAcceptor());
 
         aButton.whenHeld(new ShootCMD(processBallCMD, 5000));
@@ -95,7 +95,7 @@ public class RobotContainer {
         yButton.whenActive(processBallCMD);
 
 
-        //bButton.whenActive(new SetShooterAngleCommand(30));
+        bButton.whenActive(new SetShooterAngleCommand(10));
 
         xButton.whenActive(new CalibrateRetractIntake());
         

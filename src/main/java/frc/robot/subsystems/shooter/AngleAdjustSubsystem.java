@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.robot_utils.motor.MotorUtil;
 import frc.robot.robot_utils.encoder.ConcurrentRotationalEncoder;
@@ -70,5 +71,7 @@ public class AngleAdjustSubsystem extends SubsystemBase {
         double delta = Angle.minimumDelta(currentAngle, targetAngle);
         double adjustorMotorPower = controller.calculate(delta);
         adjustor.setPower(adjustorMotorPower);
+
+        SmartDashboard.putNumber("Shooter Angle", getAngle());
     }
 }

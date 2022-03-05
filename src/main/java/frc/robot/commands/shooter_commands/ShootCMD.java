@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
-import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
+import static frc.robot.Constants.MotorValue.*;
 
 public class ShootCMD extends CommandBase{
 
@@ -44,7 +44,7 @@ public class ShootCMD extends CommandBase{
         // Only run the rear storage motor when the shooter has reached its target RPM.
         if (Robot.shooter.isDesiredSpeed(this.shootSpeed)) {
             // Run the storage motor, due to the if statement above it will shut off when the ball leaves.
-            Robot.storage.setStorageMotor(ACCEPT_SPEED);
+            Robot.storage.setStorageMotor(SLOW_ACCEPT_SPEED);
         } else{
             Robot.shooter.setShooterVelocity(this.shootSpeed);
         }
