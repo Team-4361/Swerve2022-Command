@@ -17,17 +17,16 @@ import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_GEAR_RATIO;
 import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_MOTOR_ID;
 
 public class AngleAdjustSubsystem extends SubsystemBase {
-    private final ProtectedAbstractMotor adjustor;
+    private final SparkMaxMotor adjustor;
     private final ConcurrentRotationalEncoder absoluteEncoder;
     private final PIDController controller;
     private Angle targetAngle;
 
     public AngleAdjustSubsystem() {
-        CANSparkMax adjustorSpark = new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless);
-        absoluteEncoder = new ConcurrentRotationalEncoder(adjustorSpark)
+        adjustor = SparkMaxMotor.brushless(ADJUSTOR_MOTOR_ID, ADJUSTOR_FLIPPED);
+        absoluteEncoder = new ConcurrentRotationalEncoder(adjustor.getSpark())
                 .setFlipped(ADJUSTOR_FLIPPED);
 
-        adjustor = new ProtectedAbstractMotor(adjustorSpark::set, adjustorSpark::get, adjustorSpark, ADJUSTOR_FLIPPED);
         controller = new PIDController((double) 1 / 90, 0, 0);
         controller.setSetpoint(0.0);
         
@@ -38,7 +37,7 @@ public class AngleAdjustSubsystem extends SubsystemBase {
         absoluteEncoder.reset();
     }
 
-    public ProtectedAbstractMotor getAdjustor() {
+    public SparkMaxMotor getAdjustor() {
         return this.adjustor;
     }
 
