@@ -17,15 +17,18 @@ import static frc.robot.Constants.Shooter.SHOOTER_MOTOR_ID;
 public class ShooterSubsystem extends SubsystemBase {
     private final AbstractMotor shooterMotor;
     private final RelativeEncoder shooterEncoder;
+    private final CANSparkMax shooterSpark;
     private final PIDController shooterController = new PIDController(0 ,2e-4, 0);
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Shooter Velocity", getVelocity());
+        SmartDashboard.putNumber("Shooter Current", shooterSpark.getOutputCurrent());
+        SmartDashboard.putNumber("Shooter Voltage", shooterSpark.getBusVoltage());
     }
 
     public ShooterSubsystem() {
-        CANSparkMax shooterSpark = new CANSparkMax(SHOOTER_MOTOR_ID, kBrushless);
+        shooterSpark = new CANSparkMax(SHOOTER_MOTOR_ID, kBrushless);
         this.shooterMotor = new AbstractMotor(
                 shooterSpark::set,
                 shooterSpark::get,

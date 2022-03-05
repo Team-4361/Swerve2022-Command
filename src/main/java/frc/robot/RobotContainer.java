@@ -95,9 +95,9 @@ public class RobotContainer {
         yButton.whenActive(processBallCMD);
 
 
-        bButton.whenActive(new SetShooterAngleCommand(30));
+        //bButton.whenActive(new SetShooterAngleCommand(30));
 
-        xButton.whenActive(calibrateGroup);
+        xButton.whenActive(new CalibrateRetractIntake());
         
         lBumper.whenActive(new MoveClimberDown());
         rBumper.whenActive(new MoveClimberUp());

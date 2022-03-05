@@ -25,11 +25,12 @@ public class CalibrateShooterCommand extends CommandBase {
     @Override
     public void initialize() {
         addRequirements(Robot.adjustor);
+        finished = false;
     }
 
     @Override
     public void execute() {
-        if (sparkEncoder.getVelocity() < 100 && sparkMotor.getOutputCurrent() > 20) {
+        if (Math.abs(sparkEncoder.getVelocity()) < 50 && sparkMotor.getOutputCurrent() > 20) {
             // The motor has stalled, everything is done.
             finished = true;
             sparkMaxMotor.setPower(0);
