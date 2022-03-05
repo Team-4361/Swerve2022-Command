@@ -11,14 +11,8 @@ public class MoveClimberUp extends CommandBase {
     public void initialize() {
         addRequirements(Robot.climber);
 
-<<<<<<< HEAD
-        // This may not be required, but it can eliminate a possible issue.
-        leftDone = false;
-        rightDone = false;
-=======
         this.leftDone = false;
         this.rightDone = false;
->>>>>>> origin/ShooterAngle
     }
 
     @Override
