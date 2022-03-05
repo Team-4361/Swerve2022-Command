@@ -10,31 +10,41 @@ public class MoveClimberDown extends CommandBase {
     @Override
     public void initialize() {
         addRequirements(Robot.climber);
+
+        this.leftDone = false;
+        this.rightDone = false;
     }
 
 
     @Override
     public void execute() {
         // This runs repeatedly until the command is ended.
-        if (!Robot.climber.isBottomLeftSwitchPressed()) {
-        // While the front switch is not pressed, keep running the climber Extender Motor out.
-        Robot.climber.lowerLeftClimber();
+        if (!leftDone) {
+            if (!Robot.climber.isBottomLeftSwitchPressed()) {
+                // While the front switch is not pressed, keep running the climber Extender Motor out.
+                Robot.climber.lowerLeftClimber();
+            } else {
+                Robot.climber.stopLeftClimber();
+                leftDone = true;
+            }
         } else {
             Robot.climber.stopLeftClimber();
-            leftDone = true;
         }
 
         // This runs repeatedly until the command is ended.
-        if (!Robot.climber.isBottomRightSwitchPressed()) {
-            // While the front switch is not pressed, keep running the climber Extender Motor out.
-            Robot.climber.lowerRightClimber();
+        if (!rightDone) {
+            if (!Robot.climber.isBottomRightSwitchPressed()) {
+                // While the front switch is not pressed, keep running the climber Extender Motor out.
+                Robot.climber.lowerRightClimber();
+            } else {
+                Robot.climber.stopRightClimber();
+                rightDone = true;
+            }
         } else {
             Robot.climber.stopRightClimber();
-            rightDone = true;
         }
 
         if (leftDone && rightDone) {
-            Robot.climber.zero();
             end(false);
         }
     }
@@ -42,6 +52,7 @@ public class MoveClimberDown extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         Robot.climber.stopClimber();
+        Robot.climber.zero();
     }
 
     @Override

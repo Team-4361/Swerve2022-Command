@@ -21,7 +21,7 @@ import java.util.function.Supplier;
  * @see CommandBase#execute()
  * @see SubsystemBase#periodic()
  */
-public abstract class ProtectedAbstractMotor extends AbstractMotor {
+public class ProtectedAbstractMotor extends AbstractMotor {
     private double maxTemperatureCelsius = 35;
     private double maxRunningCurrent = 60;
     private double maxStallCurrent = 120;
@@ -30,9 +30,9 @@ public abstract class ProtectedAbstractMotor extends AbstractMotor {
 
     private boolean stopOnError = true;
 
-    private CANSparkMax sparkMotor;
-    private RelativeEncoder encoder;
-    private ArrayList<MotorListener> motorErrorListeners;
+    private final CANSparkMax sparkMotor;
+    private final RelativeEncoder encoder;
+    private final ArrayList<MotorListener> motorErrorListeners;
     private MotorIntention motorIntention;
 
     private Consumer<MotorError> motorErrorMethod;
@@ -448,7 +448,7 @@ public abstract class ProtectedAbstractMotor extends AbstractMotor {
 
                     if (stallTime == 0) {
                         startTimer();
-                    } else if (stallTime > 2) {
+                    } else if (stallTime > 1) {
                         end(MotorError.OVER_CURRENT);
                     }
 

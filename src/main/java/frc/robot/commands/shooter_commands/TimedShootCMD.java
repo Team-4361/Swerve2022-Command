@@ -5,20 +5,19 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
 //This is for autoshoot
-public class TimedShootCMD extends CommandBase{
+public class TimedShootCMD extends CommandBase {
 
     private double startTime;
-    private double targetTime;
-    private double shootSpeed;
+    private final double targetTime;
+    private final double shootSpeed;
 
     private ShootCMD shootCMD;
 
     /**
-     * 
-     * @param time time in seconds to run the shooter
+     * @param time       time in seconds to run the shooter
      * @param shootSpeed speed in RPM
      */
-    public TimedShootCMD(double time, double shootSpeed){
+    public TimedShootCMD(double time, double shootSpeed) {
         this.targetTime = time;
         this.shootSpeed = shootSpeed;
         this.shootCMD = new ShootCMD(shootSpeed);
@@ -38,15 +37,13 @@ public class TimedShootCMD extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        if(Robot.shooter.isDesiredSpeed(shootSpeed)){
-            if(startTime == -1){
+        if (Robot.shooter.isDesiredSpeed(shootSpeed)) {
+            if (startTime == -1) {
                 startTime = System.currentTimeMillis();
             }
 
-            if(startTime != -1){
-                if((System.currentTimeMillis() - startTime) > (targetTime*1000)){
-                    return true;
-                }
+            if (startTime != -1) {
+                return (System.currentTimeMillis() - startTime) > (targetTime * 1000);
             }
         }
 

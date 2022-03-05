@@ -10,6 +10,9 @@ public class MoveClimberUp extends CommandBase {
     @Override
     public void initialize() {
         addRequirements(Robot.climber);
+
+        this.leftDone = false;
+        this.rightDone = false;
     }
 
     @Override
@@ -23,6 +26,8 @@ public class MoveClimberUp extends CommandBase {
                 Robot.climber.stopLeftClimber();
                 leftDone = true;
             }
+        } else {
+            Robot.climber.stopLeftClimber();
         }
 
         // This runs repeatedly until the command is ended.
@@ -34,9 +39,12 @@ public class MoveClimberUp extends CommandBase {
                 Robot.climber.stopRightClimber();
                 rightDone = true;
             }
+        } else {
+            Robot.climber.stopRightClimber();
         }
 
         if (leftDone && rightDone) {
+            Robot.climber.zero();
             end(false);
         }
     }
