@@ -10,14 +10,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Chassis;
 import frc.robot.commands.chassis_commands.*;
-import frc.robot.commands.climber_commands.MoveLeftClimberDown;
-import frc.robot.commands.climber_commands.MoveLeftClimberUp;
-import frc.robot.commands.climber_commands.MoveRightClimberDown;
-import frc.robot.commands.climber_commands.MoveRightClimberUp;
+import frc.robot.commands.climber_commands.*;
 import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
@@ -59,8 +57,13 @@ public class RobotContainer {
             new MoveBCKCMD()
     );
 
-    private final ParallelCommandGroup raiseClimberGroup = new ParallelCommandGroup(new MoveRightClimberUp(), new MoveLeftClimberUp());
-    private final ParallelCommandGroup lowerClimberGroup = new ParallelCommandGroup(new MoveRightClimberDown(), new MoveLeftClimberDown());
+    private final ParallelCommandGroup raiseClimberGroup = new ParallelCommandGroup(
+            new MoveLeftClimberUp(), new MoveRightClimberUp()
+    );
+
+    private final ParallelCommandGroup lowerClimberGroup = new ParallelCommandGroup(
+            new MoveLeftClimberDown(), new MoveRightClimberDown()
+    );
 
     // // TODO: may need to add/remove commands from this group.
     // private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(

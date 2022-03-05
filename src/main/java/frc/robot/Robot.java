@@ -18,6 +18,8 @@ import frc.robot.robot_utils.ChassisCamera;
 import frc.robot.robot_utils.ShooterCamera;
 import frc.robot.robot_utils.TestUtil;
 import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.climber.LeftClimberSubsystem;
+import frc.robot.subsystems.climber.RightClimberSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.AngleAdjustSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -43,9 +45,12 @@ public class Robot extends TimedRobot {
     public static StorageSubsystem storage;
     public static ShooterSubsystem shooter;
     public static IntakeSubsystem intake;
-    public static ClimberSubsystem climber;
+    //public static ClimberSubsystem climber;
     public static AngleAdjustSubsystem adjustor;
     public static TestUtil testUtil;
+
+    public static LeftClimberSubsystem leftClimber;
+    public static RightClimberSubsystem rightClimber;
 
     public static ShooterCamera shooterCamera;
     public static ChassisCamera chassisCamera;
@@ -69,7 +74,8 @@ public class Robot extends TimedRobot {
 
         intake = new IntakeSubsystem();
 
-        climber = new ClimberSubsystem();
+        leftClimber = new LeftClimberSubsystem();
+        rightClimber = new RightClimberSubsystem();
 
         adjustor = new AngleAdjustSubsystem();
 

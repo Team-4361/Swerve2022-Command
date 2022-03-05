@@ -9,26 +9,28 @@ public class MoveLeftClimberDown extends CommandBase {
     @Override
     public void initialize() {
         this.done = false;
+
+        addRequirements(Robot.leftClimber);
     }
 
     @Override
     public void execute() {
         if (!done) {
-            if (!Robot.climber.isBottomLeftSwitchPressed()) {
-                // While the front switch is not pressed, keep running the climber Extender Motor out.
-                Robot.climber.lowerLeftClimber();
+            if (!Robot.leftClimber.isBottomLeftSwitchPressed()) {
+                // While the front switch is not pressed, keep running the leftClimber Extender Motor out.
+                Robot.leftClimber.lower();
             } else {
-                Robot.climber.stopLeftClimber();
+                Robot.leftClimber.stop();
                 done = true;
             }
         } else {
-            Robot.climber.stopLeftClimber();
+            Robot.leftClimber.stop();
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        Robot.climber.stopLeftClimber();
+        Robot.leftClimber.stop();
     }
 
     @Override

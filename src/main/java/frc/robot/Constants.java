@@ -223,7 +223,7 @@ public class Constants {
 
         public static final double ADJUSTOR_SPEED = 0.3;
 
-        public static final double CLIMBER_SPEED = 0.35;
+        public static final double CLIMBER_SPEED = 0.6;
 
         // Stall current in amps, stops the motor when the current rises above
         // the maximum value.
