@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Chassis;
@@ -19,6 +20,7 @@ import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 import frc.robot.commands.intake_commands.adjustor.RunAcceptor;
+import frc.robot.commands.shooter_commands.CalibrateShooterCommand;
 import frc.robot.commands.shooter_commands.SetShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
@@ -66,6 +68,10 @@ public class RobotContainer {
             new IntakeProcessAccept(),
             new StorageDecision());
 
+    private final ParallelCommandGroup calibrateGroup = new ParallelCommandGroup(
+            new CalibrateRetractIntake(),
+            new CalibrateShooterCommand()
+    );
 
     public RobotContainer() {
         Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() ->
@@ -88,10 +94,10 @@ public class RobotContainer {
 
         yButton.whenActive(processBallCMD);
 
-        xButton.whenActive(new CalibrateRetractIntake());
 
         bButton.whenActive(new SetShooterAngleCommand(30));
 
+        xButton.whenActive(calibrateGroup);
         
         lBumper.whenActive(new MoveClimberDown());
         rBumper.whenActive(new MoveClimberUp());

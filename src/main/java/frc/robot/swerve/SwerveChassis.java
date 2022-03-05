@@ -119,12 +119,12 @@ public class SwerveChassis implements Drive {
     }
 
     @Override
-    public void setModifier(Function<Translation, Translation> modifier) {
+    public void setDriveModifier(Function<Translation, Translation> modifier) {
         this.modifier = modifier;
     }
 
     @Override
-    public Function<Translation, Translation> getModifier() {
+    public Function<Translation, Translation> getDriveModifier() {
         return modifier;
     }
 
