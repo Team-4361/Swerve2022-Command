@@ -107,8 +107,8 @@ public class RobotContainer {
 
         xButton.whenActive(new CalibrateRetractIntake());
         
-        lBumper.whenActive(lowerClimberGroup);
-        rBumper.whenActive(raiseClimberGroup);
+        lBumper.whenHeld(lowerClimberGroup);
+        rBumper.whenHeld(raiseClimberGroup);
     }
 
     public Command getAutonomousCommand() {

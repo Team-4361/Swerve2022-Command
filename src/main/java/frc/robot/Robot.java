@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.ChassisCameraConsts;
@@ -56,7 +57,7 @@ public class Robot extends TimedRobot {
     public static ChassisCamera chassisCamera;
     public static boolean leftHandedMode = false;
 
-    private final AcceptColor INIT_TARGET_COLOR = AcceptColor.BLUE;
+    private AcceptColor INIT_TARGET_COLOR = AcceptColor.BLUE;
 
     @Override
     public void robotInit() {
@@ -66,6 +67,10 @@ public class Robot extends TimedRobot {
         swerveDrive.resetGyro();
         pathfinder = swerveDrive.getPathfinder();
         pathfinderSubsystem = new PathfinderSubsystem(pathfinder);
+
+        if (SmartDashboard.getBoolean("Accept Red", false)) {
+            INIT_TARGET_COLOR = AcceptColor.RED;
+        }
 
         storage = new StorageSubsystem(INIT_TARGET_COLOR)
                 .setRetractMode(RETRACT_MODE);
