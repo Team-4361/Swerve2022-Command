@@ -12,13 +12,23 @@ public class ShootCMD extends CommandBase{
 
     private double shootSpeed;
 
+    /**
+     * 
+     * @param cmd command using the storage subsystem
+     * @param shootSpeed shoot speed in RPM
+     */
     public ShootCMD(Command cmd, double shootSpeed){
         if(!cmd.isScheduled()){
             this.cancel();
+
             shouldAddRequirements = false;
 
             this.shootSpeed = shootSpeed;
         }
+    }
+
+    public ShootCMD(double shootSpeed){
+        this.shootSpeed = shootSpeed;
     }
 
     @Override

@@ -60,7 +60,7 @@ public class AutoShootCommand extends SequentialCommandGroup {
         @Override
         public void initialize() {
             // Run the SensorShootCommand with the calculated velocity, after setting all the angles.
-            new SensorShootCommand(requiredVelocity).schedule();
+            new TimedShootCMD(5, requiredVelocity).schedule();;
 
             end(false);
         }

@@ -13,11 +13,13 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Chassis;
 import frc.robot.commands.chassis_commands.*;
+import frc.robot.commands.climber_commands.MoveClimberDown;
+import frc.robot.commands.climber_commands.MoveClimberUp;
 import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 import frc.robot.commands.intake_commands.adjustor.RunAcceptor;
-import frc.robot.commands.shooter_commands.SensorShootCommand;
+import frc.robot.commands.shooter_commands.SetShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageDecision;
@@ -40,6 +42,8 @@ public class RobotContainer {
     private final JoystickButton bButton = new JoystickButton(controller, XBOX_B);
     private final JoystickButton lBumper = new JoystickButton(controller, XBOX_LEFT_TRIGGER);
     private final JoystickButton rBumper = new JoystickButton(controller, XBOX_RIGHT_TRIGGER);
+    private final JoystickButton lStick = new JoystickButton(controller, XBOX_LEFT_STICK);
+    private final JoystickButton rStick = new JoystickButton(controller, XBOX_RIGHT_STICK);
 
     private final JoystickButton xyButtonFive = new JoystickButton(xyStick, 5);
 
@@ -76,20 +80,16 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        xyButtonFive.whenActive(new CalibrateRetractIntake());
-        //xyButtonFive.debounce(0.2).whenActive(new CenterShooterToHubCommand());
+        //lStick.debounce(0.2).whenActive(new CenterShooterToHubCommand());
 
         aButton.whenHeld(new ShootCMD(processBallCMD, 2000));
 
         yButton.whenActive(processBallCMD);
 
         xButton.whenActive(new CalibrateRetractIntake());
-
-        //bButton.whileHeld(new ShootCMD(processBallCMD, ACCEPT_SPEED));
         
-        bButton.whenHeld(new RunAcceptor());
-        lBumper.whenActive(new RetractIntakeMagnet());
-        rBumper.whenActive(new ExtendIntakeMagnet());
+        lBumper.whenActive(new MoveClimberDown());
+        rBumper.whenActive(new MoveClimberUp());
     }
 
     public Command getAutonomousCommand() {

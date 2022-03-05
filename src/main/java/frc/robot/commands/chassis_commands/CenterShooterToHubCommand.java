@@ -36,7 +36,7 @@ public class CenterShooterToHubCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Robot.swerveDrive.getGyro()));
+        Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(0)));
     }
 
     @Override
