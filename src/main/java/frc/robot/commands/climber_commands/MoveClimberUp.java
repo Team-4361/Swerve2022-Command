@@ -10,6 +10,10 @@ public class MoveClimberUp extends CommandBase {
     @Override
     public void initialize() {
         addRequirements(Robot.climber);
+
+        // This may not be required, but it can eliminate a possible issue.
+        leftDone = false;
+        rightDone = false;
     }
 
     @Override

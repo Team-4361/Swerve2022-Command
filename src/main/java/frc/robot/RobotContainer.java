@@ -23,6 +23,7 @@ import frc.robot.commands.shooter_commands.SetShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageDecision;
+import frc.robot.commands.storage_commands.RunStorageAcceptor;
 import frc.robot.commands.storage_commands.SimpleProcessBallCMD;
 
 import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
@@ -80,13 +81,17 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        //lStick.debounce(0.2).whenActive(new CenterShooterToHubCommand());
+        lStick.whenActive(new CenterShooterToHubCommand());
+        rStick.whenHeld(new RunStorageAcceptor());
 
-        aButton.whenHeld(new ShootCMD(processBallCMD, 2000));
+        aButton.whenHeld(new ShootCMD(processBallCMD, 5000));
 
         yButton.whenActive(processBallCMD);
 
         xButton.whenActive(new CalibrateRetractIntake());
+
+        bButton.whenActive(new SetShooterAngleCommand(30));
+
         
         lBumper.whenActive(new MoveClimberDown());
         rBumper.whenActive(new MoveClimberUp());

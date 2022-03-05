@@ -32,8 +32,8 @@ public class Constants {
                 XBOX_DPAD_DOWN = 13,
 
         // CONTROLLER
-        XBOX_LEFT_STICK = 7,
-                XBOX_RIGHT_STICK = 8,
+        XBOX_LEFT_STICK = 9,
+                XBOX_RIGHT_STICK = 10,
 
         // TOP BUTTONS
         XBOX_RIGHT_TRIGGER = 6,

@@ -14,7 +14,7 @@ public class CenterShooterToHubCommand extends CommandBase {
 
     HashMap<String, Double> target;
 
-    final ProportionalController centerShooterController = new ProportionalController(0.1);
+    final ProportionalController centerShooterController = new ProportionalController(0.015);
 
     public CenterShooterToHubCommand() {
         addRequirements(Robot.swerveDrive);
@@ -41,6 +41,6 @@ public class CenterShooterToHubCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(yawToHub) < 0.1;
+        return Math.abs(yawToHub) < 0.05;
     }
 }

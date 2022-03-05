@@ -22,6 +22,7 @@ public class StorageDecision extends CommandBase {
         switch (selectedTask) {
             case ACCEPT:
                 System.out.println("Storage: Scheduling Accept...");
+                new RetractIntakeMagnet().schedule();
                 new StorageAcceptBall().schedule();
                 break;
             case REJECT:
