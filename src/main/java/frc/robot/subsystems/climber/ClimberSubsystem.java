@@ -17,6 +17,7 @@ import static frc.robot.robot_utils.motor.MotorUtil.stopMotors;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
