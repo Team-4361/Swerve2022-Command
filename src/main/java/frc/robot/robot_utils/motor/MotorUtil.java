@@ -1,4 +1,4 @@
-package frc.robot.robot_utils;
+package frc.robot.robot_utils.motor;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;

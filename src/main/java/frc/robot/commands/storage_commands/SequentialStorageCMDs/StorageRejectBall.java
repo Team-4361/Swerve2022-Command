@@ -5,7 +5,7 @@ import frc.robot.Robot;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 
 import static frc.robot.Constants.MotorFlip.ACCEPTOR_FLIPPED;
-import static frc.robot.robot_utils.MotorUtil.*;
+import static frc.robot.robot_utils.motor.MotorUtil.*;
 
 import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
 

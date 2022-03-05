@@ -7,13 +7,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.robot_utils.MotorUtil;
 import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.MotorFlip.SHOOTER_FLIPPED;
 import static frc.robot.Constants.Shooter.SHOOTER_MOTOR_ID;
-import static frc.robot.robot_utils.MotorUtil.getMotorValue;
 
 
 public class ShooterSubsystem extends SubsystemBase {

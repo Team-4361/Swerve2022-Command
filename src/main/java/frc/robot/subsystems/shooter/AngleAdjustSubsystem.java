@@ -4,7 +4,7 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.robot_utils.MotorUtil;
+import frc.robot.robot_utils.motor.MotorUtil;
 import frc.robot.robot_utils.encoder.ConcurrentRotationalEncoder;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.revrobotics.SparkMaxMotor;

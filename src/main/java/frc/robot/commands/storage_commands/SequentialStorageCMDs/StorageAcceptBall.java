@@ -7,7 +7,7 @@ import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 import static frc.robot.Constants.MotorFlip.ACCEPTOR_FLIPPED;
 import static frc.robot.Constants.MotorFlip.STORAGE_FLIPPED;
 import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
-import static frc.robot.robot_utils.MotorUtil.*;
+import static frc.robot.robot_utils.motor.MotorUtil.*;
 
 
 public class StorageAcceptBall extends CommandBase {

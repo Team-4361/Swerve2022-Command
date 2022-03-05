@@ -10,9 +10,9 @@ import static frc.robot.Constants.Climber.TR_LIMIT_ID;
 import static frc.robot.Constants.MotorFlip.CLIMBER_LEFT_FLIPPED;
 import static frc.robot.Constants.MotorFlip.CLIMBER_RIGHT_FLIPPED;
 import static frc.robot.Constants.MotorValue.CLIMBER_SPEED;
-import static frc.robot.robot_utils.MotorUtil.getMotorValue;
-import static frc.robot.robot_utils.MotorUtil.runMotor;
-import static frc.robot.robot_utils.MotorUtil.stopMotors;
+import static frc.robot.robot_utils.motor.MotorUtil.getMotorValue;
+import static frc.robot.robot_utils.motor.MotorUtil.runMotor;
+import static frc.robot.robot_utils.motor.MotorUtil.stopMotors;
 
 import com.revrobotics.CANSparkMax;
 
