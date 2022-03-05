@@ -14,8 +14,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Chassis;
 import frc.robot.commands.chassis_commands.*;
-import frc.robot.commands.climber_commands.MoveClimberDown;
-import frc.robot.commands.climber_commands.MoveClimberUp;
+import frc.robot.commands.climber_commands.MoveLeftClimberDown;
+import frc.robot.commands.climber_commands.MoveLeftClimberUp;
+import frc.robot.commands.climber_commands.MoveRightClimberDown;
+import frc.robot.commands.climber_commands.MoveRightClimberUp;
 import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
@@ -56,6 +58,9 @@ public class RobotContainer {
             new MoveFWDCMD(),
             new MoveBCKCMD()
     );
+
+    private final ParallelCommandGroup raiseClimberGroup = new ParallelCommandGroup(new MoveRightClimberUp(), new MoveLeftClimberUp());
+    private final ParallelCommandGroup lowerClimberGroup = new ParallelCommandGroup(new MoveRightClimberDown(), new MoveLeftClimberDown());
 
     // // TODO: may need to add/remove commands from this group.
     // private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
@@ -99,8 +104,8 @@ public class RobotContainer {
 
         xButton.whenActive(new CalibrateRetractIntake());
         
-        lBumper.whenActive(new MoveClimberDown());
-        rBumper.whenActive(new MoveClimberUp());
+        lBumper.whenActive(lowerClimberGroup);
+        rBumper.whenActive(raiseClimberGroup);
     }
 
     public Command getAutonomousCommand() {
