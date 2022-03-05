@@ -10,12 +10,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Chassis;
 import frc.robot.commands.chassis_commands.*;
-import frc.robot.commands.climber_commands.MoveClimberDown;
-import frc.robot.commands.climber_commands.MoveClimberUp;
+import frc.robot.commands.climber_commands.*;
 import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
@@ -57,6 +57,14 @@ public class RobotContainer {
             new MoveBCKCMD()
     );
 
+    private final ParallelCommandGroup raiseClimberGroup = new ParallelCommandGroup(
+            new MoveLeftClimberUp(), new MoveRightClimberUp()
+    );
+
+    private final ParallelCommandGroup lowerClimberGroup = new ParallelCommandGroup(
+            new MoveLeftClimberDown(), new MoveRightClimberDown()
+    );
+
     // // TODO: may need to add/remove commands from this group.
     // private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
     //         new CenterShooterToHubCommand(),
@@ -87,7 +95,7 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        lStick.whenActive(new CenterShooterToHubCommand());
+        lStick.whenHeld(new CenterShooterToHubCommand());
         rStick.whenHeld(new RunStorageAcceptor());
 
         aButton.whenHeld(new ShootCMD(processBallCMD, 5000));
@@ -95,12 +103,12 @@ public class RobotContainer {
         yButton.whenActive(processBallCMD);
 
 
-        bButton.whenActive(new SetShooterAngleCommand(30));
+        bButton.whenActive(new SetShooterAngleCommand(10));
 
-        xButton.whenActive(calibrateGroup);
+        xButton.whenActive(new CalibrateRetractIntake());
         
-        lBumper.whenActive(new MoveClimberDown());
-        rBumper.whenActive(new MoveClimberUp());
+        lBumper.whenHeld(lowerClimberGroup);
+        rBumper.whenHeld(raiseClimberGroup);
     }
 
     public Command getAutonomousCommand() {
