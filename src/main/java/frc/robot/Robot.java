@@ -59,6 +59,7 @@ public class Robot extends TimedRobot {
 
     private AcceptColor INIT_TARGET_COLOR = AcceptColor.BLUE;
 
+
     @Override
     public void robotInit() {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -76,6 +77,11 @@ public class Robot extends TimedRobot {
                 .setRetractMode(RETRACT_MODE);
 
         shooter = new ShooterSubsystem();
+
+        //updates the acceleration every 2 ms starting 1 ms after the robot starts
+        addPeriodic(()->{
+            shooter.updateAcceleration();
+        }, 0.002, 0.001);
 
         intake = new IntakeSubsystem();
 

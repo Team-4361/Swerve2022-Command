@@ -7,6 +7,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import edu.wpi.first.wpilibj.TimedRobot;
 import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
@@ -20,11 +21,16 @@ public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax shooterSpark;
     private final PIDController shooterController = new PIDController(0 ,2e-4, 0);
 
+    private double lastVelocity;
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Shooter Velocity", getVelocity());
         SmartDashboard.putNumber("Shooter Current", shooterSpark.getOutputCurrent());
         SmartDashboard.putNumber("Shooter Voltage", shooterSpark.getBusVoltage());
+
+
+        lastVelocity = getVelocity();
     }
 
     public ShooterSubsystem() {
@@ -81,5 +87,17 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void resetPID() {
         shooterController.reset();
+    }
+
+    public void updateAcceleration(){
+        lastVelocity = getVelocity();
+    }
+
+    /**
+     * 
+     * @return returns the average acceleration over 112 ms 
+     */
+    public double getAcceleration(){
+        return (getVelocity() - lastVelocity)/2;
     }
 }
