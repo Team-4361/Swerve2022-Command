@@ -105,6 +105,10 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+
+        if(!robotContainer.isRobotCalibrated()){
+            robotContainer.calibrateRobot();
+        }
     }
 
     @Override public void disabledInit() {

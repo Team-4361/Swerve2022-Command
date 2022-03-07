@@ -57,6 +57,8 @@ public class RobotContainer {
             new MoveBCKCMD()
     );
 
+    private boolean isRobotCalibrated = false;
+
     private final ParallelCommandGroup raiseClimberGroup = new ParallelCommandGroup(
             new MoveLeftClimberUp(), new MoveRightClimberUp()
     );
@@ -77,8 +79,7 @@ public class RobotContainer {
             new StorageDecision());
 
     private final ParallelCommandGroup calibrateGroup = new ParallelCommandGroup(
-            new CalibrateRetractIntake(),
-            new CalibrateShooterCommand()
+            new CalibrateRetractIntake()
     );
 
     public RobotContainer() {
@@ -105,7 +106,7 @@ public class RobotContainer {
 
         bButton.whenActive(new SetShooterAngleCommand(10));
 
-        xButton.whenActive(new CalibrateRetractIntake());
+        //xButton.whenActive(new CalibrateRetractIntake());
         
         lBumper.whenHeld(lowerClimberGroup);
         rBumper.whenHeld(raiseClimberGroup);
@@ -126,5 +127,14 @@ public class RobotContainer {
 
     public double deadzone(double value, double deadzone) {
         return Math.abs(value) > deadzone ? value : 0;
+    }
+
+    public void calibrateRobot(){
+        calibrateGroup.schedule();
+        isRobotCalibrated = true;
+    }
+
+    public boolean isRobotCalibrated(){
+        return isRobotCalibrated;
     }
 }
