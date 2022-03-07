@@ -11,6 +11,7 @@ import java.util.HashMap;
 public class CenterShooterToHubCommand extends CommandBase {
 
     private double yawToHub = 0.0;
+    private boolean inRange = false;
 
     HashMap<String, Double> target;
 
@@ -31,7 +32,15 @@ public class CenterShooterToHubCommand extends CommandBase {
         target = Robot.shooterCamera.getTargetGoal();
         yawToHub = target.get("Yaw");
 
-        Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, centerShooterController.calculate(yawToHub, 0), Rotation2d.fromDegrees(0)));
+        double status = target.get("Status");
+
+        if(status != 0){
+            inRange = true;
+            Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, centerShooterController.calculate(yawToHub, 0), Rotation2d.fromDegrees(0)));
+        }else {
+            Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0.5, Rotation2d.fromDegrees(0)));
+        }
+        
     }
 
     @Override
@@ -41,6 +50,6 @@ public class CenterShooterToHubCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(yawToHub) < 0.05;
+        return (Math.abs(yawToHub) < 0.05) && inRange;
     }
 }
