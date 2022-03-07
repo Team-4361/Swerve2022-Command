@@ -16,21 +16,39 @@ public class ConcurrentRotationalEncoder {
     private double relativeRotations;
     private double calculatedRotations;
     private double velocity;
+    private double tolerance;
     private boolean rpmFlipped;
     private long lastTimeMs;
 
     public ConcurrentRotationalEncoder(Motor motor, RelativeEncoder encoder) {
         this.motor = motor;
         this.encoder = encoder;
+        this.tolerance = 2;
     }
 
     public ConcurrentRotationalEncoder(CANSparkMax motor) {
         this.motor = new AbstractMotor(motor::set, motor::get, false);
         this.encoder = motor.getEncoder();
+        this.tolerance = 2;
+    }
+
+    public ConcurrentRotationalEncoder(CANSparkMax motor, boolean flipped) {
+        this(motor);
+        this.setFlipped(flipped);
+    }
+
+    public ConcurrentRotationalEncoder(Motor motor, RelativeEncoder encoder, boolean flipped) {
+        this(motor, encoder);
+        this.setFlipped(flipped);
     }
 
     private static double calculateRotationChange(double encoderRpm, double elapsedTimeMs) {
         return encoderRpm / (60 / (elapsedTimeMs / 1_000));
+    }
+
+    public ConcurrentRotationalEncoder setRPMTolerance(double tolerance) {
+        this.tolerance = tolerance;
+        return this;
     }
 
     public void periodic() {
@@ -40,7 +58,7 @@ public class ConcurrentRotationalEncoder {
         if (elapsedTimeMs < 200) return;
 
         velocity = getMotorValue(encoder.getVelocity(), rpmFlipped);
-        if (!inTolerance(0, velocity, 2)) {
+        if (!inTolerance(0, velocity, this.tolerance)) {
             relativeRotations = getMotorValue(encoder.getPosition(), rpmFlipped);
             calculatedRotations = calculateRotationChange(velocity, elapsedTimeMs);
             absoluteRotations += calculatedRotations;

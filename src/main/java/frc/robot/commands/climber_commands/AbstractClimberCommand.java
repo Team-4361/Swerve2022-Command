@@ -1,16 +1,16 @@
 package frc.robot.commands.climber_commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.climber.LeftClimberSubsystem;
 
 import java.util.function.Supplier;
 
 public abstract class AbstractClimberCommand extends CommandBase {
-    private final ClimberSubsystem climber;
+    private final LeftClimberSubsystem climber;
     private final Supplier<Boolean> isSwitchPressed;
     private final Runnable translate;
 
-    public AbstractClimberCommand(ClimberSubsystem climber,
+    public AbstractClimberCommand(LeftClimberSubsystem climber,
                                   Supplier<Boolean> isSwitchPressed,
                                   Runnable translate) {
         this.climber = climber;
@@ -30,7 +30,7 @@ public abstract class AbstractClimberCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        climber.stopClimber();
+        climber.stop();
     }
 
     @Override

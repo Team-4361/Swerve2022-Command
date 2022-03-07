@@ -4,21 +4,19 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.ChassisCameraConsts;
 import frc.robot.Constants.ShooterCameraConsts;
-import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
-import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.test_commands.ChassisForwardOffsetTest;
 import frc.robot.commands.test_commands.ChassisOffsetTest;
 import frc.robot.commands.test_commands.ShooterAngleTest;
 import frc.robot.robot_utils.ChassisCamera;
 import frc.robot.robot_utils.ShooterCamera;
 import frc.robot.robot_utils.TestUtil;
-import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.climber.LeftClimberSubsystem;
 import frc.robot.subsystems.climber.RightClimberSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
@@ -46,12 +44,12 @@ public class Robot extends TimedRobot {
     public static StorageSubsystem storage;
     public static ShooterSubsystem shooter;
     public static IntakeSubsystem intake;
-    //public static ClimberSubsystem climber;
     public static AngleAdjustSubsystem adjustor;
     public static TestUtil testUtil;
 
     public static LeftClimberSubsystem leftClimber;
     public static RightClimberSubsystem rightClimber;
+
 
     public static ShooterCamera shooterCamera;
     public static ChassisCamera chassisCamera;
@@ -103,7 +101,6 @@ public class Robot extends TimedRobot {
         chassisCamera = new ChassisCamera("RoxBallCam", ChassisCameraConsts.CAMERA_HEIGHT, ChassisCameraConsts.CAMERA_PITCH, INIT_TARGET_COLOR);
         shooterCamera = new ShooterCamera("RoxShooterCam", ShooterCameraConsts.CAMERA_HEIGHT, ShooterCameraConsts.CAMERA_PITCH);
     }
-
 
     @Override
     public void robotPeriodic() {
