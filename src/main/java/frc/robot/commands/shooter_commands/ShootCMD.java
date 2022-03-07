@@ -42,7 +42,7 @@ public class ShootCMD extends CommandBase{
     @Override
     public void execute() {
         // Only run the rear storage motor when the shooter has reached its target RPM.
-        if (Robot.shooter.isDesiredSpeed(this.shootSpeed) && (Robot.shooter.getAcceleration() >= 0)) {
+        if (Robot.shooter.isDesiredSpeed(this.shootSpeed)) {
             // Run the storage motor, due to the if statement above it will shut off when the ball leaves.
             Robot.storage.setStorageMotor(SLOW_ACCEPT_SPEED);
         } else{
