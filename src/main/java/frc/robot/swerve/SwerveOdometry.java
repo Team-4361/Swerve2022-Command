@@ -84,6 +84,8 @@ public class SwerveOdometry extends AbstractOdometry {
     }
 
     private boolean shouldUpdate() {
+        // only update the odometry every X milliseconds
+        // updating it too frequently may cause very inaccurate results
         double currentTime = Time.ms();
 
         return currentTime - updateInterval >= lastUpdateTimeMs;

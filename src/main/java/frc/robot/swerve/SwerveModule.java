@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import me.wobblyyyy.pathfinder2.revrobotics.SparkMaxMotor;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
@@ -16,20 +17,20 @@ import me.wobblyyyy.pathfinder2.utils.StringUtils;
  * allowing the robot to move in any direction.
  */
 public class SwerveModule {
-    private static final int COUNTS_PER_REV = 4_096;
+    // private static final int COUNTS_PER_REV = 4_096;
 
     private final SparkMaxMotor driveMotor;
     private final SparkMaxMotor turnMotor;
     private final RelativeEncoder driveEncoder;
     private final DutyCycleEncoder rotationPWMEncoder;
     private final double offset;
-    
+
     private double errorFactor;
 
     private final PIDController turnController = new PIDController(
             0.5,
-            0.00,
-            0,
+            0.0,
+            0.0,
             0.02
     );
 
@@ -48,9 +49,14 @@ public class SwerveModule {
         this.errorFactor = errorFactor;
     }
 
-
     public double velocityMetersPerSecond() {
-        return driveEncoder.getVelocity();//  COUNTS_PER_REV;
+        // rpm -> rps -> mps
+        double rotationsPerMinute = driveEncoder.getVelocity();
+        double rotationsPerSecond = rotationsPerMinute / 60;
+        double metersPerSecond = rotationsPerSecond *
+                Constants.Chassis.SWERVE_WHEEL_CIRCUMFERENCE;
+
+        return metersPerSecond;
     }
 
     public Rotation2d getTurnAngle() {
@@ -69,7 +75,7 @@ public class SwerveModule {
                 state.angle.getRadians()
         );
 
-        driveMotor.setPower(state.speedMetersPerSecond* errorFactor);
+        driveMotor.setPower(state.speedMetersPerSecond * errorFactor);
         turnMotor.setPower(turnPower);
     }
 
@@ -108,6 +114,4 @@ public class SwerveModule {
     public double getDistance() {
         return driveEncoder.getPosition();
     }
-
-    
 }

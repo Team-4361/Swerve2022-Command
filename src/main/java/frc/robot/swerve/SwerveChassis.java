@@ -15,7 +15,7 @@ import java.util.function.Function;
 import static frc.robot.Constants.Chassis.*;
 import static frc.robot.Constants.TestValue.DRIVE_ENABLED;
 
-
+@SuppressWarnings("unused")
 public class SwerveChassis implements Drive {
     private static final Translation2d SWERVE_FR_POSITION =
             new Translation2d(SWERVE_CHASSIS_SIDE_LENGTH / 2, SWERVE_CHASSIS_SIDE_LENGTH / 2);
@@ -48,10 +48,34 @@ public class SwerveChassis implements Drive {
 
     public SwerveChassis() {
         this(
-                new SwerveModule(FR_DRIVE_ID, FR_TURN_ID, FR_DIO_ENCODER_PORT, FR_OFFSET, FR_ERROR_FACTOR),
-                new SwerveModule(FL_DRIVE_ID, FL_TURN_ID, FL_DIO_ENCODER_PORT, FL_OFFSET, FL_ERROR_FACTOR),
-                new SwerveModule(BR_DRIVE_ID, BR_TURN_ID, BR_DIO_ENCODER_PORT, BR_OFFSET, BR_ERROR_FACTOR),
-                new SwerveModule(BL_DRIVE_ID, BL_TURN_ID, BL_DIO_ENCODER_PORT, BL_OFFSET, FL_ERROR_FACTOR)
+                new SwerveModule(
+                        FR_DRIVE_ID,
+                        FR_TURN_ID,
+                        FR_DIO_ENCODER_PORT,
+                        FR_OFFSET,
+                        FR_ERROR_FACTOR
+                ),
+                new SwerveModule(
+                        FL_DRIVE_ID,
+                        FL_TURN_ID,
+                        FL_DIO_ENCODER_PORT,
+                        FL_OFFSET,
+                        FL_ERROR_FACTOR
+                ),
+                new SwerveModule(
+                        BR_DRIVE_ID,
+                        BR_TURN_ID,
+                        BR_DIO_ENCODER_PORT,
+                        BR_OFFSET,
+                        BR_ERROR_FACTOR
+                ),
+                new SwerveModule(
+                        BL_DRIVE_ID,
+                        BL_TURN_ID,
+                        BL_DIO_ENCODER_PORT,
+                        BL_OFFSET,
+                        BL_ERROR_FACTOR
+                )
         );
     }
 
@@ -115,7 +139,8 @@ public class SwerveChassis implements Drive {
             backLeft.setState(backLeftState);
         }
 
-        updateDashboard();
+        // don't update the dashboard here anymore, do it in SwerveOdometry
+        // updateDashboard();
     }
 
     @Override

@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.I2C;
 import frc.robot.robot_utils.TestUtil;
 import frc.robot.subsystems.storage.RetractMode;
 
-// TODO: check all values and make sure they are correct
 public class Constants {
 
     public static double BALL_MASS = 0.2676195;
@@ -73,7 +72,7 @@ public class Constants {
 
         public static final double CONTROLLER_DEADZONE = 0.1;
 
-        //In meters
+        // In meters
         public static final double SWERVE_CHASSIS_SIDE_LENGTH = 0.762;
 
         public static final int FR_DRIVE_ID = 4;
@@ -91,7 +90,15 @@ public class Constants {
         public static final int BR_DIO_ENCODER_PORT = 2;
         public static final int BL_DIO_ENCODER_PORT = 1;
 
+        /**
+         * the radius of each of the swerve drive wheels (meters)
+         */
         public static final double SWERVE_WHEEL_RADIUS = 0.0508;
+        /**
+         * the circumference of each of the swerve drive wheels (meters)
+         */
+        public static final double SWERVE_WHEEL_CIRCUMFERENCE =
+            SWERVE_WHEEL_RADIUS * 2 * Math.PI;
         public static final double ODOMETRY_MS_INTERVAL = 5;
 
         public static final double BL_ERROR_FACTOR = 1;
@@ -212,7 +219,7 @@ public class Constants {
         public static final double BALL_HEIGHT = 0.2413;
     }
 
-    // These values are designed to be changed based on the Motor 
+    // These values are designed to be changed based on the Motor
     public static class MotorValue {
         public static final double SHOOT_SPEED = 1.0;
         public static final double ACCEPT_SPEED = 0.4;
