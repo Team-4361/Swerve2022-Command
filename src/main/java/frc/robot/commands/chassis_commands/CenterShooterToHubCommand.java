@@ -38,7 +38,7 @@ public class CenterShooterToHubCommand extends CommandBase {
             inRange = true;
             Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, centerShooterController.calculate(yawToHub, 0), Rotation2d.fromDegrees(0)));
         }else {
-            Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0.5, Rotation2d.fromDegrees(0)));
+            Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 1.0, Rotation2d.fromDegrees(0)));
         }
         
     }

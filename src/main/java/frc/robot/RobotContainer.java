@@ -101,7 +101,7 @@ public class RobotContainer {
 
         bButton.whenActive(new SetShooterAngleCommand(10));
 
-        //xButton.whenActive(new CalibrateRetractIntake());
+        xButton.whenActive(new CalibrateRetractIntake());
 
         lBumper.whenHeld(lowerClimberGroup);
         rBumper.whenHeld(raiseClimberGroup);

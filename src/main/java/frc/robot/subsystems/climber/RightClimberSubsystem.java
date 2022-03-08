@@ -51,6 +51,7 @@ public class RightClimberSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("tr switch", trSwitch.get());
 
         SmartDashboard.putNumber("climber: right encoder", getRotations());
+        SmartDashboard.putNumber("climber: right temp", climberMotor.getMotorTemperature());
     }
 
     /** @return If the motor is over 40C, which is a good sign that it's stalling */
