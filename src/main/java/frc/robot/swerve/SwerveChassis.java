@@ -117,13 +117,6 @@ public class SwerveChassis implements Drive {
         return SWERVE_KINEMATICS;
     }
 
-    public HashMap<String, SwerveModuleState> getSwerveModuleStates() {
-        return new HashMap<>(Map.of("FL", getFrontLeft().getState(),
-                "BL", getBackLeft().getState(),
-                "FR", getFrontRight().getState(),
-                "BR", getBackRight().getState()));
-    }
-
     public void drive(ChassisSpeeds speeds) {
         SwerveModuleState[] states =
                 SWERVE_KINEMATICS.toSwerveModuleStates(speeds);

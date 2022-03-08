@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
+import me.wobblyyyy.pathfinder2.math.Rounding;
 import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
 import me.wobblyyyy.pathfinder2.time.Time;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
@@ -49,8 +50,8 @@ public class SwerveOdometry extends AbstractOdometry {
     private static String formatState(SwerveModuleState state) {
         return StringUtils.format(
                 "v: %s a: %s deg",
-                state.speedMetersPerSecond,
-                state.angle.getDegrees()
+                Rounding.fastRound(state.speedMetersPerSecond),
+                Rounding.fastRound(state.angle.getDegrees())
         );
     }
 

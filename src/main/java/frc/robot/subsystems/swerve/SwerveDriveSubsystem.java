@@ -52,10 +52,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 odometry.getPosition().toString());
     }
 
-    public HashMap<String, SwerveModuleState> getSwerveModuleStates() {
-        return swerveChassis.getSwerveModuleStates();
-    }
-
     public void drive(ChassisSpeeds speeds) {
         if (DRIVE_ENABLED) {
             swerveChassis.drive(speeds);
