@@ -18,6 +18,7 @@ import frc.robot.commands.chassis_commands.*;
 import frc.robot.commands.climber_commands.*;
 import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
+import frc.robot.commands.shooter_commands.AutoShootCommand;
 import frc.robot.commands.shooter_commands.SetShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
@@ -62,11 +63,11 @@ public class RobotContainer {
             new MoveLeftClimberDown(), new MoveRightClimberDown()
     );
 
-    // // TODO: may need to add/remove commands from this group.
-    // private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
-    //         new CenterShooterToHubCommand(),
-    //         new AutoShootCommand()
-    // );
+    // TODO: may need to add/remove commands from this group.
+    private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
+            new CenterShooterToHubCommand(),
+            new AutoShootCommand()
+    );
 
     private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(
             new ExtendIntakeMagnet(),
@@ -120,9 +121,9 @@ public class RobotContainer {
     //     return (Command) new TestAutonomous(pathfinderSubsystem);
     // }
 
-    // public SequentialCommandGroup getAutoShootGroup() {
-    //     return autoShootGroup;
-    // }
+    public SequentialCommandGroup getAutoShootGroup() {
+        return autoShootGroup;
+    }
 
     public double deadzone(double value, double deadzone) {
         return Math.abs(value) > deadzone ? value : 0;
