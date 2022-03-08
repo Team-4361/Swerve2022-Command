@@ -43,6 +43,7 @@ public class RobotContainer {
     private final JoystickButton rBumper = new JoystickButton(controller, XBOX_RIGHT_TRIGGER);
     private final JoystickButton lStick = new JoystickButton(controller, XBOX_LEFT_STICK);
     private final JoystickButton rStick = new JoystickButton(controller, XBOX_RIGHT_STICK);
+    private final JoystickButton startButton = new JoystickButton(controller, XBOX_START);
 
     private final JoystickButton xyButtonFive = new JoystickButton(xyStick, 5);
 
@@ -65,7 +66,7 @@ public class RobotContainer {
 
     // TODO: may need to add/remove commands from this group.
     private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
-            new CenterShooterToHubCommand(),
+            new ParallelCommandGroup(new SetShooterAngleCommand(20) ,new CenterShooterToHubCommand()),
             new AutoShootCommand()
     );
 
@@ -102,7 +103,7 @@ public class RobotContainer {
 
         bButton.whenActive(new SetShooterAngleCommand(10));
 
-        xButton.whenActive(new CalibrateRetractIntake());
+        startButton.whenActive(new CalibrateRetractIntake());
 
         lBumper.whenHeld(lowerClimberGroup);
         rBumper.whenHeld(raiseClimberGroup);

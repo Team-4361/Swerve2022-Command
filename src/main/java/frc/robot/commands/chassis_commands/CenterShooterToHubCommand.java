@@ -15,7 +15,7 @@ public class CenterShooterToHubCommand extends CommandBase {
 
     HashMap<String, Double> target;
 
-    final ProportionalController centerShooterController = new ProportionalController(0.015);
+    final ProportionalController centerShooterController = new ProportionalController(0.05);
 
     public CenterShooterToHubCommand() {
         addRequirements(Robot.swerveDrive);

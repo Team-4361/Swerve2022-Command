@@ -21,7 +21,7 @@ public class Constants {
                 XBOX_Y = 4,
                 XBOX_B = 2,
                 XBOX_A = 1,
-                XBOX_START = 9,
+                XBOX_START = 8,
                 XBOX_END = 10,
 
         // DPAD
