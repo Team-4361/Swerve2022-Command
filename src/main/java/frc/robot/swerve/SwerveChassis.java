@@ -7,6 +7,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.robot.Drive;
+import me.wobblyyyy.pathfinder2.wpilib.WPIAdapter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -156,6 +157,8 @@ public class SwerveChassis implements Drive {
     @Override
     public void setTranslation(Translation translation) {
         this.translation = translation;
+
+        drive(WPIAdapter.speedsFromTranslation(translation));
     }
 
     @Override

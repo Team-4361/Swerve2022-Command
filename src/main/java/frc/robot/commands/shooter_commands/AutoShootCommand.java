@@ -96,7 +96,7 @@ public class AutoShootCommand extends SequentialCommandGroup {
 
     public AutoShootCommand() {
         super(
-                new AdjustAngleCommand(Angle.fromDeg(45)),
+                new SetShooterAngleCommand(20),
                 new ShootBallCommand(Robot.shooterCamera.getTargetGoal())
         );
     }

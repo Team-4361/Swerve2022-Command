@@ -104,7 +104,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
 
-        if(!robotContainer.isRobotCalibrated()){
+        if (!robotContainer.isRobotCalibrated()) {
             robotContainer.calibrateRobot();
         }
     }
@@ -119,6 +119,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        swerveDrive.reset();
         autonomous = robotContainer.getAutonomousCommand(pathfinderSubsystem);
 
         if (autonomous != null)
@@ -126,7 +127,13 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+        SmartDashboard.putBoolean("pathfinder status", pathfinder.isActive());
+        SmartDashboard.putBoolean("auton scheduled", autonomous.isScheduled());
+        SmartDashboard.putBoolean("auton finished", autonomous.isFinished());
+        
+        pathfinder.tick();
+    }
 
     @Override
     public void teleopInit() {
@@ -134,11 +141,12 @@ public class Robot extends TimedRobot {
             autonomous.cancel();
 
         CommandScheduler.getInstance().cancelAll();
-
     }
 
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        swerveDrive.periodic();       
+    }
 
     @Override
     public void testInit() {

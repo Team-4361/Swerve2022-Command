@@ -13,6 +13,7 @@ import frc.robot.swerve.SwerveOdometry;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.control.Controller;
 import me.wobblyyyy.pathfinder2.control.ProportionalController;
+import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 import me.wobblyyyy.pathfinder2.robot.Odometry;
 import me.wobblyyyy.pathfinder2.robot.Robot;
@@ -93,5 +94,9 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     public double getDistance() {
         return swerveChassis.getDistance();
+    }
+
+    public void reset() {
+        odometry.offsetSoPositionIs(new PointXYZ(0, 0, 0));
     }
 }
