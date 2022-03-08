@@ -10,25 +10,20 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Chassis;
+import frc.robot.commands.autonomous_commands.TestAutonomous;
 import frc.robot.commands.chassis_commands.*;
 import frc.robot.commands.climber_commands.*;
 import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
-import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
-import frc.robot.commands.intake_commands.adjustor.RunAcceptor;
-import frc.robot.commands.shooter_commands.CalibrateShooterCommand;
 import frc.robot.commands.shooter_commands.SetShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageDecision;
+import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 import frc.robot.commands.storage_commands.RunStorageAcceptor;
-import frc.robot.commands.storage_commands.SimpleProcessBallCMD;
-
-import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
 
 import static frc.robot.Constants.Control.*;
 
@@ -107,7 +102,7 @@ public class RobotContainer {
         bButton.whenActive(new SetShooterAngleCommand(10));
 
         //xButton.whenActive(new CalibrateRetractIntake());
-        
+
         lBumper.whenHeld(lowerClimberGroup);
         rBumper.whenHeld(raiseClimberGroup);
     }
@@ -115,6 +110,10 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         return null;
+    }
+
+    public Command getAutonomousCommand(PathfinderSubsystem pathfinder) {
+        return new TestAutonomous(pathfinder);
     }
 
     // public Command getAutonomousCommand(PathfinderSubsystem pathfinderSubsystem) {

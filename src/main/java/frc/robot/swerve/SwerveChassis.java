@@ -139,6 +139,7 @@ public class SwerveChassis implements Drive {
     }
 
     public double getDistance() {
-        return frontRight.getDistance() * 2 * Math.PI * Constants.Chassis.SWERVE_WHEEL_RADIUS;
+        return frontRight.getDistance() * 2 *
+            Math.PI * Constants.Chassis.SWERVE_WHEEL_RADIUS;
     }
 }

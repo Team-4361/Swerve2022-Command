@@ -14,7 +14,7 @@ public class TestAutonomous extends TrajectoryCommand {
     public static Trajectory SPLINE_TRAJECTORY = new AdvancedSplineTrajectoryBuilder()
             .setStep(0.1)
             .setSpeed(0.3)
-            .setTolerance(0.05)
+            .setTolerance(2)
             .setAngleTolerance(Angle.fromDeg(5))
             .add(new PointXYZ(0, 0, 0))
             .add(new PointXYZ(0, 0, 0).inDirection(1, Angle.fromDeg(45)))

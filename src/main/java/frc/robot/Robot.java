@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -57,7 +56,6 @@ public class Robot extends TimedRobot {
 
     private AcceptColor INIT_TARGET_COLOR = AcceptColor.BLUE;
 
-
     @Override
     public void robotInit() {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
@@ -76,7 +74,7 @@ public class Robot extends TimedRobot {
 
         shooter = new ShooterSubsystem();
 
-        //updates the acceleration every 2 ms starting 1 ms after the robot starts
+        // updates the acceleration every 2 ms starting 1 ms after the robot starts
         addPeriodic(()->{
             shooter.updateAcceleration();
         }, 0.002, 0.001);
@@ -97,7 +95,7 @@ public class Robot extends TimedRobot {
 
         robotContainer = new RobotContainer();
 
-        //Cameras
+        // Cameras
         chassisCamera = new ChassisCamera("RoxBallCam", ChassisCameraConsts.CAMERA_HEIGHT, ChassisCameraConsts.CAMERA_PITCH, INIT_TARGET_COLOR);
         shooterCamera = new ShooterCamera("RoxShooterCam", ShooterCameraConsts.CAMERA_HEIGHT, ShooterCameraConsts.CAMERA_PITCH);
     }
@@ -111,24 +109,24 @@ public class Robot extends TimedRobot {
         }
     }
 
-    @Override public void disabledInit() {
+    @Override
+    public void disabledInit() {
         CommandScheduler.getInstance().cancelAll();
     }
-    
-    @Override public void disabledPeriodic() {}
+
+    @Override
+    public void disabledPeriodic() {}
 
     @Override
     public void autonomousInit() {
-        // autonomous = robotContainer
-        //         .getAutonomousCommand(pathfinderSubsystem);
+        autonomous = robotContainer.getAutonomousCommand(pathfinderSubsystem);
 
         if (autonomous != null)
             autonomous.schedule();
     }
 
     @Override
-    public void autonomousPeriodic() {
-    }
+    public void autonomousPeriodic() {}
 
     @Override
     public void teleopInit() {
@@ -136,28 +134,18 @@ public class Robot extends TimedRobot {
             autonomous.cancel();
 
         CommandScheduler.getInstance().cancelAll();
-        
+
     }
 
-    /**
-     * This function is called periodically during operator control.
-     */
     @Override
     public void teleopPeriodic() {}
 
     @Override
     public void testInit() {
-        // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
-
-        // Run the testing command when in testing mode.
         testUtil.runExecutedCommand();
     }
 
-    /**
-     * This function is called periodically during test mode.
-     */
     @Override
-    public void testPeriodic() {
-    }
+    public void testPeriodic() {}
 }
