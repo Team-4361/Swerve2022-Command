@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -49,12 +50,15 @@ public class Robot extends TimedRobot {
     public static LeftClimberSubsystem leftClimber;
     public static RightClimberSubsystem rightClimber;
 
+    private final SendableChooser<AcceptColor> acceptColorChooser = new SendableChooser<>();
+    private final String BLUE_ACCEPT_NAME = "Blue Accept";
+    private final String RED_ACCEPT_NAME = "Red Accept";
 
     public static ShooterCamera shooterCamera;
     public static ChassisCamera chassisCamera;
     public static boolean leftHandedMode = false;
 
-    private AcceptColor INIT_TARGET_COLOR = AcceptColor.BLUE;
+    private final AcceptColor INIT_TARGET_COLOR = AcceptColor.BLUE;
 
     @Override
     public void robotInit() {
@@ -65,8 +69,15 @@ public class Robot extends TimedRobot {
         pathfinder = swerveDrive.getPathfinder();
         pathfinderSubsystem = new PathfinderSubsystem(pathfinder);
 
-        if (SmartDashboard.getBoolean("Accept Red", false)) {
-            INIT_TARGET_COLOR = AcceptColor.RED;
+        // Add the values for the SendableChooser
+        this.acceptColorChooser.addOption(BLUE_ACCEPT_NAME, AcceptColor.BLUE);
+        this.acceptColorChooser.addOption(RED_ACCEPT_NAME, AcceptColor.RED);
+
+        switch (this.INIT_TARGET_COLOR) {
+            case RED:
+                this.acceptColorChooser.setDefaultOption(RED_ACCEPT_NAME, AcceptColor.RED);
+            case BLUE:
+                this.acceptColorChooser.setDefaultOption(BLUE_ACCEPT_NAME, AcceptColor.BLUE);
         }
 
         storage = new StorageSubsystem(INIT_TARGET_COLOR)
@@ -133,6 +144,13 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        // See if the acceptance color value has been updated, and if so then adjust it.
+        AcceptColor currentlyAccepting = Robot.storage.getAcceptColor();
+        AcceptColor currentlySelected = this.acceptColorChooser.getSelected();
+
+        if (currentlySelected != currentlyAccepting) {
+            Robot.storage.setAcceptColor(currentlySelected);
+        }
     }
 
     @Override

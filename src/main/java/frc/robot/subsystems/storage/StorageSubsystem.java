@@ -21,7 +21,7 @@ public class StorageSubsystem extends SubsystemBase {
     private final ColorSensorV3 indexColorSensor;
     private final AbstractMotor acceptorMotor, storageMotor;
 
-    private final AcceptColor acceptColor;
+    private AcceptColor acceptColor;
 
     private StorageTask nextTask;
     private RetractMode retractMode;
@@ -68,6 +68,10 @@ public class StorageSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("Storage: Storage Loaded", rearProximityCovered());
 
         SmartDashboard.putNumber("Storage: Balls Loaded", getBallsLoaded());
+    }
+
+    public void setAcceptColor(AcceptColor color) {
+        this.acceptColor = color;
     }
 
     public void setAcceptorMotor(double speed) {
