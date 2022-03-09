@@ -9,7 +9,7 @@ public enum StorageTask {
 
     /**
      * Neutral Task, returned when nothing should be done.
-     * @see NewStorageSubsystem#getDetectedTask()
+     * @see StorageSubsystem#getDetectedTask()
      */
     NEUTRAL
 }

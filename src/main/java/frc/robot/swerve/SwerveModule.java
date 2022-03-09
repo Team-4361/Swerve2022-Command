@@ -6,9 +6,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 import me.wobblyyyy.pathfinder2.revrobotics.SparkMaxMotor;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
+
+import static frc.robot.Constants.Chassis.SWERVE_WHEEL_CIRCUMFERENCE;
 
 /**
  * A {@code SwerveModule} is composed of two motors and two encoders:
@@ -23,9 +24,9 @@ public class SwerveModule {
     private final SparkMaxMotor turnMotor;
     private final RelativeEncoder driveEncoder;
     private final DutyCycleEncoder rotationPWMEncoder;
-    private final double offset;
 
-    private double errorFactor;
+    private final double offset;
+    private final double errorFactor;
 
     private final PIDController turnController = new PIDController(
             0.5,
@@ -53,10 +54,8 @@ public class SwerveModule {
         // rpm -> rps -> mps
         double rotationsPerMinute = driveEncoder.getVelocity();
         double rotationsPerSecond = rotationsPerMinute / 60;
-        double metersPerSecond = rotationsPerSecond *
-                Constants.Chassis.SWERVE_WHEEL_CIRCUMFERENCE;
 
-        return metersPerSecond;
+        return rotationsPerSecond * SWERVE_WHEEL_CIRCUMFERENCE;
     }
 
     public Rotation2d getTurnAngle() {

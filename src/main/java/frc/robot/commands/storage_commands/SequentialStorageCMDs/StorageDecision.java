@@ -3,15 +3,28 @@ package frc.robot.commands.storage_commands.SequentialStorageCMDs;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
+import frc.robot.subsystems.storage.AcceptColor;
 import frc.robot.subsystems.storage.StorageTask;
 
+import static frc.robot.Constants.Storage.RETRACT_ON_ACCEPT;
+
+/**
+ * Checks the Task that was determined in {@link IntakeProcessAccept}, and based on the value, schedules either the
+ * acceptance command, or reject command. If there are 2 balls loaded in the Storage, then ignore.
+ */
 public class StorageDecision extends CommandBase {
-    /**
-     * Checks the Task that was determined in {@link IntakeProcessAccept}, and based on the value, schedules either the
-     * acceptance command, or reject command. If there are 2 balls loaded in the Storage, then ignore.
-     */
+    private void acceptBall() {
+        System.out.println("Storage: Scheduling Accept...");
 
+        if (RETRACT_ON_ACCEPT) { new RetractIntakeMagnet().schedule(); }
 
+        new StorageAcceptBall().schedule();
+    }
+
+    private void rejectBall() {
+        System.out.println("Storage: Scheduling Reject...");
+        new StorageRejectBall().schedule();
+    }
 
     @Override
     public void initialize() {
@@ -21,16 +34,16 @@ public class StorageDecision extends CommandBase {
         //assert selectedTask != null && selectedTask != StorageTask.NEUTRAL;
         System.out.println("Storage: Making Decision");
 
-        switch (selectedTask) {
-            case ACCEPT:
-                System.out.println("Storage: Scheduling Accept...");
-                new RetractIntakeMagnet().schedule();
-                new StorageAcceptBall().schedule();
-                break;
-            case REJECT:
-                System.out.println("Storage: Scheduling Reject...");
-                new StorageRejectBall().schedule();
-                break;
+        // If the acceptance color is set to neutral, always attempt to take in the ball no matter if it should
+        // be accepted or rejected.
+        if (Robot.storage.getAcceptColor().equals(AcceptColor.NEUTRAL) ){
+            this.acceptBall();
+        } else {
+            switch (selectedTask) {
+                case ACCEPT: this.acceptBall(); break;
+                case REJECT: this.rejectBall(); break;
+                case NEUTRAL: break;
+            }
         }
 
         end(false);

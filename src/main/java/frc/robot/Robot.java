@@ -29,7 +29,7 @@ import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 
-import static frc.robot.Constants.Storage.RETRACT_MODE;
+import static frc.robot.Constants.Storage.RETRACT_MODE_FINISHED;
 import static frc.robot.Constants.TestValue.DEFAULT_TEST_MODE;
 import static frc.robot.robot_utils.TestUtil.TestMode.*;
 
@@ -50,15 +50,30 @@ public class Robot extends TimedRobot {
     public static LeftClimberSubsystem leftClimber;
     public static RightClimberSubsystem rightClimber;
 
-    private final SendableChooser<AcceptColor> acceptColorChooser = new SendableChooser<>();
-    private final String BLUE_ACCEPT_NAME = "Blue Accept";
-    private final String RED_ACCEPT_NAME = "Red Accept";
+    public static final SendableChooser<AcceptColor> acceptColorChooser = new SendableChooser<>();
+    public static final AcceptColor DEFAULT_COLOR = AcceptColor.BLUE;
 
     public static ShooterCamera shooterCamera;
     public static ChassisCamera chassisCamera;
     public static boolean leftHandedMode = false;
 
-    private final AcceptColor INIT_TARGET_COLOR = AcceptColor.BLUE;
+    private void setupColorChooser() {
+        // Add the values for the SendableChooser
+        acceptColorChooser.addOption("Blue Accept", AcceptColor.BLUE);
+        acceptColorChooser.addOption("Red Accept", AcceptColor.RED);
+        acceptColorChooser.addOption("Neutral", AcceptColor.NEUTRAL);
+
+        switch (DEFAULT_COLOR) {
+            case RED:
+                acceptColorChooser.setDefaultOption("Red Accept", AcceptColor.RED);
+            case BLUE:
+                acceptColorChooser.setDefaultOption("Blue Accept", AcceptColor.BLUE);
+            case NEUTRAL:
+                acceptColorChooser.setDefaultOption("Neutral", AcceptColor.NEUTRAL);
+        }
+
+        SmartDashboard.putData("Acceptance Color Chooser", acceptColorChooser);
+    }
 
     @Override
     public void robotInit() {
@@ -69,8 +84,9 @@ public class Robot extends TimedRobot {
         pathfinder = swerveDrive.getPathfinder();
         pathfinderSubsystem = new PathfinderSubsystem(pathfinder);
 
-        storage = new StorageSubsystem(INIT_TARGET_COLOR)
-                .setRetractMode(RETRACT_MODE);
+        this.setupColorChooser();
+
+        storage = new StorageSubsystem(acceptColorChooser::getSelected).setRetractMode(RETRACT_MODE_FINISHED);
 
         shooter = new ShooterSubsystem();
 
@@ -94,22 +110,26 @@ public class Robot extends TimedRobot {
         robotContainer = new RobotContainer();
 
         // Cameras
-        chassisCamera = new ChassisCamera("RoxBallCam", ChassisCameraConsts.CAMERA_HEIGHT, ChassisCameraConsts.CAMERA_PITCH, INIT_TARGET_COLOR);
-        shooterCamera = new ShooterCamera("RoxShooterCam", ShooterCameraConsts.CAMERA_HEIGHT, ShooterCameraConsts.CAMERA_PITCH);
+        chassisCamera = new ChassisCamera(
+                "RoxBallCam",
+                ChassisCameraConsts.CAMERA_HEIGHT,
+                ChassisCameraConsts.CAMERA_PITCH,
+                acceptColorChooser::getSelected
+        );
+
+        shooterCamera = new ShooterCamera(
+                "RoxShooterCam",
+                ShooterCameraConsts.CAMERA_HEIGHT,
+                ShooterCameraConsts.CAMERA_PITCH
+        );
     }
 
-    @Override
-    public void robotPeriodic() {
-        CommandScheduler.getInstance().run();
-    }
-
-    @Override
-    public void disabledInit() {
-        CommandScheduler.getInstance().cancelAll();
-    }
-
-    @Override
-    public void disabledPeriodic() {}
+    @Override public void robotPeriodic() { CommandScheduler.getInstance().run(); }
+    @Override public void disabledInit() { CommandScheduler.getInstance().cancelAll(); }
+    @Override public void disabledPeriodic() {}
+    @Override public void autonomousPeriodic() {}
+    @Override public void teleopPeriodic() {}
+    @Override public void testPeriodic() {}
 
     @Override
     public void autonomousInit() {
@@ -120,37 +140,11 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void autonomousPeriodic() {}
-
-    @Override
     public void teleopInit() {
         if (autonomous != null && !autonomous.isFinished())
             autonomous.cancel();
 
         CommandScheduler.getInstance().cancelAll();
-
-        // Add the values for the SendableChooser
-        this.acceptColorChooser.addOption(BLUE_ACCEPT_NAME, AcceptColor.BLUE);
-        this.acceptColorChooser.addOption(RED_ACCEPT_NAME, AcceptColor.RED);
-
-        switch (this.INIT_TARGET_COLOR) {
-            case RED:
-                this.acceptColorChooser.setDefaultOption(RED_ACCEPT_NAME, AcceptColor.RED);
-            case BLUE:
-                this.acceptColorChooser.setDefaultOption(BLUE_ACCEPT_NAME, AcceptColor.BLUE);
-        }
-
-        SmartDashboard.putData("color chooser", this.acceptColorChooser);
-
-    }
-
-    @Override
-    public void teleopPeriodic() {
-        // See if the acceptance color value has been updated, and if so then adjust it.
-        AcceptColor currentlyAccepting = Robot.storage.getAcceptColor();
-        AcceptColor currentlySelected = this.acceptColorChooser.getSelected();
-
-        Robot.storage.setAcceptColor(currentlySelected);
     }
 
     @Override
@@ -158,7 +152,4 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll();
         testUtil.runExecutedCommand();
     }
-
-    @Override
-    public void testPeriodic() {}
 }

@@ -4,9 +4,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.robot_utils.motor.MotorError;
-import frc.robot.robot_utils.motor.MotorListener;
-import frc.robot.robot_utils.motor.ProtectedAbstractMotor;
 import me.wobblyyyy.pathfinder2.revrobotics.SparkMaxMotor;
 
 public class CalibrateShooterCommand extends CommandBase {
