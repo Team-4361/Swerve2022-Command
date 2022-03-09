@@ -69,17 +69,6 @@ public class Robot extends TimedRobot {
         pathfinder = swerveDrive.getPathfinder();
         pathfinderSubsystem = new PathfinderSubsystem(pathfinder);
 
-        // Add the values for the SendableChooser
-        this.acceptColorChooser.addOption(BLUE_ACCEPT_NAME, AcceptColor.BLUE);
-        this.acceptColorChooser.addOption(RED_ACCEPT_NAME, AcceptColor.RED);
-
-        switch (this.INIT_TARGET_COLOR) {
-            case RED:
-                this.acceptColorChooser.setDefaultOption(RED_ACCEPT_NAME, AcceptColor.RED);
-            case BLUE:
-                this.acceptColorChooser.setDefaultOption(BLUE_ACCEPT_NAME, AcceptColor.BLUE);
-        }
-
         storage = new StorageSubsystem(INIT_TARGET_COLOR)
                 .setRetractMode(RETRACT_MODE);
 
@@ -140,6 +129,19 @@ public class Robot extends TimedRobot {
 
         CommandScheduler.getInstance().cancelAll();
 
+        // Add the values for the SendableChooser
+        this.acceptColorChooser.addOption(BLUE_ACCEPT_NAME, AcceptColor.BLUE);
+        this.acceptColorChooser.addOption(RED_ACCEPT_NAME, AcceptColor.RED);
+
+        switch (this.INIT_TARGET_COLOR) {
+            case RED:
+                this.acceptColorChooser.setDefaultOption(RED_ACCEPT_NAME, AcceptColor.RED);
+            case BLUE:
+                this.acceptColorChooser.setDefaultOption(BLUE_ACCEPT_NAME, AcceptColor.BLUE);
+        }
+
+        SmartDashboard.putData("color chooser", this.acceptColorChooser);
+
     }
 
     @Override
@@ -148,9 +150,7 @@ public class Robot extends TimedRobot {
         AcceptColor currentlyAccepting = Robot.storage.getAcceptColor();
         AcceptColor currentlySelected = this.acceptColorChooser.getSelected();
 
-        if (currentlySelected != currentlyAccepting) {
-            Robot.storage.setAcceptColor(currentlySelected);
-        }
+        Robot.storage.setAcceptColor(currentlySelected);
     }
 
     @Override

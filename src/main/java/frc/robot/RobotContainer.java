@@ -64,11 +64,11 @@ public class RobotContainer {
             new MoveLeftClimberDown(), new MoveRightClimberDown()
     );
 
-    // TODO: may need to add/remove commands from this group.
-    private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
-            new ParallelCommandGroup(new SetShooterAngleCommand(20) ,new CenterShooterToHubCommand()),
-            new AutoShootCommand()
-    );
+    // // TODO: may need to add/remove commands from this group.
+    // private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
+    //         new ParallelCommandGroup(new SetShooterAngleCommand(20) ,new CenterShooterToHubCommand()),
+    //         new AutoShootCommand()
+    // );
 
     private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(
             new ExtendIntakeMagnet(),
@@ -109,10 +109,10 @@ public class RobotContainer {
         rBumper.whenHeld(raiseClimberGroup);
     }
 
-    public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        return null;
-    }
+    // public Command getAutonomousCommand() {
+    //     // An ExampleCommand will run in autonomous
+    //     return null;
+    // }
 
     public Command getAutonomousCommand(PathfinderSubsystem pathfinder) {
         return new TestAutonomous(pathfinder);
@@ -122,9 +122,9 @@ public class RobotContainer {
     //     return (Command) new TestAutonomous(pathfinderSubsystem);
     // }
 
-    public SequentialCommandGroup getAutoShootGroup() {
-        return autoShootGroup;
-    }
+    // public SequentialCommandGroup getAutoShootGroup() {
+    //     return autoShootGroup;
+    // }
 
     public double deadzone(double value, double deadzone) {
         return Math.abs(value) > deadzone ? value : 0;
