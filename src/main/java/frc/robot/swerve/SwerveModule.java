@@ -96,14 +96,14 @@ public class SwerveModule {
 
     public void updateDashboard(String prefix) {
         String driveVelocity = StringUtils.format("%s: vel", prefix);
-        String drivePower = StringUtils.format("%s: pow", prefix);
-        String turnPower = StringUtils.format("%s: turn pow", prefix);
         String turnPosition = StringUtils.format("%s: turn pos", prefix);
+        // String drivePower = StringUtils.format("%s: pow", prefix);
+        // String turnPower = StringUtils.format("%s: turn pow", prefix);
 
         SmartDashboard.putNumber(driveVelocity, velocityMetersPerSecond());
-        SmartDashboard.putNumber(turnPower, turnMotor.getPower());
         SmartDashboard.putNumber(turnPosition, getTurnAngle().getRadians());
-        SmartDashboard.putNumber(drivePower, driveMotor.getPower());
+        // SmartDashboard.putNumber(drivePower, driveMotor.getPower());
+        // SmartDashboard.putNumber(turnPower, turnMotor.getPower());
     }
 
     /**

@@ -8,10 +8,8 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import me.wobblyyyy.pathfinder2.geometry.PointXYZ;
-import me.wobblyyyy.pathfinder2.math.Rounding;
 import me.wobblyyyy.pathfinder2.robot.AbstractOdometry;
 import me.wobblyyyy.pathfinder2.time.Time;
-import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.wpilib.WPIAdapter;
 
 /**
@@ -47,14 +45,6 @@ public class SwerveOdometry extends AbstractOdometry {
         );
     }
 
-    private static String formatState(SwerveModuleState state) {
-        return StringUtils.format(
-                "v: %s a: %s deg",
-                Rounding.fastRound(state.speedMetersPerSecond),
-                Rounding.fastRound(state.angle.getDegrees())
-        );
-    }
-
     private void update() {
         Rotation2d rotation = gyro.getRotation2d();
 
@@ -64,10 +54,7 @@ public class SwerveOdometry extends AbstractOdometry {
         SwerveModuleState backRightState = chassis.getBackRight().getState();
         SwerveModuleState backLeftState = chassis.getBackLeft().getState();
 
-        // SmartDashboard.putString("FR State", formatState(frontRightState));
-        // SmartDashboard.putString("FL State", formatState(frontLeftState));
-        // SmartDashboard.putString("BR State", formatState(backRightState));
-        // SmartDashboard.putString("BL State", formatState(backLeftState));
+        SmartDashboard.putNumber("gyro angle", rotation.getDegrees());
 
         pose = odometry.update(
                 rotation,
