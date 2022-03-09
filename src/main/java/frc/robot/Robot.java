@@ -75,9 +75,7 @@ public class Robot extends TimedRobot {
         shooter = new ShooterSubsystem();
 
         // updates the acceleration every 2 ms starting 1 ms after the robot starts
-        addPeriodic(()->{
-            shooter.updateAcceleration();
-        }, 0.002, 0.001);
+        addPeriodic(() -> shooter.updateAcceleration(), 0.002, 0.001);
 
         intake = new IntakeSubsystem();
 
@@ -134,7 +132,8 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+    }
 
     @Override
     public void testInit() {
