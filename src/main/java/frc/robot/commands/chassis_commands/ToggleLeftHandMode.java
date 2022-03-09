@@ -11,14 +11,14 @@ public class ToggleLeftHandMode extends CommandBase {
     @Override
     public void initialize() {
         finished = false;
-        SmartDashboard.putBoolean("Robot: Left Handed", Robot.leftHandedMode);
+        // SmartDashboard.putBoolean("Robot: Left Handed", Robot.leftHandedMode);
     }
 
 
     @Override
     public void execute() {
         Robot.leftHandedMode = !Robot.leftHandedMode;
-        SmartDashboard.putBoolean("Robot: Left Handed", Robot.leftHandedMode);
+        // SmartDashboard.putBoolean("Robot: Left Handed", Robot.leftHandedMode);
         finished = true;
     }
 

@@ -4,7 +4,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -16,10 +15,13 @@ import static frc.robot.Constants.Storage.*;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 
-public class StorageSubsystem extends SubsystemBase {
+public class StorageSubsystem extends SubsystemBase implements AutoCloseable {
     private final DigitalInput frontProximity, rearProximity;
     private final ColorSensorV3 indexColorSensor;
-    private final AbstractMotor acceptorMotor, storageMotor;
+    private final CANSparkMax acceptorSpark;
+    private final CANSparkMax storageSpark;
+    private final AbstractMotor acceptorMotor;
+    private final AbstractMotor storageMotor;
 
     private final AcceptColor acceptColor;
 
@@ -29,8 +31,8 @@ public class StorageSubsystem extends SubsystemBase {
     public StorageSubsystem(AcceptColor acceptColor) {
         this.acceptColor = acceptColor;
 
-        CANSparkMax acceptorSpark = new CANSparkMax(ACCEPTOR_MOTOR_PORT, kBrushless);
-        CANSparkMax storageSpark = new CANSparkMax(STORAGE_MOTOR_PORT, kBrushless);
+        acceptorSpark = new CANSparkMax(ACCEPTOR_MOTOR_PORT, kBrushless);
+        storageSpark = new CANSparkMax(STORAGE_MOTOR_PORT, kBrushless);
 
         this.frontProximity = new DigitalInput(ACCEPTOR_PHOTO_ELECTRIC_PORT);
         this.rearProximity = new DigitalInput(STORAGE_PHOTO_ELECTRIC_PORT);
@@ -55,19 +57,19 @@ public class StorageSubsystem extends SubsystemBase {
     }
 
     public void updateSensors() {
-        int colorProximity = indexColorSensor.getProximity();
-        Color color = indexColorSensor.getColor();
+        // int colorProximity = indexColorSensor.getProximity();
+        // Color color = indexColorSensor.getColor();
 
-        SmartDashboard.putNumber("Storage: Red", color.red);
-        SmartDashboard.putNumber("Storage: Green", color.green);
-        SmartDashboard.putNumber("Storage: Blue", color.blue);
-        SmartDashboard.putNumber("Storage: Proximity", colorProximity);
+        // SmartDashboard.putNumber("Storage: Red", color.red);
+        // SmartDashboard.putNumber("Storage: Green", color.green);
+        // SmartDashboard.putNumber("Storage: Blue", color.blue);
+        // SmartDashboard.putNumber("Storage: Proximity", colorProximity);
 
         // Everything with the Photo Electric sensor is opposite of what it should be.
-        SmartDashboard.putBoolean("Storage: Acceptor Loaded", frontProximityCovered());
-        SmartDashboard.putBoolean("Storage: Storage Loaded", rearProximityCovered());
+        // SmartDashboard.putBoolean("Storage: Acceptor Loaded", frontProximityCovered());
+        // SmartDashboard.putBoolean("Storage: Storage Loaded", rearProximityCovered());
 
-        SmartDashboard.putNumber("Storage: Balls Loaded", getBallsLoaded());
+        // SmartDashboard.putNumber("Storage: Balls Loaded", getBallsLoaded());
     }
 
     public void setAcceptorMotor(double speed) {
@@ -87,14 +89,13 @@ public class StorageSubsystem extends SubsystemBase {
     }
 
     public int getBallsLoaded() {
-        if (rearProximityCovered() && frontProximityCovered()){
+        if (rearProximityCovered() && frontProximityCovered()) {
             return 2;
-        }else if(rearProximityCovered()){
+        } else if (rearProximityCovered()) {
             return 1;
-        }else {
+        } else {
             return 0;
         }
-           
     }
 
     public Color getColor() {
@@ -182,5 +183,11 @@ public class StorageSubsystem extends SubsystemBase {
     /** @return If there are the maximum amount of balls stored (2) */
     public boolean isFull() {
         return getBallsLoaded() == 2;
+    }
+
+    @Override
+    public void close() {
+        acceptorSpark.close();
+        storageSpark.close();
     }
 }

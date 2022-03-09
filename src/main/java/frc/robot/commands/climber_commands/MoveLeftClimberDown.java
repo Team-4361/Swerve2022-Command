@@ -17,7 +17,7 @@ public class MoveLeftClimberDown extends CommandBase {
     public void execute() {
         if (Robot.leftClimber.isDangerousTemperature()) {
             Robot.leftClimber.setDone(true);
-            SmartDashboard.putBoolean("climber: overheat", true);
+            // SmartDashboard.putBoolean("climber: overheat", true);
         } else if (!Robot.leftClimber.getDone()) {
             if (!Robot.leftClimber.isBottomLeftSwitchPressed()) {
                 // While the front switch is not pressed, keep running the climber Extender Motor out.

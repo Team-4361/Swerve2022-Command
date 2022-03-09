@@ -76,16 +76,12 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Back Switch Pressed:", isRetracted());
-        SmartDashboard.putBoolean("Front Switch Pressed:", isExtended());
-
-        SmartDashboard.putNumber("Left Intake Position", leftEncoder.getPosition());
-        SmartDashboard.putNumber("Right Intake Position", rightEncoder.getPosition());
-
-        SmartDashboard.putNumber("Intake Position Average", getAveragePosition());
-
-        SmartDashboard.putNumber("Intake Absolute Position Avg", getAverageAbsolutePosition());
-
+        // SmartDashboard.putBoolean("Back Switch Pressed:", isRetracted());
+        // SmartDashboard.putBoolean("Front Switch Pressed:", isExtended());
+        // SmartDashboard.putNumber("Left Intake Position", leftEncoder.getPosition());
+        // SmartDashboard.putNumber("Right Intake Position", rightEncoder.getPosition());
+        // SmartDashboard.putNumber("Intake Position Average", getAveragePosition());
+        // SmartDashboard.putNumber("Intake Absolute Position Avg", getAverageAbsolutePosition());
     }
 
     public void extendIntake() {

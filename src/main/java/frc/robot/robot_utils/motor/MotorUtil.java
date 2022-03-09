@@ -76,8 +76,8 @@ public class MotorUtil {
             if (Math.abs(velocity) < MotorValue.STALL_RPM && motor.getOutputCurrent() > MotorValue.STALL_CURRENT) {
                 // The motor has been stalled, return true.
 
-                SmartDashboard.putBoolean("MotorUtil: Motor Stalled", true);
-                SmartDashboard.putNumber("MotorUtil: Stalled #ID", motor.getDeviceId());
+                // SmartDashboard.putBoolean("MotorUtil: Motor Stalled", true);
+                // SmartDashboard.putNumber("MotorUtil: Stalled #ID", motor.getDeviceId());
 
                 stalledMotor = motor;
                 return true;

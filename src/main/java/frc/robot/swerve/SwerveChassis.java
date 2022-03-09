@@ -133,8 +133,7 @@ public class SwerveChassis implements Drive {
             backLeft.setState(backLeftState);
         }
 
-        // don't update the dashboard here anymore, do it in SwerveOdometry
-        // updateDashboard();
+        updateDashboard();
     }
 
     @Override

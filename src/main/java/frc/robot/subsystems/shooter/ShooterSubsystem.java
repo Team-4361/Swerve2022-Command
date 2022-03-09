@@ -25,9 +25,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Shooter Velocity", getVelocity());
-        SmartDashboard.putNumber("Shooter Current", shooterSpark.getOutputCurrent());
-        SmartDashboard.putNumber("Shooter Voltage", shooterSpark.getBusVoltage());
+        // SmartDashboard.putNumber("Shooter Velocity", getVelocity());
+        // SmartDashboard.putNumber("Shooter Current", shooterSpark.getOutputCurrent());
+        // SmartDashboard.putNumber("Shooter Voltage", shooterSpark.getBusVoltage());
 
 
         lastVelocity = getVelocity();

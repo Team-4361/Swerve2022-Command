@@ -64,10 +64,10 @@ public class SwerveOdometry extends AbstractOdometry {
         SwerveModuleState backRightState = chassis.getBackRight().getState();
         SwerveModuleState backLeftState = chassis.getBackLeft().getState();
 
-        SmartDashboard.putString("FR State", formatState(frontRightState));
-        SmartDashboard.putString("FL State", formatState(frontLeftState));
-        SmartDashboard.putString("BR State", formatState(backRightState));
-        SmartDashboard.putString("BL State", formatState(backLeftState));
+        // SmartDashboard.putString("FR State", formatState(frontRightState));
+        // SmartDashboard.putString("FL State", formatState(frontLeftState));
+        // SmartDashboard.putString("BR State", formatState(backRightState));
+        // SmartDashboard.putString("BL State", formatState(backLeftState));
 
         pose = odometry.update(
                 rotation,

@@ -73,6 +73,6 @@ public class AngleAdjustSubsystem extends SubsystemBase {
         double adjustorMotorPower = controller.calculate(delta);
         adjustor.setPower(adjustorMotorPower);
 
-        SmartDashboard.putNumber("Shooter Angle", getAngle());
+        // SmartDashboard.putNumber("Shooter Angle", getAngle());
     }
 }

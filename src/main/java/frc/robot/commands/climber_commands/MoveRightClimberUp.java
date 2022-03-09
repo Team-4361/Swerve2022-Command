@@ -1,6 +1,5 @@
 package frc.robot.commands.climber_commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
@@ -17,7 +16,7 @@ public class MoveRightClimberUp extends CommandBase {
     public void execute() {
         if (Robot.rightClimber.isDangerousTemperature()) {
             Robot.rightClimber.setDone(true);
-            SmartDashboard.putBoolean("climber: overheat", true);
+            // SmartDashboard.putBoolean("climber: overheat", true);
         } else if (!Robot.rightClimber.getDone()) {
             if (!Robot.rightClimber.isTopRightSwitchPressed()) {
                 // While the front switch is not pressed, keep running the climber Extender Motor out.
