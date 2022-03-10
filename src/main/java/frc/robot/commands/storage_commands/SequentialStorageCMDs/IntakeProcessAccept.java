@@ -17,7 +17,7 @@ public class IntakeProcessAccept extends CommandBase {
     }
 
     /**
-     * This is called from {@link ExtendIntakePID}, and is used to listen for the AcceptColor (BLUE/RED), where it
+     * This is called from {@link frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet}, and is used to listen for the AcceptColor (BLUE/RED), where it
      * can be sequenced to call Accept/Deny based off it.
      */
     @Override

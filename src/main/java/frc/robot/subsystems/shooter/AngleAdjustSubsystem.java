@@ -1,18 +1,13 @@
 package frc.robot.subsystems.shooter;
 
-import com.revrobotics.CANSparkMax;
-
-import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.robot_utils.motor.MotorUtil;
 import frc.robot.robot_utils.encoder.ConcurrentRotationalEncoder;
-import frc.robot.robot_utils.motor.ProtectedAbstractMotor;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.revrobotics.SparkMaxMotor;
 
-import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.MotorFlip.ADJUSTOR_FLIPPED;
 import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_GEAR_RATIO;
 import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_MOTOR_ID;
@@ -73,6 +68,6 @@ public class AngleAdjustSubsystem extends SubsystemBase {
         double adjustorMotorPower = controller.calculate(delta);
         adjustor.setPower(adjustorMotorPower);
 
-        SmartDashboard.putNumber("Shooter Angle", getAngle());
+        SmartDashboard.putNumber("Adjustor: Shooter Adjust Angle", getAngle());
     }
 }

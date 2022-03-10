@@ -1,10 +1,7 @@
 package frc.robot.commands.shooter_commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-import frc.robot.subsystems.shooter.AngleAdjustSubsystem;
-import me.wobblyyyy.pathfinder2.geometry.Angle;
 
 import java.util.Map;
 

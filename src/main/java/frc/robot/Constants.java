@@ -201,7 +201,8 @@ public class Constants {
 
         public static final double LENGTH_ROD_TO_ANGULAR_POS = 0;
 
-        public static final RetractMode RETRACT_MODE = RetractMode.RETRACT_ALWAYS;
+        public static final RetractMode RETRACT_MODE_FINISHED = RetractMode.RETRACT_ALWAYS;
+        public static final boolean RETRACT_ON_ACCEPT = true;
     }
 
     //PhotonVision Constants

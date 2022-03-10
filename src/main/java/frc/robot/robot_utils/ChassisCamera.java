@@ -8,6 +8,7 @@ import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 import static frc.robot.Constants.ChassisCameraConsts.BALL_HEIGHT;
 
@@ -31,8 +32,9 @@ public class ChassisCamera {
      * @param cameraName    name of the camera in photon vision
      * @param mCameraHeight camera height in meters
      * @param mCameraPitch  camera pitch in radians
+     * @param colorSupplier the supplier used to determine color
      */
-    public ChassisCamera(String cameraName, double mCameraHeight, double mCameraPitch, AcceptColor targetColor) {
+    public ChassisCamera(String cameraName, double mCameraHeight, double mCameraPitch, Supplier<AcceptColor> colorSupplier) {
         cameraHeight = mCameraHeight;
 
         //camera pitch in radians
@@ -40,10 +42,11 @@ public class ChassisCamera {
 
         photonCamera = new PhotonCamera(cameraName);
 
-        if (targetColor == AcceptColor.BLUE) {
-            photonCamera.setPipelineIndex(1);
-        } else {
-            photonCamera.setPipelineIndex(2);
+        switch (colorSupplier.get()) {
+            case BLUE:
+                photonCamera.setPipelineIndex(1);
+            case RED:
+                photonCamera.setPipelineIndex(2);
         }
 
         System.out.println("Connected");

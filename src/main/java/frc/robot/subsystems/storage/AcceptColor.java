@@ -5,5 +5,8 @@ public enum AcceptColor {
     RED,
 
     /** Accept the BLUE Color */
-    BLUE
+    BLUE,
+
+    /** Accept any color, do NOT reject */
+    NEUTRAL
 }

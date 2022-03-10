@@ -18,7 +18,6 @@ import frc.robot.commands.chassis_commands.*;
 import frc.robot.commands.climber_commands.*;
 import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
-import frc.robot.commands.shooter_commands.AutoShootCommand;
 import frc.robot.commands.shooter_commands.SetShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.shooter_commands.TimedShootCMD;
@@ -67,11 +66,11 @@ public class RobotContainer {
             new MoveLeftClimberDown(), new MoveRightClimberDown()
     );
 
-    // TODO: may need to add/remove commands from this group.
-    private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
-            new ParallelCommandGroup(new SetShooterAngleCommand(20) ,new CenterShooterToHubCommand()),
-            new AutoShootCommand()
-    );
+    // // TODO: may need to add/remove commands from this group.
+    // private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
+    //         new ParallelCommandGroup(new SetShooterAngleCommand(20) ,new CenterShooterToHubCommand()),
+    //         new AutoShootCommand()
+    // );
 
     private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(
             new ExtendIntakeMagnet(),
@@ -111,10 +110,10 @@ public class RobotContainer {
         rBumper.whenHeld(raiseClimberGroup);
     }
 
-    public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        return null;
-    }
+    // public Command getAutonomousCommand() {
+    //     // An ExampleCommand will run in autonomous
+    //     return null;
+    // }
 
     public Command getAutonomousCommand(PathfinderSubsystem pathfinder) {
         return new TestAutonomous(pathfinder);
@@ -124,9 +123,9 @@ public class RobotContainer {
     //     return (Command) new TestAutonomous(pathfinderSubsystem);
     // }
 
-    public SequentialCommandGroup getAutoShootGroup() {
-        return autoShootGroup;
-    }
+    // public SequentialCommandGroup getAutoShootGroup() {
+    //     return autoShootGroup;
+    // }
     
     public SequentialCommandGroup getSimpleAutoCommand(){
         return simpleAutoonomousCMD;

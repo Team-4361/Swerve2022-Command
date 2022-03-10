@@ -7,7 +7,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import edu.wpi.first.wpilibj.TimedRobot;
 import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
@@ -19,29 +18,28 @@ public class ShooterSubsystem extends SubsystemBase {
     private final AbstractMotor shooterMotor;
     private final RelativeEncoder shooterEncoder;
     private final CANSparkMax shooterSpark;
-    private final PIDController shooterController = new PIDController(0 ,2e-4, 0);
+    private final PIDController shooterController = new PIDController(0, 2e-4, 0);
 
-    private double lastVelocity;
+    private double lastVelocity, velocityAcc, currentAcc, lastCurrent;
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Shooter Velocity", getVelocity());
-        SmartDashboard.putNumber("Shooter Current", shooterSpark.getOutputCurrent());
-        SmartDashboard.putNumber("Shooter Voltage", shooterSpark.getBusVoltage());
+        SmartDashboard.putNumber("Shooter: Instant Velocity", getVelocity());
+        SmartDashboard.putNumber("Shooter: Instant Current", shooterSpark.getOutputCurrent());
+        SmartDashboard.putNumber("Shooter: Instant Voltage", shooterSpark.getBusVoltage());
 
-
-        lastVelocity = getVelocity();
+        SmartDashboard.putNumber("Shooter: Velocity Acc", getVelocityAcceleration());
+        SmartDashboard.putNumber("Shooter: Current Acc", getCurrentAcceleration());
     }
 
     public ShooterSubsystem() {
         shooterSpark = new CANSparkMax(SHOOTER_MOTOR_ID, kBrushless);
-        this.shooterMotor = new AbstractMotor(
-                shooterSpark::set,
-                shooterSpark::get,
-                SHOOTER_FLIPPED
-        );
+        this.shooterMotor = new AbstractMotor(shooterSpark::set, shooterSpark::get, SHOOTER_FLIPPED);
 
         this.shooterEncoder = shooterSpark.getEncoder();
+
+        this.lastVelocity = getVelocity();
+        this.lastCurrent = this.shooterSpark.getOutputCurrent();
 
         shooterController.setIntegratorRange(-1, 1);
     }
@@ -89,15 +87,21 @@ public class ShooterSubsystem extends SubsystemBase {
         shooterController.reset();
     }
 
-    public void updateAcceleration(){
-        lastVelocity = getVelocity();
+    public void updateAcceleration() {
+        // Subtract the current velocity from the lastVelocity, to get the difference.
+        this.velocityAcc = getVelocity() - this.lastVelocity;
+        this.currentAcc = this.shooterSpark.getOutputCurrent() - this.lastCurrent;
+
+        // Update the lastVelocity to what the velocity is currently, so it can be looped.
+        this.lastVelocity = getVelocity();
+        this.lastCurrent = this.shooterSpark.getOutputCurrent();
     }
 
-    /**
-     * 
-     * @return returns the average acceleration over 112 ms 
-     */
-    public double getAcceleration(){
-        return (getVelocity() - lastVelocity)/2;
+    public double getVelocityAcceleration() {
+        return this.velocityAcc;
+    }
+
+    public double getCurrentAcceleration() {
+        return this.currentAcc;
     }
 }

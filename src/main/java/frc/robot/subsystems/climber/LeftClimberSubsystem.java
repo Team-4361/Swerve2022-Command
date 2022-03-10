@@ -46,11 +46,11 @@ public class LeftClimberSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("bl switch", blSwitch.get());
-        SmartDashboard.putBoolean("tl switch", tlSwitch.get());
+        SmartDashboard.putBoolean("Climber: BL Switch", blSwitch.get());
+        SmartDashboard.putBoolean("Climber: TL Switch", tlSwitch.get());
 
-        SmartDashboard.putNumber("climber: left encoder", getRotations());
-        SmartDashboard.putNumber("climber: left temp", climberMotor.getMotorTemperature());
+        SmartDashboard.putNumber("Climber: Left Rotations", getRotations());
+        SmartDashboard.putNumber("Climber: Left Motor Temp", climberMotor.getMotorTemperature());
     }
 
     /** @return If the motor is over 40C, which is a good sign that it's stalling */

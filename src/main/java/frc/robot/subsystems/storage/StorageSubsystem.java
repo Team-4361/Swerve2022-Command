@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
 
+import java.util.function.Supplier;
+
 import static frc.robot.Constants.MotorFlip.ACCEPTOR_FLIPPED;
 import static frc.robot.Constants.MotorFlip.STORAGE_FLIPPED;
 import static frc.robot.Constants.Storage.*;
@@ -20,15 +22,12 @@ public class StorageSubsystem extends SubsystemBase {
     private final DigitalInput frontProximity, rearProximity;
     private final ColorSensorV3 indexColorSensor;
     private final AbstractMotor acceptorMotor, storageMotor;
-
-    private final AcceptColor acceptColor;
+    private final Supplier<AcceptColor> colorSupplier;
 
     private StorageTask nextTask;
     private RetractMode retractMode;
 
-    public StorageSubsystem(AcceptColor acceptColor) {
-        this.acceptColor = acceptColor;
-
+    public StorageSubsystem(Supplier<AcceptColor> colorSupplier) {
         CANSparkMax acceptorSpark = new CANSparkMax(ACCEPTOR_MOTOR_PORT, kBrushless);
         CANSparkMax storageSpark = new CANSparkMax(STORAGE_MOTOR_PORT, kBrushless);
 
@@ -47,6 +46,8 @@ public class StorageSubsystem extends SubsystemBase {
                 storageSpark::get,
                 STORAGE_FLIPPED
         );
+
+        this.colorSupplier = colorSupplier;
     }
 
     @Override
@@ -174,9 +175,12 @@ public class StorageSubsystem extends SubsystemBase {
         return this.retractMode;
     }
 
-    /** @return Returns the {@link AcceptColor}. Either {@link AcceptColor#RED}, or {@link AcceptColor#BLUE} */
+    /**
+     * @return Returns the {@link AcceptColor} from the {@link #colorSupplier}. Either {@link AcceptColor#RED},
+     * {@link AcceptColor#BLUE}, or {@link AcceptColor#NEUTRAL}.
+     * */
     public AcceptColor getAcceptColor() {
-        return this.acceptColor;
+        return this.colorSupplier.get();
     }
 
     /** @return If there are the maximum amount of balls stored (2) */

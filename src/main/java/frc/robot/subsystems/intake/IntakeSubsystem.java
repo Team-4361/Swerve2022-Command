@@ -4,13 +4,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 
-import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorFlip;
 import frc.robot.Constants.MotorValue;
-import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import me.wobblyyyy.pathfinder2.control.ProportionalController;
 import me.wobblyyyy.pathfinder2.math.Average;
 import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
@@ -76,16 +74,13 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
 
     @Override
     public void periodic() {
-        SmartDashboard.putBoolean("Back Switch Pressed:", isRetracted());
-        SmartDashboard.putBoolean("Front Switch Pressed:", isExtended());
+        SmartDashboard.putBoolean("Intake: Retracted", isRetracted());
+        SmartDashboard.putBoolean("Intake: Extended", isExtended());
 
-        SmartDashboard.putNumber("Left Intake Position", leftEncoder.getPosition());
-        SmartDashboard.putNumber("Right Intake Position", rightEncoder.getPosition());
+        SmartDashboard.putNumber("Intake: Left Position", leftEncoder.getPosition());
+        SmartDashboard.putNumber("Intake: Right Position", rightEncoder.getPosition());
 
-        SmartDashboard.putNumber("Intake Position Average", getAveragePosition());
-
-        SmartDashboard.putNumber("Intake Absolute Position Avg", getAverageAbsolutePosition());
-
+        SmartDashboard.putNumber("Intake: Average Position", getAveragePosition());
     }
 
     public void extendIntake() {
