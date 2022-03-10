@@ -2,9 +2,13 @@ package frc.robot.commands.storage_commands.SequentialStorageCMDs;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
+import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 import frc.robot.subsystems.storage.StorageTask;
 
 public class IntakeProcessAccept extends CommandBase {
+
+    private double timeStarted = System.currentTimeMillis();
+    private double elapsedTime = 0;
 
     @Override
     public void initialize() {
@@ -33,10 +37,18 @@ public class IntakeProcessAccept extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         Robot.intake.stopIntakeGroup();
+
+        if(elapsedTime > 10_000){
+            new RetractIntakeMagnet().schedule();
+        } else{
+            new StorageDecision().schedule();
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return Robot.storage.getNextTask() != null;
+        elapsedTime = System.currentTimeMillis() - timeStarted;
+        
+        return Robot.storage.getNextTask() != null || (elapsedTime > 10_000);
     }
 }

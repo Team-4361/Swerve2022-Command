@@ -9,28 +9,21 @@ import frc.robot.Robot;
 public class MoveFWDCMD extends CommandBase {
 
 
-    private final PIDController chassisController;
-
-    private final double distanceToMove = 2.4;
-    private double initDriveEncoderDist = 0;
-
+    private double timeStarted = System.currentTimeMillis();
 
     public MoveFWDCMD() {
-        chassisController = new PIDController(0.1, 0, 0);
         addRequirements(Robot.swerveDrive);
     }
 
     @Override
     public void initialize() {
-        initDriveEncoderDist = Robot.swerveDrive.getDistance();
+        addRequirements(Robot.swerveDrive);
     }
 
 
     @Override
     public void execute() {
-        double power = chassisController.calculate(getAbsDistance(), distanceToMove + 0.1);
-
-        Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, power, 0, Rotation2d.fromDegrees(0)));
+        Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.3, 0, Rotation2d.fromDegrees(0)));
     }
 
     @Override
@@ -40,10 +33,6 @@ public class MoveFWDCMD extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return getAbsDistance() > distanceToMove;
-    }
-
-    private double getAbsDistance() {
-        return Robot.swerveDrive.getDistance() - initDriveEncoderDist;
+        return (System.currentTimeMillis() - timeStarted) > 2000;
     }
 }

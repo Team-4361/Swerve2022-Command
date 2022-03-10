@@ -163,7 +163,7 @@ public class Constants {
         public static final double DESIRED_RPM = 4800;
         //In KG
         public static double SHOOTER_WHEEL_MASS = 0.603844;
-        public static double SHOOTER_HEIGHT = 0;
+        public static double SHOOTER_HEIGHT = 0.5;
     }
 
     public static class Storage {

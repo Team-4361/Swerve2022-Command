@@ -21,6 +21,7 @@ import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.shooter_commands.AutoShootCommand;
 import frc.robot.commands.shooter_commands.SetShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
+import frc.robot.commands.shooter_commands.TimedShootCMD;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageDecision;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
@@ -54,6 +55,8 @@ public class RobotContainer {
             new MoveBCKCMD()
     );
 
+    private final SequentialCommandGroup simpleAutoonomousCMD = new SequentialCommandGroup(new TimedShootCMD(5, 4000), new MoveFWDCMD());
+
     private boolean isRobotCalibrated = false;
 
     private final ParallelCommandGroup raiseClimberGroup = new ParallelCommandGroup(
@@ -72,8 +75,7 @@ public class RobotContainer {
 
     private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(
             new ExtendIntakeMagnet(),
-            new IntakeProcessAccept(),
-            new StorageDecision());
+            new IntakeProcessAccept());
 
     private final ParallelCommandGroup calibrateGroup = new ParallelCommandGroup(
             new CalibrateRetractIntake()
@@ -124,6 +126,10 @@ public class RobotContainer {
 
     public SequentialCommandGroup getAutoShootGroup() {
         return autoShootGroup;
+    }
+    
+    public SequentialCommandGroup getSimpleAutoCommand(){
+        return simpleAutoonomousCMD;
     }
 
     public double deadzone(double value, double deadzone) {
