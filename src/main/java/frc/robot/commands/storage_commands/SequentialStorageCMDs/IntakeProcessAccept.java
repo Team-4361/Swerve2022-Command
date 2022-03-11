@@ -7,13 +7,14 @@ import frc.robot.subsystems.storage.StorageTask;
 
 public class IntakeProcessAccept extends CommandBase {
 
-    private double timeStarted = System.currentTimeMillis();
+    private double timeStarted;
     private double elapsedTime = 0;
 
     @Override
     public void initialize() {
         addRequirements(Robot.intake, Robot.storage);
         System.out.println("Intaking");
+        timeStarted = System.currentTimeMillis();
     }
 
     /**
@@ -28,10 +29,7 @@ public class IntakeProcessAccept extends CommandBase {
         // and then exit the command.
         StorageTask task = Robot.storage.getDetectedTask();
 
-        if (task != StorageTask.NEUTRAL) {
-            // A proper task has been determined, save the value and end.
-            Robot.storage.setNextTask(task);
-        }
+        Robot.storage.setNextTask(task);
     }
 
     @Override
@@ -49,6 +47,6 @@ public class IntakeProcessAccept extends CommandBase {
     public boolean isFinished() {
         elapsedTime = System.currentTimeMillis() - timeStarted;
         
-        return Robot.storage.getNextTask() != null || (elapsedTime > 10_000);
+        return Robot.storage.getNextTask() != StorageTask.NEUTRAL || (elapsedTime > 10_000);
     }
 }

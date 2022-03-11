@@ -36,14 +36,17 @@ public class StorageDecision extends CommandBase {
 
         // If the acceptance color is set to neutral, always attempt to take in the ball no matter if it should
         // be accepted or rejected.
-        if (Robot.storage.getAcceptColor().equals(AcceptColor.NEUTRAL) ){
-            this.acceptBall();
-        } else {
-            switch (selectedTask) {
-                case ACCEPT: this.acceptBall(); break;
-                case REJECT: this.rejectBall(); break;
-                case NEUTRAL: break;
+        switch (selectedTask) {
+            case ACCEPT: this.acceptBall(); break;
+            case REJECT: {
+                if (Robot.storage.getAcceptColor() == AcceptColor.NEUTRAL) {
+                    this.acceptBall();
+                } else {
+                    this.rejectBall();
+                }
+                break;
             }
+            case NEUTRAL: break;
         }
 
         end(false);

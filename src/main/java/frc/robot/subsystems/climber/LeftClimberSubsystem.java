@@ -63,11 +63,19 @@ public class LeftClimberSubsystem extends SubsystemBase {
     }
 
     public void raise() {
-        MotorUtil.runMotor(climberMotor, getMotorValue(-CLIMBER_SPEED, CLIMBER_LEFT_FLIPPED));
+        if (!isDangerousTemperature()) {
+            MotorUtil.runMotor(climberMotor, getMotorValue(-CLIMBER_SPEED, CLIMBER_LEFT_FLIPPED));
+        } else {
+            MotorUtil.runMotor(climberMotor, 0);
+        }
     }
 
     public void lower() {
-        MotorUtil.runMotor(climberMotor, getMotorValue(CLIMBER_SPEED, CLIMBER_LEFT_FLIPPED));
+        if (!isDangerousTemperature()) {
+            MotorUtil.runMotor(climberMotor, getMotorValue(CLIMBER_SPEED, CLIMBER_LEFT_FLIPPED));
+        } else {
+            MotorUtil.runMotor(climberMotor, 0);
+        }
     }
 
     public void zero() {

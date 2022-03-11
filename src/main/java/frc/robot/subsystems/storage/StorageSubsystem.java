@@ -132,7 +132,16 @@ public class StorageSubsystem extends SubsystemBase {
                     } else {
                         return StorageTask.NEUTRAL;
                     }
-
+                
+                case NEUTRAL:
+                    if (detectedColor.red > RED_THRESHOLD) {
+                        return StorageTask.ACCEPT;
+                    } else if (detectedColor.blue > BLUE_THRESHOLD) {
+                        return StorageTask.ACCEPT;
+                    } else {
+                        return StorageTask.NEUTRAL;
+                    }
+                
                 default:
                     return StorageTask.NEUTRAL;
             }

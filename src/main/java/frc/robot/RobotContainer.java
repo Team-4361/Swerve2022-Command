@@ -18,6 +18,7 @@ import frc.robot.commands.chassis_commands.*;
 import frc.robot.commands.climber_commands.*;
 import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
+import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 import frc.robot.commands.shooter_commands.SetShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.shooter_commands.TimedShootCMD;
@@ -54,7 +55,7 @@ public class RobotContainer {
             new MoveBCKCMD()
     );
 
-    private final SequentialCommandGroup simpleAutoonomousCMD = new SequentialCommandGroup(new TimedShootCMD(5, 4000), new MoveFWDCMD());
+    private final SequentialCommandGroup simpleAutoonomousCMD = new SequentialCommandGroup(new TimedShootCMD(6, 5000), new MoveFWDCMD());
 
     private boolean isRobotCalibrated = false;
 
@@ -100,6 +101,8 @@ public class RobotContainer {
         aButton.whenHeld(new ShootCMD(processBallCMD, 5000));
 
         yButton.whenActive(processBallCMD);
+
+        xButton.whenActive(new RetractIntakeMagnet());
 
 
         bButton.whenActive(new SetShooterAngleCommand(10));

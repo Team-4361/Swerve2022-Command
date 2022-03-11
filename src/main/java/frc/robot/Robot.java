@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
     public static RightClimberSubsystem rightClimber;
 
     public static final SendableChooser<AcceptColor> acceptColorChooser = new SendableChooser<>();
-    public static final AcceptColor DEFAULT_COLOR = AcceptColor.BLUE;
+    public static final AcceptColor DEFAULT_COLOR = AcceptColor.NEUTRAL;
 
     public static ShooterCamera shooterCamera;
     public static ChassisCamera chassisCamera;
@@ -79,6 +79,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
+
         swerveDrive = new SwerveDriveSubsystem();
         swerveDrive.resetGyro();
         pathfinder = swerveDrive.getPathfinder();
@@ -87,6 +88,8 @@ public class Robot extends TimedRobot {
         this.setupColorChooser();
 
         storage = new StorageSubsystem(acceptColorChooser::getSelected).setRetractMode(RETRACT_MODE_FINISHED);
+
+        SmartDashboard.putBoolean("climber overheat", false);
 
         shooter = new ShooterSubsystem();
 
@@ -134,6 +137,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         //autonomous = robotContainer.getAutonomousCommand(pathfinderSubsystem);
+
+        CommandScheduler.getInstance().cancelAll();
 
         autonomous = robotContainer.getSimpleAutoCommand();
         

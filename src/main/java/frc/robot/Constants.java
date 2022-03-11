@@ -194,7 +194,7 @@ public class Constants {
 
         // Adjust based on sensitivity.
         public static final double BLUE_THRESHOLD = 0.30;
-        public static final double RED_THRESHOLD = 0.30;
+        public static final double RED_THRESHOLD = 0.265;
         public static final double PROXIMITY_THRESHOLD = 120;
 
         public static final int STORAGE_EXTRA_TIME_MS = 500;

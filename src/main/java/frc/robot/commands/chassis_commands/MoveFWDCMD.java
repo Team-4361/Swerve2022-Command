@@ -9,7 +9,7 @@ import frc.robot.Robot;
 public class MoveFWDCMD extends CommandBase {
 
 
-    private double timeStarted = System.currentTimeMillis();
+    private double timeStarted;
 
     public MoveFWDCMD() {
         addRequirements(Robot.swerveDrive);
@@ -17,13 +17,14 @@ public class MoveFWDCMD extends CommandBase {
 
     @Override
     public void initialize() {
+        timeStarted = System.currentTimeMillis();
         addRequirements(Robot.swerveDrive);
     }
 
 
     @Override
     public void execute() {
-        Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.3, 0, Rotation2d.fromDegrees(0)));
+        Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.6, 0, Rotation2d.fromDegrees(0)));
     }
 
     @Override
