@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Chassis;
 import frc.robot.commands.autonomous_commands.TestAutonomous;
 import frc.robot.commands.chassis_commands.*;
@@ -28,6 +29,7 @@ import frc.robot.commands.shooter_commands.TimedShootCMD;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageDecision;
 import frc.robot.robot_utils.ShooterCamera;
+import frc.robot.robot_utils.trigger.MultiTrigger;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 import frc.robot.commands.storage_commands.RunStorageAcceptor;
 
@@ -54,6 +56,8 @@ public class RobotContainer {
     private final JoystickButton rStick = new JoystickButton(controller, XBOX_RIGHT_STICK);
     private final JoystickButton startButton = new JoystickButton(controller, XBOX_START);
 
+    private final JoystickButton endButton = new JoystickButton(controller, XboxController.Button.kBack.value);
+
     private final JoystickButton xyButtonFive = new JoystickButton(xyStick, 5);
 
     private final SequentialCommandGroup testSwerveDrive = new SequentialCommandGroup(
@@ -62,6 +66,9 @@ public class RobotContainer {
             new MoveFWDCMD(),
             new MoveBCKCMD()
     );
+
+    private final MultiTrigger lowerLeftTrigger = new MultiTrigger(endButton, lBumper);
+    private final MultiTrigger lowerRightTrigger = new MultiTrigger(endButton, rBumper);
 
     private final SequentialCommandGroup simpleAutoonomousCMD = new SequentialCommandGroup(new ParallelCommandGroup(new TimedShootCMD(6, 4500), new SetShooterAngleCommand(10)), new MoveFWDCMD());
 
@@ -118,8 +125,8 @@ public class RobotContainer {
 
         startButton.whenActive(new CalibrateRetractIntake());
 
-        lBumper.whenHeld(lowerClimberGroup);
-        rBumper.whenHeld(raiseClimberGroup);
+        lBumper.whenHeld(new ManualMoveLeftClimber(lowerLeftTrigger.get()));
+        rBumper.whenHeld(new ManualMoveRightClimber(lowerRightTrigger.get()));
     }
 
     // public Command getAutonomousCommand() {
