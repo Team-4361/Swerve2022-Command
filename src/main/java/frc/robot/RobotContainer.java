@@ -62,7 +62,7 @@ public class RobotContainer {
             new MoveBCKCMD()
     );
 
-    private final SequentialCommandGroup simpleAutoonomousCMD = new SequentialCommandGroup(new ParallelCommandGroup(new TimedShootCMD(6, 5000), new SetShooterAngleCommand(10)), new MoveFWDCMD());
+    private final SequentialCommandGroup simpleAutoonomousCMD = new SequentialCommandGroup(new ParallelCommandGroup(new TimedShootCMD(6, 4500), new SetShooterAngleCommand(10)), new MoveFWDCMD());
 
     private boolean isRobotCalibrated = false;
 
