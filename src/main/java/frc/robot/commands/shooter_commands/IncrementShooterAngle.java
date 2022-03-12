@@ -12,7 +12,7 @@ public class IncrementShooterAngle extends CommandBase  {
 
      @Override
      public void initialize() {
-        if(currentAngle <= 30){
+        if(currentAngle <= 30 || Robot.adjustor.getAdjustorLimit()){
             currentAngle += 5;
             new SetShooterAngleCommand(currentAngle).schedule();;
         } else {

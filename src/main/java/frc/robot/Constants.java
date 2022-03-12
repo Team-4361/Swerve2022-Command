@@ -156,6 +156,8 @@ public class Constants {
         public static final double ADJUSTOR_GEAR_RATIO = /*1:*/160;
         public static final int ADJUSTOR_MOTOR_ID = 15;
 
+        public static final int ADJUSTOR_LIMIT_PORT = 100;
+
         public static final boolean LIMIT_SWITCH_ENABLED = false;
     }
 

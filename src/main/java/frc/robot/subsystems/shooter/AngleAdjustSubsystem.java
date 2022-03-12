@@ -1,12 +1,14 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.robot_utils.motor.MotorUtil;
 import frc.robot.robot_utils.encoder.ConcurrentRotationalEncoder;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.revrobotics.SparkMaxMotor;
+import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_LIMIT_PORT;
 
 import static frc.robot.Constants.MotorFlip.ADJUSTOR_FLIPPED;
 import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_GEAR_RATIO;
@@ -17,6 +19,7 @@ public class AngleAdjustSubsystem extends SubsystemBase {
     private final ConcurrentRotationalEncoder absoluteEncoder;
     private final PIDController controller;
     private Angle targetAngle;
+    private final DigitalInput adjustorLimit = new DigitalInput(ADJUSTOR_LIMIT_PORT);
 
     public AngleAdjustSubsystem() {
         adjustor = SparkMaxMotor.brushless(ADJUSTOR_MOTOR_ID, ADJUSTOR_FLIPPED);
@@ -58,6 +61,10 @@ public class AngleAdjustSubsystem extends SubsystemBase {
 
     public void setRotationsFromBase(double position) {
         setAngle(rotationToAngle(position));
+    }
+
+    public boolean getAdjustorLimit(){
+        return adjustorLimit.get();
     }
 
     @Override
