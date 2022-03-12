@@ -16,7 +16,6 @@ import static frc.robot.robot_utils.motor.MotorUtil.getMotorValue;
 
 public class LeftClimberSubsystem extends SubsystemBase {
     private final CANSparkMax climberMotor = new CANSparkMax(L_CLIMBER_ID, kBrushless);
-    private final Debouncer debouncer = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
 
     /**
      * This encoder is used for being able to run the climber at a high speed until nearly the max rotations,
