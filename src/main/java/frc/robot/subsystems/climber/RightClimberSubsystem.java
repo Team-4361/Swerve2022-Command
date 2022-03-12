@@ -88,10 +88,10 @@ public class RightClimberSubsystem extends SubsystemBase {
     }
 
     public boolean isTopRightSwitchPressed() {
-        return debouncer.calculate(trSwitch.get());
+        return trSwitch.get();
     }
 
     public boolean isBottomRightSwitchPressed() {
-        return debouncer.calculate(brSwitch.get());
+        return brSwitch.get();
     }
 }

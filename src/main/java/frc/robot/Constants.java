@@ -9,6 +9,8 @@ public class Constants {
     public static double BALL_MASS = 0.2676195;
     public static double BALL_RADIUS = 0.2413;
 
+    public static boolean GET_DATA = false;
+
 
     public static class Control {
         public static final int XY_STICK_ID = 0;
@@ -108,7 +110,7 @@ public class Constants {
     }
 
     public static class Climber {
-        public static final int L_CLIMBER_ID = 9;
+        public static final int L_CLIMBER_ID = 21;
         public static final int R_CLIMBER_ID = 10;
 
         // bottom magnet
@@ -193,8 +195,8 @@ public class Constants {
         public static final I2C.Port COLOR_SENSOR_PORT = I2C.Port.kOnboard;
 
         // Adjust based on sensitivity.
-        public static final double BLUE_THRESHOLD = 0.30;
-        public static final double RED_THRESHOLD = 0.265;
+        public static final double BLUE_THRESHOLD = 0.325;//0.30
+        public static final double RED_THRESHOLD = 0.28;//0.265
         public static final double PROXIMITY_THRESHOLD = 120;
 
         public static final int STORAGE_EXTRA_TIME_MS = 500;
@@ -231,7 +233,7 @@ public class Constants {
 
         public static final double ADJUSTOR_SPEED = 0.3;
 
-        public static final double CLIMBER_SPEED = 0.6;
+        public static final double CLIMBER_SPEED = 1.0;
 
         // Stall current in amps, stops the motor when the current rises above
         // the maximum value.

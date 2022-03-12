@@ -87,10 +87,10 @@ public class LeftClimberSubsystem extends SubsystemBase {
     }
 
     public boolean isTopLeftSwitchPressed() {
-        return debouncer.calculate(tlSwitch.get());
+        return tlSwitch.get();
     }
 
     public boolean isBottomLeftSwitchPressed() {
-        return debouncer.calculate(blSwitch.get());
+        return blSwitch.get();
     }
 }

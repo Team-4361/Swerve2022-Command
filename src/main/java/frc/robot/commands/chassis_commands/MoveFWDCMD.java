@@ -24,7 +24,7 @@ public class MoveFWDCMD extends CommandBase {
 
     @Override
     public void execute() {
-        Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.6, 0, Rotation2d.fromDegrees(0)));
+        Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.4, 0, Rotation2d.fromDegrees(0)));
     }
 
     @Override

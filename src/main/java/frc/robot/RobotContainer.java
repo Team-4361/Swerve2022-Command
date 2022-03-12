@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -19,21 +20,27 @@ import frc.robot.commands.climber_commands.*;
 import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
+import frc.robot.commands.shooter_commands.IncrementShooterAngle;
 import frc.robot.commands.shooter_commands.SetShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.shooter_commands.TimedShootCMD;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageDecision;
+import frc.robot.robot_utils.ShooterCamera;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 import frc.robot.commands.storage_commands.RunStorageAcceptor;
 
 import static frc.robot.Constants.Control.*;
+
+import java.util.Map;
 
 public class RobotContainer {
 
     private final Joystick xyStick = new Joystick(XY_STICK_ID);
     private final Joystick zStick = new Joystick(Z_STICK_ID);
     private final XboxController controller = new XboxController(CONTROLLER_ID);
+
+    private double currentShooterAngle = 0;
 
     // Xbox Extracted Controller Buttons
     private final JoystickButton xButton = new JoystickButton(controller, XBOX_X);
@@ -55,7 +62,7 @@ public class RobotContainer {
             new MoveBCKCMD()
     );
 
-    private final SequentialCommandGroup simpleAutoonomousCMD = new SequentialCommandGroup(new TimedShootCMD(6, 5000), new MoveFWDCMD());
+    private final SequentialCommandGroup simpleAutoonomousCMD = new SequentialCommandGroup(new ParallelCommandGroup(new TimedShootCMD(6, 5000), new SetShooterAngleCommand(10)), new MoveFWDCMD());
 
     private boolean isRobotCalibrated = false;
 
@@ -104,7 +111,6 @@ public class RobotContainer {
 
         xButton.whenActive(new RetractIntakeMagnet());
 
-
         bButton.whenActive(new SetShooterAngleCommand(10));
 
         startButton.whenActive(new CalibrateRetractIntake());
@@ -145,5 +151,9 @@ public class RobotContainer {
 
     public boolean isRobotCalibrated(){
         return isRobotCalibrated;
+    }
+
+    public XboxController getXbox(){
+        return controller;
     }
 }

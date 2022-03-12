@@ -57,6 +57,8 @@ public class Robot extends TimedRobot {
     public static ChassisCamera chassisCamera;
     public static boolean leftHandedMode = false;
 
+    
+
     private void setupColorChooser() {
         // Add the values for the SendableChooser
         acceptColorChooser.addOption("Blue Accept", AcceptColor.BLUE);
@@ -131,7 +133,11 @@ public class Robot extends TimedRobot {
     @Override public void disabledInit() { CommandScheduler.getInstance().cancelAll(); }
     @Override public void disabledPeriodic() {}
     @Override public void autonomousPeriodic() {}
-    @Override public void teleopPeriodic() {}
+
+    @Override public void teleopPeriodic() {
+        
+    }
+
     @Override public void testPeriodic() {}
 
     @Override
