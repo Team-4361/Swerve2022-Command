@@ -21,6 +21,7 @@ import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 import frc.robot.commands.shooter_commands.IncrementShooterAngle;
+import frc.robot.commands.shooter_commands.RevShooterCMD;
 import frc.robot.commands.shooter_commands.SetShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.shooter_commands.TimedShootCMD;
@@ -97,6 +98,8 @@ public class RobotContainer {
                         Rotation2d.fromDegrees(0)
                 )
         ));
+
+        Robot.shooter.setDefaultCommand(new RevShooterCMD(5000));
 
         configureButtonBindings();
     }
