@@ -167,8 +167,6 @@ public class Robot extends TimedRobot {
             autonomous.cancel();
 
         CommandScheduler.getInstance().cancelAll();
-
-        Robot.adjustor.zero();
     }
 
     @Override
