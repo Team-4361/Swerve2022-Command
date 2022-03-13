@@ -155,6 +155,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll();
 
         autonomous = robotContainer.getSimpleAutoCommand();
+        Robot.adjustor.zero();
         
         if (autonomous != null)
             autonomous.schedule();
