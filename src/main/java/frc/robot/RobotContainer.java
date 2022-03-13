@@ -26,12 +26,17 @@ import frc.robot.commands.shooter_commands.RevShooterCMD;
 import frc.robot.commands.shooter_commands.SetShooterAngleCommand;
 import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.shooter_commands.TimedShootCMD;
+import frc.robot.commands.shooter_commands.UserShootCMD;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageDecision;
 import frc.robot.robot_utils.ShooterCamera;
+import frc.robot.robot_utils.trigger.DPADUPButton;
 import frc.robot.robot_utils.trigger.MultiTrigger;
+import frc.robot.robot_utils.trigger.TriggerButtonLeft;
+import frc.robot.robot_utils.trigger.TriggerButtonRight;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 import frc.robot.commands.storage_commands.RunStorageAcceptor;
+import frc.robot.commands.storage_commands.RunStorageCMD;
 
 import static frc.robot.Constants.Control.*;
 
@@ -41,7 +46,7 @@ public class RobotContainer {
 
     private final Joystick xyStick = new Joystick(XY_STICK_ID);
     private final Joystick zStick = new Joystick(Z_STICK_ID);
-    private final XboxController controller = new XboxController(CONTROLLER_ID);
+    public static final XboxController controller = new XboxController(CONTROLLER_ID);
 
     private double currentShooterAngle = 0;
 
@@ -55,6 +60,9 @@ public class RobotContainer {
     private final JoystickButton lStick = new JoystickButton(controller, XBOX_LEFT_STICK);
     private final JoystickButton rStick = new JoystickButton(controller, XBOX_RIGHT_STICK);
     private final JoystickButton startButton = new JoystickButton(controller, XBOX_START);
+    private final JoystickButton leftTriggerBTN = new TriggerButtonLeft(controller, 100);
+    private final JoystickButton rightTriggerBTN = new TriggerButtonRight(controller, 101);
+    private final JoystickButton dpadUPBTN = new DPADUPButton(controller, 102);
 
     private final JoystickButton endButton = new JoystickButton(controller, XboxController.Button.kBack.value);
 
@@ -106,7 +114,7 @@ public class RobotContainer {
                 )
         ));
 
-        Robot.shooter.setDefaultCommand(new RevShooterCMD(5000));
+        //Robot.shooter.setDefaultCommand(new RevShooterCMD(4500));
 
         configureButtonBindings();
     }
@@ -115,7 +123,7 @@ public class RobotContainer {
         lStick.whenHeld(new CenterShooterToHubCommand());
         rStick.whenHeld(new RunStorageAcceptor());
 
-        aButton.whenHeld(new ShootCMD(processBallCMD, 5000));
+        aButton.whenHeld(new UserShootCMD(4500));
 
         yButton.whenActive(processBallCMD);
 
@@ -123,10 +131,15 @@ public class RobotContainer {
 
         bButton.whenActive(new SetShooterAngleCommand(10));
 
-        startButton.whenActive(new CalibrateRetractIntake());
+        startButton.whenActive(new CalibrateRetractIntake()); 
 
-        lBumper.whenHeld(new ManualMoveLeftClimber(lowerLeftTrigger.get()));
-        rBumper.whenHeld(new ManualMoveRightClimber(lowerRightTrigger.get()));
+        leftTriggerBTN.whenHeld(new ManualMoveLeftClimber(true));
+        rightTriggerBTN.whenHeld(new ManualMoveRightClimber(true));
+
+        lBumper.whenHeld(new ManualMoveLeftClimber(false));
+        rBumper.whenHeld(new ManualMoveRightClimber(false));
+
+        dpadUPBTN.whenHeld(new RunStorageCMD());
     }
 
     // public Command getAutonomousCommand() {

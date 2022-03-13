@@ -15,7 +15,9 @@ import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
 import me.wobblyyyy.pathfinder2.robot.components.Motor;
 import me.wobblyyyy.pathfinder2.robot.components.MultiMotor;
 
+import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushed;
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
+
 import static frc.robot.Constants.Intake.*;
 
 public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
@@ -37,7 +39,7 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     public IntakeSubsystem() {
         CANSparkMax leftSpark = new CANSparkMax(L_INTAKE_EXTEND_ID, kBrushless);
         CANSparkMax rightSpark = new CANSparkMax(R_INTAKE_EXTEND_ID, kBrushless);
-        CANSparkMax intakeSpark = new CANSparkMax(INTAKE_SPIN_MOTOR_ID, kBrushless);
+        CANSparkMax intakeSpark = new CANSparkMax(INTAKE_SPIN_MOTOR_ID, kBrushed);
         sparks = new CANSparkMax[]{leftSpark, rightSpark, intakeSpark};
 
         extender = new MultiMotor(
@@ -81,6 +83,8 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         SmartDashboard.putNumber("Intake: Right Position", rightEncoder.getPosition());
 
         SmartDashboard.putNumber("Intake: Average Position", getAveragePosition());
+
+        SmartDashboard.putNumber("Intake: Position Difference", getDifference());
     }
 
     public void extendIntake() {
@@ -152,6 +156,10 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
 
     public double getAverageAbsolutePosition() {
         return Average.of(leftEncoder.getPosition(), rightEncoder.getPosition());
+    }
+
+    public double getDifference() {
+        return Math.abs(getLeftPosition()-getRightPosition());
     }
 
     public void resetEncoders() {

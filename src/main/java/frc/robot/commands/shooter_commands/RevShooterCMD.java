@@ -9,25 +9,20 @@ public class RevShooterCMD extends CommandBase {
 
     public RevShooterCMD(double targetRPM){
         this.targetRPM = targetRPM;
+        addRequirements(Robot.shooter);
     }
 
     @Override
     public void execute() {
-        if(Robot.storage.getBallsLoaded() >= 1){
+        //if(Robot.storage.getBallsLoaded() >= 1){
             Robot.shooter.setShooterVelocity(targetRPM);
-        }
+        //}
     }
 
     @Override
     public void initialize() {
         // TODO Auto-generated method stub
-        addRequirements(Robot.shooter);
 
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        Robot.shooter.stopShooter();
     }
 
     @Override

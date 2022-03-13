@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.ChassisCameraConsts;
 import frc.robot.Constants.ShooterCameraConsts;
+import frc.robot.commands.climber_commands.ManualMoveLeftClimber;
+import frc.robot.commands.climber_commands.ManualMoveRightClimber;
 import frc.robot.commands.test_commands.ChassisForwardOffsetTest;
 import frc.robot.commands.test_commands.ChassisOffsetTest;
 import frc.robot.commands.test_commands.ShooterAngleTest;
@@ -46,6 +48,11 @@ public class Robot extends TimedRobot {
     public static IntakeSubsystem intake;
     public static AngleAdjustSubsystem adjustor;
     public static TestUtil testUtil;
+
+    // private final ManualMoveLeftClimber downLeftClimber = new ManualMoveLeftClimber(true);
+    // private final ManualMoveRightClimber downRightClimber = new ManualMoveRightClimber(true);
+    // private final ManualMoveLeftClimber upLeftClimber = new ManualMoveLeftClimber(false);
+    // private final ManualMoveRightClimber upRightClimber = new ManualMoveRightClimber(false);
 
     public static LeftClimberSubsystem leftClimber;
     public static RightClimberSubsystem rightClimber;
@@ -134,9 +141,10 @@ public class Robot extends TimedRobot {
     @Override public void disabledPeriodic() {}
     @Override public void autonomousPeriodic() {}
 
-    @Override public void teleopPeriodic() {
-        
+    @Override 
+    public void teleopPeriodic() {
     }
+
 
     @Override public void testPeriodic() {}
 

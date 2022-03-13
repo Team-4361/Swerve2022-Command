@@ -19,7 +19,7 @@ public class AngleAdjustSubsystem extends SubsystemBase {
     private final ConcurrentRotationalEncoder absoluteEncoder;
     private final PIDController controller;
     private Angle targetAngle;
-    private final DigitalInput adjustorLimit = new DigitalInput(ADJUSTOR_LIMIT_PORT);
+    //private final DigitalInput adjustorLimit = new DigitalInput(ADJUSTOR_LIMIT_PORT);
 
     public AngleAdjustSubsystem() {
         adjustor = SparkMaxMotor.brushless(ADJUSTOR_MOTOR_ID, ADJUSTOR_FLIPPED);
@@ -63,9 +63,9 @@ public class AngleAdjustSubsystem extends SubsystemBase {
         setAngle(rotationToAngle(position));
     }
 
-    public boolean getAdjustorLimit(){
-        return adjustorLimit.get();
-    }
+    // public boolean getAdjustorLimit(){
+    //     return adjustorLimit.get();
+    // }
 
     @Override
     public void periodic() {
