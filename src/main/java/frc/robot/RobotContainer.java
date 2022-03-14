@@ -8,12 +8,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Chassis;
 import frc.robot.commands.autonomous_commands.TestAutonomous;
 import frc.robot.commands.chassis_commands.*;
@@ -22,33 +20,21 @@ import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 import frc.robot.commands.shooter_commands.IncrementShooterAngle;
-import frc.robot.commands.shooter_commands.RevShooterCMD;
 import frc.robot.commands.shooter_commands.SetShooterAngleCommand;
-import frc.robot.commands.shooter_commands.ShootCMD;
 import frc.robot.commands.shooter_commands.TimedShootCMD;
 import frc.robot.commands.shooter_commands.UserShootCMD;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
-import frc.robot.commands.storage_commands.SequentialStorageCMDs.StorageDecision;
-import frc.robot.robot_utils.ShooterCamera;
-import frc.robot.robot_utils.trigger.DPADUPButton;
-import frc.robot.robot_utils.trigger.MultiTrigger;
-import frc.robot.robot_utils.trigger.TriggerButtonLeft;
-import frc.robot.robot_utils.trigger.TriggerButtonRight;
+import frc.robot.robot_utils.trigger.*;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 import frc.robot.commands.storage_commands.RunStorageAcceptor;
 import frc.robot.commands.storage_commands.RunStorageCMD;
 
 import static frc.robot.Constants.Control.*;
 
-import java.util.Map;
-
 public class RobotContainer {
-
     private final Joystick xyStick = new Joystick(XY_STICK_ID);
     private final Joystick zStick = new Joystick(Z_STICK_ID);
     public static final XboxController controller = new XboxController(CONTROLLER_ID);
-
-    private double currentShooterAngle = 0;
 
     // Xbox Extracted Controller Buttons
     private final JoystickButton xButton = new JoystickButton(controller, XBOX_X);
@@ -60,13 +46,10 @@ public class RobotContainer {
     private final JoystickButton lStick = new JoystickButton(controller, XBOX_LEFT_STICK);
     private final JoystickButton rStick = new JoystickButton(controller, XBOX_RIGHT_STICK);
     private final JoystickButton startButton = new JoystickButton(controller, XBOX_START);
-    private final JoystickButton leftTriggerBTN = new TriggerButtonLeft(controller, 100);
-    private final JoystickButton rightTriggerBTN = new TriggerButtonRight(controller, 101);
-    private final JoystickButton dpadUPBTN = new DPADUPButton(controller, 102);
 
-    private final JoystickButton endButton = new JoystickButton(controller, XboxController.Button.kBack.value);
-
-    private final JoystickButton xyButtonFive = new JoystickButton(xyStick, 5);
+    private final ConditionalButton leftTriggerButton = new ConditionalButton(controller, 100);
+    private final ConditionalButton rightTriggerButton = new ConditionalButton(controller, 101);
+    private final ConditionalButton dpadUpButton = new ConditionalButton(controller, 102);
 
     private final SequentialCommandGroup testSwerveDrive = new SequentialCommandGroup(
             new MoveRightCMD(),
@@ -75,19 +58,12 @@ public class RobotContainer {
             new MoveBCKCMD()
     );
 
-    private final MultiTrigger lowerLeftTrigger = new MultiTrigger(endButton, lBumper);
-    private final MultiTrigger lowerRightTrigger = new MultiTrigger(endButton, rBumper);
-
-    private final SequentialCommandGroup simpleAutoonomousCMD = new SequentialCommandGroup(new ParallelCommandGroup(new TimedShootCMD(6, 4500), new SetShooterAngleCommand(10)), new MoveFWDCMD());
-
-    private boolean isRobotCalibrated = false;
-
-    private final ParallelCommandGroup raiseClimberGroup = new ParallelCommandGroup(
-            new MoveLeftClimberUp(), new MoveRightClimberUp()
-    );
-
-    private final ParallelCommandGroup lowerClimberGroup = new ParallelCommandGroup(
-            new MoveLeftClimberDown(), new MoveRightClimberDown()
+    private final SequentialCommandGroup simpleAutonomousCMD = new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                    new TimedShootCMD(6, 4500),
+                    new SetShooterAngleCommand(10)
+            ),
+            new MoveFWDCMD()
     );
 
     public static final IncrementShooterAngle incrementAngleCMD = new IncrementShooterAngle();
@@ -106,6 +82,8 @@ public class RobotContainer {
             new CalibrateRetractIntake()
     );
 
+    private boolean isRobotCalibrated = false;
+
     public RobotContainer() {
         Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() ->
                 ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -117,6 +95,10 @@ public class RobotContainer {
         ));
 
         //Robot.shooter.setDefaultCommand(new RevShooterCMD(4500));
+
+        this.leftTriggerButton.setSupplier(() -> (controller.getLeftTriggerAxis() > 0.8));
+        this.rightTriggerButton.setSupplier(() -> (controller.getRightTriggerAxis() > 0.8));
+        this.dpadUpButton.setSupplier(() -> (controller.getPOV() >= 315 || controller.getPOV() >= 90));
 
         configureButtonBindings();
     }
@@ -133,15 +115,15 @@ public class RobotContainer {
 
         bButton.whenActive(incrementAngleCMD);
 
-        startButton.whenActive(new CalibrateRetractIntake()); 
+        startButton.whenActive(new CalibrateRetractIntake());
 
-        leftTriggerBTN.whenHeld(new ManualMoveLeftClimber(true));
-        rightTriggerBTN.whenHeld(new ManualMoveRightClimber(true));
+        leftTriggerButton.whenHeld(new ManualMoveLeftClimber(true));
+        rightTriggerButton.whenHeld(new ManualMoveRightClimber(true));
 
         lBumper.whenHeld(new ManualMoveLeftClimber(false));
         rBumper.whenHeld(new ManualMoveRightClimber(false));
 
-        dpadUPBTN.whenHeld(new RunStorageCMD());
+        dpadUpButton.whenHeld(new RunStorageCMD());
     }
 
     // public Command getAutonomousCommand() {
@@ -160,25 +142,25 @@ public class RobotContainer {
     // public SequentialCommandGroup getAutoShootGroup() {
     //     return autoShootGroup;
     // }
-    
-    public SequentialCommandGroup getSimpleAutoCommand(){
-        return simpleAutoonomousCMD;
+
+    public SequentialCommandGroup getSimpleAutoCommand() {
+        return simpleAutonomousCMD;
     }
 
     public double deadzone(double value, double deadzone) {
         return Math.abs(value) > deadzone ? value : 0;
     }
 
-    public void calibrateRobot(){
+    public void calibrateRobot() {
         calibrateGroup.schedule();
         isRobotCalibrated = true;
     }
 
-    public boolean isRobotCalibrated(){
+    public boolean isRobotCalibrated() {
         return isRobotCalibrated;
     }
 
-    public XboxController getXbox(){
+    public XboxController getXbox() {
         return controller;
     }
 }

@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.ChassisCameraConsts;
 import frc.robot.Constants.ShooterCameraConsts;
-import frc.robot.commands.climber_commands.ManualMoveLeftClimber;
-import frc.robot.commands.climber_commands.ManualMoveRightClimber;
 import frc.robot.commands.test_commands.ChassisForwardOffsetTest;
 import frc.robot.commands.test_commands.ChassisOffsetTest;
 import frc.robot.commands.test_commands.ShooterAngleTest;
@@ -30,6 +28,8 @@ import frc.robot.subsystems.storage.StorageSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
+
+import java.util.function.Supplier;
 
 import static frc.robot.Constants.Storage.RETRACT_MODE_FINISHED;
 import static frc.robot.Constants.TestValue.DEFAULT_TEST_MODE;
