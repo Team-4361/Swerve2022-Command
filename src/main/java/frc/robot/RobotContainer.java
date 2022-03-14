@@ -90,6 +90,8 @@ public class RobotContainer {
             new MoveLeftClimberDown(), new MoveRightClimberDown()
     );
 
+    public static final IncrementShooterAngle incrementAngleCMD = new IncrementShooterAngle();
+
     // // TODO: may need to add/remove commands from this group.
     // private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
     //         new ParallelCommandGroup(new SetShooterAngleCommand(20) ,new CenterShooterToHubCommand()),
@@ -129,7 +131,7 @@ public class RobotContainer {
 
         xButton.whenActive(new RetractIntakeMagnet());
 
-        bButton.whenActive(new SetShooterAngleCommand(10));
+        bButton.whenActive(incrementAngleCMD);
 
         startButton.whenActive(new CalibrateRetractIntake()); 
 

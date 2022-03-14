@@ -19,14 +19,11 @@ public class IncrementShooterAngle extends CommandBase  {
             currentAngle = 0;
             new SetShooterAngleCommand(0).schedule();;
         }
-
-
-        Map<String, Double> map = Robot.shooterCamera.getTargetGoal();
-
-        SmartDashboard.putNumber("Current Shooter Angle", currentAngle);
-        SmartDashboard.putNumber("Target distance ", map.get("Distance"));
-        SmartDashboard.putNumber("Target Pitch ", map.get("Pitch"));
      }
+
+    public double getCurrentTargetAngle(){
+        return currentAngle;
+    }
 
      
 

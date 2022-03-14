@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.robot_utils.motor.MotorUtil;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.robot_utils.encoder.ConcurrentRotationalEncoder;
 import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.revrobotics.SparkMaxMotor;
@@ -13,6 +15,8 @@ import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_LIMIT_PORT;
 import static frc.robot.Constants.MotorFlip.ADJUSTOR_FLIPPED;
 import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_GEAR_RATIO;
 import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_MOTOR_ID;
+
+import java.util.Map;
 
 public class AngleAdjustSubsystem extends SubsystemBase {
     private final SparkMaxMotor adjustor;
@@ -75,6 +79,12 @@ public class AngleAdjustSubsystem extends SubsystemBase {
         double adjustorMotorPower = controller.calculate(delta);
         adjustor.setPower(adjustorMotorPower);
 
+        Map<String, Double> map = Robot.shooterCamera.getTargetGoal();
+
         SmartDashboard.putNumber("Adjustor: Shooter Adjust Angle", getAngle());
+    
+        SmartDashboard.putNumber("Current Shooter Angle", RobotContainer.incrementAngleCMD.getCurrentTargetAngle());
+        SmartDashboard.putNumber("Target distance ", map.get("Distance"));
+        SmartDashboard.putNumber("Target Pitch ", map.get("Pitch"));
     }
 }
