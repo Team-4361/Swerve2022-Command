@@ -21,6 +21,7 @@ import frc.robot.subsystems.climber.LeftClimberSubsystem;
 import frc.robot.subsystems.climber.RightClimberSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.PIDAngleAdjustSubsystem;
+import frc.robot.subsystems.shooter.RotationalAngleAdjustSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.storage.AcceptColor;
 import frc.robot.subsystems.storage.StorageSubsystem;
@@ -44,7 +45,8 @@ public class Robot extends TimedRobot {
     public static StorageSubsystem storage;
     public static ShooterSubsystem shooter;
     public static IntakeSubsystem intake;
-    public static PIDAngleAdjustSubsystem adjustor;
+    //public static PIDAngleAdjustSubsystem adjustor;
+    public static RotationalAngleAdjustSubsystem adjustor;
     public static TestUtil testUtil;
 
     // private final ManualMoveLeftClimber downLeftClimber = new ManualMoveLeftClimber(true);
@@ -108,7 +110,7 @@ public class Robot extends TimedRobot {
         leftClimber = new LeftClimberSubsystem();
         rightClimber = new RightClimberSubsystem();
 
-        adjustor = new PIDAngleAdjustSubsystem();
+        adjustor = new RotationalAngleAdjustSubsystem();
 
         // Add your test commands here
         testUtil = new TestUtil()
@@ -153,7 +155,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll();
 
         autonomous = robotContainer.getSimpleAutoCommand();
-        Robot.adjustor.zero();
+        Robot.adjustor.reset();
         
         if (autonomous != null)
             autonomous.schedule();

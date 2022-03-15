@@ -12,8 +12,7 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.MotorFlip.ADJUSTOR_FLIPPED;
-import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_GEAR_RATIO;
-import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_MOTOR_ID;
+import static frc.robot.Constants.ShooterAdjustor.*;
 import static frc.robot.robot_utils.motor.MotorUtil.getMotorValue;
 import static frc.robot.robot_utils.motor.MotorUtil.inTolerance;
 
@@ -31,27 +30,37 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
         this.adjustEncoder = new ConcurrentRotationalEncoder(this.adjustMotor, ADJUSTOR_FLIPPED);
     }
 
-    /** Resets the {@link ConcurrentRotationalEncoder}, and zeros it out. */
+    /**
+     * Resets the {@link ConcurrentRotationalEncoder}, and zeros it out.
+     */
     public void reset() {
         this.adjustEncoder.reset();
     }
 
-    /** @return The {@link CANSparkMax} motor used for controlling the Angle Adjustor. */
+    /**
+     * @return The {@link CANSparkMax} motor used for controlling the Angle Adjustor.
+     */
     public CANSparkMax getAdjustMotor() {
         return this.adjustMotor;
     }
 
-    /** @return The {@link ConcurrentRotationalEncoder} encoder associated with this motor. */
+    /**
+     * @return The {@link ConcurrentRotationalEncoder} encoder associated with this motor.
+     */
     public ConcurrentRotationalEncoder getAdjustEncoder() {
         return this.adjustEncoder;
     }
 
-    /** @return The current angle of the Angle Adjustor. */
+    /**
+     * @return The current angle of the Angle Adjustor.
+     */
     public double getAngle() {
         return ((Math.abs(adjustEncoder.getAbsoluteRotations()) * 360) * (1 / ADJUSTOR_GEAR_RATIO));
     }
 
-    /** @return If the angle is currently being adjusted. */
+    /**
+     * @return If the angle is currently being adjusted.
+     */
     public boolean isAdjustingAngle() {
         return this.adjustingAngle;
     }
@@ -82,17 +91,23 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
         return this;
     }
 
-    /** @return The current {@link #speedTolerance} used. */
+    /**
+     * @return The current {@link #speedTolerance} used.
+     */
     public double getSpeedTolerance() {
         return this.speedTolerance;
     }
 
-    /** @return The current {@link #precisionTolerance} used. */
+    /**
+     * @return The current {@link #precisionTolerance} used.
+     */
     public double getPrecisionTolerance() {
         return this.precisionTolerance;
     }
 
-    /** @return If the Adjustor is within the {@link #precisionTolerance} of the desired angle. */
+    /**
+     * @return If the Adjustor is within the {@link #precisionTolerance} of the desired angle.
+     */
     public boolean atDesiredAngle(double desired) {
         return (inTolerance(desired, getAngle(), this.precisionTolerance));
     }
@@ -111,6 +126,10 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
     }
 
     public boolean setTargetAngle(double angle) {
+        if (angle > ADJUSTOR_ANGLE_MAX || angle < ADJUSTOR_ANGLE_MIN) {
+            return false;
+        }
+
         if (inTolerance(angle, getAngle(), this.precisionTolerance)) {
             return false;
         } else {
@@ -136,13 +155,13 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
                 this.adjustingAngle = false;
             } else if (currentAngle > targetAngle) {
                 // Move the adjustor motor in the down direction.
-                this.adjustMotor.set(-getMotorValue(getRequiredSpeed(), ADJUSTOR_FLIPPED));
-            } else if (currentAngle < targetAngle) {
                 this.adjustMotor.set(getMotorValue(getRequiredSpeed(), ADJUSTOR_FLIPPED));
-            } else {
+            } else if (currentAngle < targetAngle) {
+                this.adjustMotor.set(-getMotorValue(getRequiredSpeed(), ADJUSTOR_FLIPPED));
+            } else if (currentAngle == targetAngle) {
+                // This is almost completely impossible, but do it anyways.
                 this.adjustingAngle = false;
             }
-
         } else {
             this.adjustMotor.stopMotor();
         }

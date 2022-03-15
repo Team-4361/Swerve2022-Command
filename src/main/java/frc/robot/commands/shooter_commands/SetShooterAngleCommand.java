@@ -14,11 +14,11 @@ public class SetShooterAngleCommand extends CommandBase {
 
     @Override
     public void execute() {
-        Robot.adjustor.setAngle(runAngle);
+        Robot.adjustor.setTargetAngle(runAngle);
     }
 
     @Override
     public boolean isFinished() {
-        return Robot.adjustor.atDesiredAngle(runAngle, 5);
+        return Robot.adjustor.atDesiredAngle(runAngle);
     }
 }
