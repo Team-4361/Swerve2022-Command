@@ -20,7 +20,7 @@ import frc.robot.robot_utils.TestUtil;
 import frc.robot.subsystems.climber.LeftClimberSubsystem;
 import frc.robot.subsystems.climber.RightClimberSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
-import frc.robot.subsystems.shooter.AngleAdjustSubsystem;
+import frc.robot.subsystems.shooter.PIDAngleAdjustSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.storage.AcceptColor;
 import frc.robot.subsystems.storage.StorageSubsystem;
@@ -28,8 +28,6 @@ import frc.robot.subsystems.storage.StorageSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import me.wobblyyyy.pathfinder2.Pathfinder;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
-
-import java.util.function.Supplier;
 
 import static frc.robot.Constants.Storage.RETRACT_MODE_FINISHED;
 import static frc.robot.Constants.TestValue.DEFAULT_TEST_MODE;
@@ -46,7 +44,7 @@ public class Robot extends TimedRobot {
     public static StorageSubsystem storage;
     public static ShooterSubsystem shooter;
     public static IntakeSubsystem intake;
-    public static AngleAdjustSubsystem adjustor;
+    public static PIDAngleAdjustSubsystem adjustor;
     public static TestUtil testUtil;
 
     // private final ManualMoveLeftClimber downLeftClimber = new ManualMoveLeftClimber(true);
@@ -110,7 +108,7 @@ public class Robot extends TimedRobot {
         leftClimber = new LeftClimberSubsystem();
         rightClimber = new RightClimberSubsystem();
 
-        adjustor = new AngleAdjustSubsystem();
+        adjustor = new PIDAngleAdjustSubsystem();
 
         // Add your test commands here
         testUtil = new TestUtil()

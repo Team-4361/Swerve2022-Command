@@ -159,6 +159,10 @@ public class Constants {
         public static final int ADJUSTOR_LIMIT_PORT = 100;
 
         public static final boolean LIMIT_SWITCH_ENABLED = false;
+
+        // in degrees
+        public static final double ADJUSTOR_ANGLE_MAX = 32;
+        public static final double ADJUSTOR_ANGLE_MIN = 0;
     }
 
     public static class Shooter {
