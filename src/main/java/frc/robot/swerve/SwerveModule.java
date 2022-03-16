@@ -74,8 +74,8 @@ public class SwerveModule {
                 state.angle.getRadians()
         );
 
-        driveMotor.setPower(state.speedMetersPerSecond * errorFactor);
-        turnMotor.setPower(turnPower);
+        //driveMotor.setPower(state.speedMetersPerSecond * errorFactor);
+        //turnMotor.setPower(turnPower);
     }
 
     /**

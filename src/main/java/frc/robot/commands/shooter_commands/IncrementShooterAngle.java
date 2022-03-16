@@ -6,26 +6,28 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
+import static frc.robot.Constants.ShooterAdjustor.*;
+
 public class IncrementShooterAngle extends CommandBase  {
     
-    private double currentAngle = 0;
+    private double targetAngle = 0, actualAngle;
 
      @Override
      public void initialize() {
-        if(currentAngle <= 30){
-            currentAngle += 5;
-            new SetShooterAngleCommand(currentAngle).schedule();;
+        actualAngle = Robot.adjustor.getAngle();
+
+        if(actualAngle < ADJUSTOR_ANGLE_MAX){
+            targetAngle += 5;
+            Robot.adjustor.setTargetAngle(targetAngle);
         } else {
-            currentAngle = 0;
-            new SetShooterAngleCommand(0).schedule();;
+            targetAngle = 0;
+            Robot.adjustor.setTargetAngle(targetAngle);
         }
      }
 
     public double getCurrentTargetAngle(){
-        return currentAngle;
+        return targetAngle;
     }
-
-     
 
     @Override
     public boolean isFinished() {

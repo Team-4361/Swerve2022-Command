@@ -3,6 +3,8 @@ package frc.robot.subsystems.shooter;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -118,10 +120,8 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
         if (inTolerance(targetAngle, currentAngle, this.precisionTolerance)) {
             this.adjustingAngle = false;
             return 0;
-        } else if (inTolerance(targetAngle, currentAngle, this.speedTolerance)) {
-            return 0.15;
         } else {
-            return 0.3;
+            return 0.06;
         }
     }
 
@@ -161,9 +161,13 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
             } else if (currentAngle == targetAngle) {
                 // This is almost completely impossible, but do it anyways.
                 this.adjustingAngle = false;
+            } else if (currentAngle == ADJUSTOR_ANGLE_MAX) {
+                this.adjustingAngle = false;
             }
         } else {
             this.adjustMotor.stopMotor();
         }
+
+        SmartDashboard.putNumber("new shooter angle", getAngle());
     }
 }
