@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -64,7 +65,7 @@ public class Robot extends TimedRobot {
     public static ChassisCamera chassisCamera;
     public static boolean leftHandedMode = false;
 
-    
+    private final PowerDistribution pdp = new PowerDistribution();
 
     private void setupColorChooser() {
         // Add the values for the SendableChooser
@@ -136,13 +137,26 @@ public class Robot extends TimedRobot {
         );
     }
 
-    @Override public void robotPeriodic() { CommandScheduler.getInstance().run(); }
+    @Override public void robotPeriodic() { 
+        CommandScheduler.getInstance().run();
+
+        double current = pdp.getTotalCurrent();
+        double voltage = pdp.getVoltage();
+
+        double watts = voltage * current;
+
+        SmartDashboard.putNumber("total current", current);
+        SmartDashboard.putNumber("total watts", watts);
+        SmartDashboard.putNumber("robot voltage", voltage);
+     }
+
     @Override public void disabledInit() { CommandScheduler.getInstance().cancelAll(); }
     @Override public void disabledPeriodic() {}
     @Override public void autonomousPeriodic() {}
 
     @Override 
     public void teleopPeriodic() {
+        
     }
 
 
