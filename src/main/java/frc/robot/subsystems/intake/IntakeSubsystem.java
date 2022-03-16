@@ -2,8 +2,6 @@ package frc.robot.subsystems.intake;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,7 +21,8 @@ import static frc.robot.Constants.Intake.*;
 public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     private final CANSparkMax[] sparks;
 
-    private final Motor extender;
+    private final Motor leftExtender;
+    private final Motor rightExtender;
     private final Motor intakeMotor;
 
     private final RelativeEncoder leftEncoder;
@@ -42,17 +41,15 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         CANSparkMax intakeSpark = new CANSparkMax(INTAKE_SPIN_MOTOR_ID, kBrushed);
         sparks = new CANSparkMax[]{leftSpark, rightSpark, intakeSpark};
 
-        extender = new MultiMotor(
-                new AbstractMotor(
-                        leftSpark::set,
-                        leftSpark::get,
-                        MotorFlip.INTAKE_EXTENDER_LEFT_FLIPPED
-                ),
-                new AbstractMotor(
-                        rightSpark::set,
-                        rightSpark::get,
-                        MotorFlip.INTAKE_EXTENDER_RIGHT_FLIPPED
-                )
+        leftExtender = new AbstractMotor(
+                leftSpark::set,
+                leftSpark::get,
+                MotorFlip.INTAKE_EXTENDER_LEFT_FLIPPED
+        );
+        rightExtender = new AbstractMotor(
+                rightSpark::set,
+                rightSpark::get,
+                MotorFlip.INTAKE_EXTENDER_LEFT_FLIPPED
         );
         intakeMotor = new AbstractMotor(
                 intakeSpark::set,
@@ -72,7 +69,7 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         brMagnet = new DigitalInput(BR_MAGNET_ID);
     }
 
-    
+
 
     @Override
     public void periodic() {
@@ -134,12 +131,40 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     }
 
     public void stopIntakeGroup() {
-        extender.setPower(0);
+        translateExtender(0);
         intakeMotor.setPower(0);
     }
 
-    private void translateExtender(double value) {
-        extender.setPower(value);
+    /**
+     * translate one of the extender's motors, so long as the translation
+     * is valid. if the translation would cause the extender to extend past
+     * either of its limits (either extend too far or retract too far), the
+     * motor will be set a power value of 0 so that the motors don't get
+     * burned out.
+     *
+     * @param motor       the motor to set power to.
+     * @param power       the power value to set to the motor.
+     * @param isExtended  is the FRONT limit switch activated?
+     * @param isRetracted is the BACK limit switch activated?
+     */
+    private static void translateExtender(Motor motor,
+                                          double power,
+                                          boolean isExtended,
+                                          boolean isRetracted) {
+        if (power > 0 && isExtended) power = 0;
+        else if (power < 0 && isRetracted) power = 0;
+
+        motor.setPower(power);
+    }
+
+    /**
+     * translate both sides of the extender.
+     *
+     * @param power the power to set to the extender.
+     */
+    private void translateExtender(double power) {
+        translateExtender(leftExtender, power, flMagnet.get(), blMagnet.get());
+        translateExtender(rightExtender, power, frMagnet.get(), brMagnet.get());
     }
 
     public double getLeftPosition() {
