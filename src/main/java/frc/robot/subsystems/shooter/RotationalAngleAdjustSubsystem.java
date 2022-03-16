@@ -1,16 +1,13 @@
 package frc.robot.subsystems.shooter;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.robot_utils.encoder.ConcurrentRotationalEncoder;
-import frc.robot.robot_utils.motor.MotorUtil;
-import me.wobblyyyy.pathfinder2.geometry.Angle;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.MotorFlip.ADJUSTOR_FLIPPED;
@@ -21,15 +18,16 @@ import static frc.robot.robot_utils.motor.MotorUtil.inTolerance;
 public class RotationalAngleAdjustSubsystem extends SubsystemBase {
     private final CANSparkMax adjustMotor;
     private final ConcurrentRotationalEncoder adjustEncoder;
-    private double targetAngle;
+    private final DigitalInput topLimitSwitch;
 
+    private double targetAngle, maximumAngle;
     private double precisionTolerance = 1;
-    private double speedTolerance = 2;
     private boolean adjustingAngle = false;
 
     public RotationalAngleAdjustSubsystem() {
         this.adjustMotor = new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless);
         this.adjustEncoder = new ConcurrentRotationalEncoder(this.adjustMotor, ADJUSTOR_FLIPPED);
+        this.topLimitSwitch = new DigitalInput(ADJUSTOR_LIMIT_PORT);
     }
 
     /**
@@ -69,8 +67,8 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
 
     /**
      * Sets the Precision Tolerance, how many degrees off the Adjustor is allowed to be off, before giving
-     * up and not attempting to move it any further. This follows after the {@link #speedTolerance} and runs
-     * at a significantly slower speed in order for this to be as accurate as possible.
+     * up and not attempting to move it any further. This run at a significantly slower speed in order for
+     * this to be as accurate as possible.
      *
      * @param tolerance The {@link #precisionTolerance} to set.
      * @return {@link RotationalAngleAdjustSubsystem}
@@ -78,26 +76,6 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
     public RotationalAngleAdjustSubsystem setPrecisionTolerance(double tolerance) {
         this.precisionTolerance = tolerance;
         return this;
-    }
-
-    /**
-     * Sets the Speed Tolerance, until the Adjustor Angle is within the {@link #speedTolerance}, before
-     * slowing down the motor and attempting to reach the {@link #precisionTolerance}. This runs at a fast
-     * speed to reach the target angle as fast as possible.
-     *
-     * @param tolerance The {@link #speedTolerance} to set.
-     * @return {@link RotationalAngleAdjustSubsystem}
-     */
-    public RotationalAngleAdjustSubsystem setSpeedTolerance(double tolerance) {
-        this.speedTolerance = tolerance;
-        return this;
-    }
-
-    /**
-     * @return The current {@link #speedTolerance} used.
-     */
-    public double getSpeedTolerance() {
-        return this.speedTolerance;
     }
 
     /**
@@ -121,11 +99,15 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
             this.adjustingAngle = false;
             return 0;
         } else {
-            return 0.06;
+            return ADJUSTOR_SPEED;
         }
     }
 
     public boolean setTargetAngle(double angle) {
+        if (atLimitAngle()) {
+            return false;
+        }
+
         if (angle > ADJUSTOR_ANGLE_MAX || angle < ADJUSTOR_ANGLE_MIN) {
             return false;
         }
@@ -137,6 +119,31 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
             this.adjustingAngle = true;
             return true;
         }
+    }
+
+    /** @return If the Angle Adjustor is at the maximum angle, meaning the limit switch has been pressed. */
+    public boolean atLimitAngle() {
+        return topLimitSwitch.get();
+    }
+
+    public double getMaximumAngle() {
+        return this.maximumAngle;
+    }
+
+    public void setMaximumAngle(double angle) {
+        this.maximumAngle = angle;
+    }
+
+    public void translateUp() {
+        this.adjustMotor.set(-getMotorValue(ADJUSTOR_SPEED, ADJUSTOR_FLIPPED));
+    }
+
+    public void translateDown() {
+        this.adjustMotor.set(getMotorValue(ADJUSTOR_SPEED, ADJUSTOR_FLIPPED));
+    }
+
+    public void stop() {
+        this.adjustMotor.stopMotor();
     }
 
     /**
@@ -161,7 +168,8 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
             } else if (currentAngle == targetAngle) {
                 // This is almost completely impossible, but do it anyways.
                 this.adjustingAngle = false;
-            } else if (currentAngle == ADJUSTOR_ANGLE_MAX) {
+            } else if (atLimitAngle()) {
+                setMaximumAngle(currentAngle);
                 this.adjustingAngle = false;
             }
         } else {

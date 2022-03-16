@@ -158,7 +158,7 @@ public class Constants {
 
         public static final int ADJUSTOR_LIMIT_PORT = 20;
 
-        public static final boolean LIMIT_SWITCH_ENABLED = false;
+        public static final double ADJUSTOR_SPEED = 0.06;
 
         // in degrees
         public static final double ADJUSTOR_ANGLE_MAX = 29;

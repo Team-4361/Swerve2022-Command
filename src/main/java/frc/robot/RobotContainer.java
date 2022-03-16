@@ -19,10 +19,7 @@ import frc.robot.commands.climber_commands.*;
 import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
 import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
-import frc.robot.commands.shooter_commands.IncrementShooterAngle;
-import frc.robot.commands.shooter_commands.SetShooterAngleCommand;
-import frc.robot.commands.shooter_commands.TimedShootCMD;
-import frc.robot.commands.shooter_commands.UserShootCMD;
+import frc.robot.commands.shooter_commands.*;
 import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
 import frc.robot.robot_utils.trigger.*;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
@@ -79,7 +76,8 @@ public class RobotContainer {
             new IntakeProcessAccept());
 
     private final ParallelCommandGroup calibrateGroup = new ParallelCommandGroup(
-            new CalibrateRetractIntake()
+            new CalibrateRetractIntake(),
+            new CalibrateAdjustorCMD()
     );
 
     private boolean isRobotCalibrated = false;

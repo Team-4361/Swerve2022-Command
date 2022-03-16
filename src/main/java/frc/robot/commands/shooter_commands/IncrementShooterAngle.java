@@ -8,24 +8,27 @@ import frc.robot.Robot;
 
 import static frc.robot.Constants.ShooterAdjustor.*;
 
-public class IncrementShooterAngle extends CommandBase  {
-    
-    private double targetAngle = 0, actualAngle;
+public class IncrementShooterAngle extends CommandBase {
+    private double targetAngle = 0;
 
-     @Override
-     public void initialize() {
-        actualAngle = Robot.adjustor.getAngle();
+    private void resetAngle() {
+        targetAngle = 0;
+        Robot.adjustor.setTargetAngle(0);
+    }
 
-        if(actualAngle < ADJUSTOR_ANGLE_MAX){
+    @Override
+    public void initialize() {
+        if (Robot.adjustor.getAngle()+5 < Robot.adjustor.getMaximumAngle()) {
             targetAngle += 5;
-            Robot.adjustor.setTargetAngle(targetAngle);
+            if (!Robot.adjustor.setTargetAngle(targetAngle)) {
+                resetAngle();
+            }
         } else {
-            targetAngle = 0;
-            Robot.adjustor.setTargetAngle(targetAngle);
+            resetAngle();
         }
-     }
+    }
 
-    public double getCurrentTargetAngle(){
+    public double getCurrentTargetAngle() {
         return targetAngle;
     }
 

@@ -64,8 +64,6 @@ public class Robot extends TimedRobot {
     public static ChassisCamera chassisCamera;
     public static boolean leftHandedMode = false;
 
-    
-
     private void setupColorChooser() {
         // Add the values for the SendableChooser
         acceptColorChooser.addOption("Blue Accept", AcceptColor.BLUE);
