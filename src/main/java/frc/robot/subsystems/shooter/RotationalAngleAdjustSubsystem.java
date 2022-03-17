@@ -27,7 +27,7 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
     private double targetAngle = 0;
     private double maximumAngle = ADJUSTOR_ANGLE_MAX;
     private double precisionTolerance = 0.5;
-    private boolean adjustingAngle = false, holdMode = true;
+    private boolean adjustingAngle = false, holdMode = false;
 
     public RotationalAngleAdjustSubsystem() {
         this.adjustMotor = new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless);
@@ -47,6 +47,10 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
      */
     public CANSparkMax getAdjustMotor() {
         return this.adjustMotor;
+    }
+
+    public boolean isLowRPM() {
+        return adjustEncoder.getVelocity() < 1;
     }
 
     /**
@@ -199,19 +203,23 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
             } else if (atLimitAngle()) {
                 setMaximumAngle(currentAngle);
                 this.adjustingAngle = false;
+            } else if (isLowRPM() == currentAngle < 2) {
+                // it is bottoming out due to inaccuracies, stop and reset
+                this.adjustingAngle = false;
             }
         } else {
             this.adjustMotor.stopMotor();
 
-            if (holdMode) {
+            //if (holdMode) {
                 // If we are supposed to be holding the position, keep calling setTargetAngle. It will not respond
                 // when it's very close to what it actually should be.
-                setTargetAngle(targetAngle);
-            }
+            //    setTargetAngle(targetAngle);
+            //}
         }
 
         Map<String, Double> map = Robot.shooterCamera.getTargetGoal();
 
+        /*
         SmartDashboard.putNumber("Adjustor: Current Angle", getAngle());
         SmartDashboard.putNumber("Adjustor: Target Angle", getTargetAngle());
         SmartDashboard.putNumber("Adjustor: Angle Difference", getRealAngleDifference());
@@ -220,5 +228,10 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
 
         SmartDashboard.putNumber("Adjustor Camera: Target Distance ", map.get("Distance"));
         SmartDashboard.putNumber("Adjustor Camera: Target Pitch ", map.get("Pitch"));
+
+        SmartDashboard.putNumber("Adjustor: Max Angle", getMaximumAngle());
+
+        SmartDashboard.putNumber("Adjustor: Velocity", adjustEncoder.getVelocity());
+   */
     }
 }

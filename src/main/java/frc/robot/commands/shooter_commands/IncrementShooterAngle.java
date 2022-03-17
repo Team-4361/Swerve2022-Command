@@ -13,11 +13,12 @@ public class IncrementShooterAngle extends CommandBase {
 
     private void resetAngle() {
         targetAngle = 0;
-        Robot.adjustor.setTargetAngle(0);
+        Robot.adjustor.setAngle(0);
     }
 
     @Override
     public void initialize() {
+        /*
         if (Robot.adjustor.getAngle()+5 < Robot.adjustor.getMaximumAngle()) {
             targetAngle += 5;
             if (!Robot.adjustor.setTargetAngle(targetAngle)) {
@@ -25,6 +26,14 @@ public class IncrementShooterAngle extends CommandBase {
             }
         } else {
             resetAngle();
+        }
+        */
+        if (Robot.adjustor.getAngle()+5 < ADJUSTOR_ANGLE_MAX) {
+            targetAngle += 5;
+            Robot.adjustor.setAngle(targetAngle);
+        } else {
+            targetAngle = 0;
+            Robot.adjustor.setAngle(0);
         }
     }
 

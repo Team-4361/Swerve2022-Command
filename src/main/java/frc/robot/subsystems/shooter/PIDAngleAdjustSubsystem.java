@@ -29,7 +29,7 @@ public class PIDAngleAdjustSubsystem extends SubsystemBase {
                 .setFlipped(ADJUSTOR_FLIPPED)
                 .setRPMTolerance(0.5);
 
-        controller = new PIDController((double) 1 / 90, 0, 0);
+        controller = new PIDController((double) 1 / 63, 0, 0);
         controller.setSetpoint(0.0);
         
         targetAngle = new Angle();
@@ -76,5 +76,9 @@ public class PIDAngleAdjustSubsystem extends SubsystemBase {
         double delta = Angle.minimumDelta(currentAngle, targetAngle);
         double adjustorMotorPower = controller.calculate(delta);
         adjustor.setPower(adjustorMotorPower);
+
+        SmartDashboard.putNumber("pid angle", getAngle());
+        SmartDashboard.putString("pid target", targetAngle.toString());
+        SmartDashboard.putNumber("pid velocity", absoluteEncoder.getVelocity());
     }
 }

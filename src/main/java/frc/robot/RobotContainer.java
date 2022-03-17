@@ -77,8 +77,8 @@ public class RobotContainer {
             new IntakeProcessAccept());
 
     private final ParallelCommandGroup calibrateGroup = new ParallelCommandGroup(
-            new CalibrateRetractIntake(),
-            new CalibrateAdjustorCMD()
+            new CalibrateRetractIntake()
+            //new CalibrateAdjustorCMD()
     );
 
     private boolean isRobotCalibrated = false;
@@ -114,7 +114,7 @@ public class RobotContainer {
 
         bButton.whenActive(incrementAngleCMD);
 
-        startButton.whenActive(calibrateGroup);
+        //startButton.whenActive(new CalibrateAdjustorCMD());
 
         leftTriggerButton.whenHeld(new ManualMoveLeftClimber(true));
         rightTriggerButton.whenHeld(new ManualMoveRightClimber(true));

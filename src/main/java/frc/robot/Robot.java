@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
     public static StorageSubsystem storage;
     public static ShooterSubsystem shooter;
     public static IntakeSubsystem intake;
-    public static RotationalAngleAdjustSubsystem adjustor;
+    public static PIDAngleAdjustSubsystem adjustor;
     public static TestUtil testUtil;
 
     public static LeftClimberSubsystem leftClimber;
@@ -103,7 +103,7 @@ public class Robot extends TimedRobot {
         leftClimber = new LeftClimberSubsystem();
         rightClimber = new RightClimberSubsystem();
 
-        adjustor = new RotationalAngleAdjustSubsystem();
+        adjustor = new PIDAngleAdjustSubsystem();
 
         // Add your test commands here
         testUtil = new TestUtil()
@@ -148,7 +148,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll();
 
         autonomous = robotContainer.getSimpleAutoCommand();
-        Robot.adjustor.reset();
+        Robot.adjustor.zero();
         
         if (autonomous != null)
             autonomous.schedule();
@@ -162,7 +162,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll();
 
         // TODO: Please comment this out when autonomous starts getting tested, it will mess up otherwise.
-        Robot.adjustor.reset();
+        Robot.adjustor.zero();
     }
 
     @Override

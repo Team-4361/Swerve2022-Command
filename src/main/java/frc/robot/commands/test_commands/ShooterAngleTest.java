@@ -16,11 +16,11 @@ public class ShooterAngleTest extends CommandBase {
         // Bounce between different angles to try
         try {
             for (int angle = 0; angle <= 80; angle += 10) {
-                Robot.adjustor.setTargetAngle(angle);
+                Robot.adjustor.setAngle(angle);
                 TimeUnit.SECONDS.sleep(1);
             }
             for (int angle = 80; angle >= 0; angle -= 10) {
-                Robot.adjustor.setTargetAngle(angle);
+                Robot.adjustor.setAngle(angle);
                 TimeUnit.SECONDS.sleep(1);
             }
         } catch (InterruptedException ignored) {
