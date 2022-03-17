@@ -7,7 +7,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.robot_utils.encoder.ConcurrentRotationalEncoder;
+
+import java.util.Map;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.MotorFlip.ADJUSTOR_FLIPPED;
@@ -20,13 +24,14 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
     private final ConcurrentRotationalEncoder adjustEncoder;
     private final DigitalInput topLimitSwitch;
 
-    private double targetAngle, maximumAngle;
-    private double precisionTolerance = 1;
-    private boolean adjustingAngle = false;
+    private double targetAngle = 0;
+    private double maximumAngle = ADJUSTOR_ANGLE_MAX;
+    private double precisionTolerance = 0.5;
+    private boolean adjustingAngle = false, holdMode = true;
 
     public RotationalAngleAdjustSubsystem() {
         this.adjustMotor = new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless);
-        this.adjustEncoder = new ConcurrentRotationalEncoder(this.adjustMotor, ADJUSTOR_FLIPPED);
+        this.adjustEncoder = new ConcurrentRotationalEncoder(adjustMotor, ADJUSTOR_FLIPPED);
         this.topLimitSwitch = new DigitalInput(ADJUSTOR_LIMIT_PORT);
     }
 
@@ -56,6 +61,13 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
      */
     public double getAngle() {
         return ((Math.abs(adjustEncoder.getAbsoluteRotations()) * 360) * (1 / ADJUSTOR_GEAR_RATIO));
+    }
+
+    /**
+     * @return The target angle intended to be set.
+     */
+    public double getTargetAngle() {
+        return this.targetAngle;
     }
 
     /**
@@ -108,7 +120,7 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
             return false;
         }
 
-        if (angle > ADJUSTOR_ANGLE_MAX || angle < ADJUSTOR_ANGLE_MIN) {
+        if (angle > getMaximumAngle() || angle < ADJUSTOR_ANGLE_MIN) {
             return false;
         }
 
@@ -119,6 +131,10 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
             this.adjustingAngle = true;
             return true;
         }
+    }
+
+    public double getRealAngleDifference() {
+        return Math.abs(targetAngle-getAngle());
     }
 
     /** @return If the Angle Adjustor is at the maximum angle, meaning the limit switch has been pressed. */
@@ -147,6 +163,18 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
     }
 
     /**
+     * Sets the holding mode for the {@link RotationalAngleAdjustSubsystem}, and will attempt to keep the target
+     * angle even when moved from its original location by continuously calling {@link #setTargetAngle(double)} while
+     * not actively moving.
+     *
+     * @param holdMode If hold mode should be enabled.
+     */
+    public RotationalAngleAdjustSubsystem setHoldMode(boolean holdMode) {
+        this.holdMode = holdMode;
+        return this;
+    }
+
+    /**
      * This method is called periodically by the {@link CommandScheduler}. Useful for updating subsystem-specific state
      * that you don't want to offload to a {@link Command}. Teams should try to be consistent within their own codebases
      * about which responsibilities will be handled by Commands, and which will be handled here.
@@ -166,7 +194,7 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
             } else if (currentAngle < targetAngle) {
                 this.adjustMotor.set(-getMotorValue(getRequiredSpeed(), ADJUSTOR_FLIPPED));
             } else if (currentAngle == targetAngle) {
-                // This is almost completely impossible, but do it anyways.
+                // This is almost completely impossible, but do it anyway.
                 this.adjustingAngle = false;
             } else if (atLimitAngle()) {
                 setMaximumAngle(currentAngle);
@@ -174,8 +202,23 @@ public class RotationalAngleAdjustSubsystem extends SubsystemBase {
             }
         } else {
             this.adjustMotor.stopMotor();
+
+            if (holdMode) {
+                // If we are supposed to be holding the position, keep calling setTargetAngle. It will not respond
+                // when it's very close to what it actually should be.
+                setTargetAngle(targetAngle);
+            }
         }
 
-        SmartDashboard.putNumber("new shooter angle", getAngle());
+        Map<String, Double> map = Robot.shooterCamera.getTargetGoal();
+
+        SmartDashboard.putNumber("Adjustor: Current Angle", getAngle());
+        SmartDashboard.putNumber("Adjustor: Target Angle", getTargetAngle());
+        SmartDashboard.putNumber("Adjustor: Angle Difference", getRealAngleDifference());
+
+        SmartDashboard.putBoolean("Adjustor: Is Moving", isAdjustingAngle());
+
+        SmartDashboard.putNumber("Adjustor Camera: Target Distance ", map.get("Distance"));
+        SmartDashboard.putNumber("Adjustor Camera: Target Pitch ", map.get("Pitch"));
     }
 }

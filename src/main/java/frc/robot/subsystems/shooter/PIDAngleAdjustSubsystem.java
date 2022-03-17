@@ -76,13 +76,5 @@ public class PIDAngleAdjustSubsystem extends SubsystemBase {
         double delta = Angle.minimumDelta(currentAngle, targetAngle);
         double adjustorMotorPower = controller.calculate(delta);
         adjustor.setPower(adjustorMotorPower);
-
-        Map<String, Double> map = Robot.shooterCamera.getTargetGoal();
-
-        SmartDashboard.putNumber("Adjustor: Shooter Adjust Angle", getAngle());
-    
-        SmartDashboard.putNumber("Current Shooter Angle", RobotContainer.incrementAngleCMD.getCurrentTargetAngle());
-        SmartDashboard.putNumber("Target distance ", map.get("Distance"));
-        SmartDashboard.putNumber("Target Pitch ", map.get("Pitch"));
     }
 }

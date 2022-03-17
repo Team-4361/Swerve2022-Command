@@ -45,14 +45,8 @@ public class Robot extends TimedRobot {
     public static StorageSubsystem storage;
     public static ShooterSubsystem shooter;
     public static IntakeSubsystem intake;
-    //public static PIDAngleAdjustSubsystem adjustor;
     public static RotationalAngleAdjustSubsystem adjustor;
     public static TestUtil testUtil;
-
-    // private final ManualMoveLeftClimber downLeftClimber = new ManualMoveLeftClimber(true);
-    // private final ManualMoveRightClimber downRightClimber = new ManualMoveRightClimber(true);
-    // private final ManualMoveLeftClimber upLeftClimber = new ManualMoveLeftClimber(false);
-    // private final ManualMoveRightClimber upRightClimber = new ManualMoveRightClimber(false);
 
     public static LeftClimberSubsystem leftClimber;
     public static RightClimberSubsystem rightClimber;
@@ -62,6 +56,7 @@ public class Robot extends TimedRobot {
 
     public static ShooterCamera shooterCamera;
     public static ChassisCamera chassisCamera;
+
     public static boolean leftHandedMode = false;
 
     private void setupColorChooser() {
@@ -165,6 +160,8 @@ public class Robot extends TimedRobot {
             autonomous.cancel();
 
         CommandScheduler.getInstance().cancelAll();
+
+        // TODO: Please comment this out when autonomous starts getting tested, it will mess up otherwise.
         Robot.adjustor.reset();
     }
 

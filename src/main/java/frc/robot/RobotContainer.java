@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -113,7 +114,7 @@ public class RobotContainer {
 
         bButton.whenActive(incrementAngleCMD);
 
-        startButton.whenActive(new CalibrateRetractIntake());
+        startButton.whenActive(calibrateGroup);
 
         leftTriggerButton.whenHeld(new ManualMoveLeftClimber(true));
         rightTriggerButton.whenHeld(new ManualMoveRightClimber(true));
