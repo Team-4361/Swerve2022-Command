@@ -59,7 +59,7 @@ public class Constants {
     public static class TestValue {
         // You can change the default Testing mode to be run here, when Driver Station
         // is in testing mode.
-        public final static TestUtil.TestMode DEFAULT_TEST_MODE = TestUtil.TestMode.INTAKE_ROTATION_TEST;
+        public final static TestUtil.TestMode DEFAULT_TEST_MODE = TestUtil.TestMode.SHOOTER_ANGLE_TEST;
 
         // TODO: adjust enablers based on how robot is completed
         public final static boolean DRIVE_ENABLED = true;

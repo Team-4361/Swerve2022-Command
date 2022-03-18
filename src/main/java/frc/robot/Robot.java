@@ -152,7 +152,8 @@ public class Robot extends TimedRobot {
     }
 
 
-    @Override public void testPeriodic() {}
+    @Override public void testPeriodic() {
+    }
 
     @Override
     public void autonomousInit() {
@@ -181,6 +182,6 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
-        testUtil.runExecutedCommand();
+        new ShooterAngleTest().schedule();
     }
 }

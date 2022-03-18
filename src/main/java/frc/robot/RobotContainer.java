@@ -114,7 +114,7 @@ public class RobotContainer {
 
         bButton.whenActive(incrementAngleCMD);
 
-        //startButton.whenActive(new CalibrateAdjustorCMD());
+        startButton.whenActive(new CalibrateRetractIntake());
 
         leftTriggerButton.whenHeld(new ManualMoveLeftClimber(true));
         rightTriggerButton.whenHeld(new ManualMoveRightClimber(true));
