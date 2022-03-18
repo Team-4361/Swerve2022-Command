@@ -32,8 +32,8 @@ public class IncrementShooterAngle extends CommandBase {
             targetAngle += 5;
             Robot.adjustor.setAngle(targetAngle);
         } else {
-            targetAngle = 0;
-            Robot.adjustor.setAngle(0);
+            targetAngle = 23;
+            Robot.adjustor.setAngle(targetAngle);
         }
     }
 
