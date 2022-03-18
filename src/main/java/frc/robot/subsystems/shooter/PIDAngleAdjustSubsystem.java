@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.robot_utils.motor.MotorUtil;
@@ -11,8 +12,7 @@ import me.wobblyyyy.pathfinder2.geometry.Angle;
 import me.wobblyyyy.pathfinder2.revrobotics.SparkMaxMotor;
 
 import static frc.robot.Constants.MotorFlip.ADJUSTOR_FLIPPED;
-import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_GEAR_RATIO;
-import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_MOTOR_ID;
+import static frc.robot.Constants.ShooterAdjustor.*;
 
 import java.util.Map;
 
@@ -20,19 +20,18 @@ public class PIDAngleAdjustSubsystem extends SubsystemBase {
     private final SparkMaxMotor adjustor;
     private final ConcurrentRotationalEncoder absoluteEncoder;
     private final PIDController controller;
-    private Angle targetAngle;
-    //private final DigitalInput adjustorLimit = new DigitalInput(ADJUSTOR_LIMIT_PORT);
+    private final DigitalInput adjustorLimit;
+
+    private double targetAngle, maximumAngle = ADJUSTOR_ANGLE_MAX;
 
     public PIDAngleAdjustSubsystem() {
         adjustor = SparkMaxMotor.brushless(ADJUSTOR_MOTOR_ID, ADJUSTOR_FLIPPED);
-        absoluteEncoder = new ConcurrentRotationalEncoder(adjustor.getSpark())
-                .setFlipped(ADJUSTOR_FLIPPED)
-                .setRPMTolerance(0.5);
+        absoluteEncoder = new ConcurrentRotationalEncoder(adjustor.getSpark()).setFlipped(ADJUSTOR_FLIPPED).setRPMTolerance(0.5);
 
         controller = new PIDController((double) 1 / 63, 0, 0);
         controller.setSetpoint(0.0);
-        
-        targetAngle = new Angle();
+
+        adjustorLimit = new DigitalInput(ADJUSTOR_LIMIT_PORT);
     }
 
     public void zero() {
@@ -47,38 +46,79 @@ public class PIDAngleAdjustSubsystem extends SubsystemBase {
         return ((Math.abs(rotation) * 360) * (1 / ADJUSTOR_GEAR_RATIO));
     }
 
+    /** @return Current Angle from Base */
     public double getAngle() {
-        return rotationToAngle(Math.abs(
-                    absoluteEncoder.getAbsoluteRotations()));
+        double rawAngle = rotationToAngle(Math.abs(absoluteEncoder.getAbsoluteRotations()));
+
+        if (adjustor.getPower() == 0 && MotorUtil.inTolerance(0, rawAngle, 2) && targetAngle == 0) {
+            return 0;
+        } else {
+            return rotationToAngle(Math.abs(absoluteEncoder.getAbsoluteRotations()));
+        }
     }
 
-    public boolean atDesiredAngle(double desired,
-                                  double tolerance) {
-        return (MotorUtil.inTolerance(desired, getAngle(), tolerance));
+    public boolean atDesiredAngle(double desired, double tolerance) {
+        return MotorUtil.inTolerance(desired, getAngle(), tolerance);
     }
 
     public void setAngle(double angle) {
-        targetAngle = Angle.fixedDeg(angle);
+        this.targetAngle = angle;
     }
 
     public void setRotationsFromBase(double position) {
         setAngle(rotationToAngle(position));
     }
 
-    // public boolean getAdjustorLimit(){
-    //     return adjustorLimit.get();
-    // }
+    /** @return If the adjustor limit switch is pressed. */
+    public boolean isAdjustorLimitPressed() {
+        return this.adjustorLimit.get();
+    }
+
+    public double getMaximumAngle() {
+        return this.maximumAngle;
+    }
+
+    public void setMaximumAngle(double angle) {
+        this.maximumAngle = angle;
+    }
 
     @Override
     public void periodic() {
         absoluteEncoder.periodic();
-        Angle currentAngle = Angle.fixedDeg(getAngle());
-        double delta = Angle.minimumDelta(currentAngle, targetAngle);
-        double adjustorMotorPower = controller.calculate(delta);
-        adjustor.setPower(adjustorMotorPower);
 
-        SmartDashboard.putNumber("pid angle", getAngle());
-        SmartDashboard.putString("pid target", targetAngle.toString());
-        SmartDashboard.putNumber("pid velocity", absoluteEncoder.getVelocity());
+        Angle currentAngle = Angle.fixedDeg(getAngle());
+        Angle adjustedTargetAngle = Angle.fixedDeg(targetAngle);
+
+        double delta = Angle.minimumDelta(currentAngle, adjustedTargetAngle);
+        double adjustorMotorPower = controller.calculate(delta);
+
+        // Check if the top limit switch is pressed, if so then stop the motor and set the maximum angle.
+        if (isAdjustorLimitPressed()) {
+            adjustor.setPower(0);
+
+            // Since everything is running inside a loop, if the maximum angle is not already set, then
+            // make sure it is adjusted.
+            if (!MotorUtil.inTolerance(getMaximumAngle(), getAngle(), 1)) {
+                setMaximumAngle(getAngle());
+            }
+        }
+
+        // If the adjustor motor power is a very small number, the brake mode will not 
+        // be properly enabled from how it was tested.
+        else if (Math.abs(adjustorMotorPower) < 0.02) {
+            adjustor.setPower(0);
+        } else {
+            adjustor.setPower(adjustorMotorPower);
+        }
+
+        SmartDashboard.putNumber("Adjustor: PID Angle", getAngle());
+        SmartDashboard.putNumber("Adjustor: PID Target", targetAngle);
+        SmartDashboard.putNumber("Adjustor: PID Motor Velocity", absoluteEncoder.getVelocity());
+
+        SmartDashboard.putNumber("Adjustor: PID Motor Power", adjustor.getPower());
+        SmartDashboard.putNumber("Adjustor: Maximum Angle", getMaximumAngle());
+
+        SmartDashboard.putBoolean("Adjustor: Limit Pressed", isAdjustorLimitPressed());
+    
     }
 }

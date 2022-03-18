@@ -161,7 +161,7 @@ public class Constants {
         public static final double ADJUSTOR_SPEED = 0.06;
 
         // in degrees
-        public static final double ADJUSTOR_ANGLE_MAX = 29;
+        public static final double ADJUSTOR_ANGLE_MAX = 30;
         public static final double ADJUSTOR_ANGLE_MIN = 0;
     }
 

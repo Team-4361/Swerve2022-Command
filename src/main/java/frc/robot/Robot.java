@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,8 +37,9 @@ import static frc.robot.robot_utils.TestUtil.TestMode.*;
 
 public class Robot extends TimedRobot {
     private Command autonomous;
-
     private RobotContainer robotContainer;
+
+    private final PowerDistribution pdp = new PowerDistribution();
 
     public static SwerveDriveSubsystem swerveDrive;
     public static Pathfinder pathfinder;
@@ -129,13 +131,24 @@ public class Robot extends TimedRobot {
         );
     }
 
-    @Override public void robotPeriodic() { CommandScheduler.getInstance().run(); }
+    @Override public void robotPeriodic() { 
+        CommandScheduler.getInstance().run(); 
+
+        double voltage = pdp.getVoltage();
+        double current = pdp.getTotalCurrent();
+
+        SmartDashboard.putNumber("PDP Voltage", voltage);
+        SmartDashboard.putNumber("PDP Total Amps", current);
+        SmartDashboard.putNumber("PDP Total Watts", voltage * current);
+        SmartDashboard.putBoolean("PDP Exceeding Current", current > 120);
+    }
     @Override public void disabledInit() { CommandScheduler.getInstance().cancelAll(); }
     @Override public void disabledPeriodic() {}
     @Override public void autonomousPeriodic() {}
 
     @Override 
     public void teleopPeriodic() {
+        
     }
 
 
