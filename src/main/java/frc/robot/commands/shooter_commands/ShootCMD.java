@@ -37,6 +37,7 @@ public class ShootCMD extends CommandBase{
         if(shouldAddRequirements){
             addRequirements(Robot.storage, Robot.shooter); 
         }
+        Robot.shooter.resetPID();
     }
 
     @Override

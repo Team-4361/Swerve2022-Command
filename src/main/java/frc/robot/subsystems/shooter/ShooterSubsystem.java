@@ -80,7 +80,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isDesiredSpeed(double speed) {
-        return (getVelocity() - 0.05) >= speed;
+        return isAcceptableError(speed, 0.005);
     }
 
     public void resetPID() {
@@ -103,5 +103,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public double getCurrentAcceleration() {
         return this.currentAcc;
+    }
+
+    public boolean isAcceptableError(double speed, double errorPercentage){
+
+        double lowerBound = speed - (speed* errorPercentage);
+        double upperBound = speed - (speed* errorPercentage);
+
+        return speed >= lowerBound && speed <= upperBound;
     }
 }
