@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +23,8 @@ public class PIDAngleAdjustSubsystem extends SubsystemBase {
     private final PIDController controller;
     private final DigitalInput adjustorLimit;
 
+    private final double maxPower = 0.1;
+
     private double targetAngle, maximumAngle = ADJUSTOR_ANGLE_MAX;
 
     public PIDAngleAdjustSubsystem() {
@@ -34,14 +37,16 @@ public class PIDAngleAdjustSubsystem extends SubsystemBase {
         adjustorLimit = new DigitalInput(ADJUSTOR_LIMIT_PORT);
     }
 
+    /** Resets the {@link ConcurrentRotationalEncoder}, and defaults everything to zero. */
     public void zero() {
         absoluteEncoder.reset();
     }
 
+    /** @return The {@link SparkMaxMotor} being used for adjusting. */
     public SparkMaxMotor getAdjustor() {
         return this.adjustor;
     }
-
+    
     public double rotationToAngle(double rotation) {
         return ((Math.abs(rotation) * 360) * (1 / ADJUSTOR_GEAR_RATIO));
     }
@@ -90,7 +95,7 @@ public class PIDAngleAdjustSubsystem extends SubsystemBase {
         Angle adjustedTargetAngle = Angle.fixedDeg(targetAngle);
 
         double delta = Angle.minimumDelta(currentAngle, adjustedTargetAngle);
-        double adjustorMotorPower = controller.calculate(delta);
+        double adjustorMotorPower = MathUtil.clamp(controller.calculate(delta), -maxPower, maxPower);
 
         // Check if the top limit switch is pressed, if so then stop the motor and set the maximum angle.
         if (isAdjustorLimitPressed()) {
@@ -119,6 +124,5 @@ public class PIDAngleAdjustSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Adjustor: Maximum Angle", getMaximumAngle());
 
         SmartDashboard.putBoolean("Adjustor: Limit Pressed", isAdjustorLimitPressed());
-    
     }
 }
