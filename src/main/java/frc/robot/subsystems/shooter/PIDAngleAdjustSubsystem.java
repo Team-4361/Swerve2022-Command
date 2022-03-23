@@ -23,7 +23,7 @@ public class PIDAngleAdjustSubsystem extends SubsystemBase {
     private final PIDController controller;
     private final DigitalInput adjustorLimit;
 
-    private final double maxPower = 0.1;
+    private final double maxPower = 0.09;
 
     private double targetAngle, maximumAngle = ADJUSTOR_ANGLE_MAX;
 
@@ -40,6 +40,7 @@ public class PIDAngleAdjustSubsystem extends SubsystemBase {
     /** Resets the {@link ConcurrentRotationalEncoder}, and defaults everything to zero. */
     public void zero() {
         absoluteEncoder.reset();
+        targetAngle = 0;
     }
 
     /** @return The {@link SparkMaxMotor} being used for adjusting. */

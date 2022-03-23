@@ -19,6 +19,7 @@ public class SetShooterAngleCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Robot.adjustor.atDesiredAngle(runAngle, 1);
+        //return Robot.adjustor.atDesiredAngle(runAngle, 1);
+        return true;
     }
 }
