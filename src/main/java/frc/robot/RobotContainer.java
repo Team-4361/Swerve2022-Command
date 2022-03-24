@@ -66,11 +66,11 @@ public class RobotContainer {
 
     public static final IncrementShooterAngle incrementAngleCMD = new IncrementShooterAngle();
 
-    // // TODO: may need to add/remove commands from this group.
-    // private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
-    //         new ParallelCommandGroup(new SetShooterAngleCommand(20) ,new CenterShooterToHubCommand()),
-    //         new AutoShootCommand()
-    // );
+    //TODO: may need to add/remove commands from this group.
+    private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
+            new AutoAdjustShooterAngle(),
+            new TimedShootCMD(3, 4500)
+    );
 
     private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(
             new ExtendIntakeMagnet(),

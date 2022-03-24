@@ -21,7 +21,7 @@ public class AngleAdjustSubsystem extends SubsystemBase{
     private RelativeEncoder encoder;
 
     private final double MAX_ROTATION = 14;
-    private final double DEGREES_TO_ROTATIONS = 2.25;
+    private final double DEGREES_PER_ROTATION = 2.25;
 
     private PIDController controller = new PIDController((double) 1 / 10.5, 0, 0);
 
@@ -62,12 +62,12 @@ public class AngleAdjustSubsystem extends SubsystemBase{
     
     public void setAngle(double target){
         if(encoder.getPosition() < MAX_ROTATION){
-            this.target = target/DEGREES_TO_ROTATIONS;
+            this.target = target/DEGREES_PER_ROTATION;
         }
     }
 
     public double getAngle() {
-        return -encoder.getPosition()*DEGREES_TO_ROTATIONS;
+        return -encoder.getPosition()*DEGREES_PER_ROTATION;
     }
 
     public void zero(){
