@@ -50,6 +50,7 @@ public class ShooterSubsystem extends SubsystemBase {
         sController = shooterSpark.getPIDController();
 
         sController.setP(2e-4);
+        sController.setFF(FEED_FWD);
 
         shooterController.setIntegratorRange(-1, 1);
     }
@@ -83,7 +84,7 @@ public class ShooterSubsystem extends SubsystemBase {
         double velocity = MathUtil.clamp(shooterController.calculate(getVelocity(), speed), -1.0, 1.0);
         shooterMotor.setPower(velocity);
 
-        //sController.setReference(speed, ControlType.kVelocity, 0, speed * FEED_FWD, ArbFFUnits.kPercentOut);
+        sController.setReference(speed, ControlType.kVelocity, 0);
     }
 
     public void stopShooter() {
