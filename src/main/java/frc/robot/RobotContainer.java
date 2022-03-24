@@ -47,7 +47,7 @@ public class RobotContainer {
 
     private final ConditionalButton leftTriggerButton = new ConditionalButton(controller, 100);
     private final ConditionalButton rightTriggerButton = new ConditionalButton(controller, 101);
-    private final ConditionalButton dpadUpButton = new ConditionalButton(controller, 102);
+    private final ConditionalButton dpadDownButton = new ConditionalButton(controller, 102);
 
     private final SequentialCommandGroup testSwerveDrive = new SequentialCommandGroup(
             new MoveRightCMD(),
@@ -68,7 +68,7 @@ public class RobotContainer {
 
     //TODO: may need to add/remove commands from this group.
     private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
-            new AutoAdjustShooterAngle(),
+            new ParallelCommandGroup(new AutoAdjustShooterAngle(), new CenterShooterToHubCommand()),
             new TimedShootCMD(3, 4500)
     );
 
@@ -97,7 +97,7 @@ public class RobotContainer {
 
         this.leftTriggerButton.setSupplier(() -> (controller.getLeftTriggerAxis() > 0.8));
         this.rightTriggerButton.setSupplier(() -> (controller.getRightTriggerAxis() > 0.8));
-        this.dpadUpButton.setSupplier(() -> (controller.getPOV() >= 315 || controller.getPOV() >= 90));
+        this.dpadDownButton.setSupplier(() -> (controller.getPOV() >= 315 || controller.getPOV() >= 90));
 
         configureButtonBindings();
     }
@@ -122,7 +122,7 @@ public class RobotContainer {
         lBumper.whenHeld(new ManualMoveLeftClimber(false));
         rBumper.whenHeld(new ManualMoveRightClimber(false));
 
-        dpadUpButton.whenHeld(new RunStorageCMD());
+        dpadDownButton.whenHeld(new RunStorageCMD());
     }
 
     // public Command getAutonomousCommand() {

@@ -2,6 +2,10 @@ package frc.robot.subsystems.shooter;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,13 +16,15 @@ import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.MotorFlip.SHOOTER_FLIPPED;
 import static frc.robot.Constants.Shooter.SHOOTER_MOTOR_ID;
-
+import static frc.robot.Constants.Shooter.FEED_FWD;;
 
 public class ShooterSubsystem extends SubsystemBase {
     private final AbstractMotor shooterMotor;
     private final RelativeEncoder shooterEncoder;
     private final CANSparkMax shooterSpark;
     private final PIDController shooterController = new PIDController(0, 2e-4, 0);
+
+    private final SparkMaxPIDController sController;
 
     private double lastVelocity, velocityAcc, currentAcc, lastCurrent;
 
@@ -40,6 +46,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
         this.lastVelocity = getVelocity();
         this.lastCurrent = this.shooterSpark.getOutputCurrent();
+
+        sController = shooterSpark.getPIDController();
+
+        sController.setP(2e-4);
 
         shooterController.setIntegratorRange(-1, 1);
     }
@@ -68,9 +78,12 @@ public class ShooterSubsystem extends SubsystemBase {
         return Robot.storage.rearProximityCovered();
     }
 
+
     public void setShooterVelocity(double speed) {
         double velocity = MathUtil.clamp(shooterController.calculate(getVelocity(), speed), -1.0, 1.0);
         shooterMotor.setPower(velocity);
+
+        //sController.setReference(speed, ControlType.kVelocity, 0, speed * FEED_FWD, ArbFFUnits.kPercentOut);
     }
 
     public void stopShooter() {
@@ -80,7 +93,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isDesiredSpeed(double speed) {
-        return isAcceptableError(speed, 0.005);
+        return isAcceptableError(speed, 0.01);
     }
 
     public void resetPID() {

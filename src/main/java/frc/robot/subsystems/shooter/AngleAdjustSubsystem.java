@@ -45,8 +45,7 @@ public class AngleAdjustSubsystem extends SubsystemBase{
 
         if(adjustorLimit.get()){
             adjustor.setPower(0);
-        }
-        else{
+        } else {
             delta = target - getPosition();
 
             // TODO Auto-generated method stub
@@ -61,8 +60,15 @@ public class AngleAdjustSubsystem extends SubsystemBase{
 
     
     public void setAngle(double target){
-        if(encoder.getPosition() < MAX_ROTATION){
-            this.target = target/DEGREES_PER_ROTATION;
+        double targetRotations = target/DEGREES_PER_ROTATION;
+
+        if(targetRotations > MAX_ROTATION){
+            this.target = MAX_ROTATION;
+        } else if(targetRotations < 0){
+            this.target = 0;
+        }
+        else {
+            this.target = target;
         }
     }
 

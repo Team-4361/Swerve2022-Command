@@ -17,7 +17,9 @@ public class UserShootCMD extends CommandBase{
     @Override
     public void initialize() {
         // TODO Auto-generated method stub
-        addRequirements(Robot.shooter); 
+        addRequirements(Robot.shooter);
+
+        new AutoAdjustShooterAngle().schedule();
     }
 
     @Override
