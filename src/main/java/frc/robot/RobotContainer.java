@@ -106,7 +106,7 @@ public class RobotContainer {
         lStick.whenHeld(new CenterShooterToHubCommand());
         rStick.whenHeld(new RunStorageAcceptor());
 
-        aButton.whenHeld(new UserShootCMD(4500));
+        aButton.whenHeld(new ShootCMD(4500));
 
         yButton.whenActive(processBallCMD);
 

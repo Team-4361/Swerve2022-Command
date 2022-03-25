@@ -22,7 +22,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final AbstractMotor shooterMotor;
     private final RelativeEncoder shooterEncoder;
     private final CANSparkMax shooterSpark;
-    private final PIDController shooterController = new PIDController(0, 2e-4, 0);
+    //private final PIDController shooterController = new PIDController(0, 2e-4, 0);
 
     private final SparkMaxPIDController sController;
 
@@ -40,6 +40,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public ShooterSubsystem() {
         shooterSpark = new CANSparkMax(SHOOTER_MOTOR_ID, kBrushless);
+        shooterSpark.setInverted(true);
+
         this.shooterMotor = new AbstractMotor(shooterSpark::set, shooterSpark::get, SHOOTER_FLIPPED);
 
         this.shooterEncoder = shooterSpark.getEncoder();
@@ -49,14 +51,14 @@ public class ShooterSubsystem extends SubsystemBase {
 
         sController = shooterSpark.getPIDController();
 
-        sController.setP(2e-4);
+        sController.setP(0);
         sController.setFF(FEED_FWD);
 
-        shooterController.setIntegratorRange(-1, 1);
+        //shooterController.setIntegratorRange(-1, 1);
     }
 
     public double getVelocity() {
-        return -shooterEncoder.getVelocity();
+        return shooterEncoder.getVelocity();
     }
 
     public void setShooterMotor(double val) {
@@ -81,24 +83,24 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
     public void setShooterVelocity(double speed) {
-        double velocity = MathUtil.clamp(shooterController.calculate(getVelocity(), speed), -1.0, 1.0);
-        shooterMotor.setPower(velocity);
+        //double velocity = MathUtil.clamp(shooterController.calculate(getVelocity(), speed), -1.0, 1.0);
+        //shooterMotor.setPower(velocity);
 
         sController.setReference(speed, ControlType.kVelocity, 0);
     }
 
     public void stopShooter() {
         shooterMotor.setPower(0);
-        shooterController.reset();
+        //shooterController.reset();
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isDesiredSpeed(double speed) {
-        return isAcceptableError(speed, 0.01);
+        return isAcceptableError(speed, getVelocity(), 0.01);
     }
 
     public void resetPID() {
-        shooterController.reset();
+        //shooterController.reset();
     }
 
     public void updateAcceleration() {
@@ -119,11 +121,11 @@ public class ShooterSubsystem extends SubsystemBase {
         return this.currentAcc;
     }
 
-    public boolean isAcceptableError(double speed, double errorPercentage){
+    public boolean isAcceptableError(double speed, double currVelocity, double errorPercentage){
 
         double lowerBound = speed - (speed* errorPercentage);
-        double upperBound = speed - (speed* errorPercentage);
+        double upperBound = speed + (speed* errorPercentage);
 
-        return speed >= lowerBound && speed <= upperBound;
+        return currVelocity >= lowerBound && currVelocity <= upperBound;
     }
 }

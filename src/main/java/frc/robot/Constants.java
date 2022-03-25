@@ -169,7 +169,7 @@ public class Constants {
         public static final int SHOOTER_MOTOR_ID = 17;
         public static final double SHOOTER_WHEEL_RADIUS = 0.0889;
         public static final double DESIRED_RPM = 4800;
-        public static final double FEED_FWD = 0.00025;
+        public static final double FEED_FWD = 0.000175;
 
         //In KG
         public static double SHOOTER_WHEEL_MASS = 0.603844;
