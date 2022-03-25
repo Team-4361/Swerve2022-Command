@@ -4,6 +4,10 @@ import edu.wpi.first.wpilibj.I2C;
 import frc.robot.robot_utils.TestUtil;
 import frc.robot.subsystems.storage.RetractMode;
 
+import java.util.Map;
+
+import static java.util.Map.entry;
+
 public class Constants {
 
     public static double BALL_MASS = 0.2676195;
@@ -11,6 +15,55 @@ public class Constants {
 
     public static boolean GET_DATA = false;
 
+    public static class PDH {
+
+        public static int FL_ROTATION_FUSE = 15;
+        public static int FL_DRIVE_FUSE = 16;
+        public static int FR_ROTATION_FUSE = 9;
+        public static int FR_DRIVE_FUSE = 8;
+
+        public static int BL_ROTATION_FUSE = 19;
+        public static int BL_DRIVE_FUSE = 18;
+
+        public static int BR_ROTATION_FUSE = 6;
+        public static int BR_DRIVE_FUSE = 5;
+
+        public static int LEFT_CLIMBER_FUSE = 17;
+        public static int RIGHT_CLIMBER_FUSE = 7;
+
+        public static int LEFT_INTAKE_EXTENDER_FUSE = 13;
+        public static int RIGHT_INTAKE_EXTENDER_FUSE = 14;
+
+        public static int STORAGE_ACCEPT_FUSE = 1;
+        public static int EXTERNAL_INTAKE_FUSE = 4;
+
+        public static int SHOOTER_HOOD_FUSE = 2;
+        public static int STORAGE_FEEDER_FUSE = 3;
+
+        public static int SHOOTER_FLYWHEEL_FUSE = 0;
+
+        public static Map<Integer, Integer> DEFAULT_BREAKER_ENTRIES = Map.ofEntries(
+                entry(0, 40),
+                entry(1, 40),
+                entry(3, 40),
+                entry(4, 40),
+                entry(5, 40),
+                entry(6, 40),
+                entry(7, 40),
+                entry(8, 40),
+                entry(9, 40),
+                entry(13, 40),
+                entry(14, 40),
+                entry(15, 40),
+                entry(16, 40),
+                entry(17, 40),
+                entry(18, 40),
+                entry(19, 40),
+                entry(20, 15),
+                entry(21, 10),
+                entry(22, 10)
+        );
+    }
 
     public static class Control {
         public static final int XY_STICK_ID = 0;

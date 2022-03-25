@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.PDH.DEFAULT_BREAKER_ENTRIES;
 import static frc.robot.Constants.Storage.RETRACT_MODE_FINISHED;
 import static frc.robot.Constants.TestValue.DEFAULT_TEST_MODE;
 import static frc.robot.robot_utils.TestUtil.TestMode.CHASSIS_DRIVE_TEST;
@@ -24,6 +25,7 @@ import frc.robot.commands.test_commands.ShooterAngleTest;
 import frc.robot.robot_utils.ChassisCamera;
 import frc.robot.robot_utils.ShooterCamera;
 import frc.robot.robot_utils.TestUtil;
+import frc.robot.robot_utils.power.BatteryManagement;
 import frc.robot.subsystems.climber.LeftClimberSubsystem;
 import frc.robot.subsystems.climber.RightClimberSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
@@ -39,7 +41,7 @@ public class Robot extends TimedRobot {
     private Command autonomous;
     private RobotContainer robotContainer;
 
-    private final PowerDistribution pdp = new PowerDistribution();
+    public static BatteryManagement bms = new BatteryManagement(DEFAULT_BREAKER_ENTRIES, 120);
 
     public static SwerveDriveSubsystem swerveDrive;
     public static Pathfinder pathfinder;
@@ -131,17 +133,16 @@ public class Robot extends TimedRobot {
         );
     }
 
-    @Override public void robotPeriodic() { 
-        CommandScheduler.getInstance().run(); 
+    @Override
+    public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
 
-        double voltage = pdp.getVoltage();
-        double current = pdp.getTotalCurrent();
-
-        SmartDashboard.putNumber("PDP Voltage", voltage);
-        SmartDashboard.putNumber("PDP Total Amps", current);
-        SmartDashboard.putNumber("PDP Total Watts", voltage * current);
-        SmartDashboard.putBoolean("PDP Exceeding Current", current > 120);
+        SmartDashboard.putNumber("PDP Voltage", bms.getVoltage());
+        SmartDashboard.putNumber("PDP Total Amps", bms.getCurrent());
+        SmartDashboard.putNumber("PDP Total Watts", bms.getMaximumCurrent());
+        SmartDashboard.putBoolean("PDP Exceeding Current", bms.isOverCurrentLimit());
     }
+
     @Override public void disabledInit() { CommandScheduler.getInstance().cancelAll(); }
     @Override public void disabledPeriodic() {}
     @Override public void autonomousPeriodic() {}

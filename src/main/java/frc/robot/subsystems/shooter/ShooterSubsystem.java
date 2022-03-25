@@ -11,10 +11,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.robot_utils.power.BreakerListener;
+import frc.robot.robot_utils.power.PowerBreaker;
 import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.MotorFlip.SHOOTER_FLIPPED;
+import static frc.robot.Constants.PDH.SHOOTER_FLYWHEEL_FUSE;
 import static frc.robot.Constants.Shooter.SHOOTER_MOTOR_ID;
 import static frc.robot.Constants.Shooter.FEED_FWD;;
 
@@ -22,6 +25,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private final AbstractMotor shooterMotor;
     private final RelativeEncoder shooterEncoder;
     private final CANSparkMax shooterSpark;
+
     //private final PIDController shooterController = new PIDController(0, 2e-4, 0);
 
     private final SparkMaxPIDController sController;
