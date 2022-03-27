@@ -36,6 +36,8 @@ public class AngleAdjustSubsystem extends SubsystemBase{
         encoder = adjustor.getSpark().getEncoder();
 
         adjustorLimit = new DigitalInput(ADJUSTOR_LIMIT_PORT);
+
+        adjustor.getSpark().enableVoltageCompensation(12);
     }
 
 

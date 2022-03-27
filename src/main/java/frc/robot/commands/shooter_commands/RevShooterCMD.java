@@ -14,7 +14,7 @@ public class RevShooterCMD extends CommandBase {
 
     @Override
     public void execute() {
-        //if(Robot.storage.getBallsLoaded() >= 1){
+        //if(Robot.storage.getBallsLoaded() == 2){
             Robot.shooter.setShooterVelocity(targetRPM);
         //}
     }

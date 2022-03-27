@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.Chassis;
+import frc.robot.commands.autonomous_commands.CameraAuto;
 import frc.robot.commands.autonomous_commands.TestAutonomous;
 import frc.robot.commands.chassis_commands.*;
 import frc.robot.commands.climber_commands.*;
@@ -55,12 +56,13 @@ public class RobotContainer {
                     new TimedShootCMD(6, 4500),
                     new SetShooterAngleCommand(10)
             ),
-            new MoveFWDCMD()
+            new TimedMoveFWDCMD()
     );
+
+    public final ParallelCommandGroup autoShootCMD = new ParallelCommandGroup(new AutoAdjustShooterAngle(), new ShootCMD(4500));
 
     public static final IncrementShooterAngle incrementAngleCMD = new IncrementShooterAngle();
 
-    //TODO: may need to add/remove commands from this group.
     private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
             new ParallelCommandGroup(new AutoAdjustShooterAngle(), new CenterShooterToHubCommand()),
             new TimedShootCMD(3, 4500)
@@ -86,6 +88,8 @@ public class RobotContainer {
                         Rotation2d.fromDegrees(0)
                 )
         ));
+
+        simpleAutonomousCMD.addCommands(new CameraAuto());
 
         //Robot.shooter.setDefaultCommand(new RevShooterCMD(4500));
 
@@ -119,10 +123,6 @@ public class RobotContainer {
         dpadDownButton.whenHeld(new RunStorageCMD());
     }
 
-    // public Command getAutonomousCommand() {
-    //     // An ExampleCommand will run in autonomous
-    //     return null;
-    // }
 
     public Command getAutonomousCommand(PathfinderSubsystem pathfinder) {
         return new TestAutonomous(pathfinder);
@@ -132,9 +132,9 @@ public class RobotContainer {
     //     return (Command) new TestAutonomous(pathfinderSubsystem);
     // }
 
-    // public SequentialCommandGroup getAutoShootGroup() {
-    //     return autoShootGroup;
-    // }
+    public SequentialCommandGroup getAutoShootGroup() {
+        return autoShootGroup;
+    }
 
     public SequentialCommandGroup getSimpleAutoCommand() {
         return simpleAutonomousCMD;
@@ -160,4 +160,5 @@ public class RobotContainer {
     public void resetIncrementAngle(){
         incrementAngleCMD.resetAngle();
     }
+
 }

@@ -1,5 +1,6 @@
 package frc.robot.commands.chassis_commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -15,7 +16,7 @@ public class CenterShooterToHubCommand extends CommandBase {
 
     HashMap<String, Double> target;
 
-    final ProportionalController centerShooterController = new ProportionalController(0.05);
+    final PIDController centerShooterController = new PIDController(0.05, 0 , 0);
 
     public CenterShooterToHubCommand() {
         addRequirements(Robot.swerveDrive);
@@ -38,7 +39,7 @@ public class CenterShooterToHubCommand extends CommandBase {
             inRange = true;
             Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, centerShooterController.calculate(yawToHub, 0), Rotation2d.fromDegrees(0)));
         }else {
-            Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 1.0, Rotation2d.fromDegrees(0)));
+            Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0.4, Rotation2d.fromDegrees(0)));
         }
         
     }

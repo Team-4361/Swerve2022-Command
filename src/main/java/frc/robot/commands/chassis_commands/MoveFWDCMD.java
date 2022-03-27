@@ -9,22 +9,29 @@ import frc.robot.Robot;
 public class MoveFWDCMD extends CommandBase {
 
 
-    private double timeStarted;
+    private double power;
+    private boolean shouldStop;
 
-    public MoveFWDCMD() {
+    public MoveFWDCMD(double power) {
+        this.power = power;
+
         addRequirements(Robot.swerveDrive);
     }
 
     @Override
     public void initialize() {
-        timeStarted = System.currentTimeMillis();
         addRequirements(Robot.swerveDrive);
+        shouldStop = false;
+    }
+
+    public void setPower(double power){
+        this.power = power;
     }
 
 
     @Override
     public void execute() {
-        Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0.4, 0, Rotation2d.fromDegrees(0)));
+        Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(power, 0, 0, Rotation2d.fromDegrees(0)));
     }
 
     @Override
@@ -32,8 +39,12 @@ public class MoveFWDCMD extends CommandBase {
         Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(0)));
     }
 
+    private void stopCMD(){
+        shouldStop = true;
+    }
+
     @Override
     public boolean isFinished() {
-        return (System.currentTimeMillis() - timeStarted) > 2000;
+        return shouldStop;
     }
 }

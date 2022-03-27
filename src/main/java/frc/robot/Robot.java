@@ -39,7 +39,7 @@ import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 
 public class Robot extends TimedRobot {
     private Command autonomous;
-    private RobotContainer robotContainer;
+    private static RobotContainer robotContainer;
 
     public static BatteryManagement bms = new BatteryManagement(DEFAULT_BREAKER_ENTRIES, 120);
 
