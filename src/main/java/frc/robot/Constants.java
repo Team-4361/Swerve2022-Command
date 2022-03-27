@@ -213,6 +213,9 @@ public class Constants {
 
         public static final double ADJUSTOR_SPEED = 0.06;
 
+        public static final double DEGREES_PER_ROTATION = 32/14; //2.25
+        public static double MAX_ROTATION = 14;
+
         // in degrees
         public static final double ADJUSTOR_ANGLE_MAX = 30;
         public static final double ADJUSTOR_ANGLE_MIN = 0;
@@ -222,7 +225,7 @@ public class Constants {
         public static final int SHOOTER_MOTOR_ID = 17;
         public static final double SHOOTER_WHEEL_RADIUS = 0.0889;
         public static final double DESIRED_RPM = 4800;
-        public static final double FEED_FWD = 0.000175;
+        public static final double FEED_FWD = 1.7e-4;
 
         //In KG
         public static double SHOOTER_WHEEL_MASS = 0.603844;

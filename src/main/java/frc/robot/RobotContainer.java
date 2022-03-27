@@ -49,12 +49,6 @@ public class RobotContainer {
     private final ConditionalButton rightTriggerButton = new ConditionalButton(controller, 101);
     private final ConditionalButton dpadDownButton = new ConditionalButton(controller, 102);
 
-    private final SequentialCommandGroup testSwerveDrive = new SequentialCommandGroup(
-            new MoveRightCMD(),
-            new MoveLeftCMD(),
-            new MoveFWDCMD(),
-            new MoveBCKCMD()
-    );
 
     private final SequentialCommandGroup simpleAutonomousCMD = new SequentialCommandGroup(
             new ParallelCommandGroup(
@@ -161,5 +155,9 @@ public class RobotContainer {
 
     public XboxController getXbox() {
         return controller;
+    }
+
+    public void resetIncrementAngle(){
+        incrementAngleCMD.resetAngle();
     }
 }

@@ -11,7 +11,7 @@ import static frc.robot.Constants.ShooterAdjustor.*;
 public class IncrementShooterAngle extends CommandBase {
     private double targetAngle = 0;
 
-    private void resetAngle() {
+    public void resetAngle() {
         targetAngle = 0;
         Robot.adjustor.setAngle(0);
     }

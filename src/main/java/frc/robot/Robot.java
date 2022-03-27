@@ -178,6 +178,7 @@ public class Robot extends TimedRobot {
 
         // TODO: Please comment this out when autonomous starts getting tested, it will mess up otherwise.
         Robot.adjustor.zero();
+        robotContainer.resetIncrementAngle();
     }
 
     @Override

@@ -26,8 +26,6 @@ public class ShooterSubsystem extends SubsystemBase {
     private final RelativeEncoder shooterEncoder;
     private final CANSparkMax shooterSpark;
 
-    //private final PIDController shooterController = new PIDController(0, 2e-4, 0);
-
     private final SparkMaxPIDController sController;
 
     private double lastVelocity, velocityAcc, currentAcc, lastCurrent;
@@ -55,10 +53,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
         sController = shooterSpark.getPIDController();
 
+        shooterSpark.enableVoltageCompensation(12);
+
         sController.setP(0);
         sController.setFF(FEED_FWD);
-
-        //shooterController.setIntegratorRange(-1, 1);
     }
 
     public double getVelocity() {
@@ -87,24 +85,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
     public void setShooterVelocity(double speed) {
-        //double velocity = MathUtil.clamp(shooterController.calculate(getVelocity(), speed), -1.0, 1.0);
-        //shooterMotor.setPower(velocity);
-
         sController.setReference(speed, ControlType.kVelocity, 0);
     }
 
     public void stopShooter() {
-        shooterMotor.setPower(0);
-        //shooterController.reset();
+        shooterSpark.stopMotor();
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isDesiredSpeed(double speed) {
         return isAcceptableError(speed, getVelocity(), 0.01);
-    }
-
-    public void resetPID() {
-        //shooterController.reset();
     }
 
     public void updateAcceleration() {

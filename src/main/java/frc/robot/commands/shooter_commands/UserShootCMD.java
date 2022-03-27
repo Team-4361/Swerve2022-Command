@@ -32,6 +32,5 @@ public class UserShootCMD extends CommandBase{
         // TODO Auto-generated method stub
         Robot.storage.setStorageMotor(0);
         Robot.shooter.setShooterMotor(0);
-        Robot.shooter.resetPID();
     }
 }

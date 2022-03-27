@@ -37,7 +37,6 @@ public class ShootCMD extends CommandBase{
         if(shouldAddRequirements){
             addRequirements(Robot.storage, Robot.shooter); 
         }
-        Robot.shooter.resetPID();
     }
 
     @Override
@@ -58,7 +57,6 @@ public class ShootCMD extends CommandBase{
         // TODO Auto-generated method stub
         Robot.storage.setAcceptorMotor(0);
         Robot.storage.setStorageMotor(0);
-        Robot.shooter.setShooterMotor(0);
-        Robot.shooter.resetPID();
+        Robot.shooter.stopShooter();;
     }
 }

@@ -20,9 +20,6 @@ public class AngleAdjustSubsystem extends SubsystemBase{
 
     private RelativeEncoder encoder;
 
-    private final double MAX_ROTATION = 14;
-    private final double DEGREES_PER_ROTATION = 2.25;
-
     private PIDController controller = new PIDController((double) 1 / 10.5, 0, 0);
 
     private double power = 0;
@@ -33,6 +30,9 @@ public class AngleAdjustSubsystem extends SubsystemBase{
 
     public AngleAdjustSubsystem(){
         adjustor = SparkMaxMotor.brushless(ADJUSTOR_MOTOR_ID, ADJUSTOR_FLIPPED);
+
+        adjustor.setIsInverted(true);
+
         encoder = adjustor.getSpark().getEncoder();
 
         adjustorLimit = new DigitalInput(ADJUSTOR_LIMIT_PORT);
@@ -44,7 +44,7 @@ public class AngleAdjustSubsystem extends SubsystemBase{
     public void periodic() {
 
         if(adjustorLimit.get()){
-            adjustor.setPower(0);
+            adjustor.getSpark().stopMotor();
         } else {
             delta = target - getPosition();
 
@@ -73,7 +73,7 @@ public class AngleAdjustSubsystem extends SubsystemBase{
     }
 
     public double getAngle() {
-        return -encoder.getPosition()*DEGREES_PER_ROTATION;
+        return encoder.getPosition()*DEGREES_PER_ROTATION;
     }
 
     public void zero(){
@@ -82,7 +82,7 @@ public class AngleAdjustSubsystem extends SubsystemBase{
     }
 
     public double getPosition(){
-        return -encoder.getPosition();
+        return encoder.getPosition();
     }
 
 
