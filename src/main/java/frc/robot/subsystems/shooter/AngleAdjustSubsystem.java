@@ -11,6 +11,8 @@ import static frc.robot.Constants.MotorFlip.ADJUSTOR_FLIPPED;
 import static frc.robot.Constants.ShooterAdjustor.*;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.ControlType;
 
 public class AngleAdjustSubsystem extends SubsystemBase{
     
@@ -22,6 +24,8 @@ public class AngleAdjustSubsystem extends SubsystemBase{
 
     private PIDController controller = new PIDController((double) 1 / 10.5, 0, 0);
 
+    private SparkMaxPIDController cont;
+
     private double power = 0;
 
     private double delta = 0;
@@ -31,13 +35,21 @@ public class AngleAdjustSubsystem extends SubsystemBase{
     public AngleAdjustSubsystem(){
         adjustor = SparkMaxMotor.brushless(ADJUSTOR_MOTOR_ID, ADJUSTOR_FLIPPED);
 
-        adjustor.setIsInverted(true);
+        //isInverted does not work
+        adjustor.getSpark().setInverted(true);
+
+        cont = adjustor.getSpark().getPIDController();
+
+        cont.setP((double) 1/10.5);
+
 
         encoder = adjustor.getSpark().getEncoder();
 
         adjustorLimit = new DigitalInput(ADJUSTOR_LIMIT_PORT);
 
         adjustor.getSpark().enableVoltageCompensation(12);
+
+        zero();
     }
 
 
@@ -48,12 +60,14 @@ public class AngleAdjustSubsystem extends SubsystemBase{
         if(adjustorLimit.get()){
             adjustor.getSpark().stopMotor();
         } else {
-            delta = target - getPosition();
+            delta = getPosition() - target;
 
             // TODO Auto-generated method stub
-            power = controller.calculate(delta);
+            //power = controller.calculate(delta);
     
-            adjustor.setPower(power);
+            //adjustor.setPower(power);
+
+            cont.setReference(target, ControlType.kPosition, 0);
         }
 
         SmartDashboard.putNumber("Adjustor Rotations:", getPosition());
@@ -70,7 +84,7 @@ public class AngleAdjustSubsystem extends SubsystemBase{
             this.target = 0;
         }
         else {
-            this.target = target;
+            this.target = target/DEGREES_PER_ROTATION;
         }
     }
 

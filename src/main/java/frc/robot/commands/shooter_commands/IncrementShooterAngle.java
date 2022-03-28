@@ -18,13 +18,15 @@ public class IncrementShooterAngle extends CommandBase {
 
     @Override
     public void initialize() {
-        if (Robot.adjustor.getAngle()+5 < ADJUSTOR_ANGLE_MAX) {
-            targetAngle += 5;
+        if (Robot.adjustor.getAngle()+25 < ADJUSTOR_ANGLE_MAX) {
+            targetAngle += 25;
             Robot.adjustor.setAngle(targetAngle);
         } else {
             targetAngle = 0;
             Robot.adjustor.setAngle(targetAngle);
         }
+
+        SmartDashboard.putNumber("Target Angle", targetAngle);
     }
 
     public double getCurrentTargetAngle() {
