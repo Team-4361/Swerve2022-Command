@@ -167,4 +167,12 @@ public class SwerveChassis implements Drive {
         return frontRight.getDistance() * 2 *
             Math.PI * Constants.Chassis.SWERVE_WHEEL_RADIUS;
     }
+
+    public void resetDriveEncoders() {
+        frontRight.resetDriveEncoder();
+    }
+
+    public SwerveChassis getSwerveChassis(){
+        return this;
+    }
 }

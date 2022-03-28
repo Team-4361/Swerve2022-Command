@@ -94,4 +94,8 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     public double getDistance() {
         return swerveChassis.getDistance();
     }
+
+    public SwerveChassis getSwerveChassis(){
+        return swerveChassis;
+    }
 }

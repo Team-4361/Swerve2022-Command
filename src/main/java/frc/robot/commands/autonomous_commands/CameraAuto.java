@@ -32,7 +32,7 @@ public class CameraAuto extends CommandBase {
         new TimedShootCMD(3, 4500)
     );
 
-    private ParallelCommandGroup navigateToBall = new ParallelCommandGroup(new SequentialCommandGroup(new RotateToBall(), new MoveToBall()), processBallCMD);
+    private ParallelCommandGroup getBall = new ParallelCommandGroup(new SequentialCommandGroup(new RotateToBall(), new MoveToBall()), processBallCMD);
     
 
     @Override
@@ -43,18 +43,19 @@ public class CameraAuto extends CommandBase {
     @Override
     public void execute() {
         // TODO Auto-generated method stub
-        if(Robot.chassisCamera.getTargetGoal().get("Status") == 0 && Robot.storage.getBallsLoaded() == 0){
+        if(Robot.chassisCamera.getTargetGoal().get("Status") == 0 && Robot.storage.getBallsLoaded() == 0 && !getBall.isScheduled() && !autoShootGroup.isScheduled()){
             if(!rotateCMD.isScheduled()){
                 rotateCMD.schedule();
             }
-        } else if(Robot.chassisCamera.getTargetGoal().get("Status") == 1 && Robot.storage.getBallsLoaded() == 0){
+        } else if(Robot.chassisCamera.getTargetGoal().get("Status") == 1 && Robot.storage.getBallsLoaded() == 0 && !autoShootGroup.isScheduled()){
             rotateCMD.cancel();
 
-            if(!navigateToBall.isScheduled()){
-                navigateToBall.schedule();
+            if(!getBall.isScheduled()){
+                getBall.schedule();
             }
-        } else if (Robot.storage.getBallsLoaded() > 0){
+        } else if (Robot.storage.getBallsLoaded() > 0 && !getBall.isScheduled()){
             rotateCMD.cancel();
+
             if(!autoShootGroup.isScheduled()){
                 autoShootGroup.schedule();
             }

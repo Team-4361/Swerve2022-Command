@@ -13,6 +13,7 @@ public class MoveToBall extends CommandBase {
 
     double currentDistanceToBall = 0;
 
+
     public MoveToBall() {
 
         addRequirements(Robot.swerveDrive);
@@ -26,8 +27,14 @@ public class MoveToBall extends CommandBase {
     
     @Override
     public void execute() {
-        
-        currentDistanceToBall = Robot.chassisCamera.getTargetGoal().get("Status") != 0 ? Robot.chassisCamera.getTargetGoal().get("Distance") : currentDistanceToBall;
+
+
+        if(Robot.chassisCamera.getTargetGoal().get("Status") != 0){
+
+            Robot.swerveDrive.getSwerveChassis().resetDriveEncoders();
+
+            currentDistanceToBall = Robot.chassisCamera.getTargetGoal().get("Distance");
+        }
 
         Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, controller.calculate(currentDistanceToBall), Rotation2d.fromDegrees(0)));
     }
@@ -40,6 +47,6 @@ public class MoveToBall extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return currentDistanceToBall < 2;
+        return (currentDistanceToBall - Robot.swerveDrive.getSwerveChassis().getDistance())  < 0.15;
     }
 }
