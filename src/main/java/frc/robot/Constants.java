@@ -213,7 +213,7 @@ public class Constants {
 
         public static final double ADJUSTOR_SPEED = 0.06;
 
-        public static final double DEGREES_PER_ROTATION = (double) 2.25; //2.341459
+        public static final double DEGREES_PER_ROTATION = 2.25d;
         public static double MAX_ROTATION = 14;
 
         // in degrees
