@@ -34,7 +34,7 @@ public class AngleAdjustSubsystem extends SubsystemBase{
 
         cont = adjustor.getSpark().getPIDController();
 
-        cont.setP((double) 1/10.5);
+        cont.setP((double) 1/9);
 
         encoder = adjustor.getSpark().getEncoder();
 
@@ -48,13 +48,9 @@ public class AngleAdjustSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-
-        if(adjustorLimit.get()){
-            adjustor.getSpark().stopMotor();
-        } else {
-
-            cont.setReference(target, ControlType.kPosition, 0);
-        }
+        
+        cont.setReference(target, ControlType.kPosition, 0);
+        
 
         SmartDashboard.putNumber("Adjustor Rotations:", getPosition());
         SmartDashboard.putNumber("Adjustor Angle:", getAngle());

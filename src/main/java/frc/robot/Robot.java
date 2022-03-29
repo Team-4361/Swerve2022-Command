@@ -11,6 +11,9 @@ import static frc.robot.robot_utils.TestUtil.TestMode.CHASSIS_DRIVE_TEST;
 import static frc.robot.robot_utils.TestUtil.TestMode.CHASSIS_OFFSET_ADJUSTMENT;
 import static frc.robot.robot_utils.TestUtil.TestMode.SHOOTER_ANGLE_TEST;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -137,9 +140,13 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
 
+        bms.periodic();
         SmartDashboard.putNumber("PDP Voltage", bms.getVoltage());
         SmartDashboard.putNumber("PDP Total Amps", bms.getCurrent());
-        SmartDashboard.putNumber("PDP Total Watts", bms.getMaximumCurrent());
+        SmartDashboard.putNumber("PDP Total Watts", bms.getWattage());
+        SmartDashboard.putNumber("PDP Peak Current", bms.getMaximumCurrent());
+
+        SmartDashboard.putNumber("PDP Watt-Hours", bms.getWattHours());
         SmartDashboard.putBoolean("PDP Exceeding Current", bms.isOverCurrentLimit());
     }
 
@@ -149,7 +156,11 @@ public class Robot extends TimedRobot {
 
     @Override 
     public void teleopPeriodic() {
-        
+        HashMap<String, Double> targetData = Robot.shooterCamera.getTargetGoal();
+
+        SmartDashboard.putNumber("Distance", targetData.get("Distance"));
+        SmartDashboard.putNumber("Pitch", targetData.get("Pitch"));
+        SmartDashboard.putNumber("Current Target Angle", RobotContainer.incrementAngleCMD.getCurrentTargetAngle());
     }
 
 
