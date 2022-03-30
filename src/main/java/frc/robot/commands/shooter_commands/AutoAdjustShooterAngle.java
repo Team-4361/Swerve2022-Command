@@ -11,6 +11,9 @@ public class AutoAdjustShooterAngle extends CommandBase{
 
     private double targetAngle = 0;
 
+    public AutoAdjustShooterAngle(){
+        addRequirements(Robot.adjustor); 
+    }
     @Override
     public void initialize() {
         addRequirements(Robot.adjustor);
@@ -33,6 +36,7 @@ public class AutoAdjustShooterAngle extends CommandBase{
     public double getRequiredTargetAngle(double distanceToHub){
         double requiredTargetAngle = 0;
 
+        requiredTargetAngle = 4.76d*distanceToHub - 3.93d;
 
         if(requiredTargetAngle > 30){
             requiredTargetAngle = 30;
@@ -40,7 +44,7 @@ public class AutoAdjustShooterAngle extends CommandBase{
             requiredTargetAngle = 0;
         }
         
-        return 0;
+        return requiredTargetAngle;
     }
 
     @Override

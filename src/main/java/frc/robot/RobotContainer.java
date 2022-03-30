@@ -59,7 +59,7 @@ public class RobotContainer {
             new TimedMoveFWDCMD()
     );
 
-    public final ParallelCommandGroup autoShootCMD = new ParallelCommandGroup(new AutoAdjustShooterAngle(), new ShootCMD(4500));
+    //public final ParallelCommandGroup autoShootCMD = new ParallelCommandGroup(new AutoAdjustShooterAngle(), new ShootCMD(4500));
 
     public static final IncrementShooterAngle incrementAngleCMD = new IncrementShooterAngle();
 
@@ -91,7 +91,7 @@ public class RobotContainer {
 
         simpleAutonomousCMD.addCommands(new CameraAuto());
 
-        //Robot.shooter.setDefaultCommand(new RevShooterCMD(4500));
+        //Robot.adjustor.setDefaultCommand(new AutoAdjustShooterAngle());
 
         this.leftTriggerButton.setSupplier(() -> (controller.getLeftTriggerAxis() > 0.8));
         this.rightTriggerButton.setSupplier(() -> (controller.getRightTriggerAxis() > 0.8));
@@ -110,7 +110,7 @@ public class RobotContainer {
 
         xButton.whenActive(new RetractIntakeMagnet());
 
-        bButton.whenActive(incrementAngleCMD);
+        bButton.whenActive(new AutoAdjustShooterAngle());
 
         startButton.whenActive(new CalibrateRetractIntake());
 
