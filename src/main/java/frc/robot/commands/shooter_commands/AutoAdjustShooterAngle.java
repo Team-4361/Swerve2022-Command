@@ -14,10 +14,6 @@ public class AutoAdjustShooterAngle extends CommandBase{
     public AutoAdjustShooterAngle(){
         addRequirements(Robot.adjustor); 
     }
-    @Override
-    public void initialize() {
-        addRequirements(Robot.adjustor);
-    }
 
     @Override
     public void execute() {

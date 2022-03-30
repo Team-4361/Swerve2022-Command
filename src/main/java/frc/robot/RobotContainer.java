@@ -104,13 +104,13 @@ public class RobotContainer {
         lStick.whenHeld(new CenterShooterToHubCommand());
         rStick.whenHeld(new RunStorageAcceptor());
 
-        aButton.whenHeld(new ShootCMD(4500));
+        aButton.whenHeld(new ShootCMD(3000));
 
         yButton.whenActive(processBallCMD);
 
         xButton.whenActive(new RetractIntakeMagnet());
 
-        bButton.whenActive(new AutoAdjustShooterAngle());
+        bButton.whenActive(new IncrementShooterAngle());
 
         startButton.whenActive(new CalibrateRetractIntake());
 

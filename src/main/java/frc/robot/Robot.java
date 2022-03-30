@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
 
     public static boolean leftHandedMode = false;
 
-    private AutoAdjustShooterAngle adjustAngle = new AutoAdjustShooterAngle();
+    private AutoAdjustShooterAngle adjustAngle;
 
     private void setupColorChooser() {
         // Add the values for the SendableChooser
@@ -107,6 +107,8 @@ public class Robot extends TimedRobot {
 
         shooter = new ShooterSubsystem();
         adjustor = new AngleAdjustSubsystem();
+
+        adjustAngle = new AutoAdjustShooterAngle();
         
         // updates the acceleration every 2 ms starting 1 ms after the robot starts
         addPeriodic(() -> { 
