@@ -47,6 +47,8 @@ public class ChassisCamera {
                 photonCamera.setPipelineIndex(1);
             case RED:
                 photonCamera.setPipelineIndex(2);
+            case NEUTRAL:
+                photonCamera.setPipelineIndex(1);
         }
 
         System.out.println("Connected");

@@ -59,6 +59,8 @@ public class Robot extends TimedRobot {
     public static LeftClimberSubsystem leftClimber;
     public static RightClimberSubsystem rightClimber;
 
+    public HashMap<String, Double> targetData;
+
     public static final SendableChooser<AcceptColor> acceptColorChooser = new SendableChooser<>();
     public static final AcceptColor DEFAULT_COLOR = AcceptColor.NEUTRAL;
 
@@ -66,6 +68,8 @@ public class Robot extends TimedRobot {
     public static ChassisCamera chassisCamera;
 
     public static boolean leftHandedMode = false;
+
+    private AutoAdjustShooterAngle adjustAngle = new AutoAdjustShooterAngle();
 
     private void setupColorChooser() {
         // Add the values for the SendableChooser
@@ -104,7 +108,11 @@ public class Robot extends TimedRobot {
         shooter = new ShooterSubsystem();
 
         // updates the acceleration every 2 ms starting 1 ms after the robot starts
-        addPeriodic(() -> new AutoAdjustShooterAngle().schedule(), 1, 0.001);
+        addPeriodic(() -> { 
+            if(!adjustAngle.isScheduled()){
+                adjustAngle.schedule();
+            }
+        }, 0.2, 0.001);
 
         intake = new IntakeSubsystem();
 
@@ -157,7 +165,7 @@ public class Robot extends TimedRobot {
 
     @Override 
     public void teleopPeriodic() {
-        HashMap<String, Double> targetData = Robot.shooterCamera.getTargetGoal();
+        targetData = Robot.shooterCamera.getTargetGoal();
 
         SmartDashboard.putNumber("Distance", targetData.get("Distance"));
         SmartDashboard.putNumber("Pitch", targetData.get("Pitch"));
