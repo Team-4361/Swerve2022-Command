@@ -34,7 +34,8 @@ public class AngleAdjustSubsystem extends SubsystemBase{
 
         cont = adjustor.getSpark().getPIDController();
 
-        cont.setP((double) 1/9);
+        cont.setP((double) 1/8.5);
+        cont.setOutputRange(-1, 1);
 
         encoder = adjustor.getSpark().getEncoder();
 

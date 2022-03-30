@@ -55,8 +55,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
         shooterSpark.enableVoltageCompensation(12);
 
-        sController.setP(1/10);
+        sController.setP(1/5);
         sController.setFF(FEED_FWD);
+
+        sController.setOutputRange(-1, 1);
     }
 
     public double getVelocity() {

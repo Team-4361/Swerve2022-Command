@@ -106,9 +106,10 @@ public class Robot extends TimedRobot {
         SmartDashboard.putBoolean("climber overheat", false);
 
         shooter = new ShooterSubsystem();
-
+        
         // updates the acceleration every 2 ms starting 1 ms after the robot starts
         addPeriodic(() -> { 
+            
             if(!adjustAngle.isScheduled()){
                 adjustAngle.schedule();
             }
