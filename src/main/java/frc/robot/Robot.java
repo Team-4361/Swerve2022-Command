@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
     public static LeftClimberSubsystem leftClimber;
     public static RightClimberSubsystem rightClimber;
 
-    public HashMap<String, Double> targetData;
+    public HashMap<String, Double> targetData = new HashMap<>();
 
     public static final SendableChooser<AcceptColor> acceptColorChooser = new SendableChooser<>();
     public static final AcceptColor DEFAULT_COLOR = AcceptColor.NEUTRAL;
@@ -106,6 +106,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putBoolean("climber overheat", false);
 
         shooter = new ShooterSubsystem();
+        adjustor = new AngleAdjustSubsystem();
         
         // updates the acceleration every 2 ms starting 1 ms after the robot starts
         addPeriodic(() -> { 
@@ -119,8 +120,6 @@ public class Robot extends TimedRobot {
 
         leftClimber = new LeftClimberSubsystem();
         rightClimber = new RightClimberSubsystem();
-
-        adjustor = new AngleAdjustSubsystem();
 
         // Add your test commands here
         testUtil = new TestUtil()
