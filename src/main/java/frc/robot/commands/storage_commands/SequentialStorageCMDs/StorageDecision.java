@@ -5,6 +5,7 @@ import frc.robot.Robot;
 import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
 import frc.robot.subsystems.storage.AcceptColor;
 import frc.robot.subsystems.storage.StorageTask;
+import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
 
 import static frc.robot.Constants.Storage.RETRACT_ON_ACCEPT;
 
@@ -18,7 +19,7 @@ public class StorageDecision extends CommandBase {
 
         if (RETRACT_ON_ACCEPT) { new RetractIntakeMagnet().schedule(); }
 
-        new StorageAcceptBall().schedule();
+        new StorageAcceptBall().andThen(new StorageRunAcceptor(ACCEPT_SPEED, 0.3)).schedule();
     }
 
     private void rejectBall() {

@@ -66,9 +66,9 @@ public class StorageAcceptBall extends CommandBase {
             default:
                 break;
         }
-
-        new StorageRunAcceptor(ACCEPT_SPEED, 0.3).schedule();
     }
+
+
 
     @Override
     public boolean isFinished() {
