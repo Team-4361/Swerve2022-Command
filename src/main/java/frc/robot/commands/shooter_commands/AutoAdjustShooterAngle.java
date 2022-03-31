@@ -32,9 +32,8 @@ public class AutoAdjustShooterAngle extends CommandBase{
     public double getRequiredTargetAngle(double distanceToHub){
         double requiredTargetAngle = 0;
 
-        requiredTargetAngle = 4.76d*distanceToHub - 3.93d;
+        requiredTargetAngle = (2.21*Math.pow(Math.E, 0.504*distanceToHub))*1.15;
 
-        // requiredTargetAngle = 1.25*distanceToHub + 1.25*Math.pow(distanceToHub, 2);
         if(requiredTargetAngle > 30){
             requiredTargetAngle = 30;
         } else if(requiredTargetAngle < 0) {

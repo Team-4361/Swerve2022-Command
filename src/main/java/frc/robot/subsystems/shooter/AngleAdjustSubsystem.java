@@ -76,8 +76,8 @@ public class AngleAdjustSubsystem extends SubsystemBase{
     }
 
     public void zero(){
-        encoder.setPosition(0);
         target = 0;
+        encoder.setPosition(0);
     }
 
     public double getPosition(){

@@ -90,6 +90,12 @@ public class Robot extends TimedRobot {
     }
 
     @Override
+    public void disabledExit() {
+        robotContainer.resetIncrementAngle();
+        adjustor.zero();
+    }
+
+    @Override
     public void robotInit() {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
@@ -196,11 +202,13 @@ public class Robot extends TimedRobot {
         if (autonomous != null && !autonomous.isFinished())
             autonomous.cancel();
 
+        Robot.adjustor.zero();
+        robotContainer.resetIncrementAngle();
+
         CommandScheduler.getInstance().cancelAll();
 
         // TODO: Please comment this out when autonomous starts getting tested, it will mess up otherwise.
-        Robot.adjustor.zero();
-        robotContainer.resetIncrementAngle();
+    
     }
 
     @Override
