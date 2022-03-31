@@ -54,7 +54,7 @@ public class ShooterSubsystem extends SubsystemBase {
         sController = shooterSpark.getPIDController();
 
         shooterSpark.enableVoltageCompensation(12);
-
+        
         sController.setP(1/2);
         sController.setFF(FEED_FWD);
 
