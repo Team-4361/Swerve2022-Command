@@ -14,7 +14,6 @@ public class IncrementShooterAngle extends CommandBase {
     private double incrementLength = 1;
 
     public void resetAngle() {
-        Robot.adjustor.setAngle(0);
         targetAngle = 0;
     }
 
