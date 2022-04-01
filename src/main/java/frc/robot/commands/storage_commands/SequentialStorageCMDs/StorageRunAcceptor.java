@@ -36,7 +36,7 @@ public class StorageRunAcceptor extends CommandBase{
     @Override
     public void initialize() {
         // TODO Auto-generated method stub
-        addRequirements(Robot.storage);
+        addRequirements(Robot.storage, Robot.intake);
 
         startTime = System.currentTimeMillis();
     }
@@ -45,6 +45,7 @@ public class StorageRunAcceptor extends CommandBase{
     public void execute() {
         // TODO Auto-generated method stub
         Robot.storage.setAcceptorMotor(acceptorPower);
+        Robot.intake.spinIntakeAccept();
     }
 
     private double getElapsedTime(){
@@ -55,6 +56,7 @@ public class StorageRunAcceptor extends CommandBase{
     public void end(boolean interrupted) {
         // TODO Auto-generated method stub
         Robot.storage.setAcceptorMotor(0);
+        Robot.intake.stopIntakeGroup();
     }
 
     @Override

@@ -1,6 +1,8 @@
 package frc.robot.subsystems.climber;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorValue;
@@ -11,6 +13,7 @@ public class AbstractClimberSubsystem extends SubsystemBase {
     protected final DigitalInput topLimit;
     private final CANSparkMax climberMotor;
     private final ConcurrentRotationalEncoder encoder;
+    private final RelativeEncoder relEncoder;
     private boolean isDone = false;
 
     public AbstractClimberSubsystem(DigitalInput bottomLimit,
@@ -22,6 +25,9 @@ public class AbstractClimberSubsystem extends SubsystemBase {
         this.climberMotor = climberMotor;
         this.encoder = new ConcurrentRotationalEncoder(climberMotor)
                 .setFlipped(isFlipped);
+        this.relEncoder = climberMotor.getEncoder();
+
+        
     }
 
     public void setDone(boolean done) {
@@ -48,12 +54,6 @@ public class AbstractClimberSubsystem extends SubsystemBase {
      *              value will raise the climber.
      */
     public void translateClimber(double power) {
-        // power > 0: climber is being LOWERED
-        // power < 0: climber is being RAISED
-        
-        if (power > 0 && bottomLimit.get()) power = 0;
-        else if (power < 0 && topLimit.get()) power = 0;
-
         climberMotor.set(power);
     }
 
@@ -62,14 +62,21 @@ public class AbstractClimberSubsystem extends SubsystemBase {
     }
 
     public void lower() {
-        translateClimber(MotorValue.CLIMBER_SPEED);
+        if(getRotations() <= 0){
+            translateClimber(MotorValue.CLIMBER_SPEED);
+        } else {
+            translateClimber(0);
+        }
+        
     }
 
     public void zero() {
-        this.encoder.reset();
+        this.relEncoder.setPosition(0);
     }
 
     public double getRotations() {
-        return this.encoder.getAbsoluteRotations();
+        return this.relEncoder.getPosition();
     }
+
+    
 }

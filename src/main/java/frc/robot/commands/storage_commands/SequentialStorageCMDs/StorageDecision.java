@@ -19,7 +19,7 @@ public class StorageDecision extends CommandBase {
 
         if (RETRACT_ON_ACCEPT) { new RetractIntakeMagnet().schedule(); }
 
-        new StorageAcceptBall().andThen(new StorageRunAcceptor(ACCEPT_SPEED, 0.3)).schedule();
+        new StorageAcceptBall().andThen(new StorageRunAcceptor(ACCEPT_SPEED, 2)).schedule();
     }
 
     private void rejectBall() {

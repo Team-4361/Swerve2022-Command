@@ -34,6 +34,6 @@ public class TimedMoveFWDCMD extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (System.currentTimeMillis() - timeStarted) > 2000;
+        return (System.currentTimeMillis() - timeStarted) > 1500;
     }
 }

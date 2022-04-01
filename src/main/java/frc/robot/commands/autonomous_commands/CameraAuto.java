@@ -21,7 +21,7 @@ import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAc
 public class CameraAuto extends CommandBase {
 
 
-    private RotateCMD rotateCMD = new RotateCMD(0.4);
+    private RotateCMD rotateCMD = new RotateCMD(0.15);
 
     private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(
         new ExtendIntakeMagnet(),
@@ -37,7 +37,7 @@ public class CameraAuto extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        CommandScheduler.getInstance().cancelAll();
+        
     }
 
     @Override

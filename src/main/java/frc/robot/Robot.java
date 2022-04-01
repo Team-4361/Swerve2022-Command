@@ -14,6 +14,8 @@ import static frc.robot.robot_utils.TestUtil.TestMode.SHOOTER_ANGLE_TEST;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.w3c.dom.css.RGBColor;
+
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -129,6 +131,9 @@ public class Robot extends TimedRobot {
         leftClimber = new LeftClimberSubsystem();
         rightClimber = new RightClimberSubsystem();
 
+        leftClimber.zero();;
+        rightClimber.zero();
+
         // Add your test commands here
         testUtil = new TestUtil()
                 .addDefaultCommand(CHASSIS_DRIVE_TEST, new ChassisForwardOffsetTest())
@@ -196,13 +201,16 @@ public class Robot extends TimedRobot {
         if (autonomous != null)
             autonomous.schedule();
     }
+    @Override
+    public void autonomousExit() {
+        // TODO Auto-generated method stub
+        autonomous.cancel();
+    }
 
     @Override
     public void teleopInit() {
-        if (autonomous != null && !autonomous.isFinished())
-            autonomous.cancel();
 
-        Robot.adjustor.zero();
+        //Robot.adjustor.zero();
         robotContainer.resetIncrementAngle();
 
         CommandScheduler.getInstance().cancelAll();
