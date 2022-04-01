@@ -54,7 +54,8 @@ public class RobotContainer {
 
     private final SequentialCommandGroup simpleAutonomousCMD = new SequentialCommandGroup(
             new TimedShootCMD(6, 4500),
-            new TimedMoveFWDCMD()
+            new TimedMoveFWDCMD(),
+            new CameraAuto()
     );
 
     //public final ParallelCommandGroup autoShootCMD = new ParallelCommandGroup(new AutoAdjustShooterAngle(), new ShootCMD(4500));
@@ -87,8 +88,6 @@ public class RobotContainer {
                 )
         ));
 
-        simpleAutonomousCMD.addCommands(new CameraAuto());
-
         //Robot.adjustor.setDefaultCommand(new AutoAdjustShooterAngle());
 
         this.leftTriggerButton.setSupplier(() -> (controller.getLeftTriggerAxis() > 0.8));
@@ -108,7 +107,8 @@ public class RobotContainer {
 
         xButton.whenActive(new RetractIntakeMagnet());
 
-        bButton.whenActive(new AutoAdjustShooterAngle());
+        bButton.whenHeld(new SetShooterAngleCommand(10));
+        bButton.whenHeld(new ShootCMD(4500));
 
         startButton.whenActive(new CalibrateRetractIntake());
 

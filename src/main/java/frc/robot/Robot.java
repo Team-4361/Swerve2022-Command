@@ -64,7 +64,11 @@ public class Robot extends TimedRobot {
     public HashMap<String, Double> targetData = new HashMap<>();
 
     public static final SendableChooser<AcceptColor> acceptColorChooser = new SendableChooser<>();
+    public static final SendableChooser<AcceptColor> autonTargetBallChooser = new SendableChooser<>();
+
     public static final AcceptColor DEFAULT_COLOR = AcceptColor.NEUTRAL;
+
+    public static final AcceptColor DEFAULT_AUTO_BALL = AcceptColor.BLUE;
 
     public static ShooterCamera shooterCamera;
     public static ChassisCamera chassisCamera;
@@ -89,11 +93,24 @@ public class Robot extends TimedRobot {
         }
 
         SmartDashboard.putData("Acceptance Color Chooser", acceptColorChooser);
+
+        autonTargetBallChooser.addOption("Auto Ball", AcceptColor.BLUE);
+        autonTargetBallChooser.addOption("Auto Red", AcceptColor.RED);
+
+        switch (DEFAULT_AUTO_BALL) {
+            case RED:
+                autonTargetBallChooser.setDefaultOption("Red Accept", AcceptColor.RED);
+            case BLUE:
+                autonTargetBallChooser.setDefaultOption("Blue Accept", AcceptColor.BLUE);
+            case NEUTRAL:
+                break;
+        }
+
+        SmartDashboard.putData("Acceptance Color Chooser", autonTargetBallChooser);
     }
 
     @Override
     public void disabledExit() {
-        robotContainer.resetIncrementAngle();
         adjustor.zero();
     }
 
@@ -134,6 +151,8 @@ public class Robot extends TimedRobot {
         leftClimber.zero();;
         rightClimber.zero();
 
+        adjustor.zero();
+
         // Add your test commands here
         testUtil = new TestUtil()
                 .addDefaultCommand(CHASSIS_DRIVE_TEST, new ChassisForwardOffsetTest())
@@ -148,7 +167,7 @@ public class Robot extends TimedRobot {
                 "RoxBallCam",
                 ChassisCameraConsts.CAMERA_HEIGHT,
                 ChassisCameraConsts.CAMERA_PITCH,
-                acceptColorChooser::getSelected
+                autonTargetBallChooser::getSelected
         );
 
         shooterCamera = new ShooterCamera(
@@ -201,22 +220,12 @@ public class Robot extends TimedRobot {
         if (autonomous != null)
             autonomous.schedule();
     }
-    @Override
-    public void autonomousExit() {
-        // TODO Auto-generated method stub
-        autonomous.cancel();
-    }
 
     @Override
     public void teleopInit() {
-
-        //Robot.adjustor.zero();
-        robotContainer.resetIncrementAngle();
+        autonomous.cancel();
 
         CommandScheduler.getInstance().cancelAll();
-
-        // TODO: Please comment this out when autonomous starts getting tested, it will mess up otherwise.
-    
     }
 
     @Override

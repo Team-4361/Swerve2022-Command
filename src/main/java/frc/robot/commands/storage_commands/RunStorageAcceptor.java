@@ -10,19 +10,21 @@ public class RunStorageAcceptor extends CommandBase{
     @Override
     public void initialize() {
         // TODO Auto-generated method stub
-        addRequirements(Robot.storage);
+        addRequirements(Robot.storage, Robot.intake);
     }
 
     @Override
     public void execute() {
         // TODO Auto-generated method stub
         Robot.storage.setAcceptorMotor(ACCEPT_SPEED);
+        Robot.intake.spinIntakeAccept();
     }
 
     @Override
     public void end(boolean interrupted) {
         // TODO Auto-generated method stub
         Robot.storage.setAcceptorMotor(0);
+        Robot.intake.stopIntakeGroup();
     }
 
     @Override

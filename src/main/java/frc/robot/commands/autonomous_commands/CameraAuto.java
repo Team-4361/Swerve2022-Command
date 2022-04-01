@@ -28,7 +28,7 @@ public class CameraAuto extends CommandBase {
         new IntakeProcessAccept());
 
     private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
-        new ParallelCommandGroup(new AutoAdjustShooterAngle(), new CenterShooterToHubCommand()),
+        new CenterShooterToHubCommand(),
         new TimedShootCMD(3, 4500)
     );
 
@@ -37,28 +37,40 @@ public class CameraAuto extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        
     }
 
     @Override
     public void execute() {
         // TODO Auto-generated method stub
         if(Robot.chassisCamera.getTargetGoal().get("Status") == 0 && Robot.storage.getBallsLoaded() == 0 && !getBall.isScheduled() && !autoShootGroup.isScheduled()){
+            
             if(!rotateCMD.isScheduled()){
                 rotateCMD.schedule();
             }
+            
         } else if(Robot.chassisCamera.getTargetGoal().get("Status") == 1 && Robot.storage.getBallsLoaded() == 0 && !autoShootGroup.isScheduled()){
-            rotateCMD.cancel();
+
+            if(rotateCMD.isScheduled()){
+                rotateCMD.cancel();
+            }
 
             if(!getBall.isScheduled()){
                 getBall.schedule();
             }
         } else if (Robot.storage.getBallsLoaded() > 0 && !getBall.isScheduled()){
-            rotateCMD.cancel();
+
+            if(rotateCMD.isScheduled()){
+                rotateCMD.cancel();
+            }
 
             if(!autoShootGroup.isScheduled()){
                 autoShootGroup.schedule();
             }
         }
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 }

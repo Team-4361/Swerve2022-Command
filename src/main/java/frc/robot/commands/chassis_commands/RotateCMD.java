@@ -10,7 +10,6 @@ public class RotateCMD extends CommandBase {
 
 
     private double power;
-    private boolean shouldStop;
 
     public RotateCMD(double power) {
         this.power = power;
@@ -19,10 +18,7 @@ public class RotateCMD extends CommandBase {
     }
 
     @Override
-    public void initialize() {
-        addRequirements(Robot.swerveDrive);
-        shouldStop = false;
-    }
+    public void initialize() {}
 
     public void setPower(double power){
         this.power = power;
@@ -38,12 +34,8 @@ public class RotateCMD extends CommandBase {
         Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(0)));
     }
 
-    private void stopCMD(){
-        shouldStop = true;
-    }
-
     @Override
     public boolean isFinished() {
-        return shouldStop;
+        return true;
     }
 }
