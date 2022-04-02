@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.MotorValue;
 import frc.robot.robot_utils.encoder.ConcurrentRotationalEncoder;
@@ -58,6 +59,13 @@ public class AbstractClimberSubsystem extends SubsystemBase {
     }
 
     public void raise() {
+        // if(getRotations() >= ){
+        //     translateClimber(-MotorValue.CLIMBER_SPEED);
+        // } else{
+        //     translateClimber(0);
+        // }
+
+        SmartDashboard.putNumber("Climber Rotations", getRotations());
         translateClimber(-MotorValue.CLIMBER_SPEED);
     }
 

@@ -7,10 +7,12 @@ import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
 
 public class RunStorageAcceptor extends CommandBase{
 
+    public RunStorageAcceptor(){
+        // addRequirements(Robot.storage, Robot.intake);
+    }
     @Override
     public void initialize() {
         // TODO Auto-generated method stub
-        addRequirements(Robot.storage, Robot.intake);
     }
 
     @Override
@@ -24,7 +26,7 @@ public class RunStorageAcceptor extends CommandBase{
     public void end(boolean interrupted) {
         // TODO Auto-generated method stub
         Robot.storage.setAcceptorMotor(0);
-        Robot.intake.stopIntakeGroup();
+        Robot.intake.stopIntakeMotor();
     }
 
     @Override

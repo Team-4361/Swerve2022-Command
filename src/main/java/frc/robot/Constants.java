@@ -259,7 +259,7 @@ public class Constants {
         public static final I2C.Port COLOR_SENSOR_PORT = I2C.Port.kOnboard;
 
         // Adjust based on sensitivity.
-        public static final double BLUE_THRESHOLD = 0.32;//0.325
+        public static final double BLUE_THRESHOLD = 0.31;//0.325
         public static final double RED_THRESHOLD = 0.25;//0.265//0.28
         public static final double PROXIMITY_THRESHOLD = 120;
 

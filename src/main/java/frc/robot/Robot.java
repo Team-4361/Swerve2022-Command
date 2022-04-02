@@ -39,6 +39,7 @@ import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.AngleAdjustSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.storage.AcceptColor;
+import frc.robot.subsystems.storage.RetractMode;
 import frc.robot.subsystems.storage.StorageSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import me.wobblyyyy.pathfinder2.Pathfinder;
@@ -129,7 +130,7 @@ public class Robot extends TimedRobot {
 
         this.setupColorChooser();
 
-        storage = new StorageSubsystem(acceptColorChooser::getSelected).setRetractMode(RETRACT_MODE_FINISHED);
+        storage = new StorageSubsystem(acceptColorChooser::getSelected).setRetractMode(RetractMode.RETRACT_ALWAYS);
 
         SmartDashboard.putBoolean("climber overheat", false);
 
@@ -208,6 +209,14 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Distance", targetData.get("Distance"));
         SmartDashboard.putNumber("Pitch", targetData.get("Pitch"));
         SmartDashboard.putNumber("Current Target Angle", RobotContainer.incrementAngleCMD.getCurrentTargetAngle());
+   
+        Command requringIntake = CommandScheduler.getInstance().requiring(Robot.intake);
+
+        if (requringIntake == null) {
+            SmartDashboard.putString("Requiring intake", "none");
+        } else {
+            SmartDashboard.putString("Requiring intake", requringIntake.getName());
+        }
     }
 
 

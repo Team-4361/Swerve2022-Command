@@ -192,6 +192,10 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         this.rightEncoder.setPosition(0);
     }
 
+    public void stopIntakeMotor(){
+        intakeMotor.setPower(0);
+    }
+
     @Override
     public void close() {
         for (CANSparkMax spark : sparks)

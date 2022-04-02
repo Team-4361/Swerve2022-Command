@@ -26,17 +26,19 @@ public class StorageRunAcceptor extends CommandBase{
      * @param value motor power
      */
     public StorageRunAcceptor(double value){
+        addRequirements(Robot.storage, Robot.intake);
         acceptorPower = value;
     }
 
-    public StorageRunAcceptor() {}
+    public StorageRunAcceptor() {
+        addRequirements(Robot.storage, Robot.intake);
+    }
     
 
 
     @Override
     public void initialize() {
         // TODO Auto-generated method stub
-        addRequirements(Robot.storage, Robot.intake);
 
         startTime = System.currentTimeMillis();
     }

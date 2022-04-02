@@ -26,15 +26,7 @@ public class RetractIntakeMagnet extends CommandBase {
             // While the rear switch is not pressed, keep running the Intake Retract Motor out.
             //Robot.intake.retractIntake(retractSpeed);
             Robot.intake.retractIntake();
-        } else {
-            // The magnet is pressed, stop the intake and end the command.
-            Robot.intake.stopIntakeGroup();
-
-            // Reset the encoders since we know we're at the end.
-            Robot.intake.resetEncoders();
-
-            end(false);
-        }
+        } 
     }
 
     @Override
@@ -43,6 +35,7 @@ public class RetractIntakeMagnet extends CommandBase {
         // motors. This is okay in this scenario because we don't want to be taking in balls when
         // the intake is retracted.
         Robot.intake.stopIntakeGroup();
+        Robot.intake.resetEncoders();
     }
 
     @Override

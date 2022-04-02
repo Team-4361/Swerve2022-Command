@@ -7,9 +7,13 @@ import frc.robot.Robot;
 import static frc.robot.Constants.Intake.INTAKE_EXTEND_SETPOINT;
 
 public class ExtendIntakeMagnet extends CommandBase {
+    
+    public ExtendIntakeMagnet(){
+        addRequirements(Robot.intake);
+    }
+    
     @Override
     public void initialize() {
-        addRequirements(Robot.intake);
         System.out.println("Extending Intake");
     }
 
@@ -22,7 +26,6 @@ public class ExtendIntakeMagnet extends CommandBase {
         } else {
             // The magnet is pressed, stop the intake and end the command.
             Robot.intake.stopIntakeGroup();
-            end(false);
         }
     }
 

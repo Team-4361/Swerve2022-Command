@@ -49,8 +49,6 @@ public class StorageDecision extends CommandBase {
             }
             case NEUTRAL: break;
         }
-
-        end(false);
     }
 
     @Override
