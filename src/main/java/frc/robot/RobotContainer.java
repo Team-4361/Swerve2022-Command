@@ -53,9 +53,8 @@ public class RobotContainer {
 
 
     private final SequentialCommandGroup simpleAutonomousCMD = new SequentialCommandGroup(
-            new TimedShootCMD(6, 4500),
-            new TimedMoveFWDCMD(),
-            new CameraAuto()
+            new TimedShootCMD(3.5, 4500),
+            new TimedMoveFWDCMD()
     );
 
     //public final ParallelCommandGroup autoShootCMD = new ParallelCommandGroup(new AutoAdjustShooterAngle(), new ShootCMD(4500));
