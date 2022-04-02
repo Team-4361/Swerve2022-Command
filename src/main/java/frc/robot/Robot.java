@@ -65,11 +65,11 @@ public class Robot extends TimedRobot {
     public HashMap<String, Double> targetData = new HashMap<>();
 
     public static final SendableChooser<AcceptColor> acceptColorChooser = new SendableChooser<>();
-    //public static final SendableChooser<AcceptColor> autonTargetBallChooser = new SendableChooser<>();
+    public static final SendableChooser<AcceptColor> autonTargetBallChooser = new SendableChooser<>();
 
     public static final AcceptColor DEFAULT_COLOR = AcceptColor.NEUTRAL;
 
-    // public static final AcceptColor DEFAULT_AUTO_BALL = AcceptColor.BLUE;
+    public static final AcceptColor DEFAULT_AUTO_BALL = AcceptColor.BLUE;
 
     public static ShooterCamera shooterCamera;
     public static ChassisCamera chassisCamera;
@@ -97,19 +97,19 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putData("Acceptance Color Chooser", acceptColorChooser);
 
-        // autonTargetBallChooser.addOption("Auto Ball", AcceptColor.BLUE);
-        // autonTargetBallChooser.addOption("Auto Red", AcceptColor.RED);
+        autonTargetBallChooser.addOption("Auto Red", AcceptColor.RED);
+        
+        autonTargetBallChooser.addOption("Auto Ball", AcceptColor.BLUE);
+        switch (DEFAULT_AUTO_BALL) {
+            case RED:
+                autonTargetBallChooser.setDefaultOption("Red Accept", AcceptColor.RED);
+            case BLUE:
+                autonTargetBallChooser.setDefaultOption("Blue Accept", AcceptColor.BLUE);
+            case NEUTRAL:
+                break;
+        }
 
-        // switch (DEFAULT_AUTO_BALL) {
-        //     case RED:
-        //         autonTargetBallChooser.setDefaultOption("Red Accept", AcceptColor.RED);
-        //     case BLUE:
-        //         autonTargetBallChooser.setDefaultOption("Blue Accept", AcceptColor.BLUE);
-        //     case NEUTRAL:
-        //         break;
-        // }
-
-        // SmartDashboard.putData("Acceptance Color Chooser", autonTargetBallChooser);
+        SmartDashboard.putData("Autonomous Color Chooser", autonTargetBallChooser);
     }
 
     @Override
@@ -172,7 +172,7 @@ public class Robot extends TimedRobot {
                 "RoxBallCam",
                 ChassisCameraConsts.CAMERA_HEIGHT,
                 ChassisCameraConsts.CAMERA_PITCH,
-                acceptColorChooser::getSelected
+                autonTargetBallChooser::getSelected
         );
 
         shooterCamera = new ShooterCamera(
@@ -192,6 +192,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("PDP Total Watts", bms.getWattage());
         SmartDashboard.putNumber("PDP Peak Current", bms.getMaximumCurrent());
 
+        SmartDashboard.putNumber("PDP Amp Hours", bms.getAmpHours());
         SmartDashboard.putNumber("PDP Watt-Hours", bms.getWattHours());
         SmartDashboard.putBoolean("PDP Exceeding Current", bms.isOverCurrentLimit());
     }
@@ -228,7 +229,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        autonomous.cancel();
+        if(autonomous != null)
+            autonomous.cancel();
 
         CommandScheduler.getInstance().cancelAll();
     }

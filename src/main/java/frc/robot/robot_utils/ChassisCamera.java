@@ -47,7 +47,7 @@ public class ChassisCamera {
                 photonCamera.setPipelineIndex(1);
             case RED:
                 photonCamera.setPipelineIndex(2);
-            case NEUTRAL:
+            default:
                 photonCamera.setPipelineIndex(2);
         }
 
