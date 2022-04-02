@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.robot_utils.motor.MotorUtil;
 
+import static frc.robot.Constants.MotorFlip.*;
+
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.Intake.*;
 import static frc.robot.Constants.Intake.BR_MAGNET_ID;
@@ -29,13 +31,13 @@ public class ExtenderSubsystem extends SubsystemBase {
     }
 
     public void extendIntake() {
-        leftExtender.set(ACCEPT_SPEED);
-        rightExtender.set(ACCEPT_SPEED);
+        leftExtender.set(MotorUtil.getMotorValue(ACCEPT_SPEED, INTAKE_EXTENDER_LEFT_FLIPPED));
+        rightExtender.set(MotorUtil.getMotorValue(ACCEPT_SPEED, INTAKE_EXTENDER_RIGHT_FLIPPED));
     }
 
     public void retractIntake() {
-        leftExtender.set(-ACCEPT_SPEED);
-        rightExtender.set(-ACCEPT_SPEED);
+        leftExtender.set(MotorUtil.getMotorValue(-ACCEPT_SPEED, INTAKE_EXTENDER_LEFT_FLIPPED));
+        rightExtender.set(MotorUtil.getMotorValue(-ACCEPT_SPEED, INTAKE_EXTENDER_RIGHT_FLIPPED));
     }
 
     public boolean isFullyExtended() {
