@@ -14,6 +14,7 @@ import static frc.robot.robot_utils.TestUtil.TestMode.SHOOTER_ANGLE_TEST;
 import java.util.HashMap;
 import java.util.Map;
 
+import frc.robot.subsystems.intake.ExtenderSubsystem;
 import org.w3c.dom.css.RGBColor;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -57,6 +58,7 @@ public class Robot extends TimedRobot {
     public static StorageSubsystem storage;
     public static ShooterSubsystem shooter;
     public static IntakeSubsystem intake;
+    public static ExtenderSubsystem intakeExtender;
     public static AngleAdjustSubsystem adjustor;
     public static TestUtil testUtil;
 
@@ -148,6 +150,7 @@ public class Robot extends TimedRobot {
         }, 0.2, 0.001);
 
         intake = new IntakeSubsystem();
+        intakeExtender = new ExtenderSubsystem();
 
         leftClimber = new LeftClimberSubsystem();
         rightClimber = new RightClimberSubsystem();

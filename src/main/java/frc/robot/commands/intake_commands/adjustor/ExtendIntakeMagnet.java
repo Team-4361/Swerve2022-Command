@@ -9,7 +9,7 @@ import static frc.robot.Constants.Intake.INTAKE_EXTEND_SETPOINT;
 public class ExtendIntakeMagnet extends CommandBase {
     
     public ExtendIntakeMagnet(){
-        addRequirements(Robot.intake);
+        addRequirements(Robot.intakeExtender);
     }
     
     @Override
@@ -20,23 +20,27 @@ public class ExtendIntakeMagnet extends CommandBase {
     @Override
     public void execute() {
         // This runs repeatedly until the command is ended.
-        if (!Robot.intake.isExtended()) {
+        /*
+        if (!Robot.intakeExtender.isFullyExtended()) {
             // While the front switch is not pressed, keep running the Intake Extender Motor out.
-            Robot.intake.extendIntake();
+            Robot.intakeExtender.extendIntake();
         } else {
             // The magnet is pressed, stop the intake and end the command.
-            Robot.intake.stopIntakeGroup();
+            Robot.intakeExtender.stop();
         }
+
+         */
+        Robot.intakeExtender.extendIntake();
     }
 
     @Override
     public void end(boolean interrupted) {
-        Robot.intake.stopIntakeGroup();
+        Robot.intakeExtender.stop();
     }
 
     @Override
     public boolean isFinished() {
         // Will be finished when the front switch is pressed, meaning all the way extended.
-        return Robot.intake.isExtended() || (Robot.intake.getLeftPosition() <= INTAKE_EXTEND_SETPOINT && Robot.intake.getRightPosition() <= INTAKE_EXTEND_SETPOINT);
+        return Robot.intakeExtender.isFullyExtended(); //|| (Robot.intake.getLeftPosition() <= INTAKE_EXTEND_SETPOINT && Robot.intake.getRightPosition() <= INTAKE_EXTEND_SETPOINT);
     }
 }

@@ -39,6 +39,7 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         CANSparkMax leftSpark = new CANSparkMax(L_INTAKE_EXTEND_ID, kBrushless);
         CANSparkMax rightSpark = new CANSparkMax(R_INTAKE_EXTEND_ID, kBrushless);
         CANSparkMax intakeSpark = new CANSparkMax(INTAKE_SPIN_MOTOR_ID, kBrushed);
+
         sparks = new CANSparkMax[]{leftSpark, rightSpark, intakeSpark};
 
         leftExtender = new AbstractMotor(
@@ -69,8 +70,6 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
         brMagnet = new DigitalInput(BR_MAGNET_ID);
     }
 
-
-
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Intake: Retracted", isRetracted());
@@ -85,11 +84,15 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
     }
 
     public void extendIntake() {
-        translateExtender(MotorValue.ACCEPT_SPEED);
+        //translateExtender(MotorValue.ACCEPT_SPEED);
+        leftExtender.setPower(MotorValue.ACCEPT_SPEED);
+        rightExtender.setPower(MotorValue.ACCEPT_SPEED);
     }
 
     public void retractIntake() {
-        translateExtender(-MotorValue.ACCEPT_SPEED);
+        //translateExtender(-MotorValue.ACCEPT_SPEED);
+        leftExtender.setPower(-MotorValue.ACCEPT_SPEED);
+        rightExtender.setPower(-MotorValue.ACCEPT_SPEED);
     }
 
     public void extendIntake(double speed) {
@@ -151,8 +154,8 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
                                           double power,
                                           boolean isExtended,
                                           boolean isRetracted) {
-        if (power > 0 && isExtended) power = 0;
-        else if (power < 0 && isRetracted) power = 0;
+        //if (power > 0 && isExtended) power = 0;
+        //else if (power < 0 && isRetracted) power = 0;
 
         motor.setPower(power);
     }

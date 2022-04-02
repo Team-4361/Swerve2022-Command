@@ -66,6 +66,9 @@ public class RobotContainer {
             new TimedShootCMD(3, 4500)
     );
 
+    // FIXME: Sometimes the intake decides to not extend for some reason, gets partially
+    // FIXME: stuck right at the beginning, and completely freezes up even when pressing
+    // FIXME: the calibrateGroup button (Start) that should be retracting the intake.
     private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(
             new ExtendIntakeMagnet(),
             new IntakeProcessAccept());
@@ -102,6 +105,7 @@ public class RobotContainer {
 
         aButton.whenHeld(new ShootCMD(4500));
 
+        //yButton.whenActive(processBallCMD);
         yButton.whenActive(processBallCMD);
 
         xButton.whenActive(new RetractIntakeMagnet());

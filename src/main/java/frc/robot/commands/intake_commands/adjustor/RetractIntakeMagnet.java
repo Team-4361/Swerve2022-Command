@@ -16,17 +16,23 @@ public class RetractIntakeMagnet extends CommandBase {
 
     @Override
     public void initialize() {
-        addRequirements(Robot.intake);
+        addRequirements(Robot.intakeExtender);
     }
 
     @Override
     public void execute() {
         // This runs repeatedly until the command is ended.
-        if (!Robot.intake.isRetracted()) {
+        /*
+        if (!Robot.intakeExtender.isFullyRetracted()) {
             // While the rear switch is not pressed, keep running the Intake Retract Motor out.
             //Robot.intake.retractIntake(retractSpeed);
-            Robot.intake.retractIntake();
-        } 
+            Robot.intakeExtender.retractIntake();
+        } else {
+            Robot.intakeExtender.stop();
+        }
+
+         */
+        Robot.intakeExtender.retractIntake();
     }
 
     @Override
@@ -34,13 +40,13 @@ public class RetractIntakeMagnet extends CommandBase {
         // The stop intake method disables retract motors, as well as the accept/reject
         // motors. This is okay in this scenario because we don't want to be taking in balls when
         // the intake is retracted.
-        Robot.intake.stopIntakeGroup();
-        Robot.intake.resetEncoders();
+        Robot.intakeExtender.stop();
+        //Robot.intake.resetEncoders();
     }
 
     @Override
     public boolean isFinished() {
         // Will be finished when the front switch is pressed, meaning all the way extended.
-        return Robot.intake.isRetracted() ||  (Robot.intake.getLeftPosition() >= INTAKE_RETRACT_SETPOINT && Robot.intake.getRightPosition() >= INTAKE_RETRACT_SETPOINT);
+        return Robot.intakeExtender.isFullyRetracted(); // ||  (Robot.intake.getLeftPosition() >= INTAKE_RETRACT_SETPOINT && Robot.intake.getRightPosition() >= INTAKE_RETRACT_SETPOINT);
     }
 }
