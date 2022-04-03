@@ -4,11 +4,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
 public class CalibrateRetractIntake extends CommandBase{
+
+    public CalibrateRetractIntake(){
+        addRequirements(Robot.intakeExtender);
+    }
     
     @Override
     public void initialize() {
         // TODO Auto-generated method stub
-        addRequirements(Robot.intake);
     }
 
     @Override

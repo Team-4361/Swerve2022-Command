@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
 
     private AutoAdjustShooterAngle adjustAngle;
 
-    public static SetShooterAngleCommand fixSetShooterAngle;
+    //public static SetShooterAngleCommand fixSetShooterAngle;
 
     private void setupColorChooser() {
         // Add the values for the SendableChooser
@@ -144,7 +144,7 @@ public class Robot extends TimedRobot {
         // updates the acceleration every 2 ms starting 1 ms after the robot starts
         addPeriodic(() -> { 
             
-            if(!adjustAngle.isScheduled() && !fixSetShooterAngle.isScheduled()){
+            if(!adjustAngle.isScheduled()){
                 adjustAngle.schedule();
             }
         }, 0.2, 0.001);
@@ -160,7 +160,7 @@ public class Robot extends TimedRobot {
 
         adjustor.zero();
 
-        fixSetShooterAngle = new SetShooterAngleCommand(10);
+        //fixSetShooterAngle = new SetShooterAngleCommand(10);
 
         // Add your test commands here
         testUtil = new TestUtil()
