@@ -42,5 +42,6 @@ public class RetractIntakeMagnet extends CommandBase {
     public boolean isFinished() {
         // Will be finished when the front switch is pressed, meaning all the way extended.
         return Robot.intake.isRetracted() ||  (Robot.intake.getLeftPosition() >= INTAKE_RETRACT_SETPOINT && Robot.intake.getRightPosition() >= INTAKE_RETRACT_SETPOINT);
+        //return Robot.intake.isRetracted();
     }
 }

@@ -151,8 +151,8 @@ public class IntakeSubsystem extends SubsystemBase implements AutoCloseable {
                                           double power,
                                           boolean isExtended,
                                           boolean isRetracted) {
-        if (power > 0 && isExtended) power = 0;
-        else if (power < 0 && isRetracted) power = 0;
+        // if (power > 0 && isExtended) power = 0;
+        // else if (power < 0 && isRetracted) power = 0;
 
         motor.setPower(power);
     }
