@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.ChassisCameraConsts;
 import frc.robot.Constants.ShooterCameraConsts;
 import frc.robot.commands.shooter_commands.AutoAdjustShooterAngle;
@@ -205,6 +206,16 @@ public class Robot extends TimedRobot {
     @Override public void disabledPeriodic() {}
     @Override public void autonomousPeriodic() {}
 
+    private void getRequiring(Subsystem subsystem, String name) {
+        Command reqCommand = CommandScheduler.getInstance().requiring(subsystem);
+
+        if (reqCommand == null) {
+            SmartDashboard.putString("requring " + name, "none");
+        } else {
+            SmartDashboard.putString("requring " + name, reqCommand.getName());
+        }
+    }
+
     @Override 
     public void teleopPeriodic() {
         targetData = Robot.shooterCamera.getTargetGoal();
@@ -215,11 +226,10 @@ public class Robot extends TimedRobot {
    
         Command requringIntake = CommandScheduler.getInstance().requiring(Robot.intake);
 
-        if (requringIntake == null) {
-            SmartDashboard.putString("Requiring intake", "none");
-        } else {
-            SmartDashboard.putString("Requiring intake", requringIntake.getName());
-        }
+
+        getRequiring(Robot.intake, "Intake");
+        getRequiring(Robot.intakeExtender, "Intake Extender");
+        getRequiring(Robot.storage, "Storage");
     }
 
 

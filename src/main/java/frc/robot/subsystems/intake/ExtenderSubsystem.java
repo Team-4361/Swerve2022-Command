@@ -3,6 +3,7 @@ package frc.robot.subsystems.intake;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.robot_utils.motor.MotorUtil;
@@ -17,7 +18,6 @@ import static frc.robot.robot_utils.motor.MotorUtil.getMotorValue;
 
 public class ExtenderSubsystem extends SubsystemBase {
     private final CANSparkMax leftExtender, rightExtender;
-
     private final DigitalInput blSensor, brSensor, flSensor, frSensor;
 
     public ExtenderSubsystem() {
@@ -38,6 +38,17 @@ public class ExtenderSubsystem extends SubsystemBase {
     public void retractIntake() {
         leftExtender.set(MotorUtil.getMotorValue(-ACCEPT_SPEED, INTAKE_EXTENDER_LEFT_FLIPPED));
         rightExtender.set(MotorUtil.getMotorValue(-ACCEPT_SPEED, INTAKE_EXTENDER_RIGHT_FLIPPED));
+    }
+
+    public void retractIntake(double speed) {
+        leftExtender.set(MotorUtil.getMotorValue(-speed, INTAKE_EXTENDER_LEFT_FLIPPED));
+        rightExtender.set(MotorUtil.getMotorValue(-speed, INTAKE_EXTENDER_RIGHT_FLIPPED));
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putBoolean("intake extended", isFullyExtended());
+        SmartDashboard.putBoolean("intake retracted", isFullyRetracted());
     }
 
     public boolean isFullyExtended() {

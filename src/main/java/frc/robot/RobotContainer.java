@@ -30,6 +30,7 @@ import frc.robot.robot_utils.trigger.*;
 import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
 import frc.robot.commands.storage_commands.RunStorageAcceptor;
 import frc.robot.commands.storage_commands.RunStorageCMD;
+import frc.robot.commands.storage_commands.SimpleProcessBallCMD;
 
 import static frc.robot.Constants.Control.*;
 
@@ -107,12 +108,15 @@ public class RobotContainer {
 
         aButton.whenHeld(new ShootCMD(4500));
 
-        yButton.whenActive(processBallCMD);
+        yButton.whenHeld(new SimpleProcessBallCMD());
 
         xButton.whenActive(new RetractIntakeMagnet());
 
         bButton.whenActive(new InstantCommand(()->{
-            CommandScheduler.getInstance().requiring(Robot.intake).cancel();
+            if(CommandScheduler.getInstance().requiring(Robot.intake) != null){
+                CommandScheduler.getInstance().requiring(Robot.intake).cancel();
+            }
+            
         }));
 
         startButton.whenActive(new CalibrateRetractIntake());

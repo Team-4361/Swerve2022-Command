@@ -16,18 +16,17 @@ public class CalibrateRetractIntake extends CommandBase{
 
     @Override
     public void end(boolean interrupted) {
-        Robot.intake.stopIntakeGroup();
-        Robot.intake.resetEncoders();
+        Robot.intakeExtender.stop();
     }
 
     @Override
     public void execute() {
         // TODO Auto-generated method stub
-        if (!Robot.intake.isRetracted()) {
-            Robot.intake.retractIntake(0.1);
+        if (!Robot.intakeExtender.isFullyRetracted()) {
+            Robot.intakeExtender.retractIntake(0.1);
         } else {
             // The magnet is pressed, stop the intake and end the command.
-            Robot.intake.stopIntakeGroup();
+            Robot.intakeExtender.stop();
 
             end(false);
         }
@@ -35,6 +34,6 @@ public class CalibrateRetractIntake extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        return Robot.intake.isRetracted();
+        return Robot.intakeExtender.isFullyRetracted();
     }
 }
