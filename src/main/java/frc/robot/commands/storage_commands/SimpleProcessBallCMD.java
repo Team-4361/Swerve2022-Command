@@ -10,16 +10,23 @@ import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
 
 public class SimpleProcessBallCMD extends CommandBase {
 
+    public SimpleProcessBallCMD(){
+        addRequirements(Robot.intake, Robot.storage);  
+    }
     @Override
     public void initialize() {
-        addRequirements(Robot.intake, Robot.storage);
-        CommandScheduler.getInstance().schedule(new ExtendIntakeMagnet());
+        new ExtendIntakeMagnet().schedule();
     }
 
     @Override
     public void execute() {
+        
+        if(Robot.storage.getBallsLoaded() == 0){
+            Robot.storage.setStorageMotor(ACCEPT_SPEED);
+        } else {
+            Robot.storage.setStorageMotor(0);
+        }
         Robot.storage.setAcceptorMotor(ACCEPT_SPEED);
-        Robot.storage.setStorageMotor(ACCEPT_SPEED);
         Robot.intake.spinIntakeAccept();
     }
 
@@ -28,7 +35,8 @@ public class SimpleProcessBallCMD extends CommandBase {
         Robot.intake.stopIntakeGroup();
         Robot.storage.setAcceptorMotor(0);
         Robot.storage.setStorageMotor(0);
-        CommandScheduler.getInstance().schedule(new RetractIntakeMagnet());
+        
+        new RetractIntakeMagnet().schedule();
     }
 
     @Override

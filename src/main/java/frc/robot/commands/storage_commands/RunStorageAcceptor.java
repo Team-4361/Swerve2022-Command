@@ -8,7 +8,7 @@ import static frc.robot.Constants.MotorValue.ACCEPT_SPEED;
 public class RunStorageAcceptor extends CommandBase{
 
     public RunStorageAcceptor(){
-        // addRequirements(Robot.storage, Robot.intake);
+        addRequirements(Robot.storage, Robot.intake);
     }
     @Override
     public void initialize() {
