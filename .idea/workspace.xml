@@ -5,13 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23715b12-efc2-4da0-ba81-3cafe00e97f4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/intake/ExtenderSubsystem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/Robot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/RobotContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/intake_commands/adjustor/ExtendIntakeMagnet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/intake_commands/adjustor/ExtendIntakeMagnet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/intake_commands/adjustor/RetractIntakeMagnet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/intake_commands/adjustor/RetractIntakeMagnet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/intake/IntakeSubsystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/subsystems/intake/IntakeSubsystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/frc/robot/commands/shooter_commands/AutoAdjustShooterAngle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/frc/robot/commands/shooter_commands/AutoAdjustShooterAngle.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,6 +106,6 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WpiLibVersionService">
-    <option name="lastChecked" value="20220402155317" />
+    <option name="lastChecked" value="20220403093213" />
   </component>
 </project>
