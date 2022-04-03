@@ -52,11 +52,11 @@ public class ExtenderSubsystem extends SubsystemBase {
     }
 
     public boolean isFullyExtended() {
-        return flSensor.get() && frSensor.get();
+        return !flSensor.get() && !frSensor.get();
     }
 
     public boolean isFullyRetracted() {
-        return blSensor.get() && brSensor.get();
+        return !blSensor.get() && !brSensor.get();
     }
 
     public void stop() {
