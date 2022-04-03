@@ -110,8 +110,10 @@ public class RobotContainer {
 
         xButton.whenActive(new RetractIntakeMagnet());
 
-        bButton.whenHeld(Robot.fixSetShooterAngle);
-        bButton.whenHeld(new ShootCMD(4500));
+        // bButton.whenHeld(Robot.fixSetShooterAngle);
+        // bButton.whenHeld(new ShootCMD(4500));
+
+        bButton.whenActive(incrementAngleCMD);
 
         startButton.whenActive(new CalibrateRetractIntake());
 

@@ -15,6 +15,7 @@ public class IncrementShooterAngle extends CommandBase {
 
     public void resetAngle() {
         targetAngle = 0;
+        incrementLength = 1;
     }
 
     public IncrementShooterAngle(){

@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.ChassisCameraConsts;
 import frc.robot.Constants.ShooterCameraConsts;
 import frc.robot.commands.shooter_commands.AutoAdjustShooterAngle;
+import frc.robot.commands.shooter_commands.IncrementShooterAngle;
 import frc.robot.commands.shooter_commands.SetShooterAngleCommand;
 import frc.robot.commands.test_commands.ChassisForwardOffsetTest;
 import frc.robot.commands.test_commands.ChassisOffsetTest;
@@ -142,12 +143,12 @@ public class Robot extends TimedRobot {
         adjustAngle = new AutoAdjustShooterAngle();
         
         // updates the acceleration every 2 ms starting 1 ms after the robot starts
-        addPeriodic(() -> { 
+        // addPeriodic(() -> { 
             
-            if(!adjustAngle.isScheduled() && !fixSetShooterAngle.isScheduled()){
-                adjustAngle.schedule();
-            }
-        }, 0.2, 0.001);
+        //     if(!adjustAngle.isScheduled() && !fixSetShooterAngle.isScheduled()){
+        //         adjustAngle.schedule();
+        //     }
+        // }, 0.2, 0.001);
 
         intake = new IntakeSubsystem();
         intakeExtender = new ExtenderSubsystem();
@@ -241,6 +242,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        RobotContainer.incrementAngleCMD.resetAngle();
+        Robot.adjustor.zero();
+
         if(autonomous != null)
             autonomous.cancel();
 
