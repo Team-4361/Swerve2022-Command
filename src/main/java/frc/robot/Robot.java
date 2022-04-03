@@ -188,6 +188,8 @@ public class Robot extends TimedRobot {
         );
     }
 
+    private double maxMemory = 0;
+
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
@@ -201,6 +203,16 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("PDP Amp Hours", bms.getAmpHours());
         SmartDashboard.putNumber("PDP Watt-Hours", bms.getWattHours());
         SmartDashboard.putBoolean("PDP Exceeding Current", bms.isOverCurrentLimit());
+
+        Runtime runtime = Runtime.getRuntime();
+        long totalMemory = runtime.maxMemory();
+        long freeMemory = runtime.freeMemory();
+
+        long usedMemory = totalMemory - freeMemory;
+
+        SmartDashboard.putNumber("Used Memory", usedMemory);
+        SmartDashboard.putNumber("Free Memory", freeMemory);
+        SmartDashboard.putNumber("Memory %", (usedMemory/536870912)*100);
     }
 
     @Override public void disabledInit() { CommandScheduler.getInstance().cancelAll(); }
@@ -256,6 +268,7 @@ public class Robot extends TimedRobot {
             autonomous.cancel();
 
         CommandScheduler.getInstance().cancelAll();
+        maxMemory = 0;
     }
 
     @Override

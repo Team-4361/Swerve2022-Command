@@ -28,6 +28,7 @@ public class AutoAdjustShooterAngle extends CommandBase{
 
     }
 
+
     //equation that converts distance to hub to required shooter angle
     public double getRequiredTargetAngle(double distanceToHub){
         double requiredTargetAngle = 0;
