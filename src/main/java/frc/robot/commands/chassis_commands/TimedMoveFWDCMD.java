@@ -18,7 +18,6 @@ public class TimedMoveFWDCMD extends CommandBase {
     @Override
     public void initialize() {
         timeStarted = System.currentTimeMillis();
-        addRequirements(Robot.swerveDrive);
     }
 
 
