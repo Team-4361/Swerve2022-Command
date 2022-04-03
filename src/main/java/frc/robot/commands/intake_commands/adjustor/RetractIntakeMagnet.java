@@ -14,9 +14,13 @@ import static frc.robot.Constants.Intake.INTAKE_RETRACT_SETPOINT;
  */
 public class RetractIntakeMagnet extends CommandBase {
 
+    public RetractIntakeMagnet(){
+        addRequirements(Robot.intakeExtender);
+    }
+
     @Override
     public void initialize() {
-        addRequirements(Robot.intakeExtender);
+    
     }
 
     @Override

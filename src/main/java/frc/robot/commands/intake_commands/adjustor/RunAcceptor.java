@@ -4,11 +4,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
 public class RunAcceptor extends CommandBase{
-    
+
+    public RunAcceptor(){
+        addRequirements(Robot.intake);
+    }
     @Override
     public void initialize() {
         // TODO Auto-generated method stub
-        addRequirements(Robot.intake);
     }
 
     @Override
