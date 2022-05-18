@@ -144,12 +144,12 @@ public class Robot extends TimedRobot {
         adjustAngle = new AutoAdjustShooterAngle();
         
         // updates the acceleration every 2 ms starting 1 ms after the robot starts
-        addPeriodic(() -> { 
+        // addPeriodic(() -> { 
             
-            if(!adjustAngle.isScheduled()){
-                adjustAngle.schedule();
-            }
-        }, 0.2, 0.001);
+        //     if(!adjustAngle.isScheduled()){
+        //         adjustAngle.schedule();
+        //     }
+        // }, 0.2, 0.001);
 
         intake = new IntakeSubsystem();
         intakeExtender = new ExtenderSubsystem();
@@ -269,6 +269,8 @@ public class Robot extends TimedRobot {
 
         CommandScheduler.getInstance().cancelAll();
         maxMemory = 0;
+
+        Robot.adjustor.setAngle(10);
     }
 
     @Override
