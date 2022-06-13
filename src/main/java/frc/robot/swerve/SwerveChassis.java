@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import static frc.robot.Constants.Chassis.*;
-import static frc.robot.Constants.TestValue.DRIVE_ENABLED;
+
 
 @SuppressWarnings("unused")
 public class SwerveChassis implements Drive {
@@ -132,15 +132,11 @@ public class SwerveChassis implements Drive {
         SwerveModuleState backRightState = states[2];
         SwerveModuleState backLeftState = states[3];
 
-        if (DRIVE_ENABLED) {
-            frontRight.setState(frontRightState);
-            frontLeft.setState(frontLeftState);
-            backRight.setState(backRightState);
-            backLeft.setState(backLeftState);
-        }
+        frontRight.setState(frontRightState);
+        frontLeft.setState(frontLeftState);
+        backRight.setState(backRightState);
+        backLeft.setState(backLeftState);
 
-        // don't update the dashboard here anymore, do it in SwerveOdometry
-        // updateDashboard();
     }
 
     @Override

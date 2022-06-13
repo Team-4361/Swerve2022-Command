@@ -1,14 +1,16 @@
 package frc.robot.swerve;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import me.wobblyyyy.pathfinder2.revrobotics.SparkMaxMotor;
-import me.wobblyyyy.pathfinder2.utils.StringUtils;
 
+import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.Chassis.SWERVE_WHEEL_CIRCUMFERENCE;
 
 /**
@@ -18,10 +20,8 @@ import static frc.robot.Constants.Chassis.SWERVE_WHEEL_CIRCUMFERENCE;
  * allowing the robot to move in any direction.
  */
 public class SwerveModule {
-    // private static final int COUNTS_PER_REV = 4_096;
-
-    private final SparkMaxMotor driveMotor;
-    private final SparkMaxMotor turnMotor;
+    private final CANSparkMax driveMotor;
+    private final CANSparkMax turnMotor;
     private final RelativeEncoder driveEncoder;
     private final DutyCycleEncoder rotationPWMEncoder;
 
@@ -35,21 +35,26 @@ public class SwerveModule {
             0.02
     );
 
-    public SwerveModule(int driveMotorId,
-                        int turnMotorId,
-                        int digitalEncoderPort,
-                        double offset,
-                        double errorFactor) {
-        driveMotor = SparkMaxMotor.brushless(driveMotorId);
-        turnMotor = SparkMaxMotor.brushless(turnMotorId);
+    /**
+     * Creates a new {@link SwerveModule} instance, using the specified parameters.
+     * @param driveMotorId The Motor ID used for driving the wheel.
+     * @param turnMotorId The Motor ID used for turning the wheel.
+     * @param digitalEncoderPort The {@link DigitalInput} ID used for the Encoder.
+     * @param offset The offset to use for driving the wheel.
+     * @param errorFactor The maximum error factor that is acceptable.
+     */
+    public SwerveModule(int driveMotorId, int turnMotorId, int digitalEncoderPort, double offset, double errorFactor) {
+        driveMotor = new CANSparkMax(driveMotorId, kBrushless);
+        turnMotor = new CANSparkMax(turnMotorId, kBrushless);
 
-        driveEncoder = driveMotor.getSpark().getEncoder();
+        driveEncoder = driveMotor.getEncoder();
         rotationPWMEncoder = new DutyCycleEncoder(digitalEncoderPort);
 
         this.offset = offset;
         this.errorFactor = errorFactor;
     }
 
+    /** @return The current meters per second of the robot. */
     public double velocityMetersPerSecond() {
         // rpm -> rps -> mps
         double rotationsPerMinute = driveEncoder.getVelocity();
@@ -74,8 +79,8 @@ public class SwerveModule {
                 state.angle.getRadians()
         );
 
-        driveMotor.setPower(state.speedMetersPerSecond * errorFactor);
-        turnMotor.setPower(turnPower);
+        driveMotor.set(state.speedMetersPerSecond * errorFactor);
+        turnMotor.set(turnPower);
     }
 
     /**
@@ -94,15 +99,16 @@ public class SwerveModule {
     }
 
     public void updateDashboard(String prefix) {
-        String driveVelocity = StringUtils.format("%s: vel", prefix);
-        String drivePower = StringUtils.format("%s: pow", prefix);
-        String turnPower = StringUtils.format("%s: turn pow", prefix);
-        String turnPosition = StringUtils.format("%s: turn pos", prefix);
+        String driveVelocity = prefix + ": m/s";
+        String drivePower = prefix + ": pow";
+        String turnPower = prefix + ": turn pow";
+        String turnPosition = prefix + ": turn pos";
+
 
         SmartDashboard.putNumber(driveVelocity, velocityMetersPerSecond());
-        SmartDashboard.putNumber(turnPower, turnMotor.getPower());
+        SmartDashboard.putNumber(turnPower, turnMotor.get());
         SmartDashboard.putNumber(turnPosition, getTurnAngle().getRadians());
-        SmartDashboard.putNumber(drivePower, driveMotor.getPower());
+        SmartDashboard.putNumber(drivePower, driveMotor.get());
     }
 
     /**

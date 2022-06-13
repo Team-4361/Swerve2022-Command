@@ -1,119 +1,113 @@
 package frc.robot.subsystems.shooter;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.SparkMaxPIDController.ArbFFUnits;
-
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.robot_utils.power.BreakerListener;
-import frc.robot.robot_utils.power.PowerBreaker;
-import me.wobblyyyy.pathfinder2.robot.components.AbstractMotor;
+
+import java.util.function.Supplier;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.MotorFlip.SHOOTER_FLIPPED;
-import static frc.robot.Constants.PDH.SHOOTER_FLYWHEEL_FUSE;
+import static frc.robot.Constants.Power.SHOOTER_FLYWHEEL_FUSE;
+import static frc.robot.Constants.Shooter.FEED_FWD;
 import static frc.robot.Constants.Shooter.SHOOTER_MOTOR_ID;
-import static frc.robot.Constants.Shooter.FEED_FWD;;
+import static frc.robot.utils.motor.MotorUtil.flip;
 
 public class ShooterSubsystem extends SubsystemBase {
-    private final AbstractMotor shooterMotor;
     private final RelativeEncoder shooterEncoder;
-    private final CANSparkMax shooterSpark;
+    private final CANSparkMax shooterMotor;
 
     private final SparkMaxPIDController sController;
 
-    private double lastVelocity, velocityAcc, currentAcc, lastCurrent;
+    private double targetVelocity, constantVelocity = 0;
+
+    private final Supplier<Boolean> constantVelocitySupplier = () ->
+            !Robot.bms.isOverCurrentLimit() && Robot.bms.getVoltage() > 10;
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Shooter: Instant Velocity", getVelocity());
-        SmartDashboard.putNumber("Shooter: Instant Current", shooterSpark.getOutputCurrent());
-        SmartDashboard.putNumber("Shooter: Instant Voltage", shooterSpark.getBusVoltage());
+        SmartDashboard.putNumber("Shooter: Instant Current", shooterMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Shooter: Instant Voltage", shooterMotor.getBusVoltage());
 
-        SmartDashboard.putNumber("Shooter: Velocity Acc", getVelocityAcceleration());
-        SmartDashboard.putNumber("Shooter: Current Acc", getCurrentAcceleration());
+        SmartDashboard.putNumber("Shooter: Amps", Robot.bms.getBreaker(SHOOTER_FLYWHEEL_FUSE).getCurrent());
+
+        SmartDashboard.putBoolean("Shooter: Constant Velocity Possible", constantVelocitySupplier.get());
+
+        // Check if we are running the Constant Velocity mode to keep shooter spinning, if so then process.
+        if (RobotState.isTeleop() && constantVelocity > 0) {
+            // Check the Battery to ensure we are not having a large inrush current/voltage drop, typically when
+            // the robot starts moving hard. If we continue to run the shooter motor while this is happening, then
+            // voltage will dip too low and cause issues from previous attempts.
+            if (constantVelocitySupplier.get()) {
+                setShooterVelocity(constantVelocity);
+            }
+        }
     }
 
     public ShooterSubsystem() {
-        shooterSpark = new CANSparkMax(SHOOTER_MOTOR_ID, kBrushless);
-        shooterSpark.setInverted(true);
+        shooterMotor = new CANSparkMax(SHOOTER_MOTOR_ID, kBrushless);
+        shooterEncoder = shooterMotor.getEncoder();
 
-        this.shooterMotor = new AbstractMotor(shooterSpark::set, shooterSpark::get, SHOOTER_FLIPPED);
+        sController = shooterMotor.getPIDController();
+        shooterMotor.enableVoltageCompensation(12);
 
-        this.shooterEncoder = shooterSpark.getEncoder();
-
-        this.lastVelocity = getVelocity();
-        this.lastCurrent = this.shooterSpark.getOutputCurrent();
-
-        sController = shooterSpark.getPIDController();
-
-        shooterSpark.enableVoltageCompensation(12);
-        
-        sController.setP(2e-4);
+        sController.setP(0);
         sController.setFF(FEED_FWD);
-
     }
 
+    /**
+     * Sets the Constant Velocity to run the Shooter motor at during the entire time the robot is running,
+     * 0 to disable.
+     *
+     * @param velocity The RPM to run the Shooter Motor at <b>continuously.</b>
+     * @return {@link ShooterSubsystem}
+     */
+    public ShooterSubsystem setConstantVelocity(int velocity) {
+        this.constantVelocity = velocity;
+        return this;
+    }
+
+    /** @return The current RPM of the Shooter Motor. */
     public double getVelocity() {
         return shooterEncoder.getVelocity();
     }
 
-    public void setShooterMotor(double val) {
-        shooterMotor.setPower(val);
+    /**
+     * Sets the Power Level the Shooter Motor will run at.
+     * @param val Power Level from 0.0 to 1.0
+     */
+    public void setShooterPower(double val) {
+        shooterMotor.set(flip(val, SHOOTER_FLIPPED));
     }
 
-    public int getBallsLoaded() {
-        return Robot.storage.getBallsLoaded();
-    }
-
-    public void setStorageMotor(double val) {
-        Robot.storage.setStorageMotor(val);
-    }
-
-    public boolean acceptorSensorCovered() {
-        return Robot.storage.frontProximityCovered();
-    }
-
-    public boolean storageSensorCovered() {
-        return Robot.storage.rearProximityCovered();
-    }
-
-
+    /**
+     * Sets the RPM the Shooter Motor will run at.
+     * @param speed RPM
+     */
     public void setShooterVelocity(double speed) {
         sController.setReference(speed, ControlType.kVelocity, 0);
+        this.targetVelocity = speed;
     }
 
+    /** @return The current target velocity. */
+    public double getTargetVelocity() {
+        return this.targetVelocity;
+    }
+
+    /** Stops the Shooter Motor from running */
     public void stopShooter() {
-        shooterSpark.stopMotor();
+        shooterMotor.stopMotor();
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean isDesiredSpeed(double speed) {
         return isAcceptableError(speed, getVelocity(), 0.01);
-    }
-
-    public void updateAcceleration() {
-        // Subtract the current velocity from the lastVelocity, to get the difference.
-        this.velocityAcc = getVelocity() - this.lastVelocity;
-        this.currentAcc = this.shooterSpark.getOutputCurrent() - this.lastCurrent;
-
-        // Update the lastVelocity to what the velocity is currently, so it can be looped.
-        this.lastVelocity = getVelocity();
-        this.lastCurrent = this.shooterSpark.getOutputCurrent();
-    }
-
-    public double getVelocityAcceleration() {
-        return this.velocityAcc;
-    }
-
-    public double getCurrentAcceleration() {
-        return this.currentAcc;
     }
 
     public boolean isAcceptableError(double speed, double currVelocity, double errorPercentage){

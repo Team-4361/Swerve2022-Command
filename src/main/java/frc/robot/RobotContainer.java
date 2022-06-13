@@ -1,5 +1,3 @@
-
-
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -8,32 +6,37 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.Chassis;
-import frc.robot.commands.autonomous_commands.CameraAuto;
-import frc.robot.commands.autonomous_commands.TestAutonomous;
-import frc.robot.commands.chassis_commands.*;
-import frc.robot.commands.climber_commands.*;
-import frc.robot.commands.intake_commands.adjustor.CalibrateRetractIntake;
-import frc.robot.commands.intake_commands.adjustor.ExtendIntakeMagnet;
-import frc.robot.commands.intake_commands.adjustor.RetractIntakeMagnet;
-import frc.robot.commands.shooter_commands.*;
-import frc.robot.commands.storage_commands.SequentialStorageCMDs.IntakeProcessAccept;
-import frc.robot.robot_utils.trigger.*;
-import me.wobblyyyy.pathfinder2.wpilib.PathfinderSubsystem;
-import frc.robot.commands.storage_commands.RunStorageAcceptor;
-import frc.robot.commands.storage_commands.RunStorageCMD;
-import frc.robot.commands.storage_commands.SimpleProcessBallCMD;
+import frc.robot.commands.chassis.ArcadeDriveCommand;
+import frc.robot.commands.climber.LeftClimberDownCommand;
+import frc.robot.commands.climber.LeftClimberUpCommand;
+import frc.robot.commands.climber.RightClimberDownCommand;
+import frc.robot.commands.climber.RightClimberUpCommand;
+import frc.robot.commands.intake.RetractIntakeCommand;
+import frc.robot.commands.shooter.DecreaseAngleCommand;
+import frc.robot.commands.shooter.IncreaseAngleCommand;
+import frc.robot.commands.shooter.ShootCommand;
+import frc.robot.commands.storage.ProcessBallCommand;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.utils.trigger.ConditionalButton;
 
 import static frc.robot.Constants.Control.*;
+import static frc.robot.Constants.Control.XBOX_START;
 
+/**
+ * This {@link RobotContainer} class is designed to be used for Button Bindings, and the Command Groups
+ * that are used to link multiple {@link Command}'s together.
+ * <p>
+ *     Since we are using the simplified robot code, many aspects of this {@link RobotContainer} has been removed,
+ *     such as the autonomous and camera features. Some of the commands have also been changed in favor of
+ *     simpler versions, and other changes have been made as well.
+ * </p>
+ *
+ * @since 0.0.0
+ */
 public class RobotContainer {
     private final Joystick xyStick = new Joystick(XY_STICK_ID);
     private final Joystick zStick = new Joystick(Z_STICK_ID);
@@ -50,123 +53,48 @@ public class RobotContainer {
     private final JoystickButton rStick = new JoystickButton(controller, XBOX_RIGHT_STICK);
     private final JoystickButton startButton = new JoystickButton(controller, XBOX_START);
 
-    private final ConditionalButton leftTriggerButton = new ConditionalButton(controller, 100);
-    private final ConditionalButton rightTriggerButton = new ConditionalButton(controller, 101);
-    private final ConditionalButton dpadDownButton = new ConditionalButton(controller, 102);
+    private final ConditionalButton lTrigger = new ConditionalButton(controller, 100);
+    private final ConditionalButton rTrigger = new ConditionalButton(controller, 101);
+    private final ConditionalButton dpadDown = new ConditionalButton(controller, 102);
 
-
-    private final SequentialCommandGroup simpleAutonomousCMD = new SequentialCommandGroup(
-            new TimedShootCMD(3.5, 4500),
-            new TimedMoveFWDCMD()
-    );
-
-    //public final ParallelCommandGroup autoShootCMD = new ParallelCommandGroup(new AutoAdjustShooterAngle(), new ShootCMD(4500));
-
-    public static final IncrementShooterAngle incrementAngleCMD = new IncrementShooterAngle();
-
-    private final SequentialCommandGroup autoShootGroup = new SequentialCommandGroup(
-            new ParallelCommandGroup(new AutoAdjustShooterAngle(), new CenterShooterToHubCommand()),
-            new TimedShootCMD(3, 4500)
-    );
-
-    // FIXME: Sometimes the intake decides to not extend for some reason, gets partially
-    // FIXME: stuck right at the beginning, and completely freezes up even when pressing
-    // FIXME: the calibrateGroup button (Start) that should be retracting the intake.
-    private final SequentialCommandGroup processBallCMD = new SequentialCommandGroup(
-            new ExtendIntakeMagnet(),
-            new IntakeProcessAccept());
-
-    private final ParallelCommandGroup calibrateGroup = new ParallelCommandGroup(
-            new CalibrateRetractIntake()
-            //new CalibrateAdjustorCMD()
-    );
-
-    private boolean isRobotCalibrated = false;
-
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        Robot.swerveDrive.setDefaultCommand(new ArcadeCommand(() ->
+        // Configure the button bindings
+        Robot.swerveDrive.setDefaultCommand(new ArcadeDriveCommand(() ->
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                        deadzone(xyStick.getX(), Chassis.CONTROLLER_DEADZONE),
-                        -deadzone(xyStick.getY(), Chassis.CONTROLLER_DEADZONE),
-                        -deadzone(zStick.getTwist(), Chassis.CONTROLLER_DEADZONE),
+                        deadzone(xyStick.getX(), Constants.Chassis.DRIVE_DEAD_ZONE),
+                        -deadzone(xyStick.getY(), Constants.Chassis.DRIVE_DEAD_ZONE),
+                        -deadzone(zStick.getTwist(), Constants.Chassis.DRIVE_DEAD_ZONE),
                         Rotation2d.fromDegrees(0)
                 )
         ));
 
-        //Robot.adjustor.setDefaultCommand(new AutoAdjustShooterAngle());
-
-        this.leftTriggerButton.setSupplier(() -> (controller.getLeftTriggerAxis() > 0.8));
-        this.rightTriggerButton.setSupplier(() -> (controller.getRightTriggerAxis() > 0.8));
-        this.dpadDownButton.setSupplier(() -> (controller.getPOV() >= 315 || controller.getPOV() >= 90));
+        lTrigger.setSupplier(() -> (controller.getLeftTriggerAxis() > 0.8));
+        rTrigger.setSupplier(() -> (controller.getRightTriggerAxis() > 0.8));
+        dpadDown.setSupplier(() -> (controller.getPOV() >= 315 || controller.getPOV() >= 90));
 
         configureButtonBindings();
-    }
-
-    private void configureButtonBindings() {
-        lStick.whenHeld(new CenterShooterToHubCommand());
-        rStick.whenHeld(new RunStorageAcceptor());
-
- 
-        aButton.whenHeld(new ShootCMD(4500));
-
-        yButton.whenHeld(new SimpleProcessBallCMD());
-
-        xButton.whenActive(new RetractIntakeMagnet());
-
-        bButton.whenActive(new InstantCommand(()->{
-            if(CommandScheduler.getInstance().requiring(Robot.intake) != null){
-                CommandScheduler.getInstance().requiring(Robot.intake).cancel();
-            }
-            
-        }));
-
-        startButton.whenActive(new CalibrateRetractIntake());
-
-        leftTriggerButton.whenHeld(new ManualMoveLeftClimber(true));
-        rightTriggerButton.whenHeld(new ManualMoveRightClimber(true));
-
-        lBumper.whenHeld(new ManualMoveLeftClimber(false));
-        rBumper.whenHeld(new ManualMoveRightClimber(false));
-
-        dpadDownButton.whenHeld(new RunStorageCMD());
-    }
-
-
-    public Command getAutonomousCommand(PathfinderSubsystem pathfinder) {
-        return new TestAutonomous(pathfinder);
-    }
-
-    // public Command getAutonomousCommand(PathfinderSubsystem pathfinderSubsystem) {
-    //     return (Command) new TestAutonomous(pathfinderSubsystem);
-    // }
-
-    public SequentialCommandGroup getAutoShootGroup() {
-        return autoShootGroup;
-    }
-
-    public SequentialCommandGroup getSimpleAutoCommand() {
-        return simpleAutonomousCMD;
     }
 
     public double deadzone(double value, double deadzone) {
         return Math.abs(value) > deadzone ? value : 0;
     }
 
-    public void calibrateRobot() {
-        calibrateGroup.schedule();
-        isRobotCalibrated = true;
+    /**
+     * Use this method to define your button->command mappings. Buttons can be created by
+     * instantiating a {@link GenericHID} or one of its subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+     * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+     */
+    private void configureButtonBindings() {
+        aButton.whenHeld(new ShootCommand(4500));
+        yButton.whenHeld(new ProcessBallCommand());
+        xButton.whenActive(new RetractIntakeCommand());
+        lTrigger.whenHeld(new LeftClimberDownCommand());
+        rTrigger.whenHeld(new RightClimberDownCommand());
+        lBumper.whenHeld(new LeftClimberUpCommand());
+        rBumper.whenHeld(new RightClimberUpCommand());
+        bButton.whenPressed(new IncreaseAngleCommand());
+        dpadDown.whenPressed(new DecreaseAngleCommand());
     }
-
-    public boolean isRobotCalibrated() {
-        return isRobotCalibrated;
-    }
-
-    public XboxController getXbox() {
-        return controller;
-    }
-
-    public void resetIncrementAngle(){
-        incrementAngleCMD.resetAngle();
-    }
-
 }
