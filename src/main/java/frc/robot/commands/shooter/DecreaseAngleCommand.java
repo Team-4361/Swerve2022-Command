@@ -9,6 +9,7 @@ public class DecreaseAngleCommand extends CommandBase {
     public void initialize() {
         addRequirements(Robot.adjustor);
 
+        /*
         double currentAngle = Robot.adjustor.getAngle();
 
         if (currentAngle-5 > 0) {
@@ -16,10 +17,21 @@ public class DecreaseAngleCommand extends CommandBase {
         } else {
             Robot.adjustor.setAngle(0);
         }
+        */
+    }
+
+    @Override
+    public void execute() {
+        Robot.adjustor.lowerAngle(0.3);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        Robot.adjustor.stop();
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

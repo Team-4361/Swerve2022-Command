@@ -157,7 +157,7 @@ public class Constants {
         public static final double BL_OFFSET = -6.12 - (2 * Math.PI) - (Math.PI / 2);
 
         /** The dead-zone where anything below this value, nothing will happen. */
-        public static final double DRIVE_DEAD_ZONE = 0.1;
+        public static final double DRIVE_DEAD_ZONE = 0.15;
 
         /** The length of the side of the {@link Chassis} in <b>meters.</b> */
         public static final double SWERVE_CHASSIS_SIDE_LENGTH = 0.762;

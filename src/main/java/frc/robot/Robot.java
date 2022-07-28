@@ -92,6 +92,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         // Cancel all commands that are currently running before starting teleop mode.
         CommandScheduler.getInstance().cancelAll();
-        Robot.adjustor.setAngle(10);
+        Robot.adjustor.zero();
+        //Robot.adjustor.setAngle(10);
     }
 }

@@ -10,11 +10,21 @@ public class IncreaseAngleCommand extends CommandBase {
     @Override
     public void initialize() {
         addRequirements(Robot.adjustor);
-        Robot.adjustor.setAngle(Math.min(Robot.adjustor.getAngle() + 5, ADJUSTOR_ANGLE_MAX));
+        //Robot.adjustor.setAngle(Math.min(Robot.adjustor.getAngle() + 5, ADJUSTOR_ANGLE_MAX));
+    }
+
+    @Override
+    public void execute() {
+        Robot.adjustor.raiseAngle(0.3);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        Robot.adjustor.stop();
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

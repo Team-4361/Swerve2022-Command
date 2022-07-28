@@ -40,7 +40,7 @@ public class ProcessBallCommand extends CommandBase {
         Robot.storage.setAcceptorMotor(0);
         Robot.storage.setStorageMotor(0);
 
-        new RetractIntakeCommand();
+        new RetractIntakeCommand().schedule();
     }
 
     @Override

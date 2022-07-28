@@ -15,19 +15,11 @@ import static frc.robot.Constants.ShooterAdjustor.*;
 public class AngleAdjustSubsystem extends SubsystemBase {
     private final CANSparkMax adjustor;
     private final RelativeEncoder encoder;
-    private final SparkMaxPIDController cont;
-    private final DigitalInput adjustorLimit;
-
-    private double target = 0;
 
     public AngleAdjustSubsystem() {
         this.adjustor = new CANSparkMax(ADJUSTOR_MOTOR_ID, kBrushless);
-        this.adjustorLimit = new DigitalInput(ADJUSTOR_LIMIT_PORT);
-
-        this.cont = adjustor.getPIDController();
         this.encoder = adjustor.getEncoder();
 
-        cont.setP((double) 1 / 10.5);
         adjustor.enableVoltageCompensation(12);
         adjustor.setInverted(ADJUSTOR_FLIPPED);
 
@@ -36,27 +28,30 @@ public class AngleAdjustSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (adjustorLimit.get()) {
-            // This should prevent the system from increasing the angle too much.
-            target = getAngle() - 1;
-        }
-
-        cont.setReference(target, ControlType.kPosition, 0);
-
         SmartDashboard.putNumber("Adjustor Rotations:", getPosition());
         SmartDashboard.putNumber("Adjustor Angle:", getAngle());
     }
 
-    public void setAngle(double target) {
-        double targetRotations = target / DEGREES_PER_ROTATION;
+    public void raiseAngle(double speed) {
+        translateAdjustor(speed);
+    }
 
-        if (targetRotations > MAX_ROTATION) {
-            this.target = MAX_ROTATION;
-        } else if (targetRotations < 0) {
-            this.target = 0;
-        } else {
-            this.target = target / DEGREES_PER_ROTATION;
-        }
+    public void lowerAngle(double speed) {
+        translateAdjustor(-speed);
+    }
+
+    public void stop() {
+        translateAdjustor(0);
+    }
+
+    /**
+     * A POSITIVE number should raise the adjustor, and a NEGATIVE
+     * number should lower the adjustor.
+     * 
+     * @param speed The speed to translate.
+     */
+    public void translateAdjustor(double speed) {
+        adjustor.set(speed);
     }
 
     public double getAngle() {
@@ -65,7 +60,6 @@ public class AngleAdjustSubsystem extends SubsystemBase {
 
     public void zero() {
         encoder.setPosition(0);
-        target = 0;
     }
 
     public double getPosition() {
