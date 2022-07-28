@@ -5,6 +5,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.climber.LeftClimberSubsystem;
@@ -16,6 +20,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.storage.StorageSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import frc.robot.utils.power.BatteryManagement;
+import frc.robot.utils.power.PowerBreaker;
 
 import static frc.robot.Constants.*;
 
@@ -77,15 +82,14 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         bms.periodic();
 
-        SmartDashboard.putNumber("PDP Voltage", bms.getVoltage());
-        SmartDashboard.putNumber("PDP Total Amps", bms.getCurrent());
-        SmartDashboard.putNumber("PDP Total Watts", bms.getWattage());
-        SmartDashboard.putNumber("PDP Peak Current", bms.getMaximumCurrent());
+        SmartDashboard.putNumber("PDP: Voltage", bms.getVoltage());
+        SmartDashboard.putNumber("PDP: Total Amps", bms.getCurrent());
+        SmartDashboard.putNumber("PDP: Total Watts", bms.getWattage());
+        SmartDashboard.putNumber("PDP: Peak Current", bms.getMaximumCurrent());
 
-        SmartDashboard.putNumber("PDP Amp Hours", bms.getAmpHours());
-        SmartDashboard.putNumber("PDP Watt-Hours", bms.getWattHours());
-        SmartDashboard.putBoolean("PDP Exceeding Current", bms.isOverCurrentLimit());
-
+        SmartDashboard.putNumber("PDP: Amp Hours", bms.getAmpHours());
+        SmartDashboard.putNumber("PDP: Watt-Hours", bms.getWattHours());
+        SmartDashboard.putBoolean("PDP: Exceeding Current", bms.isOverCurrentLimit());
     }
 
     @Override
@@ -93,6 +97,5 @@ public class Robot extends TimedRobot {
         // Cancel all commands that are currently running before starting teleop mode.
         CommandScheduler.getInstance().cancelAll();
         Robot.adjustor.zero();
-        //Robot.adjustor.setAngle(10);
     }
 }

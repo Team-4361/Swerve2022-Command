@@ -52,11 +52,12 @@ public class RobotContainer {
     private final JoystickButton lStick = new JoystickButton(controller, XBOX_LEFT_STICK);
     private final JoystickButton rStick = new JoystickButton(controller, XBOX_RIGHT_STICK);
     private final JoystickButton startButton = new JoystickButton(controller, XBOX_START);
+    private final JoystickButton dpadDown = new JoystickButton(controller, XBOX_DPAD_DOWN);
+    private final JoystickButton dpadUp = new JoystickButton(controller, XBOX_DPAD_UP);
 
     private final ConditionalButton lTrigger = new ConditionalButton(controller, 100);
     private final ConditionalButton rTrigger = new ConditionalButton(controller, 101);
-    private final ConditionalButton dpadDown = new ConditionalButton(controller, 102);
-    private final ConditionalButton dpadUp = new ConditionalButton(controller, 103);
+
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -72,8 +73,6 @@ public class RobotContainer {
 
         lTrigger.setSupplier(() -> (controller.getLeftTriggerAxis() > 0.8));
         rTrigger.setSupplier(() -> (controller.getRightTriggerAxis() > 0.8));
-        dpadDown.setSupplier(() -> (controller.getPOV() >= 315 || controller.getPOV() >= 90));
-        dpadUp.setSupplier(() -> (controller.getPOV() == 180));
         configureButtonBindings();
     }
 
@@ -95,7 +94,7 @@ public class RobotContainer {
         rTrigger.whenHeld(new RightClimberDownCommand());
         lBumper.whenHeld(new LeftClimberUpCommand());
         rBumper.whenHeld(new RightClimberUpCommand());
-        bButton.whenHeld(new IncreaseAngleCommand());
+        dpadUp.whenHeld(new IncreaseAngleCommand());
         dpadDown.whenHeld(new DecreaseAngleCommand());
     }
 }

@@ -33,7 +33,6 @@ public class ShooterSubsystem extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Shooter: Instant Velocity", getVelocity());
         SmartDashboard.putNumber("Shooter: Instant Current", shooterMotor.getOutputCurrent());
-        SmartDashboard.putNumber("Shooter: Instant Voltage", shooterMotor.getBusVoltage());
 
         SmartDashboard.putNumber("Shooter: Amps", Robot.bms.getBreaker(SHOOTER_FLYWHEEL_FUSE).getCurrent());
 

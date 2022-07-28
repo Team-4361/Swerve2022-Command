@@ -77,6 +77,7 @@ public class SwerveChassis implements Drive {
                         BL_ERROR_FACTOR
                 )
         );
+        updateDashboard();
     }
 
     public SwerveChassis(SwerveModule frontRight,
@@ -87,6 +88,7 @@ public class SwerveChassis implements Drive {
         this.frontLeft = frontLeft;
         this.backRight = backRight;
         this.backLeft = backLeft;
+        updateDashboard();
     }
 
     private void updateDashboard() {
@@ -137,6 +139,7 @@ public class SwerveChassis implements Drive {
         backRight.setState(backRightState);
         backLeft.setState(backLeftState);
 
+        updateDashboard();
     }
 
     @Override
