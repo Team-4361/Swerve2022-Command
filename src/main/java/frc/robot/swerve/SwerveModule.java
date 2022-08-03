@@ -102,13 +102,14 @@ public class SwerveModule {
         String driveVelocity = prefix + ": m/s";
         String drivePower = prefix + ": pow";
         String turnPower = prefix + ": turn pow";
-        String turnPosition = prefix + ": turn deg";
+        String turnPosition = prefix + ": turn rad";
 
 
         SmartDashboard.putNumber(driveVelocity, velocityMetersPerSecond());
         SmartDashboard.putNumber(turnPower, turnMotor.get());
-        SmartDashboard.putNumber(turnPosition, getTurnAngle().getDegrees());
+        SmartDashboard.putNumber(turnPosition, turnAngleRadians());
         SmartDashboard.putNumber(drivePower, driveMotor.get());
+        SmartDashboard.putNumber(prefix + " pwm encoder:", rotationPWMEncoder.get());
     }
 
     /**
