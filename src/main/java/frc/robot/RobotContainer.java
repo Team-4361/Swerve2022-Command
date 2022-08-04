@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.chassis.ArcadeDriveCommand;
 import frc.robot.commands.climber.LeftClimberDownCommand;
@@ -20,6 +21,7 @@ import frc.robot.commands.shooter.DecreaseAngleCommand;
 import frc.robot.commands.shooter.IncreaseAngleCommand;
 import frc.robot.commands.shooter.ShootCommand;
 import frc.robot.commands.storage.ProcessBallCommand;
+import frc.robot.commands.storage.RunStorageAcceptor;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.utils.trigger.ConditionalButton;
 
@@ -52,11 +54,11 @@ public class RobotContainer {
     private final JoystickButton lStick = new JoystickButton(controller, XBOX_LEFT_STICK);
     private final JoystickButton rStick = new JoystickButton(controller, XBOX_RIGHT_STICK);
     private final JoystickButton startButton = new JoystickButton(controller, XBOX_START);
-    private final JoystickButton dpadDown = new JoystickButton(controller, XBOX_DPAD_DOWN);
-    private final JoystickButton dpadUp = new JoystickButton(controller, XBOX_DPAD_UP);
 
     private final ConditionalButton lTrigger = new ConditionalButton(controller, 100);
     private final ConditionalButton rTrigger = new ConditionalButton(controller, 101);
+    private final ConditionalButton dpadDown = new ConditionalButton(controller, 102);
+    private final ConditionalButton dpadUp =  new ConditionalButton(controller, 103);
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -73,6 +75,8 @@ public class RobotContainer {
 
         lTrigger.setSupplier(() -> (controller.getLeftTriggerAxis() > 0.8));
         rTrigger.setSupplier(() -> (controller.getRightTriggerAxis() > 0.8));
+        dpadDown.setSupplier(() -> (controller.getPOV() == 180));
+        dpadUp.setSupplier(() -> (controller.getPOV() == 0));
         configureButtonBindings();
     }
 
@@ -87,7 +91,7 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        aButton.whenHeld(new ShootCommand(4500));
+        aButton.whenHeld(new ShootCommand());
         yButton.whenHeld(new ProcessBallCommand());
         xButton.whenActive(new RetractIntakeCommand());
         lTrigger.whenHeld(new LeftClimberDownCommand());
@@ -96,5 +100,7 @@ public class RobotContainer {
         rBumper.whenHeld(new RightClimberUpCommand());
         dpadUp.whenHeld(new IncreaseAngleCommand());
         dpadDown.whenHeld(new DecreaseAngleCommand());
+
+        lStick.whenHeld(new RunStorageAcceptor());
     }
 }
