@@ -14,10 +14,6 @@ public class ShootCommand extends CommandBase {
         this.shootSpeed = shootSpeed;
     }
 
-    public ShootCommand() {
-        this.shootSpeed = SmartDashboard.getNumber("Shoot Speed", 4500);
-    }
-
     @Override
     public void initialize() {
         addRequirements(Robot.shooter, Robot.storage);

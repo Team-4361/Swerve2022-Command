@@ -91,7 +91,7 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        aButton.whenHeld(new ShootCommand());
+        aButton.whenHeld(new ShootCommand(SmartDashboard.getNumber("Shooter: Shoot RPM", 4500)));
         yButton.whenHeld(new ProcessBallCommand());
         xButton.whenActive(new RetractIntakeCommand());
         lTrigger.whenHeld(new LeftClimberDownCommand());

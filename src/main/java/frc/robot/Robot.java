@@ -97,8 +97,5 @@ public class Robot extends TimedRobot {
         // Cancel all commands that are currently running before starting teleop mode.
         CommandScheduler.getInstance().cancelAll();
         Robot.adjustor.zero();
-
-        // adjustable shoot speed
-        SmartDashboard.putNumber("Shoot Speed", 4500);
     }
 }

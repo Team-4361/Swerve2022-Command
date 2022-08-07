@@ -58,6 +58,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
         sController.setP(0);
         sController.setFF(FEED_FWD);
+
+        // adjustable shoot speed
+        SmartDashboard.putNumber("Shooter: Shoot RPM", 4500);
     }
 
     /**
