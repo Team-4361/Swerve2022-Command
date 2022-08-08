@@ -90,6 +90,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("PDP: Amp Hours", bms.getAmpHours());
         SmartDashboard.putNumber("PDP: Watt-Hours", bms.getWattHours());
         SmartDashboard.putBoolean("PDP: Exceeding Current", bms.isOverCurrentLimit());
+
+        SmartDashboard.putNumber("PDP: Temperature", bms.getTemperatureF());
     }
 
     @Override

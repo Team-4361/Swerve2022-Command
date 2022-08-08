@@ -55,7 +55,7 @@ public class SwerveModule {
     }
 
     /** @return The current meters per second of the robot. */
-    public double velocityMetersPerSecond() {
+    private double velocityMetersPerSecond() {
         // rpm -> rps -> mps
         double rotationsPerMinute = driveEncoder.getVelocity();
         double rotationsPerSecond = rotationsPerMinute / 60;
@@ -99,13 +99,12 @@ public class SwerveModule {
     }
 
     public void updateDashboard(String prefix) {
-        String driveVelocity = prefix + ": m/s";
+        String driveVelocity = prefix + ": mph";
         String drivePower = prefix + ": pow";
         String turnPower = prefix + ": turn pow";
         String turnPosition = prefix + ": turn rad";
 
-
-        SmartDashboard.putNumber(driveVelocity, velocityMetersPerSecond());
+        SmartDashboard.putNumber(driveVelocity, velocityMetersPerSecond()*2.236936);
         SmartDashboard.putNumber(turnPower, turnMotor.get());
         SmartDashboard.putNumber(turnPosition, turnAngleRadians());
         SmartDashboard.putNumber(drivePower, driveMotor.get());

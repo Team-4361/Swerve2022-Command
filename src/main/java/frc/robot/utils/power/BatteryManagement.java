@@ -3,6 +3,8 @@ package frc.robot.utils.power;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.temp.TempUnit;
+import frc.robot.utils.temp.Temperature;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -65,6 +67,14 @@ public class BatteryManagement extends MainPowerBreaker {
 
     public Map<Integer, Integer> getBreakerLimits() {
         return this.breakerLimits;
+    }
+
+    public double getTemperature() {
+        return pds.getTemperature();
+    }
+
+    public double getTemperatureF() {
+        return Temperature.toFahrenheit(getTemperature(), TempUnit.CELSIUS);
     }
 
     /**
