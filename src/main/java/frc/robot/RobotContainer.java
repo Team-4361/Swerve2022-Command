@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.chassis.ArcadeDriveCommand;
 import frc.robot.commands.climber.LeftClimberDownCommand;
@@ -24,6 +25,8 @@ import frc.robot.commands.storage.ProcessBallCommand;
 import frc.robot.commands.storage.RunStorageAcceptor;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.utils.trigger.ConditionalButton;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static frc.robot.Constants.Control.*;
 import static frc.robot.Constants.Control.XBOX_START;
@@ -60,6 +63,8 @@ public class RobotContainer {
     private final ConditionalButton dpadDown = new ConditionalButton(controller, 102);
     private final ConditionalButton dpadUp =  new ConditionalButton(controller, 103);
 
+    /** This shoot RPM will be able to be adjusted from the Joystick or {@link SmartDashboard}. */
+    public AtomicInteger shootRPM = new AtomicInteger(4500);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -91,7 +96,7 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        aButton.whenHeld(new ShootCommand(SmartDashboard.getNumber("Shooter: Shoot RPM", 4500)));
+        aButton.whenHeld(new ShootCommand());
         yButton.whenHeld(new ProcessBallCommand());
         xButton.whenActive(new RetractIntakeCommand());
         lTrigger.whenHeld(new LeftClimberDownCommand());
@@ -100,6 +105,24 @@ public class RobotContainer {
         rBumper.whenHeld(new RightClimberUpCommand());
         dpadUp.whenHeld(new IncreaseAngleCommand());
         dpadDown.whenHeld(new DecreaseAngleCommand());
+
+        startButton.whenPressed(new InstantCommand(() -> {
+            // Ensure the range is correct when adding, if this number is too high then the motor will never
+            // reach its target. Since it's only allowed to increment if the number is 5k or below, it will only
+            // obtain a maximum of 5500 RPM.
+            if (shootRPM.get() <= 5000) {
+                shootRPM.set(shootRPM.get()+500);
+            }
+        }));
+
+        bButton.whenPressed(new InstantCommand(() -> {
+            // Ensure the range is correct when subtracting, if this number is too low then the PIDController will
+            // not give the motor enough power to spin up and throw a ball. Since it's only allowed to decrease if
+            // the number is 1k rpm or above, it will only obtain a minimum of 500.
+            if (shootRPM.get() >= 1000) {
+                shootRPM.set(shootRPM.get()-500);
+            }
+        }));
 
         lStick.whenHeld(new RunStorageAcceptor());
     }

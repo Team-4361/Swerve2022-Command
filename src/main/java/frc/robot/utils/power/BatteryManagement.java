@@ -85,10 +85,12 @@ public class BatteryManagement extends MainPowerBreaker {
      */
     public void periodic() {
         // Make sure to update the MainBreaker that we are extending off.
-        this.update(pds.getVoltage(), pds.getTotalCurrent());
+        double pdsVoltage = pds.getVoltage();
+
+        this.update(pdsVoltage, pds.getTotalCurrent());
 
         for (PowerBreaker breaker: this.breakerInstances) {
-            breaker.update(pds.getVoltage(), pds.getCurrent(breaker.getFuseNumber()));
+            breaker.update(pdsVoltage, pds.getCurrent(breaker.getFuseNumber()));
 
             // Check if the breaker is over the maximum current, and call the listeners.
             if (breaker.isOverCurrentLimit()) {

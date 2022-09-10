@@ -8,11 +8,7 @@ import frc.robot.Robot;
 import static frc.robot.Constants.MotorValue.SLOW_ACCEPT_SPEED;
 
 public class ShootCommand extends CommandBase {
-    private double shootSpeed;
-
-    public ShootCommand(double shootSpeed) {
-        this.shootSpeed = shootSpeed;
-    }
+    public ShootCommand() {}
 
     @Override
     public void initialize() {
@@ -21,6 +17,8 @@ public class ShootCommand extends CommandBase {
 
     @Override
     public void execute() {
+        int shootSpeed = Robot.robotContainer.shootRPM.get();
+
         if (Robot.shooter.isDesiredSpeed(shootSpeed)) {
             Robot.storage.setStorageMotor(SLOW_ACCEPT_SPEED);
             Robot.shooter.setShooterVelocity(shootSpeed);
