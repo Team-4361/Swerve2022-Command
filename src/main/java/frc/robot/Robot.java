@@ -61,7 +61,6 @@ public class Robot extends TimedRobot {
         rightClimber = new RightClimberSubsystem();
     
         adjustor.zero();
-        swerveDrive.resetGyro();
 
         robotContainer = new RobotContainer();
     }
@@ -87,11 +86,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("PDP: Total Watts", bms.getWattage());
         SmartDashboard.putNumber("PDP: Peak Current", bms.getMaximumCurrent());
 
-        SmartDashboard.putNumber("PDP: Amp Hours", bms.getAmpHours());
         SmartDashboard.putNumber("PDP: Watt-Hours", bms.getWattHours());
         SmartDashboard.putBoolean("PDP: Exceeding Current", bms.isOverCurrentLimit());
-
-        SmartDashboard.putNumber("PDP: Temperature", bms.getTemperatureF());
     }
 
     @Override

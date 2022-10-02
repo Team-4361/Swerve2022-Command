@@ -6,6 +6,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
+import me.wobblyyyy.pathfinder2.math.Average;
 import me.wobblyyyy.pathfinder2.robot.Drive;
 
 import java.util.HashMap;
@@ -45,6 +46,7 @@ public class SwerveChassis implements Drive {
 
     private Function<Translation, Translation> modifier = (t) -> t;
     private Translation translation;
+    private double chassisSpeed = 0.0, maxChassisSpeed = 0.0;
 
     public SwerveChassis() {
         this(
@@ -119,10 +121,12 @@ public class SwerveChassis implements Drive {
     }
 
     public HashMap<String, SwerveModuleState> getSwerveModuleStates() {
-        return new HashMap<>(Map.of("FL", getFrontLeft().getState(),
+        return new HashMap<>(Map.of(
+                "FL", getFrontLeft().getState(),
                 "BL", getBackLeft().getState(),
                 "FR", getFrontRight().getState(),
-                "BR", getBackRight().getState()));
+                "BR", getBackRight().getState()
+        ));
     }
 
     public void drive(ChassisSpeeds speeds) {
@@ -140,6 +144,11 @@ public class SwerveChassis implements Drive {
         backLeft.setState(backLeftState);
 
         updateDashboard();
+
+        chassisSpeed = getDriveMPH();
+        if (chassisSpeed > maxChassisSpeed) {
+            maxChassisSpeed = chassisSpeed;
+        }
     }
 
     @Override
@@ -162,13 +171,29 @@ public class SwerveChassis implements Drive {
         return translation;
     }
 
-    public double getDistance() {
-        return frontRight.getDistance() * 2 *
-            Math.PI * Constants.Chassis.SWERVE_WHEEL_RADIUS;
+    /** @return The total amount of Meters driven since last reset. */
+    public double getMetersDriven() {
+        return Average.of(
+                frontLeft.getMetersDriven(),
+                frontRight.getMetersDriven(),
+                backLeft.getMetersDriven(),
+                backRight.getMetersDriven()
+        );
+    }
+
+    public double getDriveMPH() {
+        return this.chassisSpeed;
+    }
+
+    public double getMaxDriveMPH() {
+        return this.maxChassisSpeed;
     }
 
     public void resetDriveEncoders() {
+        frontLeft.resetDriveEncoder();
         frontRight.resetDriveEncoder();
+        backLeft.resetDriveEncoder();
+        backRight.resetDriveEncoder();
     }
 
     public SwerveChassis getSwerveChassis(){

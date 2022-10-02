@@ -3,6 +3,7 @@ package frc.robot.utils.power;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.utils.temp.TempUnit;
 import frc.robot.utils.temp.Temperature;
 
@@ -16,8 +17,6 @@ public class BatteryManagement extends MainPowerBreaker {
     private final PowerBreaker[] breakerInstances;
 
     private final double currentLimit;
-
-    private final ArrayList<BreakerListener> listeners;
 
     /**
      * Creates a new {@link BatteryManagement} instance, with preset Breaker Limits, and the main breaker. current
@@ -33,18 +32,12 @@ public class BatteryManagement extends MainPowerBreaker {
         this.breakerLimits = breakerLimits;
         this.breakerInstances = new PowerBreaker[breakerLimits.size()];
         this.pds = new PowerDistribution();
-        this.listeners = new ArrayList<>();
 
         AtomicInteger counter = new AtomicInteger(0);
         breakerLimits.forEach((id, max) -> {
             this.breakerInstances[counter.get()] = new PowerBreaker(id, max);
             counter.getAndIncrement();
         });
-    }
-
-    public PowerBreaker addListener(BreakerListener listener) {
-        this.listeners.add(listener);
-        return this;
     }
 
     /** @return A list of all the registered {@link PowerBreaker}'s. */
@@ -69,12 +62,15 @@ public class BatteryManagement extends MainPowerBreaker {
         return this.breakerLimits;
     }
 
-    public double getTemperature() {
-        return pds.getTemperature();
-    }
-
-    public double getTemperatureF() {
-        return Temperature.toFahrenheit(getTemperature(), TempUnit.CELSIUS);
+    /**
+     * Resets the Total Amount of Energy indicated by the Robot. This will reset all methods related to watt-hours,
+     * amp-hours, etc.
+     *
+     * @return The {@link PowerBreaker} instance.
+     */
+    public PowerBreaker resetTotalEnergy() {
+        pds.resetTotalEnergy();
+        return this;
     }
 
     /**
@@ -87,27 +83,11 @@ public class BatteryManagement extends MainPowerBreaker {
         // Make sure to update the MainBreaker that we are extending off.
         double pdsVoltage = pds.getVoltage();
 
-        this.update(pdsVoltage, pds.getTotalCurrent());
+        // Update the inherited MainPowerBreaker with the total combined Robot Current and the consumed energy.
+        this.update(pdsVoltage, pds.getTotalCurrent(), pds.getTotalEnergy());
 
         for (PowerBreaker breaker: this.breakerInstances) {
             breaker.update(pdsVoltage, pds.getCurrent(breaker.getFuseNumber()));
-
-            // Check if the breaker is over the maximum current, and call the listeners.
-            if (breaker.isOverCurrentLimit()) {
-                listeners.forEach(li -> li.breakerOverCurrent(
-                        breaker.getFuseNumber(),
-                        breaker.getCurrent(),
-                        breaker.getCurrentLimit())
-                );
-            }
-        }
-
-        if (this.getVoltage() < 10) {
-            listeners.forEach(li -> li.robotVoltageLow(this.getVoltage(), 10));
-        }
-
-        if (this.getCurrent() > this.getCurrentLimit()) {
-            listeners.forEach(li -> li.robotOverCurrent(this.getCurrent(), this.getCurrentLimit()));
         }
     }
 }

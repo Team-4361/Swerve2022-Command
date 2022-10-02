@@ -34,6 +34,10 @@ public class MotorUtil {
             motor.set(speed);
     }
 
+    public static double deadzone(double value, double deadzone) {
+        return Math.abs(value) > deadzone ? value : 0;
+    }
+
     /**
      * Runs a group of motors at different speeds, based on the order.
      *

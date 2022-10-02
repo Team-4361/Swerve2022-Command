@@ -8,6 +8,7 @@ import frc.robot.Robot;
 import static frc.robot.Constants.MotorValue.SLOW_ACCEPT_SPEED;
 
 public class ShootCommand extends CommandBase {
+
     public ShootCommand() {}
 
     @Override

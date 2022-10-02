@@ -69,24 +69,13 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         // Configure the button bindings
-        Robot.swerveDrive.setDefaultCommand(new ArcadeDriveCommand(() ->
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                        deadzone(xyStick.getX(), Constants.Chassis.DRIVE_DEAD_ZONE),
-                        -deadzone(xyStick.getY(), Constants.Chassis.DRIVE_DEAD_ZONE),
-                        -deadzone(zStick.getTwist(), Constants.Chassis.DRIVE_DEAD_ZONE),
-                        Rotation2d.fromDegrees(0)
-                )
-        ));
+        Robot.swerveDrive.setDefaultCommand(new ArcadeDriveCommand(xyStick::getX, xyStick::getY, zStick::getTwist));
 
         lTrigger.setSupplier(() -> (controller.getLeftTriggerAxis() > 0.8));
         rTrigger.setSupplier(() -> (controller.getRightTriggerAxis() > 0.8));
         dpadDown.setSupplier(() -> (controller.getPOV() == 180));
         dpadUp.setSupplier(() -> (controller.getPOV() == 0));
         configureButtonBindings();
-    }
-
-    public double deadzone(double value, double deadzone) {
-        return Math.abs(value) > deadzone ? value : 0;
     }
 
     /**

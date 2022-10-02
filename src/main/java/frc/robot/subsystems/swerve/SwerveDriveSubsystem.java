@@ -7,6 +7,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.chassis.ArcadeDriveCommand;
+import frc.robot.commands.chassis.SwerveDriveMode;
 import frc.robot.swerve.SwerveChassis;
 
 import java.util.Arrays;
@@ -23,13 +25,51 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     private final SwerveChassis swerveChassis;
     public final AHRS gyro;
 
+    private SwerveDriveMode driveMode = SwerveDriveMode.FIELD_RELATIVE;
+
     /** Initializes a new {@link SwerveDriveSubsystem}, and resets the Gyroscope. */
     public SwerveDriveSubsystem() {
         swerveChassis = new SwerveChassis();
         gyro = new AHRS(SPI.Port.kMXP);
         gyro.reset();
     }
-    
+
+    @Override
+    public void periodic() {
+        // Update the robot speed and other information.
+        SmartDashboard.putNumber("Robot MPH", swerveChassis.getDriveMPH());
+        SmartDashboard.putNumber("Robot Max MPH", swerveChassis.getMaxDriveMPH());
+
+        switch (driveMode) {
+            case FIELD_RELATIVE:
+                SmartDashboard.putString("Robot Drive Mode", "FIELD_RELATIVE");
+                break;
+            case ROBOT_RELATIVE:
+                SmartDashboard.putString("Robot Drive Mode", "ROBOT_RELATIVE");
+                break;
+        }
+
+        SmartDashboard.putNumber("Robot Heading", gyro.getAngle());
+    }
+
+    /**
+     * Sets the current {@link SwerveDriveMode} being used by the Robot. If {@link SwerveDriveMode#FIELD_RELATIVE} is
+     * selected, the {@link AHRS} gyroscope will be updated, allowing updated field-relative control. Otherwise, the
+     * gyro angle will be frozen, locking the head direction, and it will act robot-relative again.
+     * <p></p>
+     * This <b>can</b> be called while the Robot is in operation.
+     * @param driveMode The {@link SwerveDriveMode} to apply.
+     * @return The updated {@link ArcadeDriveCommand} instance.
+     */
+    public SwerveDriveSubsystem setDriveMode(SwerveDriveMode driveMode) {
+        this.driveMode = driveMode;
+        return this;
+    }
+
+    public SwerveDriveMode getDriveMode() {
+        return this.driveMode;
+    }
+
     /** @return A {@link HashMap} containing {@link SwerveModuleState} of the robot. */
     public HashMap<String, SwerveModuleState> getSwerveModuleStates() {
         return swerveChassis.getSwerveModuleStates();
@@ -82,11 +122,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
      */
     public void resetGyro() {
         gyro.reset();
-    }
-
-    /** @return The distance of the {@link SwerveChassis} */
-    public double getDistance() {
-        return swerveChassis.getDistance();
     }
 
     /** @return The currently used {@link SwerveChassis} */

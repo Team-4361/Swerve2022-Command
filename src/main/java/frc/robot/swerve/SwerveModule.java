@@ -1,7 +1,6 @@
 package frc.robot.swerve;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless;
 import static frc.robot.Constants.Chassis.SWERVE_WHEEL_CIRCUMFERENCE;
+import static frc.robot.Constants.Chassis.SWERVE_WHEEL_RADIUS;
 
 /**
  * A {@code SwerveModule} is composed of two motors and two encoders:
@@ -63,6 +63,10 @@ public class SwerveModule {
         return rotationsPerSecond * SWERVE_WHEEL_CIRCUMFERENCE;
     }
 
+    public double getDriveMPH() {
+        return (velocityMetersPerSecond() * 2.237);
+    }
+
     public Rotation2d getTurnAngle() {
         return new Rotation2d(turnAngleRadians());
     }
@@ -104,7 +108,7 @@ public class SwerveModule {
         String turnPower = prefix + ": turn pow";
         String turnPosition = prefix + ": turn rad";
 
-        SmartDashboard.putNumber(driveVelocity, velocityMetersPerSecond()*2.236936);
+        SmartDashboard.putNumber(driveVelocity, getDriveMPH());
         SmartDashboard.putNumber(turnPower, turnMotor.get());
         SmartDashboard.putNumber(turnPosition, turnAngleRadians());
         SmartDashboard.putNumber(drivePower, driveMotor.get());
@@ -116,8 +120,15 @@ public class SwerveModule {
      *
      * @return the elapsed distance, in rotations
      */
-    public double getDistance() {
+    public double getRotations() {
         return driveEncoder.getPosition();
+    }
+
+    /** @return The total amount of meters the individual {@link SwerveModule} has travelled. */
+    public double getMetersDriven() {
+        // The formula for calculating meters from total rotation is:
+        // (Total Rotations * 2PI * Wheel Radius)
+        return (driveEncoder.getPosition() * (2 * Math.PI) * SWERVE_WHEEL_RADIUS);
     }
 
     public void resetDriveEncoder(){

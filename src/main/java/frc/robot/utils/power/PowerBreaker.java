@@ -11,13 +11,9 @@ public class PowerBreaker {
     private double instantCurrent;
     private double instantVoltage;
 
-    private double maxCurrent = 0;
-    private double minCurrent = 0;
-    private double wattHours = 0, ampHours = 0;
+    private double maxSustainedCurrent = 0, adjustedCurrent = 0;
 
-    private long lastUpdated = System.currentTimeMillis();
-
-    private final LinearFilter filter = LinearFilter.singlePoleIIR(0.1, 0.02);
+    private final LinearFilter filter = LinearFilter.singlePoleIIR(0.2, 0.02);
 
     /**
      * @return The maximum current the fuse is able to <b>supply</b> in amps.
@@ -26,27 +22,14 @@ public class PowerBreaker {
         return this.currentLimit;
     }
 
-    /**
-     * @return If the {@link #instantCurrent} is over the {@link #currentLimit} limit.
-     */
-    public boolean isOverCurrentLimit() {
-        return filter.calculate(this.instantCurrent) > this.currentLimit;
-    }
+    /** @return If the {@link #instantCurrent} is over the {@link #currentLimit} limit. */
+    public boolean isOverCurrentLimit() { return adjustedCurrent > currentLimit; }
 
     /** @return The current wattage of the {@link PowerBreaker} */
     public double getWattage() { return instantVoltage * instantCurrent; }
 
-    /** @return The maximum current the breaker has <b>reached</b> in amps. */
-    public double getMaximumCurrent() { return this.maxCurrent; }
-
-    /** @return The minimum current the breaker has <b>reached</b> in amps. */
-    public double getMinimumCurrent() { return this.minCurrent; }
-
-    /** @return The total watt-hours of the fuse. */
-    public double getWattHours() { return this.wattHours; }
-
-    /** @return The total amp-hours of the fuse. */
-    public double getAmpHours() { return this.ampHours; }
+    /** @return The maximum current the breaker has <b>sustained</b> in amps. */
+    public double getMaximumCurrent() { return this.maxSustainedCurrent; }
 
     /** @return The maximum wattage of the {@link PowerBreaker} */
     public double getWattageLimit() { return currentLimit * instantVoltage; }
@@ -105,7 +88,7 @@ public class PowerBreaker {
 
     /**
      * Updates the breaker with the specified voltage and current, running
-     * all the calculations automatically. This doubles as a periodic method
+     * all the calculations automatically. This doubles as a periodic method,
      * so it can also be used like that.
      *
      * @param voltage The current voltage.
@@ -116,18 +99,10 @@ public class PowerBreaker {
         this.instantCurrent = current;
 
         // Run minimum and maximum calculations.
-        if (current > maxCurrent) {
-            this.maxCurrent = current;
-        } else if (current < minCurrent) {
-            this.minCurrent = current;
+        adjustedCurrent = filter.calculate(current);
+
+        if (current > adjustedCurrent) {
+            this.maxSustainedCurrent = current;
         }
-
-        // Add amp-hours, watt-hours, and kilowatt-hours;
-        double hoursUpdatedMillis = (System.currentTimeMillis() - lastUpdated) / 3600000d;
-
-        wattHours += getWattage() * hoursUpdatedMillis;
-        ampHours += getCurrent() * hoursUpdatedMillis;
-
-        this.lastUpdated = System.currentTimeMillis();
     }
 }
