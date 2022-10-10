@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.chassis.ArcadeDriveCommand;
+import frc.robot.commands.chassis.SwerveDriveMode;
 import frc.robot.commands.climber.LeftClimberDownCommand;
 import frc.robot.commands.climber.LeftClimberUpCommand;
 import frc.robot.commands.climber.RightClimberDownCommand;
@@ -30,6 +31,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static frc.robot.Constants.Control.*;
 import static frc.robot.Constants.Control.XBOX_START;
+import static frc.robot.commands.chassis.SwerveDriveMode.FIELD_RELATIVE;
+import static frc.robot.commands.chassis.SwerveDriveMode.ROBOT_RELATIVE;
 
 /**
  * This {@link RobotContainer} class is designed to be used for Button Bindings, and the Command Groups
@@ -63,6 +66,8 @@ public class RobotContainer {
     private final ConditionalButton dpadDown = new ConditionalButton(controller, 102);
     private final ConditionalButton dpadUp =  new ConditionalButton(controller, 103);
 
+    private final ConditionalButton joystickTrigger = new ConditionalButton(xyStick, 104);
+
     /** This shoot RPM will be able to be adjusted from the Joystick or {@link SmartDashboard}. */
     public AtomicInteger shootRPM = new AtomicInteger(4500);
 
@@ -75,6 +80,7 @@ public class RobotContainer {
         rTrigger.setSupplier(() -> (controller.getRightTriggerAxis() > 0.8));
         dpadDown.setSupplier(() -> (controller.getPOV() == 180));
         dpadUp.setSupplier(() -> (controller.getPOV() == 0));
+        joystickTrigger.setSupplier(xyStick::getTriggerPressed);
         configureButtonBindings();
     }
 
@@ -95,6 +101,17 @@ public class RobotContainer {
         dpadUp.whenHeld(new IncreaseAngleCommand());
         dpadDown.whenHeld(new DecreaseAngleCommand());
 
+        joystickTrigger.whenPressed(new InstantCommand(() -> {
+            switch (Robot.swerveDrive.getDriveMode()) {
+                case FIELD_RELATIVE:
+                    Robot.swerveDrive.setDriveMode(ROBOT_RELATIVE);
+                    break;
+                case ROBOT_RELATIVE:
+                    Robot.swerveDrive.setDriveMode(FIELD_RELATIVE);
+                    break;
+            }
+        }));
+
         startButton.whenPressed(new InstantCommand(() -> {
             // Ensure the range is correct when adding, if this number is too high then the motor will never
             // reach its target. Since it's only allowed to increment if the number is 5k or below, it will only
@@ -113,6 +130,7 @@ public class RobotContainer {
             }
         }));
 
+        rStick.whenPressed(new InstantCommand(() -> Robot.swerveDrive.resetGyro()));
         lStick.whenHeld(new RunStorageAcceptor());
     }
 }

@@ -136,6 +136,8 @@ public class Constants {
 
         public final static boolean INTAKE_FLIPPED = true;
         public final static boolean INTAKE_EXTENDER_FLIPPED = true;
+
+        public final static boolean GYRO_FLIPPED = false;
     }
 
     /**

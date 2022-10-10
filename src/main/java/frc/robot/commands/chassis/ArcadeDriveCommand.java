@@ -13,6 +13,7 @@ import frc.robot.utils.motor.MotorUtil;
 import java.util.function.Supplier;
 
 import static frc.robot.Constants.Chassis.DRIVE_DEAD_ZONE;
+import static frc.robot.Constants.MotorFlip.GYRO_FLIPPED;
 import static frc.robot.commands.chassis.SwerveDriveMode.FIELD_RELATIVE;
 import static frc.robot.utils.motor.MotorUtil.deadzone;
 
@@ -39,6 +40,7 @@ public class ArcadeDriveCommand extends CommandBase {
     private Rotation2d gyroAngle;
 
     private final Supplier<Double> xSupplier, ySupplier, twistSupplier;
+    private boolean gyroResetOnInit = true;
 
     /** Creates a new {@link ArcadeDriveCommand} using the default variable {@link Supplier}*/
     public ArcadeDriveCommand(Supplier<Double> xSupplier, Supplier<Double> ySupplier, Supplier<Double> twistSupplier) {
@@ -50,11 +52,36 @@ public class ArcadeDriveCommand extends CommandBase {
         this.gyroAngle = new Rotation2d(0);
     }
 
+    public Supplier<Double> getXSupplier() {
+        return this.xSupplier;
+    }
+
+    public Supplier<Double> getYSupplier() {
+        return this.ySupplier;
+    }
+
+    public Supplier<Double> getTwistSupplier() {
+        return this.twistSupplier;
+    }
+
+    public boolean isGyroResetOnInit() {
+        return this.gyroResetOnInit;
+    }
+
+    public ArcadeDriveCommand setGyroResetOnInit(boolean val) {
+        this.gyroResetOnInit = val;
+        return this;
+    }
+
     @Override
     public void execute() {
         if (Robot.swerveDrive.getDriveMode() == FIELD_RELATIVE) {
             // Update the gyro angle to allow field-relative control.
             gyroAngle = Robot.swerveDrive.getGyro();
+
+            if (GYRO_FLIPPED) {
+                gyroAngle = gyroAngle.unaryMinus();
+            }
         }
 
         Robot.swerveDrive.drive(
@@ -67,6 +94,13 @@ public class ArcadeDriveCommand extends CommandBase {
                     gyroAngle
                 )
         );
+    }
+
+    @Override
+    public void initialize() {
+        if (gyroResetOnInit) {
+            Robot.swerveDrive.resetGyro();
+        }
     }
 
     @Override
