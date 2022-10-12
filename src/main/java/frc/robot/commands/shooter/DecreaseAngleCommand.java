@@ -22,7 +22,7 @@ public class DecreaseAngleCommand extends CommandBase {
 
     @Override
     public void execute() {
-        Robot.adjustor.lowerAngle(0.3);
+        Robot.adjustor.decreaseAdjustMotor(0.3);
     }
 
     @Override

@@ -3,8 +3,6 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
-import static frc.robot.Constants.ShooterAdjustor.ADJUSTOR_ANGLE_MAX;
-
 public class IncreaseAngleCommand extends CommandBase {
 
     @Override
@@ -15,7 +13,7 @@ public class IncreaseAngleCommand extends CommandBase {
 
     @Override
     public void execute() {
-        Robot.adjustor.raiseAngle(0.3);
+        Robot.adjustor.increaseAdjustMotor(0.3);
     }
 
     @Override
