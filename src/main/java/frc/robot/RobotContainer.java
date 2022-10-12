@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -13,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.chassis.ArcadeDriveCommand;
-import frc.robot.commands.chassis.SwerveDriveMode;
 import frc.robot.commands.climber.LeftClimberDownCommand;
 import frc.robot.commands.climber.LeftClimberUpCommand;
 import frc.robot.commands.climber.RightClimberDownCommand;
@@ -66,21 +63,27 @@ public class RobotContainer {
     private final ConditionalButton dpadDown = new ConditionalButton(controller, 102);
     private final ConditionalButton dpadUp =  new ConditionalButton(controller, 103);
 
-    private final ConditionalButton joystickTrigger = new ConditionalButton(xyStick, 104);
+    private final ConditionalButton lJoyTrigger = new ConditionalButton(xyStick, 104);
+    private final ConditionalButton rJoyTrigger = new ConditionalButton(zStick, 105);
 
     /** This shoot RPM will be able to be adjusted from the Joystick or {@link SmartDashboard}. */
+
     public AtomicInteger shootRPM = new AtomicInteger(4500);
+    private final ArcadeDriveCommand arcadeDriveCommand;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         // Configure the button bindings
-        Robot.swerveDrive.setDefaultCommand(new ArcadeDriveCommand(xyStick::getX, xyStick::getY, zStick::getTwist));
+        arcadeDriveCommand = new ArcadeDriveCommand(xyStick::getX, xyStick::getY, zStick::getTwist);
+
+        Robot.swerveDrive.setDefaultCommand(arcadeDriveCommand);
 
         lTrigger.setSupplier(() -> (controller.getLeftTriggerAxis() > 0.8));
         rTrigger.setSupplier(() -> (controller.getRightTriggerAxis() > 0.8));
         dpadDown.setSupplier(() -> (controller.getPOV() == 180));
         dpadUp.setSupplier(() -> (controller.getPOV() == 0));
-        joystickTrigger.setSupplier(xyStick::getTriggerPressed);
+        lJoyTrigger.setSupplier(xyStick::getTriggerPressed);
+        rJoyTrigger.setSupplier(zStick::getTriggerPressed);
         configureButtonBindings();
     }
 
@@ -101,7 +104,7 @@ public class RobotContainer {
         dpadUp.whenHeld(new IncreaseAngleCommand());
         dpadDown.whenHeld(new DecreaseAngleCommand());
 
-        joystickTrigger.whenPressed(new InstantCommand(() -> {
+        lJoyTrigger.whenPressed(new InstantCommand(() -> {
             switch (Robot.swerveDrive.getDriveMode()) {
                 case FIELD_RELATIVE:
                     Robot.swerveDrive.setDriveMode(ROBOT_RELATIVE);
@@ -127,6 +130,12 @@ public class RobotContainer {
             // the number is 1k rpm or above, it will only obtain a minimum of 500.
             if (shootRPM.get() >= 1000) {
                 shootRPM.set(shootRPM.get()-500);
+            }
+        }));
+
+        rJoyTrigger.whenPressed(new InstantCommand(() -> {
+            if (arcadeDriveCommand != null) {
+                arcadeDriveCommand.setHoldMode(!arcadeDriveCommand.getHoldMode());
             }
         }));
 

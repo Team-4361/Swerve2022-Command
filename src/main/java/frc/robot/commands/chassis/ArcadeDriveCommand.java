@@ -42,6 +42,10 @@ public class ArcadeDriveCommand extends CommandBase {
     private final Supplier<Double> xSupplier, ySupplier, twistSupplier;
     private boolean gyroResetOnInit = true;
 
+    // used for testing purposes, holds the value of the joystick without requiring constant input.
+    private boolean holdMode = false;
+    private double xVal=0, yVal=0, twistVal=0;
+
     /** Creates a new {@link ArcadeDriveCommand} using the default variable {@link Supplier}*/
     public ArcadeDriveCommand(Supplier<Double> xSupplier, Supplier<Double> ySupplier, Supplier<Double> twistSupplier) {
         addRequirements(Robot.swerveDrive);
@@ -73,6 +77,14 @@ public class ArcadeDriveCommand extends CommandBase {
         return this;
     }
 
+    public void setHoldMode(boolean holdMode) {
+        this.holdMode = holdMode;
+    }
+
+    public boolean getHoldMode() {
+        return this.holdMode;
+    }
+
     @Override
     public void execute() {
         if (Robot.swerveDrive.getDriveMode() == FIELD_RELATIVE) {
@@ -84,13 +96,19 @@ public class ArcadeDriveCommand extends CommandBase {
             }
         }
 
+        if (!holdMode) {
+            this.xVal = xSupplier.get();
+            this.yVal = ySupplier.get();
+            this.twistVal = twistSupplier.get();
+        }
+
         Robot.swerveDrive.drive(
                 // This converts the inputs to a robot-relative control that can be processed by the SwerveDriveSubsystem
                 // and with the updated gyroAngle it can either be field-relative or robot-relative.
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                    deadzone(xSupplier.get(), DRIVE_DEAD_ZONE),
-                    -deadzone(ySupplier.get(), DRIVE_DEAD_ZONE),
-                    -deadzone(twistSupplier.get(), DRIVE_DEAD_ZONE),
+                    deadzone(xVal, DRIVE_DEAD_ZONE),
+                    -deadzone(yVal, DRIVE_DEAD_ZONE),
+                    -deadzone(twistVal, DRIVE_DEAD_ZONE),
                     gyroAngle
                 )
         );
