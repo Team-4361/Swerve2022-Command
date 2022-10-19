@@ -13,6 +13,8 @@ import me.wobblyyyy.pathfinder2.time.Time;
 import me.wobblyyyy.pathfinder2.utils.StringUtils;
 import me.wobblyyyy.pathfinder2.wpilib.WPIAdapter;
 
+import java.util.function.Supplier;
+
 /**
  * the chassis' swerve drive odometry system. this uses encoders on each
  * of the swerve modules, as well as a gyroscope on the robot, to determine
@@ -28,20 +30,20 @@ public class SwerveOdometry extends AbstractOdometry {
             Constants.Chassis.ODOMETRY_MS_INTERVAL;
 
     private final SwerveChassis chassis;
-    private final Gyro gyro;
+    private final Supplier<Rotation2d> gyroSupplier;
     private final SwerveDriveOdometry odometry;
     private Pose2d pose;
     private double lastUpdateTimeMs;
 
     public SwerveOdometry(SwerveChassis chassis,
-                          Gyro gyro,
+                          Supplier<Rotation2d> gyroSupplier,
                           Pose2d pose) {
         this.chassis = chassis;
-        this.gyro = gyro;
+        this.gyroSupplier = gyroSupplier;
         this.pose = pose;
         odometry = new SwerveDriveOdometry(
                 chassis.getSwerveKinematics(),
-                gyro.getRotation2d(),
+                gyroSupplier.get(),
                 pose
         );
     }
@@ -55,7 +57,6 @@ public class SwerveOdometry extends AbstractOdometry {
     }
 
     private void update() {
-        Rotation2d rotation = gyro.getRotation2d();
 
         // each of these states is m per sec and omega rad per sec
         SwerveModuleState frontRightState = chassis.getFrontRight().getState();
@@ -63,13 +64,14 @@ public class SwerveOdometry extends AbstractOdometry {
         SwerveModuleState backRightState = chassis.getBackRight().getState();
         SwerveModuleState backLeftState = chassis.getBackLeft().getState();
 
+
         SmartDashboard.putString("FR State", formatState(frontRightState));
         SmartDashboard.putString("FL State", formatState(frontLeftState));
         SmartDashboard.putString("BR State", formatState(backRightState));
         SmartDashboard.putString("BL State", formatState(backLeftState));
 
         pose = odometry.update(
-                rotation,
+                gyroSupplier.get(),
                 frontRightState,
                 frontLeftState,
                 backRightState,

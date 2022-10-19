@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.Constants;
 import me.wobblyyyy.pathfinder2.geometry.Translation;
 import me.wobblyyyy.pathfinder2.math.Average;
 import me.wobblyyyy.pathfinder2.robot.Drive;
@@ -46,7 +45,10 @@ public class SwerveChassis implements Drive {
 
     private Function<Translation, Translation> modifier = (t) -> t;
     private Translation translation;
-    private double chassisSpeed = 0.0, maxChassisSpeed = 0.0;
+    private double chassisSpeed = 0.0;
+    private double maxChassisSpeed = 0.0;
+    private final double metersDriven = 0.0;
+    private boolean robotMoving = false;
 
     public SwerveChassis() {
         this(
@@ -130,13 +132,14 @@ public class SwerveChassis implements Drive {
     }
 
     public void drive(ChassisSpeeds speeds) {
-        SwerveModuleState[] states =
-                SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
+        SwerveModuleState[] states = SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
 
         SwerveModuleState frontRightState = states[0];
         SwerveModuleState frontLeftState = states[1];
         SwerveModuleState backRightState = states[2];
         SwerveModuleState backLeftState = states[3];
+
+        robotMoving = frontLeftState.speedMetersPerSecond != 0 && frontRightState.speedMetersPerSecond != 0 && backLeftState.speedMetersPerSecond != 0 && backRightState.speedMetersPerSecond != 0;
 
         frontRight.setState(frontRightState);
         frontLeft.setState(frontLeftState);
@@ -145,10 +148,15 @@ public class SwerveChassis implements Drive {
 
         updateDashboard();
 
-        chassisSpeed = getDriveMPH();
+        chassisSpeed = Average.of(frontLeft.getDriveMPH(), frontRight.getDriveMPH(), backLeft.getDriveMPH(), backRight.getDriveMPH());
+
         if (chassisSpeed > maxChassisSpeed) {
             maxChassisSpeed = chassisSpeed;
         }
+    }
+
+    public boolean isRobotMoving() {
+        return robotMoving;
     }
 
     @Override

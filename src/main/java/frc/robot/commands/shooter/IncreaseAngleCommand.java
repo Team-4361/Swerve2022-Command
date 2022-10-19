@@ -18,7 +18,7 @@ public class IncreaseAngleCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        Robot.adjustor.stop();
+        Robot.adjustor.stopAdjustMotor();
     }
 
     @Override

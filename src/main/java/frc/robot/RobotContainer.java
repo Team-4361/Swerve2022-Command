@@ -104,6 +104,7 @@ public class RobotContainer {
         dpadUp.whenHeld(new IncreaseAngleCommand());
         dpadDown.whenHeld(new DecreaseAngleCommand());
 
+        /*
         lJoyTrigger.whenPressed(new InstantCommand(() -> {
             switch (Robot.swerveDrive.getDriveMode()) {
                 case FIELD_RELATIVE:
@@ -114,6 +115,8 @@ public class RobotContainer {
                     break;
             }
         }));
+         */
+        Robot.swerveDrive.setDriveMode(FIELD_RELATIVE);
 
         startButton.whenPressed(new InstantCommand(() -> {
             // Ensure the range is correct when adding, if this number is too high then the motor will never
@@ -133,11 +136,13 @@ public class RobotContainer {
             }
         }));
 
+        /*
         rJoyTrigger.whenPressed(new InstantCommand(() -> {
             if (arcadeDriveCommand != null) {
                 arcadeDriveCommand.setHoldMode(!arcadeDriveCommand.getHoldMode());
             }
         }));
+         */
 
         rStick.whenPressed(new InstantCommand(() -> Robot.swerveDrive.resetGyro()));
         lStick.whenHeld(new RunStorageAcceptor());

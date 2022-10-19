@@ -1,15 +1,19 @@
 package frc.robot.subsystems.swerve;
 
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.commands.chassis.ArcadeDriveCommand;
 import frc.robot.commands.chassis.SwerveDriveMode;
 import frc.robot.swerve.SwerveChassis;
+import frc.robot.swerve.SwerveOdometry;
+import me.wobblyyyy.pathfinder2.robot.Odometry;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,22 +27,37 @@ import java.util.OptionalDouble;
  */
 public class SwerveDriveSubsystem extends SubsystemBase {
     private final SwerveChassis swerveChassis;
+    private final Odometry swerveOdometry;
     public final AHRS gyro;
 
+    private Rotation2d fusedAngle = new Rotation2d(0);
+
     private SwerveDriveMode driveMode = SwerveDriveMode.FIELD_RELATIVE;
+
 
     /** Initializes a new {@link SwerveDriveSubsystem}, and resets the Gyroscope. */
     public SwerveDriveSubsystem() {
         swerveChassis = new SwerveChassis();
         gyro = new AHRS(SPI.Port.kMXP);
         gyro.reset();
+        gyro.calibrate();
+
+        swerveOdometry = new SwerveOdometry(swerveChassis, () -> (fusedAngle), new Pose2d());
+    }
+
+    public Rotation2d getFusedAngle() {
+        return this.fusedAngle;
     }
 
     @Override
     public void periodic() {
         // Update the robot speed and other information.
+        fusedAngle = new Rotation2d(-gyro.getFusedHeading());
+
+        SmartDashboard.putString("Robot Position", swerveOdometry.toString());
         SmartDashboard.putNumber("Robot MPH", swerveChassis.getDriveMPH());
         SmartDashboard.putNumber("Robot Max MPH", swerveChassis.getMaxDriveMPH());
+        SmartDashboard.putString("Robot Heading", fusedAngle.toString());
 
         switch (driveMode) {
             case FIELD_RELATIVE:
@@ -48,8 +67,6 @@ public class SwerveDriveSubsystem extends SubsystemBase {
                 SmartDashboard.putString("Robot Drive Mode", "ROBOT_RELATIVE");
                 break;
         }
-
-        SmartDashboard.putNumber("Robot Heading", gyro.getAngle());
     }
 
     /**
@@ -113,7 +130,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
 
     /** @return {@link Rotation2d} gyroscope instance. */
     public Rotation2d getGyro() {
-        return gyro.getRotation2d();
+        return fusedAngle;
     }
 
     /**

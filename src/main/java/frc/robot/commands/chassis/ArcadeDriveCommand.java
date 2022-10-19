@@ -89,11 +89,7 @@ public class ArcadeDriveCommand extends CommandBase {
     public void execute() {
         if (Robot.swerveDrive.getDriveMode() == FIELD_RELATIVE) {
             // Update the gyro angle to allow field-relative control.
-            gyroAngle = Robot.swerveDrive.getGyro();
-
-            if (GYRO_FLIPPED) {
-                gyroAngle = gyroAngle.unaryMinus();
-            }
+            gyroAngle = Robot.swerveDrive.getFusedAngle();
         }
 
         if (!holdMode) {
