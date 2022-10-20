@@ -9,8 +9,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.autonomous.TimedMoveFWDCMD;
+import frc.robot.commands.autonomous.TimedShootCommand;
 import frc.robot.commands.chassis.ArcadeDriveCommand;
+import frc.robot.commands.chassis.ResetGyroCommand;
 import frc.robot.commands.climber.LeftClimberDownCommand;
 import frc.robot.commands.climber.LeftClimberUpCommand;
 import frc.robot.commands.climber.RightClimberDownCommand;
@@ -18,7 +22,8 @@ import frc.robot.commands.climber.RightClimberUpCommand;
 import frc.robot.commands.intake.RetractIntakeCommand;
 import frc.robot.commands.shooter.DecreaseAngleCommand;
 import frc.robot.commands.shooter.IncreaseAngleCommand;
-import frc.robot.commands.shooter.ShootCommand;
+import frc.robot.commands.shooter.LowShootCommand;
+import frc.robot.commands.shooter.UserShootCommand;
 import frc.robot.commands.storage.ProcessBallCommand;
 import frc.robot.commands.storage.RunStorageAcceptor;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,7 +34,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static frc.robot.Constants.Control.*;
 import static frc.robot.Constants.Control.XBOX_START;
 import static frc.robot.commands.chassis.SwerveDriveMode.FIELD_RELATIVE;
-import static frc.robot.commands.chassis.SwerveDriveMode.ROBOT_RELATIVE;
 
 /**
  * This {@link RobotContainer} class is designed to be used for Button Bindings, and the Command Groups
@@ -71,12 +75,25 @@ public class RobotContainer {
     public AtomicInteger shootRPM = new AtomicInteger(4500);
     private final ArcadeDriveCommand arcadeDriveCommand;
 
+    private final SequentialCommandGroup autoGroup = new SequentialCommandGroup(
+        new ResetGyroCommand(),
+        new TimedMoveFWDCMD(),
+        new TimedShootCommand(4500, 6)
+    );
+
+    public SequentialCommandGroup getAutoCommand() {
+        return autoGroup;
+    }
+
+    public ArcadeDriveCommand getArcadeDriveCommand() {
+        return arcadeDriveCommand;
+    }
+
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         // Configure the button bindings
         arcadeDriveCommand = new ArcadeDriveCommand(xyStick::getX, xyStick::getY, zStick::getTwist);
 
-        Robot.swerveDrive.setDefaultCommand(arcadeDriveCommand);
 
         lTrigger.setSupplier(() -> (controller.getLeftTriggerAxis() > 0.8));
         rTrigger.setSupplier(() -> (controller.getRightTriggerAxis() > 0.8));
@@ -94,7 +111,7 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        aButton.whenHeld(new ShootCommand());
+        aButton.whenHeld(new UserShootCommand());
         yButton.whenHeld(new ProcessBallCommand());
         xButton.whenActive(new RetractIntakeCommand());
         lTrigger.whenHeld(new LeftClimberDownCommand());
@@ -127,6 +144,7 @@ public class RobotContainer {
             }
         }));
 
+        /*
         bButton.whenPressed(new InstantCommand(() -> {
             // Ensure the range is correct when subtracting, if this number is too low then the PIDController will
             // not give the motor enough power to spin up and throw a ball. Since it's only allowed to decrease if
@@ -135,6 +153,9 @@ public class RobotContainer {
                 shootRPM.set(shootRPM.get()-500);
             }
         }));
+
+         */
+        bButton.whenHeld(new LowShootCommand());
 
         /*
         rJoyTrigger.whenPressed(new InstantCommand(() -> {
@@ -146,5 +167,7 @@ public class RobotContainer {
 
         rStick.whenPressed(new InstantCommand(() -> Robot.swerveDrive.resetGyro()));
         lStick.whenHeld(new RunStorageAcceptor());
+
+
     }
 }

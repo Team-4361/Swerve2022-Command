@@ -55,6 +55,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         sController = shooterMotor.getPIDController();
         shooterMotor.enableVoltageCompensation(12);
+        shooterMotor.setInverted(SHOOTER_FLIPPED);
 
         sController.setP(0);
         sController.setFF(FEED_FWD);

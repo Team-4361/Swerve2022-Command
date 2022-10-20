@@ -1,15 +1,17 @@
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.Robot;
 
 import static frc.robot.Constants.MotorValue.SLOW_ACCEPT_SPEED;
 
 public class ShootCommand extends CommandBase {
 
-    public ShootCommand() {}
+    private final int shootRPM;
+    public ShootCommand(int shootRPM) {
+        this.shootRPM = shootRPM;
+    }
 
     @Override
     public void initialize() {
@@ -18,14 +20,12 @@ public class ShootCommand extends CommandBase {
 
     @Override
     public void execute() {
-        int shootSpeed = Robot.robotContainer.shootRPM.get();
-
-        if (Robot.shooter.isDesiredSpeed(shootSpeed)) {
+        if (Robot.shooter.isDesiredSpeed(shootRPM)) {
             Robot.storage.setStorageMotor(SLOW_ACCEPT_SPEED);
-            Robot.shooter.setShooterVelocity(shootSpeed);
+            Robot.shooter.setShooterVelocity(shootRPM);
         } else {
             Robot.storage.setStorageMotor(0);
-            Robot.shooter.setShooterVelocity(shootSpeed);
+            Robot.shooter.setShooterVelocity(shootRPM);
         }
     }
 
@@ -36,3 +36,4 @@ public class ShootCommand extends CommandBase {
         Robot.shooter.stopShooter();
     }
 }
+

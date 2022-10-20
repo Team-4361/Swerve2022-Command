@@ -52,7 +52,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         // Update the robot speed and other information.
-        fusedAngle = new Rotation2d(-gyro.getFusedHeading());
+        fusedAngle = gyro.getRotation2d();
 
         SmartDashboard.putString("Robot Position", swerveOdometry.toString());
         SmartDashboard.putNumber("Robot MPH", swerveChassis.getDriveMPH());

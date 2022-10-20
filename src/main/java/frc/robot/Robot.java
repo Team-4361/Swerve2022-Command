@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.climber.LeftClimberSubsystem;
 import frc.robot.subsystems.climber.RightClimberSubsystem;
 import frc.robot.subsystems.intake.IntakeExtendSubsystem;
@@ -65,6 +66,18 @@ public class Robot extends TimedRobot {
         robotContainer = new RobotContainer();
     }
 
+    @Override
+    public void autonomousInit() {
+        CommandScheduler.getInstance().cancelAll();
+
+        
+        SequentialCommandGroup autoGroup = robotContainer.getAutoCommand();
+
+        if (autoGroup != null) {
+            autoGroup.schedule();
+        }
+    }
+
     /**
      * This function is called every robot packet, no matter the mode. Use this for items like
      * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
@@ -95,5 +108,7 @@ public class Robot extends TimedRobot {
         // Cancel all commands that are currently running before starting teleop mode.
         CommandScheduler.getInstance().cancelAll();
         Robot.adjustor.zero();
+
+        robotContainer.getArcadeDriveCommand().schedule();
     }
 }
