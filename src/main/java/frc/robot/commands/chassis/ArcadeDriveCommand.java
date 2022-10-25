@@ -1,19 +1,15 @@
 package frc.robot.commands.chassis;
 
-import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
-import frc.robot.utils.motor.MotorUtil;
 
 import java.util.function.Supplier;
 
 import static frc.robot.Constants.Chassis.DRIVE_DEAD_ZONE;
-import static frc.robot.Constants.MotorFlip.GYRO_FLIPPED;
 import static frc.robot.commands.chassis.SwerveDriveMode.FIELD_RELATIVE;
 import static frc.robot.utils.motor.MotorUtil.deadzone;
 
@@ -37,14 +33,7 @@ import static frc.robot.utils.motor.MotorUtil.deadzone;
  *     Intro to ChassisSpeeds and Field-Relative Swerve Drive.</a>
  */
 public class ArcadeDriveCommand extends CommandBase {
-    private Rotation2d gyroAngle;
-
     private final Supplier<Double> xSupplier, ySupplier, twistSupplier;
-    private boolean gyroResetOnInit = true;
-
-    // used for testing purposes, holds the value of the joystick without requiring constant input.
-    private boolean holdMode = false;
-    private double xVal=0, yVal=0, twistVal=0;
 
     /** Creates a new {@link ArcadeDriveCommand} using the default variable {@link Supplier}*/
     public ArcadeDriveCommand(Supplier<Double> xSupplier, Supplier<Double> ySupplier, Supplier<Double> twistSupplier) {
@@ -53,7 +42,6 @@ public class ArcadeDriveCommand extends CommandBase {
         this.xSupplier = xSupplier;
         this.ySupplier = ySupplier;
         this.twistSupplier = twistSupplier;
-        this.gyroAngle = new Rotation2d(0);
     }
 
     public Supplier<Double> getXSupplier() {
@@ -68,53 +56,13 @@ public class ArcadeDriveCommand extends CommandBase {
         return this.twistSupplier;
     }
 
-    public boolean isGyroResetOnInit() {
-        return this.gyroResetOnInit;
-    }
-
-    public ArcadeDriveCommand setGyroResetOnInit(boolean val) {
-        this.gyroResetOnInit = val;
-        return this;
-    }
-
-    public void setHoldMode(boolean holdMode) {
-        this.holdMode = holdMode;
-    }
-
-    public boolean getHoldMode() {
-        return this.holdMode;
-    }
-
     @Override
     public void execute() {
-        if (Robot.swerveDrive.getDriveMode() == FIELD_RELATIVE) {
-            // Update the gyro angle to allow field-relative control.
-            gyroAngle = Robot.swerveDrive.getFusedAngle();
-        }
-
-        if (!holdMode) {
-            this.xVal = xSupplier.get();
-            this.yVal = ySupplier.get();
-            this.twistVal = twistSupplier.get();
-        }
-
-        Robot.swerveDrive.drive(
-                // This converts the inputs to a robot-relative control that can be processed by the SwerveDriveSubsystem
-                // and with the updated gyroAngle it can either be field-relative or robot-relative.
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                    deadzone(xVal, DRIVE_DEAD_ZONE),
-                    -deadzone(yVal, DRIVE_DEAD_ZONE),
-                    -deadzone(twistVal, DRIVE_DEAD_ZONE),
-                    gyroAngle
-                )
+        Robot.swerveDrive.autoDrive(
+                    deadzone(xSupplier.get(), DRIVE_DEAD_ZONE),
+                    -deadzone(ySupplier.get(), DRIVE_DEAD_ZONE),
+                    -deadzone(twistSupplier.get(), DRIVE_DEAD_ZONE)
         );
-    }
-
-    @Override
-    public void initialize() {
-        if (gyroResetOnInit) {
-            Robot.swerveDrive.resetGyro();
-        }
     }
 
     @Override

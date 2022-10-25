@@ -5,10 +5,21 @@ import frc.robot.Robot;
 import frc.robot.utils.motor.MotorUtil;
 
 public class ResetGyroCommand extends CommandBase {
+    private final SwerveDriveMode updateDriveMode;
+
     @Override
     public void initialize() {
         addRequirements(Robot.swerveDrive);
         Robot.swerveDrive.resetGyro();
+        Robot.swerveDrive.setDriveMode(updateDriveMode);
+    }
+
+    public ResetGyroCommand() {
+        this(Robot.swerveDrive.getDriveMode());
+    }
+
+    public ResetGyroCommand(SwerveDriveMode updateDriveMode) {
+        this.updateDriveMode = updateDriveMode;
     }
 
     @Override

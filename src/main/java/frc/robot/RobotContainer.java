@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.autonomous.AutoCommandGroup;
 import frc.robot.commands.autonomous.TimedMoveFWDCMD;
 import frc.robot.commands.autonomous.TimedShootCommand;
 import frc.robot.commands.chassis.ArcadeDriveCommand;
@@ -75,11 +76,14 @@ public class RobotContainer {
     public AtomicInteger shootRPM = new AtomicInteger(4500);
     private final ArcadeDriveCommand arcadeDriveCommand;
 
+    /*
     private final SequentialCommandGroup autoGroup = new SequentialCommandGroup(
         new ResetGyroCommand(),
         new TimedMoveFWDCMD(),
         new TimedShootCommand(4500, 6)
     );
+     */
+    private final AutoCommandGroup autoGroup = new AutoCommandGroup();
 
     public SequentialCommandGroup getAutoCommand() {
         return autoGroup;
@@ -167,7 +171,5 @@ public class RobotContainer {
 
         rStick.whenPressed(new InstantCommand(() -> Robot.swerveDrive.resetGyro()));
         lStick.whenHeld(new RunStorageAcceptor());
-
-
     }
 }

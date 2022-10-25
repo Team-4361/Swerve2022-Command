@@ -57,13 +57,11 @@ public class SwerveOdometry extends AbstractOdometry {
     }
 
     private void update() {
-
         // each of these states is m per sec and omega rad per sec
         SwerveModuleState frontRightState = chassis.getFrontRight().getState();
         SwerveModuleState frontLeftState = chassis.getFrontLeft().getState();
         SwerveModuleState backRightState = chassis.getBackRight().getState();
         SwerveModuleState backLeftState = chassis.getBackLeft().getState();
-
 
         SmartDashboard.putString("FR State", formatState(frontRightState));
         SmartDashboard.putString("FL State", formatState(frontLeftState));
@@ -88,9 +86,7 @@ public class SwerveOdometry extends AbstractOdometry {
     private boolean shouldUpdate() {
         // only update the odometry every X milliseconds
         // updating it too frequently may cause very inaccurate results
-        double currentTime = Time.ms();
-
-        return currentTime - updateInterval >= lastUpdateTimeMs;
+        return Time.ms() - updateInterval >= lastUpdateTimeMs;
     }
 
     @Override
