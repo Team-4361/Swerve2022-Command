@@ -56,7 +56,7 @@ public class SwerveOdometry extends AbstractOdometry {
         );
     }
 
-    private void update() {
+    public void update() {
         // each of these states is m per sec and omega rad per sec
         SwerveModuleState frontRightState = chassis.getFrontRight().getState();
         SwerveModuleState frontLeftState = chassis.getFrontLeft().getState();
@@ -79,21 +79,28 @@ public class SwerveOdometry extends AbstractOdometry {
         lastUpdateTimeMs = Time.ms();
     }
 
+    public void reset() {
+        odometry.resetPosition(new Pose2d(), gyroSupplier.get());
+        odometry.resetPosition(new Pose2d(), gyroSupplier.get());
+    }
+
     public Pose2d getPose() {
         return pose;
     }
 
-    private boolean shouldUpdate() {
+    public boolean shouldUpdate() {
         // only update the odometry every X milliseconds
         // updating it too frequently may cause very inaccurate results
         return Time.ms() - updateInterval >= lastUpdateTimeMs;
     }
 
+
     @Override
     public PointXYZ getRawPosition() {
-        if (shouldUpdate())
-            update();
+        //if (shouldUpdate())
+        //    update();
 
-        return WPIAdapter.pointXYZFromPose(pose);
+        //return WPIAdapter.pointXYZFromPose(pose);
+        return new PointXYZ();
     }
 }

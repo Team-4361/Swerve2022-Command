@@ -9,26 +9,34 @@ import frc.robot.Robot;
 public class TimedMoveFWDCMD extends CommandBase {
 
 
-    private long endTime;
+    private long endTime, startTime;
 
     public TimedMoveFWDCMD() {
-        addRequirements(Robot.swerveDrive);
+
     }
 
     @Override
     public void initialize() {
-        endTime = System.currentTimeMillis() + 1500;
-    }
+        addRequirements(Robot.swerveDrive);
 
+        // hopefully gives the gyro a chance to zero out.
+        Robot.swerveDrive.autoDrive(0,0,0);
+
+        endTime = System.currentTimeMillis() + 2500;
+        startTime = System.currentTimeMillis() + 1000;
+
+    }
 
     @Override
     public void execute() {
-        Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, -0.4, 0, Rotation2d.fromDegrees(0)));
+        if (System.currentTimeMillis() > startTime) {
+            Robot.swerveDrive.autoDrive(0,0.4,0);
+        }
     }
 
     @Override
     public void end(boolean interrupted) {
-        Robot.swerveDrive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, 0, Rotation2d.fromDegrees(0)));
+        Robot.swerveDrive.autoDrive(0,0,0);
     }
 
     @Override

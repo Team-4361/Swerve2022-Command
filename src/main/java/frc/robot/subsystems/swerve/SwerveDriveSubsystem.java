@@ -8,11 +8,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.chassis.ArcadeDriveCommand;
-import frc.robot.commands.chassis.SwerveDriveMode;
 import frc.robot.swerve.SwerveChassis;
 import frc.robot.swerve.SwerveOdometry;
-import me.wobblyyyy.pathfinder2.robot.Odometry;
 
 import java.util.HashMap;
 
@@ -23,13 +20,9 @@ import java.util.HashMap;
  */
 public class SwerveDriveSubsystem extends SubsystemBase {
     private final SwerveChassis swerveChassis;
-    private final SwerveOdometry swerveOdometry;
     public final AHRS gyro;
 
     private Rotation2d robotHeading = new Rotation2d(0);
-    private Rotation2d driveHeading = new Rotation2d(0);
-
-    private SwerveDriveMode driveMode = SwerveDriveMode.FIELD_RELATIVE;
 
     /** Initializes a new {@link SwerveDriveSubsystem}, and resets the Gyroscope. */
     public SwerveDriveSubsystem() {
@@ -37,58 +30,19 @@ public class SwerveDriveSubsystem extends SubsystemBase {
         gyro = new AHRS(SPI.Port.kMXP);
         gyro.reset();
         gyro.calibrate();
-
-        swerveOdometry = new SwerveOdometry(swerveChassis, () -> (robotHeading), new Pose2d());
     }
 
     public Rotation2d getRobotHeading() {
         return this.robotHeading;
     }
-
-    public Pose2d getPose() {
-        return swerveOdometry.getPose();
-    }
-
     @Override
     public void periodic() {
         // Update the robot speed and other information.
         robotHeading = gyro.getRotation2d();
 
-        SmartDashboard.putString("Robot Position", swerveOdometry.toString());
         SmartDashboard.putNumber("Robot MPH", swerveChassis.getDriveMPH());
         SmartDashboard.putNumber("Robot Max MPH", swerveChassis.getMaxDriveMPH());
         SmartDashboard.putString("Robot Actual Heading", robotHeading.toString());
-        SmartDashboard.putString("Robot Drive Heading", driveHeading.toString());
-
-        switch (driveMode) {
-            case FIELD_RELATIVE:
-                SmartDashboard.putString("Robot Drive Mode", "FIELD_RELATIVE");
-
-                // Synchronizes the driving heading with the robot heading since we are using field-relative control.
-                driveHeading = robotHeading;
-                break;
-            case ROBOT_RELATIVE:
-                SmartDashboard.putString("Robot Drive Mode", "ROBOT_RELATIVE");
-                break;
-        }
-    }
-
-    /**
-     * Sets the current {@link SwerveDriveMode} being used by the Robot. If {@link SwerveDriveMode#FIELD_RELATIVE} is
-     * selected, the {@link AHRS} gyroscope will be updated, allowing updated field-relative control. Otherwise, the
-     * gyro angle will be frozen, locking the head direction, and it will act robot-relative again.
-     * <p></p>
-     * This <b>can</b> be called while the Robot is in operation.
-     * @param driveMode The {@link SwerveDriveMode} to apply.
-     * @return The updated {@link ArcadeDriveCommand} instance.
-     */
-    public SwerveDriveSubsystem setDriveMode(SwerveDriveMode driveMode) {
-        this.driveMode = driveMode;
-        return this;
-    }
-
-    public SwerveDriveMode getDriveMode() {
-        return this.driveMode;
     }
 
     /** @return A {@link HashMap} containing {@link SwerveModuleState} of the robot. */
@@ -117,7 +71,7 @@ public class SwerveDriveSubsystem extends SubsystemBase {
      * @param omega Yaw rad/s (+ right, - left)
      */
     public void autoDrive(double vX, double vY, double omega) {
-        this.drive(ChassisSpeeds.fromFieldRelativeSpeeds(vX, vY, omega, driveHeading));
+        this.drive(ChassisSpeeds.fromFieldRelativeSpeeds(vX, vY, omega, robotHeading));
     }
 
     /** Drives the robot to the right direction at 0.8 m/s (possibly?) */

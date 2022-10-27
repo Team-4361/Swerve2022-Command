@@ -5,14 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.chassis.SwerveDriveMode;
 import frc.robot.subsystems.climber.LeftClimberSubsystem;
 import frc.robot.subsystems.climber.RightClimberSubsystem;
 import frc.robot.subsystems.intake.IntakeExtendSubsystem;
@@ -22,7 +17,6 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.storage.StorageSubsystem;
 import frc.robot.subsystems.swerve.SwerveDriveSubsystem;
 import frc.robot.utils.power.BatteryManagement;
-import frc.robot.utils.power.PowerBreaker;
 
 import static frc.robot.Constants.*;
 
@@ -43,6 +37,8 @@ public class Robot extends TimedRobot {
 
     public static LeftClimberSubsystem leftClimber;
     public static RightClimberSubsystem rightClimber;
+
+    public boolean scheduled = false;
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -70,11 +66,13 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
+        
 
         SequentialCommandGroup autoGroup = robotContainer.getAutoCommand();
 
-        if (autoGroup != null) {
+        if (autoGroup != null && !scheduled) {
             autoGroup.schedule();
+            scheduled = true;
         }
     }
 
@@ -101,6 +99,11 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putNumber("PDP: Watt-Hours", bms.getWattHours());
         SmartDashboard.putBoolean("PDP: Exceeding Current", bms.isOverCurrentLimit());
+    }
+
+    @Override
+    public void disabledInit() {
+        scheduled = false;
     }
 
     @Override

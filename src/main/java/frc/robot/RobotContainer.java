@@ -11,11 +11,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.autonomous.AutoCommandGroup;
 import frc.robot.commands.autonomous.TimedMoveFWDCMD;
 import frc.robot.commands.autonomous.TimedShootCommand;
 import frc.robot.commands.chassis.ArcadeDriveCommand;
-import frc.robot.commands.chassis.ResetGyroCommand;
 import frc.robot.commands.climber.LeftClimberDownCommand;
 import frc.robot.commands.climber.LeftClimberUpCommand;
 import frc.robot.commands.climber.RightClimberDownCommand;
@@ -34,7 +32,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static frc.robot.Constants.Control.*;
 import static frc.robot.Constants.Control.XBOX_START;
-import static frc.robot.commands.chassis.SwerveDriveMode.FIELD_RELATIVE;
 
 /**
  * This {@link RobotContainer} class is designed to be used for Button Bindings, and the Command Groups
@@ -83,7 +80,10 @@ public class RobotContainer {
         new TimedShootCommand(4500, 6)
     );
      */
-    private final AutoCommandGroup autoGroup = new AutoCommandGroup();
+    private final SequentialCommandGroup autoGroup = new SequentialCommandGroup(
+            new TimedShootCommand(4500, 7),
+            new TimedMoveFWDCMD()
+    );
 
     public SequentialCommandGroup getAutoCommand() {
         return autoGroup;
@@ -124,20 +124,6 @@ public class RobotContainer {
         rBumper.whenHeld(new RightClimberUpCommand());
         dpadUp.whenHeld(new IncreaseAngleCommand());
         dpadDown.whenHeld(new DecreaseAngleCommand());
-
-        /*
-        lJoyTrigger.whenPressed(new InstantCommand(() -> {
-            switch (Robot.swerveDrive.getDriveMode()) {
-                case FIELD_RELATIVE:
-                    Robot.swerveDrive.setDriveMode(ROBOT_RELATIVE);
-                    break;
-                case ROBOT_RELATIVE:
-                    Robot.swerveDrive.setDriveMode(FIELD_RELATIVE);
-                    break;
-            }
-        }));
-         */
-        Robot.swerveDrive.setDriveMode(FIELD_RELATIVE);
 
         startButton.whenPressed(new InstantCommand(() -> {
             // Ensure the range is correct when adding, if this number is too high then the motor will never

@@ -14,19 +14,18 @@ public class TimedShootCommand extends ShootCommand {
     @Override
     public void initialize() {
         addRequirements(Robot.shooter);
+        endTime = duration + System.currentTimeMillis();
     }
 
     @Override
     public void execute() {
         super.execute();
-        if (endTime==0) {
-            this.endTime = System.currentTimeMillis() + duration;
-        }
     }
 
     @Override
     public void end(boolean in) {
         this.endTime = 0;
+        super.end(false);
     }
 
     @Override
