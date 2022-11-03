@@ -9,10 +9,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.autonomous.TimedMoveFWDCMD;
-import frc.robot.commands.autonomous.TimedShootCommand;
 import frc.robot.commands.chassis.ArcadeDriveCommand;
 import frc.robot.commands.climber.LeftClimberDownCommand;
 import frc.robot.commands.climber.LeftClimberUpCommand;
@@ -72,23 +69,6 @@ public class RobotContainer {
 
     public AtomicInteger shootRPM = new AtomicInteger(4500);
     private final ArcadeDriveCommand arcadeDriveCommand;
-
-    /*
-    private final SequentialCommandGroup autoGroup = new SequentialCommandGroup(
-        new ResetGyroCommand(),
-        new TimedMoveFWDCMD(),
-        new TimedShootCommand(4500, 6)
-    );
-     */
-    private final SequentialCommandGroup autoGroup = new SequentialCommandGroup(
-            new TimedShootCommand(4500, 7),
-            new TimedMoveFWDCMD()
-    );
-
-    public SequentialCommandGroup getAutoCommand() {
-        return autoGroup;
-    }
-
     public ArcadeDriveCommand getArcadeDriveCommand() {
         return arcadeDriveCommand;
     }
@@ -97,7 +77,6 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the button bindings
         arcadeDriveCommand = new ArcadeDriveCommand(xyStick::getX, xyStick::getY, zStick::getTwist);
-
 
         lTrigger.setSupplier(() -> (controller.getLeftTriggerAxis() > 0.8));
         rTrigger.setSupplier(() -> (controller.getRightTriggerAxis() > 0.8));
@@ -155,7 +134,7 @@ public class RobotContainer {
         }));
          */
 
-        rStick.whenPressed(new InstantCommand(() -> Robot.swerveDrive.resetGyro()));
+        rStick.whenPressed(new InstantCommand(() -> Robot.swerveDrive.resetPosition()));
         lStick.whenHeld(new RunStorageAcceptor());
     }
 }

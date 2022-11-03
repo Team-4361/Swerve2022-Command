@@ -81,7 +81,6 @@ public class SwerveOdometry extends AbstractOdometry {
 
     public void reset() {
         odometry.resetPosition(new Pose2d(), gyroSupplier.get());
-        odometry.resetPosition(new Pose2d(), gyroSupplier.get());
     }
 
     public Pose2d getPose() {

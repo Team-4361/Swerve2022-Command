@@ -66,14 +66,19 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         CommandScheduler.getInstance().cancelAll();
-        
 
-        SequentialCommandGroup autoGroup = robotContainer.getAutoCommand();
+        // reset the gyroscope
+        swerveDrive.resetPosition();
 
+        // TODO: add auto group to prevent errors.
+
+        /*
         if (autoGroup != null && !scheduled) {
             autoGroup.schedule();
             scheduled = true;
         }
+
+         */
     }
 
     /**

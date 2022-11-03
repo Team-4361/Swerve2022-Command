@@ -20,29 +20,38 @@ import java.util.HashMap;
  */
 public class SwerveDriveSubsystem extends SubsystemBase {
     private final SwerveChassis swerveChassis;
+
     public final AHRS gyro;
 
+    private final SwerveOdometry odometry;
     private Rotation2d robotHeading = new Rotation2d(0);
 
     /** Initializes a new {@link SwerveDriveSubsystem}, and resets the Gyroscope. */
     public SwerveDriveSubsystem() {
         swerveChassis = new SwerveChassis();
         gyro = new AHRS(SPI.Port.kMXP);
+        odometry = new SwerveOdometry(swerveChassis, this::getRobotHeading, new Pose2d());
+
         gyro.reset();
         gyro.calibrate();
     }
 
     public Rotation2d getRobotHeading() {
-        return this.robotHeading;
+        return robotHeading;
     }
     @Override
     public void periodic() {
         // Update the robot speed and other information.
         robotHeading = gyro.getRotation2d();
 
+        if (odometry.shouldUpdate()) {
+            odometry.update();
+        }
+
         SmartDashboard.putNumber("Robot MPH", swerveChassis.getDriveMPH());
         SmartDashboard.putNumber("Robot Max MPH", swerveChassis.getMaxDriveMPH());
         SmartDashboard.putString("Robot Actual Heading", robotHeading.toString());
+        SmartDashboard.putString("Robot Position", odometry.getPose().toString());
     }
 
     /** @return A {@link HashMap} containing {@link SwerveModuleState} of the robot. */
@@ -95,11 +104,11 @@ public class SwerveDriveSubsystem extends SubsystemBase {
     }
 
     /**
-     * Resets the gyroscope, <b>very important</b> you call this method ONLY at the beginning of the robot turning on,
-     * otherwise from testing it will cause issues.
+     * Resets the Odometry, which will offset the gyro angle and cause it to become zero while
+     * being referenced, essentially resetting the gyroscope.
      */
-    public void resetGyro() {
-        gyro.reset();
+    public void resetPosition() {
+        odometry.reset();
     }
 
     /** @return The currently used {@link SwerveChassis} */

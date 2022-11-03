@@ -21,10 +21,12 @@ public class ShootCommand extends CommandBase {
     @Override
     public void execute() {
         if (Robot.shooter.isDesiredSpeed(shootRPM)) {
-            Robot.storage.setStorageMotor(SLOW_ACCEPT_SPEED);
+            Robot.storage.setStorageMotor(1);
             Robot.shooter.setShooterVelocity(shootRPM);
+            Robot.storage.setAcceptorMotor(1);
         } else {
             Robot.storage.setStorageMotor(0);
+            Robot.storage.setAcceptorMotor(0);
             Robot.shooter.setShooterVelocity(shootRPM);
         }
     }
